@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Virtual File System &mdash; REGoth  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Importing Textures" href="textures.html" />
+    <link rel="prev" title="Welcome to BsZenLib’s documentation!" href="../index.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> REGoth
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Virtual File System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-vdfs-file-index">Creating a VDFS-File index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#importing-content-using-a-fileindex">Importing content using a FileIndex</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="textures.html">Importing Textures</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">REGoth</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Virtual File System</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/content/vdfs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="virtual-file-system">
+<h1>Virtual File System<a class="headerlink" href="#virtual-file-system" title="Permalink to this headline">¶</a></h1>
+<p>Gothic stores it’s files in something called a <em>Virtual File System</em>, or short <em>VDFS</em>. It is built out of multiple packages,
+which are all loaded into one file index. Think of it as putting all textures, meshes and other content into different ZIP-Archives
+and have the engine merge them all during load-time.</p>
+<p>The package format used by Gothic is <em>not</em> ZIP, but an uncompressed proprietary format. We won’t get into details about how that
+format is structured here.</p>
+<div class="section" id="creating-a-vdfs-file-index">
+<h2>Creating a VDFS-File index<a class="headerlink" href="#creating-a-vdfs-file-index" title="Permalink to this headline">¶</a></h2>
+<p>To do anything with this library, you need to populate a Virtual File Index with the packages from the original game, which is rather
+straight forward:</p>
+<p>First, you need to include the VDFS-module from ZenLib:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;vdfs/fileIndex.h&gt;</span><span class="cp"></span>
+</pre></div>
+</div>
+<p>In <cite>main</cite>, you then need to initialize the VDFS with <cite>argv[0]</cite>, which is the path to the running executable. This is a detail of the underlaying PhysFS library.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">VDFS</span><span class="o">::</span><span class="n">FileIndex</span><span class="o">::</span><span class="n">initVDFS</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</pre></div>
+</div>
+<p>Now you can create a FileIndex and load some packages from your games <cite>DATA</cite>-folder into it:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">dataDir</span> <span class="o">=</span> <span class="s">&quot;D:/Games/Gothic II/Data&quot;</span><span class="p">;</span>
+
+<span class="n">VDFS</span><span class="o">::</span><span class="n">FileIndex</span> <span class="n">vdfs</span><span class="p">;</span>
+<span class="n">vdfs</span><span class="p">.</span><span class="n">loadVDF</span><span class="p">(</span><span class="n">dataDir</span> <span class="o">+</span> <span class="s">&quot;/Meshes.vdf&quot;</span><span class="p">);</span>
+<span class="n">vdfs</span><span class="p">.</span><span class="n">loadVDF</span><span class="p">(</span><span class="n">dataDir</span> <span class="o">+</span> <span class="s">&quot;/Textures.vdf&quot;</span><span class="p">);</span>
+<span class="n">vdfs</span><span class="p">.</span><span class="n">loadVDF</span><span class="p">(</span><span class="n">dataDir</span> <span class="o">+</span> <span class="s">&quot;/Anims.vdf&quot;</span><span class="p">);</span>
+<span class="n">vdfs</span><span class="p">.</span><span class="n">finalizeLoad</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>With the file index populated, you can now access the files stored inside the packages:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="nl">file</span> <span class="p">:</span> <span class="n">vdf</span><span class="p">.</span><span class="n">getKnownFiles</span><span class="p">())</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">file</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The full example:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;vdfs/fileIndex.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">VDFS</span><span class="o">::</span><span class="n">FileIndex</span><span class="o">::</span><span class="n">initVDFS</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">dataDir</span> <span class="o">=</span> <span class="s">&quot;D:/Games/Gothic II/Data&quot;</span><span class="p">;</span>
+
+    <span class="n">VDFS</span><span class="o">::</span><span class="n">FileIndex</span> <span class="n">vdfs</span><span class="p">;</span>
+    <span class="n">vdfs</span><span class="p">.</span><span class="n">loadVDF</span><span class="p">(</span><span class="n">dataDir</span> <span class="o">+</span> <span class="s">&quot;/Meshes.vdf&quot;</span><span class="p">);</span>
+    <span class="n">vdfs</span><span class="p">.</span><span class="n">loadVDF</span><span class="p">(</span><span class="n">dataDir</span> <span class="o">+</span> <span class="s">&quot;/Textures.vdf&quot;</span><span class="p">);</span>
+    <span class="n">vdfs</span><span class="p">.</span><span class="n">loadVDF</span><span class="p">(</span><span class="n">dataDir</span> <span class="o">+</span> <span class="s">&quot;/Anims.vdf&quot;</span><span class="p">);</span>
+    <span class="n">vdfs</span><span class="p">.</span><span class="n">finalizeLoad</span><span class="p">();</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="nl">file</span> <span class="p">:</span> <span class="n">vdf</span><span class="p">.</span><span class="n">getKnownFiles</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">file</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="importing-content-using-a-fileindex">
+<h2>Importing content using a FileIndex<a class="headerlink" href="#importing-content-using-a-fileindex" title="Permalink to this headline">¶</a></h2>
+<p>A populated VDFS FileIndex can now be used to import files, as an example, this is how one would import a texture:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">HTexture</span> <span class="n">wood</span> <span class="o">=</span> <span class="n">BsZenLib</span><span class="o">::</span><span class="n">ImportTexture</span><span class="p">(</span><span class="s">&quot;WOOD.TGA&quot;</span><span class="p">,</span> <span class="n">vdfs</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The a file matching <cite>WOOD.TGA</cite> must be registered inside the passed VDFS FileIndex.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The Texture-Importer searches for <cite>WOOD.TGA</cite> <em>and</em> <cite>WOOD-C.TEX</cite> automatically.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="textures.html" class="btn btn-neutral float-right" title="Importing Textures" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="Welcome to BsZenLib’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, The REGoth-Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
