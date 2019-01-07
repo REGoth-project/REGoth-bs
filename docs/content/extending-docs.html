@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Importing Textures &mdash; REGoth  documentation</title>
+  <title>Extending the Documentation &mdash; REGoth  documentation</title>
   
 
   
@@ -28,7 +28,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Virtual File System" href="vdfs.html" /> 
+    <link rel="next" title="Kinds of Objects in Gothic" href="object-kinds.html" />
+    <link rel="prev" title="Welcome to REGoth’s documentation!" href="../index.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -79,11 +80,12 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="vdfs.html">Virtual File System</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Importing Textures</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Extending the Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#modifying-an-existing-chapter">Modifying an existing chapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-a-new-chapter">Adding a new chapter</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="object-kinds.html">Kinds of Objects in Gothic</a></li>
 </ul>
 
             
@@ -129,13 +131,13 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Importing Textures</li>
+      <li>Extending the Documentation</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/content/textures.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/content/extending-docs.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -148,14 +150,24 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="importing-textures">
-<h1>Importing Textures<a class="headerlink" href="#importing-textures" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">doxygenfile: Cannot find file “ImportTexture.hpp </p>
+  <div class="section" id="extending-the-documentation">
+<h1>Extending the Documentation<a class="headerlink" href="#extending-the-documentation" title="Permalink to this headline">¶</a></h1>
+<p>The documentation is written as reStructuredText and built
+using <a class="reference external" href="http://www.sphinx-doc.org">Sphinx</a>.
+See <a class="reference external" href="http://docutils.sourceforge.net/docs/user/rst/quickref.html">here</a>
+for a quick explanation of the <em>rst</em> syntax.</p>
+<div class="section" id="modifying-an-existing-chapter">
+<h2>Modifying an existing chapter<a class="headerlink" href="#modifying-an-existing-chapter" title="Permalink to this headline">¶</a></h2>
+<p>Simply go to <code class="docutils literal notranslate"><span class="pre">docs-source/content</span></code> and open one of the <code class="docutils literal notranslate"><span class="pre">.rst</span></code>-files with a
+text-editor of your choice.</p>
 </div>
+<div class="section" id="adding-a-new-chapter">
+<h2>Adding a new chapter<a class="headerlink" href="#adding-a-new-chapter" title="Permalink to this headline">¶</a></h2>
+<p>To add a new chapter you will have to</p>
+<ol class="arabic simple">
+<li>create a new <code class="docutils literal notranslate"><span class="pre">.rst</span></code>-file: <code class="docutils literal notranslate"><span class="pre">docs-source/content/&lt;your-chapter&gt;.rst</span></code></li>
+<li>add the new <code class="docutils literal notranslate"><span class="pre">.rst</span></code>-file to <code class="docutils literal notranslate"><span class="pre">docs-source/index.rst</span></code></li>
+</ol>
 </div>
 </div>
 
@@ -167,8 +179,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="object-kinds.html" class="btn btn-neutral float-right" title="Kinds of Objects in Gothic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="vdfs.html" class="btn btn-neutral" title="Virtual File System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="../index.html" class="btn btn-neutral" title="Welcome to REGoth’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

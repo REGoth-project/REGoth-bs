@@ -10,7 +10,8 @@ Welcome to REGoth's documentation!
    :maxdepth: 2
    :caption: Contents:
    
-   content/hello-world
+   content/extending-docs
+   content/object-kinds
 
 
 Indices and tables
