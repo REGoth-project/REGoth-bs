@@ -10,7 +10,7 @@ if (DOXYGEN_FOUND AND SPHINX_FOUND)
     configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
 
     # Build Doxygen XML, which can be read by Sphinx using Breathe
-    add_custom_target( doc_doxygen ALL
+    add_custom_target( doc_doxygen
         COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating API documentation with Doxygen"
