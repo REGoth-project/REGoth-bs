@@ -12,6 +12,7 @@ Welcome to REGoth's documentation!
    
    content/extending-docs
    content/object-kinds
+   content/scene-structure
 
 
 Indices and tables
