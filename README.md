@@ -3,7 +3,7 @@ REGoth using bs::f
 
 # Documentation
 
-https://regoth-project.github.io/REGoth-bs/
+https://regoth-project.github.io/REGoth-bs/index.html
 
 # Building
 
