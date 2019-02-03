@@ -1,8 +1,10 @@
+.. _object-kinds:
+
 Kinds of Objects in Gothic
 ==========================
 
 This chapter is a collection of some of the kinds of Objects used in the original
-engine, what they are, and how they are implemented in REGoth.
+engine, what they are and how they are implemented in REGoth.
 
 
 Vob
