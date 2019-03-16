@@ -44,7 +44,7 @@ if (DOXYGEN_FOUND AND SPHINX_FOUND)
         "${BINARY_BUILD_DIR}/conf.py"
         @ONLY)
     
-    add_custom_target(docs
+    add_custom_target(REGoth_docs
         ${SPHINX_EXECUTABLE}
             -q -b html
             -c "${BINARY_BUILD_DIR}"

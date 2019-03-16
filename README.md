@@ -24,7 +24,7 @@ You will need:
 With a cmake-project generated, run this from within the `build`-directory:
 
 ```sh
-cmake --build . --target docs
+cmake --build . --target REGoth_docs
 ```
 
 This will generate the documentation as HTML into `build/docs-source/html`. 

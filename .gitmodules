@@ -1,0 +1,3 @@
+[submodule "lib/BsZenLib"]
+	path = lib/BsZenLib
+	url = https://github.com/REGoth-project/BsZenLib.git
