@@ -18,10 +18,10 @@ are based on.
 
 The most useful properties of a vob include:
 
- - Name
- - Transform (Position, Rotation, **no scale**)
- - Visual (3D-Model, ParticleSystem, ...)
- - (probably more)
+- Name
+- Transform (Position, Rotation, **no scale**)
+- Visual (3D-Model, ParticleSystem, ...)
+- (probably more)
 
 As said before, a Vob is one of the most basic building blocks of a 3D-World in
 Gothic. For most gameplay relevant object, a subclass of Vob will be placed 
@@ -37,16 +37,16 @@ Class is used for real NPCs, monsters, as well as the player. A better name coul
 
 The NPC class is rather complex. Some of its tasks are:
 
- - Walking physics and collision detection
- - Decisions on which Animation to play
- - Inventory management
- - Fighting
- - Footstep sounds and effects
- - Handle dying, being knocked out
- - Handle attributes such as Health, Strength, skills
- - Some AI related tasks
- - Daily routine
- - (probably more)
+- Walking physics and collision detection
+- Decisions on which Animation to play
+- Inventory management
+- Fighting
+- Footstep sounds and effects
+- Handle dying, being knocked out
+- Handle attributes such as Health, Strength, skills
+- Some AI related tasks
+- Daily routine
+- (probably more)
 
 
 MOB (M...-what?)
@@ -61,9 +61,9 @@ to play an animation.
 
 Which animation that would be, is defined by the *state* the Mob is in. A chest, for example, has the states:
 
- 0. Idle
- 1. Closed
- 2. Open
+0. Idle
+1. Closed
+2. Open
 
 Depending on which state should be activated after an action by the character, a transition animation is played.
 For the chest, a transition animation ``0-to-1`` would be the character going down to knee in front of the chest.

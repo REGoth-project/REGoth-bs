@@ -13,6 +13,7 @@ Welcome to REGoth's documentation!
    content/extending-docs
    content/object-kinds
    content/scene-structure
+   content/character-statemachine
 
 
 Indices and tables

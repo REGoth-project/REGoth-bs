@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Character Statemachine &mdash; REGoth  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Scene Structure" href="scene-structure.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> REGoth
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object-kinds.html">Kinds of Objects in Gothic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scene-structure.html">Scene Structure</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Character Statemachine</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#buttons-and-ai">Buttons and AI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#priorities">Priorities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#states">States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#animation-naming">Animation naming</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#state-animations">State Animations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#translation-animations">Translation Animations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#standing-substate-description">Standing-Substate description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#state-run-forward">State - Run Forward</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#state-jump-backward">State - Jump Backward</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#state-strafe-left">State - Strafe Left</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#state-strafe-right">State - Strafe Right</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">REGoth</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Character Statemachine</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/content/character-statemachine.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="character-statemachine">
+<h1>Character Statemachine<a class="headerlink" href="#character-statemachine" title="Permalink to this headline">¶</a></h1>
+<p>Which actions a character can do at what time is decided by the characters <em>state machine</em>. It consists
+out of a center main state <em>standing</em> and a number of action-states like <em>Fight Left</em> or <em>Run Forward</em>.
+From the <em>Standing</em>-State, most other states are reached by eg. pressing a button (eg. run forward) and
+are active as long as that button is pressed.</p>
+<p>The <em>Standing</em>-State can transition to the following other states:</p>
+<ul class="simple">
+<li><em>Run Forward</em></li>
+<li><em>Jump Backward</em></li>
+<li><em>Strafe Left</em></li>
+<li><em>Strafe Right</em></li>
+<li><em>Draw Weapon</em></li>
+<li><em>Undraw Weapon</em></li>
+<li><em>Fight Forward</em></li>
+<li><em>Fight Left</em></li>
+<li><em>Fight Right</em></li>
+<li><em>Fight Block</em></li>
+</ul>
+<p>One of the reasons why a state-machine is needed here is for playing the transition animations:
+In the original game, the states described here were implicitly coded into the currently active
+animation of a character. For example, there is an animation for <em>Standing</em> and one for <em>Run Forward</em>.
+To transition between those, a <em>Transition from Standing to Run Forward</em>-Animation is played.
+While the transition-animation plays, the character is not supposed to go to other states, so that
+once the <em>Forward-Button</em> is tapped, you will need to wait for the whole transition animation to
+finish. This results in the character always taking a step once the forward button is tapped.</p>
+<div class="section" id="buttons-and-ai">
+<h2>Buttons and AI<a class="headerlink" href="#buttons-and-ai" title="Permalink to this headline">¶</a></h2>
+<p>To simplify things, when talking about buttons being pressed, this will also include the AI telling
+the character to do a certain action. Generally speaking, the AI cannot tell a character anything
+to do which is <em>not</em> bound to a button. Buttons are easy to understand.</p>
+</div>
+<div class="section" id="priorities">
+<h2>Priorities<a class="headerlink" href="#priorities" title="Permalink to this headline">¶</a></h2>
+<p>Special care has to be taken when executing a state in a loop. For example, if you
+hold the <em>Jump Backward</em>-button and then also press the <em>Run Forward</em>-button, the character should
+stay in the <em>Jump Backward</em>-state.</p>
+</div>
+<div class="section" id="states">
+<h2>States<a class="headerlink" href="#states" title="Permalink to this headline">¶</a></h2>
+<p>In the following sub-states, the filled black circle denoting the start of the
+state chart will always be the <em>Standing</em>-state, while the non-filled black
+circle will always go back to the <em>Standing</em>-state.</p>
+</div>
+<div class="section" id="animation-naming">
+<h2>Animation naming<a class="headerlink" href="#animation-naming" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="state-animations">
+<h3>State Animations<a class="headerlink" href="#state-animations" title="Permalink to this headline">¶</a></h3>
+<p>The animations named in the following parts are not the complete name of the animation clip. They
+are rather the <em>type</em> of animation the character should play. The final name is constructed like so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">S_</span><span class="o">&lt;</span><span class="n">weaponmode</span><span class="o">&gt;&lt;</span><span class="n">walkmode</span><span class="o">&gt;&lt;</span><span class="n">kind</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">&lt;weaponmode&gt;</span></code> can be one of:</p>
+<blockquote>
+<div><ul class="simple">
+<li>None: Empty string</li>
+<li>1h: <code class="docutils literal notranslate"><span class="pre">1H</span></code></li>
+<li>2h: <code class="docutils literal notranslate"><span class="pre">2H</span></code></li>
+<li>Bow: <code class="docutils literal notranslate"><span class="pre">BOW</span></code></li>
+<li>CrossBow: <code class="docutils literal notranslate"><span class="pre">CBOW</span></code></li>
+<li>Magic: <code class="docutils literal notranslate"><span class="pre">MAG</span></code></li>
+<li>Fist: <code class="docutils literal notranslate"><span class="pre">FIST</span></code></li>
+</ul>
+</div></blockquote>
+<p>And <code class="docutils literal notranslate"><span class="pre">&lt;walkmode&gt;</span></code> can be one of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">RUN</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">WALK</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">SNEAK</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">SWIM</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">JUMP</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">WATER</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">DIVE</span></code></li>
+</ul>
+</div></blockquote>
+<p>And <code class="docutils literal notranslate"><span class="pre">&lt;kind&gt;</span></code> is the animation named in the following state descriptions. For
+example, the full animation file name <code class="docutils literal notranslate"><span class="pre">S_RUNL</span></code> means: No weapon,
+Running-Walkmode with the animation which lets the character actually run
+forward, called <code class="docutils literal notranslate"><span class="pre">L</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We don’t exactly know why the actual <em>Go Forward</em>-Animations are called <code class="docutils literal notranslate"><span class="pre">L</span></code>.</p>
+</div>
+<p>As an other example, the animation file name <code class="docutils literal notranslate"><span class="pre">S_FISTWALKSTRAFEL</span></code> would be for
+fist-fighting, walking and strafing left.</p>
+<p>If an animation does not exist, first the one without a weapon mode is tried. If
+that doesn’t exist either, the <code class="docutils literal notranslate"><span class="pre">RUN</span></code> walkmode is used. And if <em>that</em> doesn’t
+exist either, we’re out of luck and can’t play any animation.</p>
+</div>
+<div class="section" id="translation-animations">
+<h3>Translation Animations<a class="headerlink" href="#translation-animations" title="Permalink to this headline">¶</a></h3>
+<p>sdfsf</p>
+</div>
+</div>
+<div class="section" id="standing-substate-description">
+<h2>Standing-Substate description<a class="headerlink" href="#standing-substate-description" title="Permalink to this headline">¶</a></h2>
+<p>The following states can be reached from the <em>Standnig</em>-state.</p>
+<div class="section" id="state-run-forward">
+<h3>State - Run Forward<a class="headerlink" href="#state-run-forward" title="Permalink to this headline">¶</a></h3>
+<p>Once the <em>Run forward</em>-button is pressed while in the <em>Standing</em>-State, the following substate shall
+be entered:</p>
+<div class="figure align-center" id="id1">
+<p class="plantuml">
+<img src="../_images/plantuml-3a3bd6e024b1efe6a72f4c78a887baaf7a54bf6e.png" alt="!include style.iuml
+
+state &quot;Play Transition:\nIdle to Run&quot; as transitionToRun
+state &quot;Play Transition:\nRun to Idle&quot; as transitionToIdle
+
+transitionToRun  : Play animation: &quot;&quot;RUN_2_RUNL&quot;&quot;
+Run              : Loop animation: &quot;&quot;RUNL&quot;&quot;
+transitionToIdle : Play animation: &quot;&quot;RUNL_2_RUN&quot;&quot;
+
+
+[*] --&gt; transitionToRun
+transitionToRun --&gt; Run : Animation Done
+
+Run --&gt; Run : While Forward-Button down
+Run --&gt; transitionToIdle : Run Forward-Button no longer down
+
+transitionToIdle --&gt; [*] : Animation Done"/>
+</p>
+<p class="caption"><span class="caption-text">Statechart for running forward.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="state-jump-backward">
+<h3>State - Jump Backward<a class="headerlink" href="#state-jump-backward" title="Permalink to this headline">¶</a></h3>
+<p>Once the <em>Jump Backward</em>-button is pressed while in the <em>Standing</em>-State, the following substate
+shall be entered:</p>
+<div class="figure align-center" id="id2">
+<p class="plantuml">
+<img src="../_images/plantuml-44225d6e0b749b030106421bb6cf7b5138217eb2.png" alt="!include style.iuml
+
+state &quot;Check Keys&quot; as CheckKeys
+state &quot;Play Animation&quot; as PlayAnimation
+
+PlayAnimation: Play Animation: &quot;&quot;JUMPB&quot;&quot;
+
+[*] -down-&gt; PlayAnimation
+
+PlayAnimation -right-&gt; CheckKeys : Animation finished
+
+CheckKeys -left-&gt; PlayAnimation : Jump Back-button down
+CheckKeys -down-&gt; [*]           : Jump Back button up"/>
+</p>
+<p class="caption"><span class="caption-text">Statechart for jump backwards.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="state-strafe-left">
+<h3>State - Strafe Left<a class="headerlink" href="#state-strafe-left" title="Permalink to this headline">¶</a></h3>
+<p>Once the <em>Strafe Left</em>-button is pressed while in the <em>Standing</em>-State, the following substate
+shall be entered:</p>
+<div class="figure align-center" id="id3">
+<p class="plantuml">
+<img src="../_images/plantuml-1658df6f25b926763f28d752849f3ad27e34e567.png" alt="!include style.iuml
+
+state &quot;Strafe Left&quot; as StrafeLeft
+StrafeLeft: Loop Animation: &quot;&quot;STRAFEL&quot;&quot;
+
+[*] --&gt; StrafeLeft
+
+StrafeLeft --&gt; StrafeLeft : While Strafe Left-button down
+
+StrafeLeft --&gt; [*] : Strafe Left-button Up"/>
+</p>
+<p class="caption"><span class="caption-text">Statechart for <em>Strafe Left</em>.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="state-strafe-right">
+<h3>State - Strafe Right<a class="headerlink" href="#state-strafe-right" title="Permalink to this headline">¶</a></h3>
+<p>Once the <em>Strafe Right</em>-button is pressed while in the <em>Standing</em>-State, the following substate
+shall be entered:</p>
+<div class="figure align-center" id="id4">
+<p class="plantuml">
+<img src="../_images/plantuml-b53b2dd0462e93a7f07bb97bef4d520935f6cb8a.png" alt="!include style.iuml
+
+state &quot;Strafe Right&quot; as StrafeRight
+StrafeRight: Loop Animation: &quot;&quot;STRAFER&quot;&quot;
+
+[*] --&gt; StrafeRight
+
+StrafeRight --&gt; StrafeRight : While Strafe Right-button down
+
+StrafeRight --&gt; [*] : Strafe Right-button Up"/>
+</p>
+<p class="caption"><span class="caption-text">Statechart for <em>Strafe Right</em>.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="scene-structure.html" class="btn btn-neutral" title="Scene Structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, The REGoth-Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

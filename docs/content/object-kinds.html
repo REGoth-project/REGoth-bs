@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Scene Structure" href="scene-structure.html" />
     <link rel="prev" title="Extending the Documentation" href="extending-docs.html" /> 
 
   
@@ -86,6 +87,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#mob-m-what">MOB (M…-what?)</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="scene-structure.html">Scene Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="character-statemachine.html">Character Statemachine</a></li>
 </ul>
 
             
@@ -161,14 +164,12 @@ into the 3D world are called in the original engine.</p>
 <p>Since Gothic uses an Object-Oriented engine, this is usually the class other Objects
 are based on.</p>
 <p>The most useful properties of a vob include:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>Name</li>
 <li>Transform (Position, Rotation, <strong>no scale</strong>)</li>
 <li>Visual (3D-Model, ParticleSystem, …)</li>
 <li>(probably more)</li>
 </ul>
-</div></blockquote>
 <p>As said before, a Vob is one of the most basic building blocks of a 3D-World in
 Gothic. For most gameplay relevant object, a subclass of Vob will be placed
 into the world. The raw Vob-class is however used for decorative objects like
@@ -179,8 +180,7 @@ into the world. The raw Vob-class is however used for decorative objects like
 <p>Even though the name explicitly states, that this is NOT something controlled by the player, in the original Gothic this
 Class is used for real NPCs, monsters, as well as the player. A better name could have been “Character Controller”.</p>
 <p>The NPC class is rather complex. Some of its tasks are:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>Walking physics and collision detection</li>
 <li>Decisions on which Animation to play</li>
 <li>Inventory management</li>
@@ -192,7 +192,6 @@ Class is used for real NPCs, monsters, as well as the player. A better name coul
 <li>Daily routine</li>
 <li>(probably more)</li>
 </ul>
-</div></blockquote>
 </div>
 <div class="section" id="mob-m-what">
 <h2>MOB (M…-what?)<a class="headerlink" href="#mob-m-what" title="Permalink to this headline">¶</a></h2>
@@ -202,13 +201,11 @@ For each spot the character could interact from, there has to be a bone. Upon in
 will be teleported to the nearest empty interation-spot. Once there, the character and the Mob will start
 to play an animation.</p>
 <p>Which animation that would be, is defined by the <em>state</em> the Mob is in. A chest, for example, has the states:</p>
-<blockquote>
-<div><ol class="arabic simple" start="0">
+<ol class="arabic simple" start="0">
 <li>Idle</li>
 <li>Closed</li>
 <li>Open</li>
 </ol>
-</div></blockquote>
 <p>Depending on which state should be activated after an action by the character, a transition animation is played.
 For the chest, a transition animation <code class="docutils literal notranslate"><span class="pre">0-to-1</span></code> would be the character going down to knee in front of the chest.
 Once the character wants to open the chest, a transition animation <code class="docutils literal notranslate"><span class="pre">1-to-2</span></code> will be played in which the character
@@ -225,6 +222,8 @@ knees in front of the chest.</p>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scene-structure.html" class="btn btn-neutral float-right" title="Scene Structure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="extending-docs.html" class="btn btn-neutral" title="Extending the Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
