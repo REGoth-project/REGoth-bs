@@ -1,0 +1,12 @@
+skinparam monochrome true
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam DefaultFontName arial
+skinparam DefaultFontSize 12
+skinparam ClassFontStyle bold
+skinparam componentStyle uml2
+skinparam linetype polyline
+skinparam roundcorner 1
+hide empty fields
+hide circle
+hide empty description
