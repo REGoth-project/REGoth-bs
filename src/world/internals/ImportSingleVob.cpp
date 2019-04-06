@@ -1,4 +1,5 @@
 #include "ImportSingleVob.hpp"
+#include <Components/BsCLight.h>
 #include <Math/BsMatrix4.h>
 #include <Scene/BsSceneObject.h>
 #include <components/StartSpot.hpp>
@@ -78,7 +79,20 @@ namespace REGoth
   {
     bs::HSceneObject so = import_zCVob(vob);
 
+    // FIXME: Put lights back in
     return so;
+#if 0
+    bs::HLight light = so->addComponent<bs::CLight>();
+
+    auto lightColor = bs::Color::fromRGBA(vob.zCVobLight.color);
+
+    light->setType(bs::LightType::Radial);
+    light->setUseAutoAttenuation(false);
+    light->setAttenuationRadius(vob.zCVobLight.range);
+    light->setColor(lightColor);
+
+    return so;
+#endif
   }
 
   /**
