@@ -6,7 +6,29 @@ add_library(samples-common
  )
 
 target_include_directories(samples-common PUBLIC common)
-target_link_libraries(samples-common PUBLIC bsf BsZenLib)
+target_link_libraries(samples-common PUBLIC bsf)
+
+add_library(REGothEngine
+  REGothEngine.cpp
+  components/CharacterState.cpp
+  components/VisualCharacter.cpp
+  components/VisualStaticMesh.cpp
+  components/StartSpot.cpp
+  animation/StateNaming.cpp
+  animation/Animation.cpp
+  original-content/VirtualFileSystem.cpp
+  world/ConstructFromZEN.cpp
+  world/internals/ImportSingleVob.cpp
+  )
+
+target_link_libraries(REGothEngine PUBLIC bsf BsZenLib)
+target_include_directories(REGothEngine PUBLIC .)
 
 add_executable(REGoth main.cpp)
-target_link_libraries(REGoth samples-common)
+target_link_libraries(REGoth REGothEngine samples-common)
+
+add_executable(REGothCharacterViewer main_CharacterViewer.cpp)
+target_link_libraries(REGothCharacterViewer REGothEngine samples-common)
+
+add_executable(REGothWorldViewer main_WorldViewer.cpp)
+target_link_libraries(REGothWorldViewer REGothEngine samples-common)

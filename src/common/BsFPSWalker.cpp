@@ -52,10 +52,13 @@ namespace bs
 
 		// If the movement button is pressed, determine direction to move in
 		Vector3 direction = Vector3::ZERO;
+
+    #if 0
 		if (goingForward) direction += tfrm.getForward();
 		if (goingBack) direction -= tfrm.getForward();
 		if (goingRight) direction += tfrm.getRight();
 		if (goingLeft) direction -= tfrm.getRight();
+    #endif
 
 		// Eliminate vertical movement
 		direction.y = 0.0f;
@@ -89,7 +92,7 @@ namespace bs
 			velocity = direction * mCurrentSpeed;
 
 		// Note: Gravity is acceleration, but since the walker doesn't support falling, just apply it as a velocity
-		Vector3 gravity = gPhysics().getGravity();
+		Vector3 gravity = Vector3(0, -9.81, 0); //gPhysics().getGravity();
 		mController->move((velocity + gravity) * frameDelta);
 	}
 }

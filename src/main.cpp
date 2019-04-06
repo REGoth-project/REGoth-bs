@@ -5,55 +5,33 @@
 #include <string>
 #include "BsApplication.h"
 #include "BsFPSCamera.h"
+#include "BsFPSWalker.h"
+#include "REGothEngine.hpp"
 #include <assert.h>
+#include "components/VisualCharacter.hpp"
+#include "original-content/VirtualFileSystem.hpp"
+#include <BsZenLib/ImportAnimation.hpp>
+#include <BsZenLib/ImportPath.hpp>
+#include <BsZenLib/ImportSkeletalMesh.hpp>
 #include <BsZenLib/ImportZEN.hpp>
 #include <Components/BsCCamera.h>
+#include <Components/BsCCharacterController.h>
 #include <Components/BsCLight.h>
 #include <Components/BsCRenderable.h>
-#include <Input/BsVirtualInput.h>
-#include <Scene/BsSceneObject.h>
-#include <Scene/BsPrefab.h>
-#include <vdfs/fileIndex.h>
-#include <Scene/BsSceneObject.h>
-#include <Resources/BsResources.h>
-#include <BsZenLib/ImportPath.hpp>
-#include <Resources/BsResourceManifest.h>
 #include <FileSystem/BsFileSystem.h>
 #include <GUI/BsCGUIWidget.h>
 #include <GUI/BsGUIPanel.h>
 #include <GUI/BsGUISlider.h>
+#include <Input/BsVirtualInput.h>
 #include <Resources/BsBuiltinResources.h>
-
-/** Registers a common set of keys/buttons that are used for controlling the examples. */
-static void setupInputConfig()
-{
-  using namespace bs;
-
-  auto inputConfig = gVirtualInput().getConfiguration();
-
-  // Camera controls for buttons (digital 0-1 input, e.g. keyboard or gamepad button)
-  inputConfig->registerButton("Forward", BC_W);
-  inputConfig->registerButton("Back", BC_S);
-  inputConfig->registerButton("Left", BC_A);
-  inputConfig->registerButton("Right", BC_D);
-  inputConfig->registerButton("Forward", BC_UP);
-  inputConfig->registerButton("Back", BC_DOWN);
-  inputConfig->registerButton("Left", BC_LEFT);
-  inputConfig->registerButton("Right", BC_RIGHT);
-  inputConfig->registerButton("FastMove", BC_LSHIFT);
-  inputConfig->registerButton("Rotate", BC_MOUSE_LEFT);
-
-  // Camera controls for axes (analog input, e.g. mouse or gamepad thumbstick)
-  // These return values in [-1.0, 1.0] range.
-  inputConfig->registerAxis("Horizontal", VIRTUAL_AXIS_DESC((UINT32)InputAxis::MouseX));
-  inputConfig->registerAxis("Vertical", VIRTUAL_AXIS_DESC((UINT32)InputAxis::MouseY));
-}
+#include <Resources/BsResourceManifest.h>
+#include <Resources/BsResources.h>
+#include <Scene/BsPrefab.h>
+#include <Scene/BsSceneObject.h>
 
 int main(int argc, char** argv)
 {
   using namespace bs;
-
-  VDFS::FileIndex::initVDFS(argv[0]);
 
   if (argc < 3)
   {
@@ -61,34 +39,33 @@ int main(int argc, char** argv)
     return -1;
   }
 
-  const String dataDir = argv[1];
+  REGoth::REGothEngine regoth;
+
+  regoth.initializeBsf();
+  regoth.setupInput();
+
+  gDebug().logDebug("[Main] Starting REGoth");
+
+  const String engineExecutablePath = argv[0];
+  const String gameDirectory = argv[1];
   const String zenFile = argv[2];
 
-  VDFS::FileIndex vdfs;
-  vdfs.loadVDF((dataDir + "/Worlds.vdf").c_str());
-  vdfs.loadVDF((dataDir + "/Textures.vdf").c_str());
-  vdfs.loadVDF((dataDir + "/Meshes.vdf").c_str());
-  vdfs.finalizeLoad();
+  gDebug().logDebug("[Main]  - Engine executable: " + engineExecutablePath);
+  gDebug().logDebug("[Main]  - Game directory:    " + gameDirectory);
+  gDebug().logDebug("[Main]  - Startup ZEN:       " + zenFile);
 
-  if (vdfs.getKnownFiles().empty())
+  gDebug().logDebug("[Main] Loading original game packages");
+  regoth.loadOriginalGamePackages(engineExecutablePath, gameDirectory);
+
+  if (!regoth.hasFoundGameFiles())
   {
     std::cout << "No files loaded into the VDFS - is the datapath correct?" << std::endl;
     return -1;
   }
 
-  // for (auto& s : vdfs.getKnownFiles())
-  // {
-  //   gDebug().logDebug(s.c_str());
-  // }
+  regoth.loadCachedResourceManifests();
 
-  VideoMode videoMode(1280, 720);
-  Application::startUp(videoMode, "zen-bs", false);
-  
-  if (FileSystem::exists(BsZenLib::GothicPathToCachedManifest("resources")))
-  {
-	  auto prevManifest = ResourceManifest::load(BsZenLib::GothicPathToCachedManifest("resources"), BsZenLib::GetCacheDirectory());
-	  gResources().registerResourceManifest(prevManifest);
-  }
+  gDebug().logDebug("[Main] Setting up scene");
 
   // Add a scene object containing a camera component
   HSceneObject sceneCameraSO = SceneObject::create("SceneCamera");
@@ -96,30 +73,62 @@ int main(int argc, char** argv)
   sceneCamera->setMain(true);
   sceneCamera->setMSAACount(1);
 
+  HSceneObject playerSO = SceneObject::create("Player");
+  REGoth::HVisualCharacter playerVisual = playerSO->addComponent<REGoth::VisualCharacter>();
+
+  // Load a model and its animations
+  BsZenLib::Res::HModelScriptFile model;
+
+  const String file = "HUMANS.MDS";
+  const String visual = "HUM_BODY_NAKED0.ASC";
+
+  if (BsZenLib::HasCachedMDS(file))
+  {
+    model = BsZenLib::LoadCachedMDS(file);
+  }
+  else
+  {
+    model = BsZenLib::ImportAndCacheMDS(file, REGoth::gVirtualFileSystem().getFileIndex());
+  }
+
+  if (!model || model->getMeshes().empty())
+  {
+    gDebug().logError("Failed to load model or animations: " + file + "/" + visual);
+    return -1;
+  }
+
+  gDebug().logDebug("Num Meshes: " + bs::toString(model->getMeshes().size()));
+
+  for (const auto& h : model->getMeshes())
+  {
+    // h.blockUntilLoaded();
+    gDebug().logDebug(h->getName());
+  }
+
+  playerVisual->setModelScript(model);
+  playerVisual->setMesh(model->getMeshes()[0]);
+  // playerSO->setScale(Vector3(0.01f, 0.01f, 0.01f)); // FIXME: Scale should be done when importing
+  // the mesh
+
   // Disable some fancy rendering
   auto rs = sceneCamera->getRenderSettings();
 
   rs->screenSpaceReflections.enabled = false;
-  rs->ambientOcclusion.enabled = true;
+  rs->ambientOcclusion.enabled = false;
   rs->enableIndirectLighting = true;
-  rs->enableFXAA = true;
+  rs->enableFXAA = false;
   rs->enableHDR = false;
   rs->enableTonemapping = false;
 
   sceneCamera->setRenderSettings(rs);
 
-  // Position the camera
-  sceneCameraSO->setPosition(Vector3(0.0f, 20.0f, 0.0f));
-  sceneCameraSO->lookAt(Vector3(0, 0, 0));
-  sceneCameraSO->addComponent<FPSCamera>();
-  
   HSceneObject worldSO = {};
 
   // Import a Gothic ZEN
   if (BsZenLib::HasCachedZEN(zenFile))
   {
     HPrefab worldPrefab = BsZenLib::LoadCachedZEN(zenFile);
-   
+
     if (!worldPrefab)
     {
       gDebug().logError("Failed to load cached ZEN: " + zenFile);
@@ -132,8 +141,9 @@ int main(int argc, char** argv)
   }
   else
   {
-	  worldSO = BsZenLib::ImportAndCacheZEN(zenFile.c_str(), vdfs);
-   
+    worldSO =
+        BsZenLib::ImportAndCacheZEN(zenFile.c_str(), REGoth::gVirtualFileSystem().getFileIndex());
+
     if (!worldSO)
     {
       gDebug().logError("Failed to load uncached ZEN: " + zenFile);
@@ -141,7 +151,32 @@ int main(int argc, char** argv)
     }
   }
 
-  setupInputConfig();
+  regoth.saveCachedResourceManifests();
+
+  HSceneObject startSO = worldSO->findChild("zCVobStartpoint:zCVob");
+
+  Vector3 startPosition = startSO ? startSO->getTransform().getPosition() : Vector3(bs::BsZero);
+  Vector3 startLookAt = startSO ? startSO->getTransform().getForward() : Vector3(1.0, 0.0, 0.0);
+
+  // Position the camera
+  sceneCameraSO->setParent(playerSO);
+
+  HCharacterController charController = playerSO->addComponent<CCharacterController>();
+  playerSO->addComponent<FPSWalker>();
+
+  // Make the character about 1.8m high, with 0.4m radius (controller represents a capsule)
+  charController->setHeight(1.0f);  // + 0.4 * 2 radius = 1.8m height
+  charController->setRadius(0.4f);
+
+  HFPSCamera fpsCamera = sceneCameraSO->addComponent<FPSCamera>();
+  fpsCamera->setCharacter(playerSO);
+
+  sceneCameraSO->setPosition(Vector3(0.0f, 1.8f * 0.5f - 0.1f, 2.0));
+
+  playerSO->setPosition(startPosition);
+  // playerSO->lookAt(startLookAt);
+
+  // setupInputConfig();
 
   // Add GUI
   HSceneObject guiSO = SceneObject::create("GUI");
@@ -155,27 +190,23 @@ int main(int argc, char** argv)
 
   // Add draw distance slider
   GUISlider* drawDistanceSlider = mainPanel->addNewElement<GUISliderHorz>();
-  
+
   drawDistanceSlider->setRange(1.0f, 100.0f);
   drawDistanceSlider->setPosition(5, 5);
   drawDistanceSlider->setWidth(200);
 
   drawDistanceSlider->onChanged.connect([&](float percent) {
-  float value = drawDistanceSlider->getValue();
+    float value = drawDistanceSlider->getValue();
 
-  auto rs = sceneCamera->getRenderSettings();
+    auto rs = sceneCamera->getRenderSettings();
 
-  rs->cullDistance = value;
-  gDebug().logDebug("Set CullDistance to: " + toString(value));
+    rs->cullDistance = value;
+    gDebug().logDebug("Set CullDistance to: " + toString(value));
 
-  sceneCamera->setRenderSettings(rs);
+    sceneCamera->setRenderSettings(rs);
   });
 
-  Application::instance().runMainLoop();
+  regoth.run();
 
-  SPtr<ResourceManifest> manifest = gResources().getResourceManifest("Default");
-  ResourceManifest::save(manifest, BsZenLib::GothicPathToCachedManifest("resources"), BsZenLib::GetCacheDirectory());
-
-  Application::shutDown();
   return 0;
 }
