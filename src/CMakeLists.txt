@@ -14,6 +14,7 @@ add_library(REGothEngine
   components/VisualCharacter.cpp
   components/VisualStaticMesh.cpp
   components/StartSpot.cpp
+  components/Spot.cpp
   animation/StateNaming.cpp
   animation/Animation.cpp
   original-content/VirtualFileSystem.cpp

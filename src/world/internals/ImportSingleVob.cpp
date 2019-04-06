@@ -5,6 +5,7 @@
 #include <components/StartSpot.hpp>
 #include <components/VisualStaticMesh.hpp>
 #include <zenload/zTypes.h>
+#include <components/Spot.hpp>
 
 namespace Internal
 {
@@ -22,6 +23,10 @@ namespace REGoth
   static bs::HSceneObject import_zCVob(const ZenLoad::zCVobData& vob);
   static bs::HSceneObject import_zCVobLight(const ZenLoad::zCVobData& vob);
   static bs::HSceneObject import_zCVobStartpoint(const ZenLoad::zCVobData& vob);
+  static bs::HSceneObject import_zCVobSpot(const ZenLoad::zCVobData& vob);
+  static bs::HSceneObject import_oCItem(const ZenLoad::zCVobData& vob);
+  static bs::HSceneObject import_zCVobSound(const ZenLoad::zCVobData& vob);
+  static bs::HSceneObject import_zCVobAnimate(const ZenLoad::zCVobData& vob);
   static void addVisualTo(bs::HSceneObject sceneObject, const bs::String& visualName);
 
   bs::HSceneObject World::importSingleVob(const ZenLoad::zCVobData& vob)
@@ -37,6 +42,22 @@ namespace REGoth
     else if (vob.objectClass == "zCVobStartpoint:zCVob")
     {
       return import_zCVobStartpoint(vob);
+    }
+    else if (vob.objectClass == "zCVobSpot:zCVob")
+    {
+      return import_zCVobSpot(vob);
+    }
+    else if (vob.objectClass == "zCVobSound:zCVob")
+    {
+      return import_zCVobSound(vob);
+    }
+    else if (vob.objectClass == "oCItem:zCVob")
+    {
+      return import_oCItem(vob);
+    }
+    else if (vob.objectClass == "zCVobAnimate:zCVob")
+    {
+      return import_zCVobAnimate(vob);
     }
     else
     {
@@ -66,7 +87,10 @@ namespace REGoth
     so->setPosition(positionCM * centimetersToMeters);
     so->setRotation(rotation);
 
-    addVisualTo(so, vob.visual.c_str());
+    if (!vob.visual.empty())
+    {
+      addVisualTo(so, vob.visual.c_str());
+    }
 
     return so;
   }
@@ -103,6 +127,45 @@ namespace REGoth
     bs::HSceneObject so = import_zCVob(vob);
 
     so->addComponent<StartSpot>();
+
+    return so;
+  }
+
+  /**
+   * Spots like free-points.
+   */
+  static bs::HSceneObject import_zCVobSpot(const ZenLoad::zCVobData& vob)
+  {
+    bs::HSceneObject so = import_zCVob(vob);
+
+    so->addComponent<Spot>();
+
+    return so;
+  }
+
+  static bs::HSceneObject import_oCItem(const ZenLoad::zCVobData& vob)
+  {
+    bs::HSceneObject so = import_zCVob(vob);
+
+    // TODO: Implement
+
+    return so;
+  }
+
+  static bs::HSceneObject import_zCVobSound(const ZenLoad::zCVobData& vob)
+  {
+    bs::HSceneObject so = import_zCVob(vob);
+
+    // TODO: Implement
+
+    return so;
+  }
+
+  static bs::HSceneObject import_zCVobAnimate(const ZenLoad::zCVobData& vob)
+  {
+    bs::HSceneObject so = import_zCVob(vob);
+
+    // TODO: Implement
 
     return so;
   }
