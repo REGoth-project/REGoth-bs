@@ -132,6 +132,9 @@ void REGothEngine::setupMainCamera()
   rs->enableFXAA = false;
   rs->enableHDR = false;
   rs->enableTonemapping = false;
+  rs->cullDistance = 100.0f;
+
+  sceneCamera->setRenderSettings(rs);
 
   mMainCamera = sceneCamera;
 }
