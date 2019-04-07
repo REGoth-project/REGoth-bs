@@ -20,10 +20,7 @@ REGothEngine::~REGothEngine()
 bs::Vector<bs::String> REGothEngine::getVdfsPackagesToLoad()
 {
   return {
-      "Worlds.vdf",
-      "Textures.vdf",
-      "Meshes.vdf",
-      "Anims.vdf",
+      "Worlds.vdf", "Textures.vdf", "Meshes.vdf", "Anims.vdf", "Fonts.vdf",
   };
 }
 

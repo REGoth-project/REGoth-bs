@@ -33,3 +33,6 @@ target_link_libraries(REGothCharacterViewer REGothEngine samples-common)
 
 add_executable(REGothWorldViewer main_WorldViewer.cpp)
 target_link_libraries(REGothWorldViewer REGothEngine samples-common)
+
+add_executable(REGothFontViewer main_FontViewer.cpp)
+target_link_libraries(REGothFontViewer REGothEngine samples-common)
