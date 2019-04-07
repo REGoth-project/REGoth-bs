@@ -102,6 +102,16 @@ namespace REGoth
      */
     bool loadPackage(const bs::String& package);
 
+    /**
+     * Returns a list of all files known to the index.
+     *
+     * This will go through all packages and assemble a list containing all
+     * known files names which one could read using readFile().
+     *
+     * @return Names of all files known to the index.
+     */
+    bs::Vector<bs::String> listAllFiles();
+
 
     /**
      * Reads the contents of a file and returns them as byte array.

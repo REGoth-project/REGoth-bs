@@ -116,6 +116,19 @@ bool VirtualFileSystem::loadPackage(const bs::String& package)
   return true;
 }
 
+bs::Vector<bs::String> VirtualFileSystem::listAllFiles()
+{
+  std::vector<std::string> allStl = mInternal->fileIndex.getKnownFiles();
+  bs::Vector<bs::String> all(allStl.size());
+
+  for(size_t i = 0; i < allStl.size(); i++)
+  {
+    all[i] = allStl[i].c_str();
+  }
+
+  return all;
+}
+
 bs::Vector<bs::UINT8> VirtualFileSystem::readFile(const bs::String& file) const
 {
   using namespace bs;
