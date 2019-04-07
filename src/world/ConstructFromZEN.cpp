@@ -79,6 +79,8 @@ namespace REGoth
     result.fileName = zenFile;
 
     zenParser.readWorld(result.vobTree);
+
+    // FIXME: Don't pack the mesh if it was already cached, packing takes a long time...
     zenParser.getWorldMesh()->packMesh(result.worldMesh, 0.01f);
 
     return true;

@@ -1,9 +1,6 @@
 #include "BsFPSCamera.h"
-#include "BsFPSWalker.h"
 #include "REGothEngine.hpp"
-#include "original-content/VirtualFileSystem.hpp"
 #include <Components/BsCCamera.h>
-#include <Math/BsVector3.h>
 #include <Scene/BsSceneObject.h>
 #include <world/ConstructFromZEN.hpp>
 
