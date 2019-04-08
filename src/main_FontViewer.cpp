@@ -1,5 +1,6 @@
 #include "BsFPSCamera.h"
 #include "REGothEngine.hpp"
+#include <GUI/BsGUILayoutY.h>
 #include <BsZenLib/ImportFont.hpp>
 #include <BsZenLib/ImportTexture.hpp>
 #include <Components/BsCCamera.h>
@@ -13,6 +14,7 @@
 #include <Scene/BsSceneObject.h>
 #include <Text/BsFont.h>
 #include <original-content/VirtualFileSystem.hpp>
+#include <gui/skin_gothic.hpp>
 
 class REGothFontViewer : public REGoth::REGothEngine
 {
@@ -22,75 +24,31 @@ public:
     REGoth::REGothEngine::setupMainCamera();
 
     mFPSCamera = mMainCamera->SO()->addComponent<bs::FPSCamera>();
+    mMainCamera->getViewport()->setClearColorValue(bs::Color(0.0f, 0.0f, 0.0f, 1.0f));
   }
 
   void setupScene() override
   {
-    const char* FONT = "FONT_DEFAULT.FNT";
-
-    bs::HFont font;
-    if (BsZenLib::HasCachedFont(FONT))
-    {
-      font = BsZenLib::LoadCachedFont(FONT);
-    }
-    else
-    {
-      font = BsZenLib::ImportAndCacheFont(FONT, REGoth::gVirtualFileSystem().getFileIndex());
-    }
-
-    if (!font)
-    {
-      bs::gDebug().logError("Failed to load Font: " + bs::String(FONT));
-      exit(-1);
-    }
-
-    const char* BACKGROUND = "STARTSCREEN.TGA";
-
-    bs::HTexture backgroundTexture =
-        BsZenLib::ImportAndCacheTexture(BACKGROUND, REGoth::gVirtualFileSystem().getFileIndex());
-
-    if (!backgroundTexture)
-    {
-      bs::gDebug().logError("Failed to load BackgroundTexture: " + bs::String(BACKGROUND));
-      exit(-1);
-    }
-
-    bs::HSpriteTexture backgroundSprite = bs::SpriteTexture::create(backgroundTexture);
-
     // Add GUI
     bs::HSceneObject guiSO = bs::SceneObject::create("GUI");
     bs::HGUIWidget gui = guiSO->addComponent<bs::CGUIWidget>(mMainCamera);
 
-    bs::HGUISkin skin = bs::GUISkin::create();
-
-    bs::GUIElementStyle gothicLabelStyle;
-    gothicLabelStyle.font = font;
-    gothicLabelStyle.fontSize = 18;
-
-    skin->setStyle("GothicLabelStyle", gothicLabelStyle);
-
     // gui->setSkin(bs::BuiltinResources::instance().getGUISkin());
-    gui->setSkin(skin);
+    gui->setSkin(REGoth::GUI::createSkin_Gothic());
 
     bs::GUIPanel* mainPanel = gui->getPanel();
-    bs::GUIPanel* backgroundPanel = mainPanel->addNewElement<bs::GUIPanel>(1);
-
-    bs::GUITexture* background = backgroundPanel->addNewElement<bs::GUITexture>(backgroundSprite);
-    background->setPosition(0,0);
-    // background->setSize(backgroundPanel->getScreenBounds().x, backgroundPanel->getScreenBounds().y);
+    bs::GUILayoutY* layoutY = mainPanel->addNewElement<bs::GUILayoutY>();
 
     const char* TEXT =
         "This is some bullshit text for testing. Does this thing handle newlines?\n"
         "I guess we'll see. What about umlauts like ä, ö, ü and ß? UPPERCASE ÄÖÜ?\n"
         "Do special characters work? Something like %, #, / or _?";
 
-    bs::GUILabel* labelDefaultFont = mainPanel->addNewElement<bs::GUILabel>(bs::HString(TEXT));
-
-    bs::GUILabel* labelGothicFont = mainPanel->addNewElement<bs::GUILabel>(bs::HString(TEXT));
-    labelGothicFont->setStyle("GothicLabelStyle");
-
-    labelDefaultFont->setPosition(10, 20);
-    labelGothicFont->setPosition(10, 100);
+    layoutY->addNewElement<bs::GUILabel>(bs::HString(TEXT), "Label");
+    layoutY->addNewElement<bs::GUILabel>(bs::HString(TEXT), "GothicLabel");
+    layoutY->addNewElement<bs::GUILabel>(bs::HString(TEXT), "GothicLabelLarge");
+    layoutY->addNewElement<bs::GUILabel>(bs::HString(TEXT), "GothicLabelHighlighted");
+    layoutY->addNewElement<bs::GUILabel>(bs::HString(TEXT), "GothicLabelLargeHighlighted");
   }
 
 protected:

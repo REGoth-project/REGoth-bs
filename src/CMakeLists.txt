@@ -19,6 +19,7 @@ add_library(REGothEngine
   animation/Animation.cpp
   original-content/VirtualFileSystem.cpp
   world/ConstructFromZEN.cpp
+  gui/skin_gothic.cpp
   world/internals/ImportSingleVob.cpp
   )
 
