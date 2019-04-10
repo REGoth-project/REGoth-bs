@@ -1,7 +1,7 @@
 /**\file
  */
 #pragma once
-#include "ScriptVM.hpp"
+#include <scripting/ScriptVM.hpp>
 #include <BsPrerequisites.h>
 
 namespace Daedalus

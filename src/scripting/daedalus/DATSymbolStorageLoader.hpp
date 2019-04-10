@@ -1,5 +1,5 @@
 #pragma once
-#include "ScriptObjects.hpp"
+#include <scripting/ScriptObjects.hpp>
 #include <BsPrerequisites.h>
 
 namespace Daedalus

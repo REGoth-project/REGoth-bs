@@ -20,8 +20,8 @@ add_library(REGothEngine
   components/VisualMorphMesh.cpp
   animation/StateNaming.cpp
   animation/Animation.cpp
-  scripting/REGothDaedalusVM.cpp
-  scripting/DATSymbolStorageLoader.cpp
+  scripting/daedalus/REGothDaedalusVM.cpp
+  scripting/daedalus/DATSymbolStorageLoader.cpp
   scripting/ScriptSymbols.cpp
   original-content/VirtualFileSystem.cpp
   world/ConstructFromZEN.cpp

@@ -1,6 +1,6 @@
 #include "REGothEngine.hpp"
 #include <scripting/ScriptSymbolStorage.hpp>
-#include <scripting/DATSymbolStorageLoader.hpp>
+#include <scripting/daedalus/DATSymbolStorageLoader.hpp>
 #include <daedalus/DATFile.h>
 
 class REGothScriptTester : public REGoth::REGothEngine
