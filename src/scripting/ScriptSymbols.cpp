@@ -9,8 +9,6 @@ namespace REGoth
     {
         switch (type)
         {
-          case SymbolType::Void:
-            return "Void";
           case SymbolType::Float:
             return "Float";
           case SymbolType::Int:
@@ -50,9 +48,6 @@ namespace REGoth
         line += "[KAL] ";
       }
 
-      if (type == SymbolType::Void)
-      {
-      }
       else if (type == SymbolType::Float)
       {
       }

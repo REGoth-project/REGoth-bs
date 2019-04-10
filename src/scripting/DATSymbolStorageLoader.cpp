@@ -95,8 +95,6 @@ namespace REGoth
       {
         switch (type)
         {
-          case SymbolType::Void:
-            return mStorage.appendSymbol<SymbolUnsupported>(name);
           case SymbolType::Float:
             return mStorage.appendSymbol<SymbolFloat>(name);
           case SymbolType::Int:
@@ -123,12 +121,7 @@ namespace REGoth
       {
         SymbolType type = mStorage.getSymbolType(target);
 
-        if (type == SymbolType::Void)
-        {
-          auto& t = mStorage.getSymbol<SymbolUnsupported>(target);  // Void IS unsupported
-          fill(t, source);
-        }
-        else if (type == SymbolType::Float)
+        if (type == SymbolType::Float)
         {
           auto& t = mStorage.getSymbol<SymbolFloat>(target);
           fill(t, source);

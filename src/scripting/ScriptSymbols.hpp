@@ -17,7 +17,6 @@ namespace REGoth
 
     enum class SymbolType
     {
-      Void,
       Float,
       Int,
       String,
