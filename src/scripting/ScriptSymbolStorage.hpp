@@ -29,8 +29,12 @@ namespace REGoth
       SymbolIndex appendSymbol(const bs::String& name)
       {
         bs::UPtr<SymbolBase> symbol = bs::bs_unique_ptr<SymbolBase>(new T());
+
+        SymbolIndex index = (SymbolIndex)(mStorage.size() - 1);
+
         mStorage.emplace_back(std::move(symbol));
         mStorage.back()->name = name;
+        mStorage.back()->index = index;
         mStorage.back()->type = T::TYPE;
 
         if (mStorage.size() >= SYMBOL_INDEX_MAX)
@@ -38,8 +42,6 @@ namespace REGoth
           using namespace bs;
           BS_EXCEPT(InvalidStateException, "Symbol Index limit reached!");
         }
-
-        SymbolIndex index = (SymbolIndex)(mStorage.size() - 1);
 
         mSymbolsByName[name] = index;
 
@@ -107,6 +109,30 @@ namespace REGoth
         throwOnMismatchingType<T>(*mStorage[index]);
 
         return getTypedSymbolReference<T>(index);
+      }
+
+      /**
+       * Runs a query agains the symbol storage. Assembles a list of all symbols
+       * for which the given function returned true.
+       *
+       * @param  addIf  Predicate function. If this returns true, the symbols index will
+       *                be added to the result list.
+       *
+       * @return List of indices of all symbols where the predicate function returned true.
+       */
+      bs::Vector<SymbolIndex> query(std::function<bool(const SymbolBase&)> addIf)
+      {
+        bs::Vector<SymbolIndex> result;
+
+        for (const auto& s : mStorage)
+        {
+          if (addIf(*s))
+          {
+            result.push_back(s->index);
+          }
+        }
+
+        return result;
       }
 
       /**

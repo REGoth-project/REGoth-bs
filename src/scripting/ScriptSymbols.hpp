@@ -47,6 +47,11 @@ namespace REGoth
       SymbolType type;
 
       /**
+       * This symbols index in the symbol storage.
+       */
+      SymbolIndex index;
+
+      /**
        * This symbols *parent* symbol. For a classes member variable, this would be the
        * symbol of the actual class.
        *
