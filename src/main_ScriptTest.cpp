@@ -1,5 +1,5 @@
 #include "REGothEngine.hpp"
-#include <scripting/ScriptSymbols.hpp>
+#include <scripting/ScriptSymbolStorage.hpp>
 #include <scripting/DATSymbolStorageLoader.hpp>
 #include <daedalus/DATFile.h>
 

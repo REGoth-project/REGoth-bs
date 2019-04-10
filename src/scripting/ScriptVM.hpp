@@ -1,5 +1,6 @@
 #pragma once
 #include "ScriptObjects.hpp"
+#include "ScriptSymbolStorage.hpp"
 #include "ScriptSymbols.hpp"
 #include <BsPrerequisites.h>
 

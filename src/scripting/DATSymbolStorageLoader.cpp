@@ -1,5 +1,5 @@
 #include "DATSymbolStorageLoader.hpp"
-#include "ScriptSymbols.hpp"
+#include "ScriptSymbolStorage.hpp"
 #include <daedalus/DATFile.h>
 
 namespace REGoth
