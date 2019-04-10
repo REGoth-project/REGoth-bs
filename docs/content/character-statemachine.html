@@ -89,6 +89,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#animation-naming">Animation naming</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#state-animations">State Animations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#translation-animations">Translation Animations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#turning-animations">Turning Animations</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#standing-substate-description">Standing-Substate description</a><ul>
@@ -98,6 +99,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#state-strafe-right">State - Strafe Right</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a></li>
 </ul>
 </li>
 </ul>
@@ -210,8 +212,12 @@ circle will always go back to the <em>Standing</em>-state.</p>
 </div>
 <div class="section" id="animation-naming">
 <h2>Animation naming<a class="headerlink" href="#animation-naming" title="Permalink to this headline">¶</a></h2>
+<p>There are two categories of animations for characters (and usable objects, really), which are <em>State</em>- and <em>Transition</em>-Animations. For most people
+the <em>State</em>-Animations are the more interesting ones, as they display the character being in a state such as <em>Standing</em>, <em>Running</em>, <em>Standing with 1H-Weapon drawn</em>, and so on.
+The <em>Transition</em>-Animations are for going from one of such states to another.</p>
+<p><em>State</em>-Animations will be always called like <code class="docutils literal notranslate"><span class="pre">S_&lt;state&gt;</span></code>, while <em>Transition</em>-Animations are called <code class="docutils literal notranslate"><span class="pre">T_&lt;from&gt;_2_&lt;to&gt;</span></code>. Examples for such animations are <code class="docutils literal notranslate"><span class="pre">S_1HRUNL</span></code> or <code class="docutils literal notranslate"><span class="pre">T_1HRUN_2_1HRUNL</span></code>.</p>
 <div class="section" id="state-animations">
-<h3>State Animations<a class="headerlink" href="#state-animations" title="Permalink to this headline">¶</a></h3>
+<span id="def-state-anims"></span><h3>State Animations<a class="headerlink" href="#state-animations" title="Permalink to this headline">¶</a></h3>
 <p>The animations named in the following parts are not the complete name of the animation clip. They
 are rather the <em>type</em> of animation the character should play. The final name is constructed like so:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">S_</span><span class="o">&lt;</span><span class="n">weaponmode</span><span class="o">&gt;&lt;</span><span class="n">walkmode</span><span class="o">&gt;&lt;</span><span class="n">kind</span><span class="o">&gt;</span>
@@ -247,7 +253,10 @@ Running-Walkmode with the animation which lets the character actually run
 forward, called <code class="docutils literal notranslate"><span class="pre">L</span></code>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">We don’t exactly know why the actual <em>Go Forward</em>-Animations are called <code class="docutils literal notranslate"><span class="pre">L</span></code>.</p>
+<p>We don’t exactly know why the actual <em>Go Forward</em>-Animations are called <em>L</em>, but it seems like the <em>L</em> does indeed stand for
+<em>Left</em>, since the animation starts with the left foot. In Gothic I there are actually two seperate jump animations, one for jumping
+off the left foot and one for the right foot.</p>
+<p class="last">Some trivia: In earlier versions of Gothic I the character would jump with the incorrect foot, as someone mixed up the <em>L</em> and <em>R</em>. <strong>&#64;nicode</strong> fixed that.</p>
 </div>
 <p>As an other example, the animation file name <code class="docutils literal notranslate"><span class="pre">S_FISTWALKSTRAFEL</span></code> would be for
 fist-fighting, walking and strafing left.</p>
@@ -257,19 +266,42 @@ exist either, we’re out of luck and can’t play any animation.</p>
 </div>
 <div class="section" id="translation-animations">
 <h3>Translation Animations<a class="headerlink" href="#translation-animations" title="Permalink to this headline">¶</a></h3>
-<p>sdfsf</p>
+<p>To display a smooth transition between two state animations, Piranha Bytes created special transition animations for going from one state
+to another. To construct the name of a transition animation, you will need:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The <em>State</em> the character is currently in</li>
+<li>The <em>State</em> the character goes to</li>
+<li>The current weapon-mode</li>
+</ul>
+</div></blockquote>
+<p>Then the name of the transition animation is constructed like so: <code class="docutils literal notranslate"><span class="pre">T_&lt;weaponmode&gt;&lt;from&gt;_2_&lt;weaponmode&gt;</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">I don’t think there are transitions between different weapon types as the character would always undraw the other weapon first.
+However, at the moment I’m not sure whether transitions for <em>Standing</em> to <em>1H-Weapon Standing</em> exist.</p>
+</div>
+</div>
+<div class="section" id="turning-animations">
+<h3>Turning Animations<a class="headerlink" href="#turning-animations" title="Permalink to this headline">¶</a></h3>
+<p>Turning is a bit weird as it can happen not only while standing, but also while running or strafing. However, the turning animations shall only be played
+while the character is standing. Therefore it makes sense to seperate these two functionalities.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Turning needs to be faster when a weapon is drawn. The speedup-factor actually comes from a script value, but I’m not sure which one.</p>
+</div>
 </div>
 </div>
 <div class="section" id="standing-substate-description">
 <h2>Standing-Substate description<a class="headerlink" href="#standing-substate-description" title="Permalink to this headline">¶</a></h2>
-<p>The following states can be reached from the <em>Standnig</em>-state.</p>
+<p>The following states can be reached from the <em>Standing</em>-state.</p>
 <div class="section" id="state-run-forward">
 <h3>State - Run Forward<a class="headerlink" href="#state-run-forward" title="Permalink to this headline">¶</a></h3>
 <p>Once the <em>Run forward</em>-button is pressed while in the <em>Standing</em>-State, the following substate shall
 be entered:</p>
 <div class="figure align-center" id="id1">
 <p class="plantuml">
-<img src="../_images/plantuml-3a3bd6e024b1efe6a72f4c78a887baaf7a54bf6e.png" alt="!include style.iuml
+<img src="../_images/plantuml-00d72b71104e72a1da83771b06fc15958c20853d.png" alt="!include style.iuml
 
 state &quot;Play Transition:\nIdle to Run&quot; as transitionToRun
 state &quot;Play Transition:\nRun to Idle&quot; as transitionToIdle
@@ -277,7 +309,6 @@ state &quot;Play Transition:\nRun to Idle&quot; as transitionToIdle
 transitionToRun  : Play animation: &quot;&quot;RUN_2_RUNL&quot;&quot;
 Run              : Loop animation: &quot;&quot;RUNL&quot;&quot;
 transitionToIdle : Play animation: &quot;&quot;RUNL_2_RUN&quot;&quot;
-
 
 [*] --&gt; transitionToRun
 transitionToRun --&gt; Run : Animation Done
@@ -289,6 +320,7 @@ transitionToIdle --&gt; [*] : Animation Done"/>
 </p>
 <p class="caption"><span class="caption-text">Statechart for running forward.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
+<p>While in the <em>Run</em>-State, turning shall be allowed but without playing an animation. Turning Left shall take precedence over turning Right.</p>
 </div>
 <div class="section" id="state-jump-backward">
 <h3>State - Jump Backward<a class="headerlink" href="#state-jump-backward" title="Permalink to this headline">¶</a></h3>
@@ -312,6 +344,11 @@ CheckKeys -down-&gt; [*]           : Jump Back button up"/>
 </p>
 <p class="caption"><span class="caption-text">Statechart for jump backwards.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
+<p>While in the <em>PlayAnimation</em>-State, turning shall be allowed but without playing an animation. Turning Left shall take precedence over turning Right.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For some reason, <em>JUMPB</em> is a transition animation, at least from the naming scheme: <code class="docutils literal notranslate"><span class="pre">T_JUMPB</span></code>.</p>
+</div>
 </div>
 <div class="section" id="state-strafe-left">
 <h3>State - Strafe Left<a class="headerlink" href="#state-strafe-left" title="Permalink to this headline">¶</a></h3>
@@ -332,6 +369,7 @@ StrafeLeft --&gt; [*] : Strafe Left-button Up"/>
 </p>
 <p class="caption"><span class="caption-text">Statechart for <em>Strafe Left</em>.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
+<p>While in the <em>StrafeLeft</em>-State, turning shall be allowed but without playing an animation. Turning Left shall take precedence over turning Right.</p>
 </div>
 <div class="section" id="state-strafe-right">
 <h3>State - Strafe Right<a class="headerlink" href="#state-strafe-right" title="Permalink to this headline">¶</a></h3>
@@ -352,7 +390,21 @@ StrafeRight --&gt; [*] : Strafe Right-button Up"/>
 </p>
 <p class="caption"><span class="caption-text">Statechart for <em>Strafe Right</em>.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
+<p>While in the <em>StrafeRight</em>-State, turning shall be allowed but without playing an animation. Turning Left shall take precedence over turning Right.</p>
 </div>
+</div>
+<div class="section" id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
+<p>The character statemachine can be split into the following parts:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Generic state-machine module,</li>
+<li>Module constructing animation names,</li>
+<li>Actual character state logic (Component),</li>
+<li>Character-Visual (Component),</li>
+<li>Character-Animation player (Component).</li>
+</ul>
+</div></blockquote>
 </div>
 </div>
 

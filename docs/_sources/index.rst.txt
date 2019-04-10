@@ -14,6 +14,8 @@ Welcome to REGoth's documentation!
    content/object-kinds
    content/scene-structure
    content/character-statemachine
+   content/daedalus-vm
+
 
 
 Indices and tables
