@@ -20,6 +20,9 @@ add_library(REGothEngine
   components/VisualMorphMesh.cpp
   animation/StateNaming.cpp
   animation/Animation.cpp
+  scripting/REGothDaedalusVM.cpp
+  scripting/DATSymbolStorageLoader.cpp
+  scripting/ScriptSymbols.cpp
   original-content/VirtualFileSystem.cpp
   world/ConstructFromZEN.cpp
   gui/skin_gothic.cpp
@@ -40,3 +43,6 @@ target_link_libraries(REGothWorldViewer REGothEngine samples-common)
 
 add_executable(REGothFontViewer main_FontViewer.cpp)
 target_link_libraries(REGothFontViewer REGothEngine samples-common)
+
+add_executable(REGothScriptTester main_ScriptTest.cpp)
+target_link_libraries(REGothScriptTester REGothEngine samples-common)

@@ -1,14 +1,26 @@
 /**\file
  */
 #pragma once
+#include "ScriptVM.hpp"
+#include <BsPrerequisites.h>
+
+namespace Daedalus
+{
+  class DATFile;
+}
 
 namespace REGoth
 {
   namespace Scripting
   {
-    class DaedalusVM
+    class DATSymbolStorageLoader;
+    class DaedalusVM : public ScriptVM
     {
     public:
+      DaedalusVM(const Daedalus::DATFile& datFile);
+
+    private:
+      bs::SPtr<DATSymbolStorageLoader> mInternals;
     };
   }  // namespace Scripting
 }  // namespace REGoth
