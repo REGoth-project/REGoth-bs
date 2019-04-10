@@ -15,6 +15,11 @@ namespace REGoth
       SYMBOL_INDEX_MAX = UINT32_MAX
     };
 
+    enum : SymbolIndex
+    {
+      SYMBOL_INDEX_INVALID = UINT32_MAX
+    };
+
     enum class SymbolType
     {
       Float,
@@ -40,6 +45,14 @@ namespace REGoth
        * this base class at some points and we would like to up-cast.
        */
       SymbolType type;
+
+      /**
+       * This symbols *parent* symbol. For a classes member variable, this would be the
+       * symbol of the actual class.
+       *
+       * If no parent is available, it will be set to SYMBOL_INDEX_INVALID.
+       */
+      SymbolIndex parent = SYMBOL_INDEX_INVALID;
 
       /**
        * If this is a class var, then the values held inside should be ignored

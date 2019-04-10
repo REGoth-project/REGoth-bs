@@ -174,6 +174,15 @@ namespace REGoth
 
         // Const as a bug and actually means "Keep this after load" in the original.
         target.isKeptAfterLoad = source.properties.elemProps.flags & Daedalus::EParFlag_Const;
+
+        if (source.parent == 0xFFFFFFFF)
+        {
+          target.parent = SYMBOL_INDEX_INVALID;
+        }
+        else
+        {
+          target.parent = source.parent;
+        }
       }
 
       void fill(SymbolInt& target, const Daedalus::PARSymbol& source)
