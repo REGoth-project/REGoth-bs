@@ -139,7 +139,8 @@ namespace REGoth
     bs::String command = string.substr(0, string.find_first_of(':'));
     bs::String action = string.substr(command.length() + 1);
 
-    gDebug().logDebug("[VisualCharacter] Got animation event: " + command + ":" + action);
+    gDebug().logDebug("[VisualCharacter] Got animation event: " + command + ":" + action +
+                      " while playing " + clip->getName());
 
     if (command == "PLAYCLIP")
     {
