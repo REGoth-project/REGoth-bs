@@ -9,6 +9,9 @@
 
 namespace REGoth
 {
+  class NodeVisuals;
+  using HNodeVisuals = bs::GameObjectHandle<NodeVisuals>;
+
   /**
    * Component for rendering an animated character (Player, NPC, Monster).
    *
@@ -21,6 +24,8 @@ namespace REGoth
    * Because of the way bsf works, one cannot modify any transforms like scaling
    * or rotation if root-motion is used on a scene object. Therefore the actual
    * characters renderable and animation components are put into a sub-object.
+   *
+   * This sub-object will also handle all visual node attachments.
    *
    * # Model script files
    *
@@ -48,6 +53,14 @@ namespace REGoth
      * the mesh.
      */
     void setMesh(BsZenLib::Res::HMeshWithMaterials mesh);
+
+    /**
+     * Sets the headmesh for this model.
+     *
+     * @param  head  File of the mesh to use as head, e.g. `HUM_HEAD.MMB`.
+     */
+    void setHeadMesh(const bs::String& headmesh, bs::UINT32 headTextureIdx = 0,
+                     bs::UINT32 teethTextureIdx = 0);
 
     /**
      * Calculates how far the characters animation has moved since the last
@@ -155,11 +168,35 @@ namespace REGoth
      */
     void onAnimationEvent(const bs::HAnimationClip& clip, bs::String string);
 
+    /**
+     * Replaces the current body mesh of this model from the current body-state
+     */
+    void updateBodyMesh();
+
+    /**
+     * Replaces the current headmesh of this model from the current body-state
+     */
+    void updateHeadMesh();
+
+    struct BodyState
+    {
+      bs::String headVisual;
+      bs::String bodyVisual;
+      bs::UINT32 headTextureIdx = 0;
+      bs::UINT32 teethTextureIdx = 0;
+      bs::UINT32 bodySkinColorIdx = 0;
+      bs::UINT32 bodyTextureIdx = 0;
+    };
+
+    // Body Visual Settings ---------------------------------------------------
+    BodyState mBodyState;
+
     // Object Sub Tree --------------------------------------------------------
     bs::Vector<bs::HSceneObject> mSubObjects; /**< All created sub-objects by this component */
 
     bs::HRenderable mSubRenderable; /**< The Renderable created inside a sub object */
     bs::HAnimation mSubAnimation;   /**< The Animation-Component created inside a sub object */
+    HNodeVisuals mSubNodeVisuals;   /**< The NodeVisuals-Component created inside a sub object */
 
     // Configuration ----------------------------------------------------------
 

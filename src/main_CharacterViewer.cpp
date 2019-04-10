@@ -1,16 +1,20 @@
+#include "BsCameraZoomer.h"
 #include "BsFPSCamera.h"
 #include "BsFPSWalker.h"
+#include "BsObjectRotator.h"
 #include "REGothEngine.hpp"
 #include "Utility/BsTime.h"
 #include "animation/StateNaming.hpp"
 #include "components/VisualCharacter.hpp"
 #include "original-content/VirtualFileSystem.hpp"
 #include <BsZenLib/ImportAnimation.hpp>
+#include <BsZenLib/ImportMorphMesh.hpp>
 #include <BsZenLib/ImportPath.hpp>
 #include <BsZenLib/ImportSkeletalMesh.hpp>
 #include <BsZenLib/ImportZEN.hpp>
 #include <Components/BsCCamera.h>
 #include <Components/BsCCharacterController.h>
+#include <Components/BsCRenderable.h>
 #include <Debug/BsDebugDraw.h>
 #include <Input/BsVirtualInput.h>
 #include <Math/BsVector3.h>
@@ -119,6 +123,7 @@ public:
     REGoth::REGothEngine::setupMainCamera();
 
     // mFPSCamera = mMainCamera->SO()->addComponent<bs::FPSCamera>();
+    mMainCamera->SO()->addComponent<bs::CameraZoomer>();
   }
 
   void setupInput() override
@@ -138,10 +143,16 @@ public:
   {
     using namespace bs;
 
+    for (auto s : REGoth::gVirtualFileSystem().listAllFiles())
+    {
+      gDebug().logDebug(s);
+    }
+
     HSceneObject playerSO = SceneObject::create("Player");
 
     REGoth::HVisualCharacter playerVisual = playerSO->addComponent<REGoth::VisualCharacter>();
     playerSO->addComponent<SimpleCharacterController>(playerVisual);
+    playerSO->addComponent<bs::ObjectRotator>();
 
     // Load a model and its animations
     BsZenLib::Res::HModelScriptFile model;
@@ -170,6 +181,7 @@ public:
 
     playerVisual->setModelScript(model);
     playerVisual->setMesh(model->getMeshes()[0]);
+    playerVisual->setHeadMesh("HUM_HEAD_PONY.MMB");
 
     Sphere bounds = playerVisual->getBounds().getSphere();
 

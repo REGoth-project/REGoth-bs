@@ -6,6 +6,14 @@
 #include <Scene/BsSceneObject.h>
 #include <animation/Animation.hpp>
 #include <animation/StateNaming.hpp>
+#include <components/NodeVisuals.hpp>
+
+const bs::String MODEL_NODE_NAME_R_HAND = "BIP01 R HAND";
+const bs::String MODEL_NODE_NAME_L_HAND = "BIP01 L HAND";
+const bs::String MODEL_NODE_NAME_R_FOOT = "BIP01 R FOOT";
+const bs::String MODEL_NODE_NAME_L_FOOT = "BIP01 L FOOT";
+const bs::String MODEL_NODE_NAME_HEAD = "BIP01 HEAD";
+const bs::String MODEL_NODE_NAME_FOOTSTEPS = " FOOTSTEPS";
 
 namespace REGoth
 {
@@ -89,6 +97,7 @@ namespace REGoth
 
     mSubRenderable = renderSO->addComponent<bs::CRenderable>();
     mSubAnimation = renderSO->addComponent<bs::CAnimation>();
+    mSubNodeVisuals = renderSO->addComponent<NodeVisuals>();
   }
 
   bs::HSceneObject VisualCharacter::createAndRegisterSubObject(const bs::String& name)
@@ -279,6 +288,34 @@ namespace REGoth
     mRootMotionLastClip = clipNow;
 
     return motion;
+  }
+
+  void VisualCharacter::setHeadMesh(const bs::String& headmesh, bs::UINT32 headTextureIdx,
+                                    bs::UINT32 teethTextureIdx)
+  {
+    mBodyState.headVisual = headmesh;
+    mBodyState.headTextureIdx = headTextureIdx;
+    mBodyState.teethTextureIdx = teethTextureIdx;
+
+    updateHeadMesh();
+  }
+
+  void VisualCharacter::updateBodyMesh()
+  {
+  }
+
+  void VisualCharacter::updateHeadMesh()
+  {
+    using namespace bs;
+
+    if (!mSubAnimation)
+    {
+      BS_EXCEPT(InvalidStateException, "Animation component not initialized!");
+    }
+
+    mSubNodeVisuals->attachVisualToNode(MODEL_NODE_NAME_HEAD, mBodyState.headVisual);
+
+    // TODO: Fix texture and color
   }
 
 }  // namespace REGoth
