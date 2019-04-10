@@ -114,8 +114,12 @@ The following kinds of symbols exist:
 Symbolkind *Void*
 ^^^^^^^^^^^^^^^^^
 
-Actually not quite sure now. *TODO: Find out what that is for*.
+The *Void* type is only used for the return type of functions/externals stored in
+the symbol offset member. The symbols return flag should be present if not the
+functions return type is any other than ``void``.
 
+Else, *Void* is not expected to be used as symbol type (only for error handling and
+internally at runtime for end-of-parameters in external definitions).
 
 Symbolkind *Float*
 ^^^^^^^^^^^^^^^^^^
