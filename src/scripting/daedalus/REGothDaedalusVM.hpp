@@ -14,6 +14,7 @@ namespace REGoth
   namespace Scripting
   {
     class DATSymbolStorageLoader;
+    class DaedalusClassVarResolver;
     class DaedalusVM : public ScriptVM
     {
     public:
@@ -26,7 +27,7 @@ namespace REGoth
     private:
       bs::SPtr<DATSymbolStorageLoader> mInternals;
       bs::SPtr<Daedalus::DATFile> mDatFile;
-
+      bs::SPtr<DaedalusClassVarResolver> mClassVarResolver;
     };
   }  // namespace Scripting
 }  // namespace REGoth

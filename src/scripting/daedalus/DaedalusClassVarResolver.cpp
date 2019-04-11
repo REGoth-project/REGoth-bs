@@ -1,4 +1,4 @@
-#include "ResolveClassMembers.hpp"
+#include "DaedalusClassVarResolver.hpp"
 
 namespace REGoth
 {

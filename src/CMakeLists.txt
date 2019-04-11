@@ -22,7 +22,7 @@ add_library(REGothEngine
   animation/Animation.cpp
   scripting/daedalus/REGothDaedalusVM.cpp
   scripting/daedalus/DATSymbolStorageLoader.cpp
-  scripting/daedalus/ResolveClassMembers.cpp
+  scripting/daedalus/DaedalusClassVarResolver.cpp
   scripting/ScriptSymbols.cpp
   scripting/ScriptVM.cpp
   scripting/ScriptSymbolQueries.cpp
