@@ -12,11 +12,11 @@ namespace REGoth
       mClassTemplates.createClassTemplates(mScriptSymbols);
     }
 
-    ScriptObjectHandle ScriptVM::instanciateBlankObjectOfClass(const bs::String& objectClass)
+    ScriptObjectHandle ScriptVM::instanciateBlankObjectOfClass(const bs::String& className)
     {
       ScriptObject& obj = mScriptObjects.create();
 
-      const ScriptObject& classTemplate = mClassTemplates.getClassTemplate(objectClass);
+      const ScriptObject& classTemplate = mClassTemplates.getClassTemplate(className);
 
       obj.functionPointers = classTemplate.functionPointers;
       obj.floats           = classTemplate.floats;

@@ -1,4 +1,5 @@
 #include "DaedalusVMWithExternals.hpp"
+#include "DaedalusClassVarResolver.hpp"
 
 namespace REGoth
 {
@@ -7,6 +8,23 @@ namespace REGoth
     DaedalusVMWithExternals::DaedalusVMWithExternals(const Daedalus::DATFile& datFile)
         : DaedalusVM(datFile)
     {
+    }
+
+    ScriptObjectHandle DaedalusVMWithExternals::instanciateClass(const bs::String& className)
+    {
+      ScriptObjectHandle obj    = instanciateBlankObjectOfClass(className);
+      const SymbolClass& symbol = mScriptSymbols.getSymbol<SymbolClass>(className);
+      ScriptObjectHandle oldCurrentInstance = mClassVarResolver->getCurrentInstance();
+
+      // Old REGoth sets 'self' symbol here. Do we really need that?
+
+      mClassVarResolver->setCurrentInstance(obj);
+
+      executeScriptFunction(symbol.constructorAddress);
+
+      mClassVarResolver->setCurrentInstance(oldCurrentInstance);
+
+      return obj;
     }
 
     void DaedalusVMWithExternals::registerAllExternals()
@@ -34,7 +52,8 @@ namespace REGoth
       mStack.pushString(IntToString(popIntValue()));
     }
 
-    void DaedalusVMWithExternals::external_ConcatStrings() {
+    void DaedalusVMWithExternals::external_ConcatStrings()
+    {
       bs::String b = popStringValue();
       bs::String a = popStringValue();
 

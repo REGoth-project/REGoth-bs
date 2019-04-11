@@ -33,13 +33,26 @@ namespace REGoth
        *
        * Throws, if the requested class does not exist.
        *
-       * @param  objectClass  Script-Class of the object to create, e.g. `C_ITEM`.
+       * @param  className  Script-Class of the object to create, e.g. `C_ITEM`.
        *
        * @return Handle of the created script object.
        */
-      ScriptObjectHandle instanciateBlankObjectOfClass(const bs::String& objectClass);
+      ScriptObjectHandle instanciateBlankObjectOfClass(const bs::String& className);
+
+      /**
+       * Creates a fully initialized script object of the given class by calling
+       * the instances constructor.
+       *
+       * Throws, if the requested class does not exist.
+       *
+       * @param  classname  Script-class of the object to create, e.g. `C_ITEM`.
+       *
+       * @return Handle of the create script object.
+       */
+      virtual ScriptObjectHandle instanciateClass(const bs::String& className) = 0;
 
     protected:
+
       /**
        * Get a list of all symbols and move them into the symbol storage vector.
        */

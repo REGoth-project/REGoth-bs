@@ -22,15 +22,25 @@ namespace REGoth
       DaedalusVM(const Daedalus::DATFile& datFile);
 
     protected:
+
       /**
-       * Executes a script function until it hits a return.
+       * Executes a script function until it hits its return.
        *
        * Throws, if the function does not exist.
        *
        * @param  name  Name of the script function to execute.
        */
-
       void executeScriptFunction(const bs::String& name);
+
+      /**
+       * Executs a script function until it hits its return.
+       *
+       * Throws, if the function does not exist.
+       *
+       * @param  address  Byte-code address of the function to execute.
+       */
+      void executeScriptFunction(bs::UINT32 address);
+
       /**
        * Runs the instruction found at the Program Counter and modifies it.
        *
@@ -110,7 +120,7 @@ namespace REGoth
       void registerExternal(const bs::String& name, externalCallback callback);
 
     protected:
-
+      bs::SPtr<DaedalusClassVarResolver> mClassVarResolver;
       DaedalusStack mStack;
 
     private:
@@ -121,7 +131,6 @@ namespace REGoth
 
       bs::SPtr<DATSymbolStorageLoader> mInternals;
       bs::SPtr<Daedalus::DATFile> mDatFile;
-      bs::SPtr<DaedalusClassVarResolver> mClassVarResolver;
 
       bs::Map<SymbolIndex, externalCallback> mExternals;
     };

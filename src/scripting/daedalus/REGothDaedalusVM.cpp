@@ -36,6 +36,13 @@ namespace REGoth
       executeUntilReturn();
     }
 
+    void DaedalusVM::executeScriptFunction(bs::UINT32 address)
+    {
+      mPC = address;
+
+      executeUntilReturn();
+    }
+
     void DaedalusVM::executeUntilReturn()
     {
       bool didNotReachReturn;
