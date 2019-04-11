@@ -33,7 +33,8 @@ namespace REGoth
     public:
       DaedalusVMWithExternals(const Daedalus::DATFile& datFile);
 
-      ScriptObjectHandle instanciateClass(const bs::String& className) override;
+      ScriptObjectHandle instanciateClass(const bs::String& className,
+                                          const bs::String& instanceName) override;
 
       void script_PrintPlus(const bs::String& text) override;
 

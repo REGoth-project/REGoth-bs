@@ -200,7 +200,7 @@ namespace REGoth
           // Function Pointes are pushed as intergers
           {
             SymbolIndex targetIndex = mStack.popFunction();
-            SymbolIndex sourceIndex = mStack.popFunction();
+            SymbolIndex sourceIndex = (SymbolIndex)popIntValue();
 
             auto& target = mScriptSymbols.getSymbol<SymbolScriptFunction>(targetIndex);
             auto& source = mScriptSymbols.getSymbol<SymbolScriptFunction>(sourceIndex);
@@ -383,11 +383,27 @@ namespace REGoth
         {
           ScriptInts& ints = mClassVarResolver->resolveClassVariableInts(symbol.name);
 
+          if (var.arrayIndex >= ints.values.size())
+          {
+            REGOTH_THROW(
+                InvalidParametersException,
+                bs::StringUtil::format("Array index out of range! (index: {0}, ArraySize: {1})",
+                                       var.arrayIndex, ints.values.size()));
+          }
+
           return ints.values[var.arrayIndex];
         }
         else
         {
           SymbolInt& symbolInt = (SymbolInt&)symbol;
+
+          if (var.arrayIndex >= symbolInt.ints.values.size())
+          {
+            REGOTH_THROW(
+                InvalidParametersException,
+                bs::StringUtil::format("Array index out of range! (index: {0}, ArraySize: {1})",
+                                       var.arrayIndex, symbolInt.ints.values.size()));
+          }
 
           return symbolInt.ints.values[var.arrayIndex];
         }
@@ -410,11 +426,27 @@ namespace REGoth
         {
           ScriptFloats& floats = mClassVarResolver->resolveClassVariableFloats(symbol.name);
 
+          if (var.arrayIndex >= floats.values.size())
+          {
+            REGOTH_THROW(
+                InvalidParametersException,
+                bs::StringUtil::format("Array index out of range! (index: {0}, ArraySize: {1})",
+                                       var.arrayIndex, floats.values.size()));
+          }
+
           return floats.values[var.arrayIndex];
         }
         else
         {
           SymbolFloat& symbolFloat = (SymbolFloat&)symbol;
+
+          if (var.arrayIndex >= symbolFloat.floats.values.size())
+          {
+            REGOTH_THROW(
+                InvalidParametersException,
+                bs::StringUtil::format("Array index out of range! (index: {0}, ArraySize: {1})",
+                                       var.arrayIndex, symbolFloat.floats.values.size()));
+          }
 
           return symbolFloat.floats.values[var.arrayIndex];
         }
@@ -437,11 +469,27 @@ namespace REGoth
         {
           ScriptStrings& strings = mClassVarResolver->resolveClassVariableStrings(symbol.name);
 
+          if (var.arrayIndex >= strings.values.size())
+          {
+            REGOTH_THROW(
+                InvalidParametersException,
+                bs::StringUtil::format("Array index out of range! (index: {0}, ArraySize: {1})",
+                                       var.arrayIndex, strings.values.size()));
+          }
+
           return strings.values[var.arrayIndex];
         }
         else
         {
           SymbolString& symbolString = (SymbolString&)symbol;
+
+          if (var.arrayIndex >= symbolString.strings.values.size())
+          {
+            REGOTH_THROW(
+                InvalidParametersException,
+                bs::StringUtil::format("Array index out of range! (index: {0}, ArraySize: {1})",
+                                       var.arrayIndex, symbolString.strings.values.size()));
+          }
 
           return symbolString.strings.values[var.arrayIndex];
         }

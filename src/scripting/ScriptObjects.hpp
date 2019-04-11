@@ -126,5 +126,10 @@ namespace REGoth
       bs::Map<ScriptObjectHandle, ScriptObject> mObjects;
       ScriptObjectHandle mNextHandle = 1;
     };
+
+    /**
+     * Writes the contents of the given object via gDebug().logDebug().
+     */
+    void debugLogScriptObject(const ScriptObject& object);
   }  // namespace Scripting
 }  // namespace REGoth

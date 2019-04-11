@@ -19,7 +19,7 @@ namespace REGoth
     class ScriptVM
     {
     public:
-      ScriptVM() = default;
+      ScriptVM()          = default;
       virtual ~ScriptVM() = default;
 
       /**
@@ -45,19 +45,19 @@ namespace REGoth
        *
        * Throws, if the requested class does not exist.
        *
-       * @param  classname  Script-class of the object to create, e.g. `C_ITEM`.
+       * @param  classname     Script-class of the object to create, e.g. `C_ITEM`.
+       * @param  instanceName  Name of the instance to instanciate, e.g. `ITFO_APPLE`.
        *
        * @return Handle of the create script object.
        */
-      virtual ScriptObjectHandle instanciateClass(const bs::String& className) = 0;
+      virtual ScriptObjectHandle instanciateClass(const bs::String& className,
+                                                  const bs::String& instanceName) = 0;
 
     protected:
-
       /**
        * Get a list of all symbols and move them into the symbol storage vector.
        */
       virtual void fillSymbolStorage() = 0;
-
 
     protected:
       // Storages for symbols and objects -----------------------------------------------------------

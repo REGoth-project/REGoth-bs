@@ -10,10 +10,11 @@ namespace REGoth
     {
     }
 
-    ScriptObjectHandle DaedalusVMWithExternals::instanciateClass(const bs::String& className)
+    ScriptObjectHandle DaedalusVMWithExternals::instanciateClass(const bs::String& className,
+                                                                 const bs::String& instanceName)
     {
       ScriptObjectHandle obj    = instanciateBlankObjectOfClass(className);
-      const SymbolClass& symbol = mScriptSymbols.getSymbol<SymbolClass>(className);
+      const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instanceName);
       ScriptObjectHandle oldCurrentInstance = mClassVarResolver->getCurrentInstance();
 
       // Old REGoth sets 'self' symbol here. Do we really need that?
@@ -23,6 +24,9 @@ namespace REGoth
       executeScriptFunction(symbol.constructorAddress);
 
       mClassVarResolver->setCurrentInstance(oldCurrentInstance);
+
+      ScriptObject& objData = mScriptObjects.get(obj);
+      debugLogScriptObject(objData);
 
       return obj;
     }

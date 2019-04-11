@@ -56,7 +56,7 @@ namespace REGoth
 
     void DaedalusStack::pushFunction(SymbolIndex symbol)
     {
-      mStackInstance.push_back(symbol);
+      mStackFunction.push_back(symbol);
     }
 
     bool DaedalusStack::isTopOfIntStackVariable() const

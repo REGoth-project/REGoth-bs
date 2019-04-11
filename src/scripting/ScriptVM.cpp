@@ -18,6 +18,7 @@ namespace REGoth
 
       const ScriptObject& classTemplate = mClassTemplates.getClassTemplate(className);
 
+      obj.className        = className;
       obj.functionPointers = classTemplate.functionPointers;
       obj.floats           = classTemplate.floats;
       obj.ints             = classTemplate.ints;

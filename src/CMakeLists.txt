@@ -27,6 +27,7 @@ add_library(REGothEngine
   scripting/daedalus/DaedalusDisassembler.cpp
   scripting/daedalus/DaedalusVMWithExternals.cpp
   scripting/ScriptSymbols.cpp
+  scripting/ScriptObjects.cpp
   scripting/ScriptVM.cpp
   scripting/ScriptSymbolQueries.cpp
   scripting/ScriptClassTemplates.cpp
