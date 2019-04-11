@@ -189,21 +189,21 @@ namespace REGoth
       {
         fillBase(target, source);
 
-        target.values.resize(source.properties.elemProps.count);
+        target.ints.values.resize(source.properties.elemProps.count);
       }
 
       void fill(SymbolFloat& target, const Daedalus::PARSymbol& source)
       {
         fillBase(target, source);
 
-        target.values.resize(source.properties.elemProps.count);
+        target.floats.values.resize(source.properties.elemProps.count);
       }
 
       void fill(SymbolString& target, const Daedalus::PARSymbol& source)
       {
         fillBase(target, source);
 
-        target.values.resize(source.properties.elemProps.count);
+        target.strings.values.resize(source.properties.elemProps.count);
       }
 
       void fill(SymbolClass& target, const Daedalus::PARSymbol& source)

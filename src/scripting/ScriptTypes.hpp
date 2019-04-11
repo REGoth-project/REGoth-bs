@@ -43,5 +43,20 @@ namespace REGoth
       SCRIPT_OBJECT_HANDLE_INVALID = 0
     };
 
+    struct ScriptInts
+    {
+      bs::Vector<bs::INT32> values;
+    };
+
+    struct ScriptFloats
+    {
+      bs::Vector<float> values;
+    };
+
+    struct ScriptStrings
+    {
+      bs::Vector<bs::String> values;
+    };
+
   }  // namespace Scripting
 }  // namespace REGoth

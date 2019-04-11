@@ -36,19 +36,19 @@ namespace REGoth
 
         if (memberSymbol.type == SymbolType::Int)
         {
-          auto num = ((SymbolInt&)memberSymbol).values.size();
+          auto num = ((SymbolInt&)memberSymbol).ints.values.size();
 
           obj.ints[name].values.resize(num);
         }
         else if (memberSymbol.type == SymbolType::Float)
         {
-          auto num = ((SymbolFloat&)memberSymbol).values.size();
+          auto num = ((SymbolFloat&)memberSymbol).floats.values.size();
 
           obj.floats[name].values.resize(num);
         }
         else if (memberSymbol.type == SymbolType::String)
         {
-          auto num = ((SymbolString&)memberSymbol).values.size();
+          auto num = ((SymbolString&)memberSymbol).strings.values.size();
 
           obj.strings[name].values.resize(num);
         }

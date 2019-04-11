@@ -7,21 +7,6 @@ namespace REGoth
 {
   namespace Scripting
   {
-    struct ScriptInts
-    {
-      bs::Vector<bs::INT32> values;
-    };
-
-    struct ScriptFloats
-    {
-      bs::Vector<float> values;
-    };
-
-    struct ScriptStrings
-    {
-      bs::Vector<bs::String> values;
-    };
-
     /**
      * General script object, storing key/value pairs of different types.
      */

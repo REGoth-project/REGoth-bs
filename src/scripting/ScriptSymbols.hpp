@@ -59,7 +59,7 @@ namespace REGoth
     {
       static constexpr SymbolType TYPE = SymbolType::Int;
 
-      bs::Vector<bs::INT32> values;
+      ScriptInts ints;
     };
 
     /**
@@ -70,6 +70,7 @@ namespace REGoth
       static constexpr SymbolType TYPE = SymbolType::Float;
 
       bs::Vector<float> values;
+      ScriptFloats floats;
     };
 
     /**
@@ -80,6 +81,7 @@ namespace REGoth
       static constexpr SymbolType TYPE = SymbolType::String;
 
       bs::Vector<bs::String> values;
+      ScriptStrings strings;
     };
 
     /**
