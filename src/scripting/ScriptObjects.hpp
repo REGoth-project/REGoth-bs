@@ -1,6 +1,7 @@
 #pragma once
 #include "ScriptTypes.hpp"
 #include <BsPrerequisites.h>
+#include <excepction/Throw.hpp>
 
 namespace REGoth
 {
@@ -94,8 +95,7 @@ namespace REGoth
 
         if (object.handle > mNextHandle)
         {
-          using namespace bs;
-          BS_EXCEPT(InvalidStateException, "Script Object Handle overflow");
+          REGOTH_THROW(InvalidStateException, "Script Object Handle overflow");
         }
 
         return mObjects.insert({object.handle, std::move(object)}).first->second;
