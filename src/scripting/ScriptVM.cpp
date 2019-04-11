@@ -14,7 +14,7 @@ namespace REGoth
 
     ScriptObjectHandle ScriptVM::instanciateBlankObjectOfClass(const bs::String& objectClass)
     {
-      ScriptObject& obj = mScriptObjects.createScriptObject();
+      ScriptObject& obj = mScriptObjects.create();
 
       const ScriptObject& classTemplate = mClassTemplates.getClassTemplate(objectClass);
 

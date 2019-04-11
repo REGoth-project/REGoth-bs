@@ -72,7 +72,7 @@ namespace REGoth
       /**
        * @return a new blank script object, with only the handle set.
        */
-      ScriptObject& createScriptObject()
+      ScriptObject& create()
       {
         ScriptObject object;
         object.handle = mNextHandle;

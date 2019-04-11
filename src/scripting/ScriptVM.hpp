@@ -44,6 +44,7 @@ namespace REGoth
        */
       virtual void fillSymbolStorage() = 0;
 
+
     protected:
       // Storages for symbols and objects -----------------------------------------------------------
       ScriptSymbolStorage mScriptSymbols;
