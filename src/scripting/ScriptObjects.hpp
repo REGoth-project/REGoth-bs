@@ -115,5 +115,5 @@ namespace REGoth
       bs::Map<ScriptObjectHandle, ScriptObject> mObjects;
       ScriptObjectHandle mNextHandle = 1;
     };
-  }
-}
+  }  // namespace Scripting
+}  // namespace REGoth
