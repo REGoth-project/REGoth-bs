@@ -2,6 +2,7 @@
 // #include <daedalus/DaedalusVM.h>
 #include "DATSymbolStorageLoader.hpp"
 #include <daedalus/DATFile.h>
+#include <excepction/Throw.hpp>
 
 namespace REGoth
 {
@@ -17,5 +18,6 @@ namespace REGoth
     {
       REGoth::Scripting::convertDatToREGothSymbolStorage(mScriptSymbols, *mDatFile);
     }
+
   }  // namespace Scripting
 }  // namespace REGoth

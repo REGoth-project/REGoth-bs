@@ -22,9 +22,11 @@ namespace REGoth
     protected:
       void fillSymbolStorage() override;
 
+
     private:
       bs::SPtr<DATSymbolStorageLoader> mInternals;
       bs::SPtr<Daedalus::DATFile> mDatFile;
+
     };
   }  // namespace Scripting
 }  // namespace REGoth
