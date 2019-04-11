@@ -1,6 +1,6 @@
 #pragma once
-#include <BsPrerequisites.h>
 #include "ScriptTypes.hpp"
+#include <BsPrerequisites.h>
 
 namespace REGoth
 {

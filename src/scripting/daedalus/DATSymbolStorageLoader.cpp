@@ -1,6 +1,6 @@
 #include "DATSymbolStorageLoader.hpp"
-#include <scripting/ScriptSymbolStorage.hpp>
 #include <daedalus/DATFile.h>
+#include <scripting/ScriptSymbolStorage.hpp>
 
 namespace REGoth
 {
@@ -36,7 +36,7 @@ namespace REGoth
 
         for (const Daedalus::PARSymbol& sym : symTable.symbols)
         {
-          SymbolType type = guessSymbolType(sym);
+          SymbolType type    = guessSymbolType(sym);
           SymbolIndex target = createSymbolOf(type, sym.name.c_str());
           transferSymbol(target, sym);
 
@@ -47,7 +47,7 @@ namespace REGoth
     private:
       SymbolType guessSymbolType(const Daedalus::PARSymbol& sym)
       {
-        uint32_t type = sym.properties.elemProps.type;
+        uint32_t type  = sym.properties.elemProps.type;
         uint32_t flags = sym.properties.elemProps.flags;
 
         if (type == Daedalus::EParType_Int)

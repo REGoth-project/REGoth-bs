@@ -79,7 +79,8 @@ namespace REGoth
        *
        * If there is no `.` or if there is more than one, then the whole name is returned.
        *
-       * @param  memberSymbolName  Name of the symbol from the member variable, e.g. `C_ITEM.SOMETHING`.
+       * @param  memberSymbolName  Name of the symbol from the member variable, e.g.
+       *                           `C_ITEM.SOMETHING`.
        *
        * @return Actual member variable name.
        */

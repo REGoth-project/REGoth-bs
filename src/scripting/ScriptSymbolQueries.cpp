@@ -1,6 +1,6 @@
 #include "ScriptSymbolQueries.hpp"
-#include "ScriptSymbols.hpp"
 #include "ScriptSymbolStorage.hpp"
+#include "ScriptSymbols.hpp"
 
 namespace REGoth
 {

@@ -43,5 +43,5 @@ namespace REGoth
       SCRIPT_OBJECT_HANDLE_INVALID = 0
     };
 
-  }    // namespace Scripting
+  }  // namespace Scripting
 }  // namespace REGoth

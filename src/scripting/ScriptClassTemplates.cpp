@@ -32,7 +32,7 @@ namespace REGoth
       for (SymbolIndex memberSymbolIndex : members)
       {
         SymbolBase& memberSymbol = scriptSymbols.getSymbolBase(memberSymbolIndex);
-        bs::String name = demangleMemberName(memberSymbol.name);
+        bs::String name          = demangleMemberName(memberSymbol.name);
 
         if (memberSymbol.type == SymbolType::Int)
         {

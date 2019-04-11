@@ -34,9 +34,9 @@ namespace REGoth
 
         SymbolIndex index = (SymbolIndex)(mStorage.size() - 1);
 
-        mStorage.back()->name = name;
+        mStorage.back()->name  = name;
         mStorage.back()->index = index;
-        mStorage.back()->type = T::TYPE;
+        mStorage.back()->type  = T::TYPE;
 
         if (mStorage.size() >= SYMBOL_INDEX_MAX)
         {
@@ -240,5 +240,5 @@ namespace REGoth
       bs::Vector<bs::UPtr<SymbolBase>> mStorage;
       bs::Map<bs::String, SymbolIndex> mSymbolsByName;
     };
-  }
-}
+  }  // namespace Scripting
+}  // namespace REGoth

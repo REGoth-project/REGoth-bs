@@ -1,6 +1,6 @@
 #pragma once
-#include <scripting/ScriptObjects.hpp>
 #include <BsPrerequisites.h>
+#include <scripting/ScriptObjects.hpp>
 
 namespace Daedalus
 {
@@ -22,5 +22,5 @@ namespace REGoth
      */
     void convertDatToREGothSymbolStorage(ScriptSymbolStorage& storage,
                                          const Daedalus::DATFile& datFile);
-  }
-}
+  }  // namespace Scripting
+}  // namespace REGoth

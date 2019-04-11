@@ -1,8 +1,8 @@
 #pragma once
+#include "ScriptClassTemplates.hpp"
 #include "ScriptObjects.hpp"
 #include "ScriptSymbolStorage.hpp"
 #include "ScriptSymbols.hpp"
-#include "ScriptClassTemplates.hpp"
 #include <BsPrerequisites.h>
 
 namespace REGoth
@@ -45,7 +45,6 @@ namespace REGoth
       virtual void fillSymbolStorage() = 0;
 
     protected:
-
       // Storages for symbols and objects -----------------------------------------------------------
       ScriptSymbolStorage mScriptSymbols;
       ScriptObjectStorage mScriptObjects;

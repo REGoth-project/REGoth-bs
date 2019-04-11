@@ -4,32 +4,31 @@ namespace REGoth
 {
   namespace Scripting
   {
-
     bs::String symbolTypeToString(SymbolType type)
     {
-        switch (type)
-        {
-          case SymbolType::Float:
-            return "Float";
-          case SymbolType::Int:
-            return "Int";
-          case SymbolType::String:
-            return "String";
-          case SymbolType::Class:
-            return "Class";
-          case SymbolType::ScriptFunction:
-            return "ScriptFunction";
-          case SymbolType::ExternalFunction:
-            return "ExternalFunction";
-          case SymbolType::Prototype:
-            return "Prototype";
-          case SymbolType::Instance:
-            return "Instance";
-          case SymbolType::Unsupported:
-            return "Unsupported";
-          default:
-            return "Unknown";
-        }
+      switch (type)
+      {
+        case SymbolType::Float:
+          return "Float";
+        case SymbolType::Int:
+          return "Int";
+        case SymbolType::String:
+          return "String";
+        case SymbolType::Class:
+          return "Class";
+        case SymbolType::ScriptFunction:
+          return "ScriptFunction";
+        case SymbolType::ExternalFunction:
+          return "ExternalFunction";
+        case SymbolType::Prototype:
+          return "Prototype";
+        case SymbolType::Instance:
+          return "Instance";
+        case SymbolType::Unsupported:
+          return "Unsupported";
+        default:
+          return "Unknown";
+      }
     }
 
     void debugLogSymbol(const SymbolBase& symbol)
