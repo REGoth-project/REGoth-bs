@@ -210,7 +210,7 @@ namespace REGoth
       {
         fillBase(target, source);
 
-        target.constructorAddress = source.address;
+        // Empty - see SymbolClass documentation.
       }
 
       void fill(SymbolExternalFunction& target, const Daedalus::PARSymbol& source)
@@ -237,6 +237,8 @@ namespace REGoth
       void fill(SymbolInstance& target, const Daedalus::PARSymbol& source)
       {
         fillBase(target, source);
+
+        target.constructorAddress = source.address;
       }
 
       void fill(SymbolUnsupported& target, const Daedalus::PARSymbol& source)

@@ -86,16 +86,11 @@ namespace REGoth
 
     /**
      * This symbol kind *would* store the class offset in the original engine.
-     * We don't do that here however, so it's just the constructor address.
+     * We don't do that here however, so it's left empty.
      */
     struct SymbolClass : SymbolBase
     {
       static constexpr SymbolType TYPE = SymbolType::Class;
-
-      /**
-       * Address of the instance constructor function.
-       */
-      bs::UINT32 constructorAddress;
     };
 
     /**
@@ -144,12 +139,21 @@ namespace REGoth
 
     /**
      * Instances are script objects which have been set up in a certain way.
+     * This symbol will hold a reference to the instance constructor.
+     *
      * They also seem to be the only ones which need to be able to store
      * references to script objects...
+     *
+     * TODO: What is the address set to at symbols like `self` and `other`?
      */
     struct SymbolInstance : SymbolBase
     {
       static constexpr SymbolType TYPE = SymbolType::Instance;
+
+      /**
+       * Bytecode address of where the constructor function starts.
+       */
+      bs::UINT32 constructorAddress;
 
       /**
        * Instance referenced by this symbol.
