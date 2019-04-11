@@ -4,6 +4,14 @@ namespace REGoth
 {
   namespace Scripting
   {
+    static bs::SPtr<ScriptVMInterface> s_GameScript = nullptr;
+
+    void loadGothicDAT(const Daedalus::DATFile& datFile)
+    {
+      s_GameScript = bs::bs_unique_ptr_new<ScriptVMInterface>(datFile);
+      s_GameScript->initialize();
+    }
+
     ScriptVMInterface::ScriptVMInterface(const Daedalus::DATFile& datFile)
         : DaedalusVMWithExternals(datFile)
     {
@@ -29,4 +37,15 @@ namespace REGoth
       return a + b;
     }
   }  // namespace Scripting
+
+  Scripting::ScriptVMInterface& gGameScript()
+  {
+    if (!Scripting::s_GameScript)
+    {
+      REGOTH_THROW(InvalidStateException, "Game-Script not available. Was loadGothicDAT() called?");
+    }
+
+    return *Scripting::s_GameScript;
+  }
+
 }  // namespace REGoth

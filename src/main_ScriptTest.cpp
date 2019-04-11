@@ -15,17 +15,14 @@ public:
   {
 
     Daedalus::DATFile dat("/home/andre/games/Gothic II/_work/Data/Scripts/_compiled/GOTHIC.DAT");
+    REGoth::Scripting::loadGothicDAT(dat);
 
-    REGoth::Scripting::ScriptVMInterface vm(dat);
+    REGoth::gGameScript().instanciateClass("C_ITEM", "ITFO_APPLE");
 
-    vm.initialize();
-
-    // vm.script_PrintPlus("Hello World!");
-    // vm.script_PrintPlus("This is printed by Daedalus!");
-    // vm.script_PrintPlus("It also appends a random number to the end, look: ");
-    // vm.script_PrintPlus("Pretty cool, eh?");
-
-    vm.instanciateClass("C_ITEM", "ITFO_APPLE");
+    REGoth::gGameScript().script_PrintPlus("Hello World!");
+    REGoth::gGameScript().script_PrintPlus("This is printed by Daedalus!");
+    REGoth::gGameScript().script_PrintPlus("It also appends a random number to the end, look: ");
+    REGoth::gGameScript().script_PrintPlus("Pretty cool, eh?");
   }
 
 protected:

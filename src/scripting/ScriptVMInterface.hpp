@@ -26,5 +26,19 @@ namespace REGoth
       bs::String IntToString(bs::INT32 i) override;
       bs::String ConcatStrings(const bs::String& a, const bs::String& b) override;
     };
+
+    /**
+     * Initializes the scripting system with a Gothic DAT-File.
+     * If this is called a second time, everything will be scrapped,
+     * all existing handles will be invalidated.
+     */
+    void loadGothicDAT(const Daedalus::DATFile& datFile);
   }
+
+  /**
+   * Global access to the game-scripting interface.
+   *
+   * Needs to be initialized via Scripting::loadDAT() first.
+   */
+  Scripting::ScriptVMInterface& gGameScript();
 }
