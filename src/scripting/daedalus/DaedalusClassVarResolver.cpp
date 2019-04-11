@@ -31,7 +31,7 @@ namespace REGoth
       return it->second;
     }
 
-    SymbolIndex& DaedalusClassVarResolver::resolveClassVariableFunctionPointer(
+    bs::UINT32& DaedalusClassVarResolver::resolveClassVariableFunctionPointer(
         const bs::String& memberSymbolName)
     {
       throwIfCurrentInstanceNotMatching(memberSymbolName);
@@ -114,7 +114,7 @@ namespace REGoth
       return mScriptObjects.get(mCurrentInstance);
     }
 
-    void DaedalusClassVarResolver::setCurrentInstanceObject(ScriptObjectHandle handle)
+    void DaedalusClassVarResolver::setCurrentInstance(ScriptObjectHandle handle)
     {
       mCurrentInstance = handle;
     }

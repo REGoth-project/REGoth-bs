@@ -34,7 +34,7 @@ namespace REGoth
       bs::Map<bs::String, ScriptInts> ints;
       bs::Map<bs::String, ScriptFloats> floats;
       bs::Map<bs::String, ScriptStrings> strings;
-      bs::Map<bs::String, SymbolIndex> functionPointers;
+      bs::Map<bs::String, bs::UINT32> functionPointers;
     };
 
     /**

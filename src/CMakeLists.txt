@@ -23,6 +23,9 @@ add_library(REGothEngine
   scripting/daedalus/REGothDaedalusVM.cpp
   scripting/daedalus/DATSymbolStorageLoader.cpp
   scripting/daedalus/DaedalusClassVarResolver.cpp
+  scripting/daedalus/DaedalusStack.cpp
+  scripting/daedalus/DaedalusDisassembler.cpp
+  scripting/daedalus/DaedalusVMWithExternals.cpp
   scripting/ScriptSymbols.cpp
   scripting/ScriptVM.cpp
   scripting/ScriptSymbolQueries.cpp

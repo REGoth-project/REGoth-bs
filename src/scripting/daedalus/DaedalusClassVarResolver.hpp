@@ -41,9 +41,14 @@ namespace REGoth
       ScriptObject& getCurrentInstanceObject();
 
       /**
+       * @return The handle of the *Current Instance*.
+       */
+      SymbolIndex getCurrentInstance() const { return mCurrentInstance; }
+
+      /**
        * Sets the current instance object.
        */
-      void setCurrentInstanceObject(ScriptObjectHandle handle);
+      void setCurrentInstance(ScriptObjectHandle handle);
 
       /**
        * Get a reference to the data of the member variable in the *Current Instance*.
@@ -62,7 +67,7 @@ namespace REGoth
       ScriptInts& resolveClassVariableInts(const bs::String& memberSymbolName);
 
       /** @copydoc resolveClassVariableInts */
-      SymbolIndex& resolveClassVariableFunctionPointer(const bs::String& memberSymbolName);
+      bs::UINT32& resolveClassVariableFunctionPointer(const bs::String& memberSymbolName);
 
       /** @copydoc resolveClassVariableInts */
       ScriptFloats& resolveClassVariableFloats(const bs::String& memberSymbolName);
