@@ -40,7 +40,7 @@ namespace REGoth
           SymbolIndex target = createSymbolOf(type, sym.name.c_str());
           transferSymbol(target, sym);
 
-          debugLogSymbol(mStorage.getSymbolBase(target));
+          // debugLogSymbol(mStorage.getSymbolBase(target));
         }
       }
 

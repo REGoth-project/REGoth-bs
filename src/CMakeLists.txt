@@ -23,6 +23,9 @@ add_library(REGothEngine
   scripting/daedalus/REGothDaedalusVM.cpp
   scripting/daedalus/DATSymbolStorageLoader.cpp
   scripting/ScriptSymbols.cpp
+  scripting/ScriptVM.cpp
+  scripting/ScriptSymbolQueries.cpp
+  scripting/ScriptClassTemplates.cpp
   original-content/VirtualFileSystem.cpp
   world/ConstructFromZEN.cpp
   gui/skin_gothic.cpp

@@ -1,8 +1,8 @@
 /**\file
  */
 #pragma once
-#include <scripting/ScriptVM.hpp>
 #include <BsPrerequisites.h>
+#include <scripting/ScriptVM.hpp>
 
 namespace Daedalus
 {
@@ -19,8 +19,12 @@ namespace REGoth
     public:
       DaedalusVM(const Daedalus::DATFile& datFile);
 
+    protected:
+      void fillSymbolStorage() override;
+
     private:
       bs::SPtr<DATSymbolStorageLoader> mInternals;
+      bs::SPtr<Daedalus::DATFile> mDatFile;
     };
   }  // namespace Scripting
 }  // namespace REGoth
