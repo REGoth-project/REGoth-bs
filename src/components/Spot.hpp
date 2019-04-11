@@ -1,5 +1,4 @@
 #pragma once
-
 #include <BsPrerequisites.h>
 #include <Scene/BsComponent.h>
 
