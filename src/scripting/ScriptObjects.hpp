@@ -87,6 +87,32 @@ namespace REGoth
       }
 
       /**
+       * Looks up a script object via its handle.
+       *
+       * Throws if the handle is invalid.
+       *
+       * @param  handle  Handle of the object to look up.
+       *
+       * @return Reference to the script objects data.
+       */
+      ScriptObject& get(ScriptObjectHandle handle)
+      {
+        if (handle == SCRIPT_OBJECT_HANDLE_INVALID)
+        {
+          REGOTH_THROW(InvalidStateException, "Script Object Handle is invalid!");
+        }
+
+        auto it = mObjects.find(handle);
+
+        if (it == mObjects.end())
+        {
+          REGOTH_THROW(InvalidStateException, "Script Object Handle does reference a known object!");
+        }
+
+        return it->second;
+      }
+
+      /**
        * Removes all script objects created so far and resets the handle counter.
        * All existing handles are to be seen as invalidated after this operation.
        */
