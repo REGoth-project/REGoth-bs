@@ -6,6 +6,7 @@
 #include <components/VisualStaticMesh.hpp>
 #include <zenload/zTypes.h>
 #include <components/Spot.hpp>
+#include <components/Item.hpp>
 
 namespace Internal
 {
@@ -147,7 +148,7 @@ namespace REGoth
   {
     bs::HSceneObject so = import_zCVob(vob);
 
-    // TODO: Implement
+    so->addComponent<Item>(vob.oCItem.instanceName.c_str());
 
     return so;
   }

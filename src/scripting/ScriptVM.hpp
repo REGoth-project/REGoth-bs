@@ -53,6 +53,10 @@ namespace REGoth
       virtual ScriptObjectHandle instanciateClass(const bs::String& className,
                                                   const bs::String& instanceName) = 0;
 
+      /**
+       * Access to the script object storage
+       */
+      ScriptObjectStorage& scriptObjects() { return mScriptObjects; }
     protected:
       /**
        * Get a list of all symbols and move them into the symbol storage vector.

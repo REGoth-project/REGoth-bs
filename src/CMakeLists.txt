@@ -16,8 +16,10 @@ add_library(REGothEngine
   components/StartSpot.cpp
   components/Spot.cpp
   components/NodeVisuals.cpp
+  components/ScriptBackedBy.cpp
   components/Visual.cpp
   components/VisualMorphMesh.cpp
+  components/Item.cpp
   animation/StateNaming.cpp
   animation/Animation.cpp
   scripting/daedalus/REGothDaedalusVM.cpp
