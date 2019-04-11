@@ -14,9 +14,16 @@ namespace REGoth
 
     ScriptObjectHandle ScriptVM::instanciateBlankObjectOfClass(const bs::String& objectClass)
     {
-      ScriptObjectHandle b;
+      ScriptObject& obj = mScriptObjects.createScriptObject();
 
-      return b;
+      const ScriptObject& classTemplate = mClassTemplates.getClassTemplate(objectClass);
+
+      obj.functionPointers = classTemplate.functionPointers;
+      obj.floats           = classTemplate.floats;
+      obj.ints             = classTemplate.ints;
+      obj.strings          = classTemplate.strings;
+
+      return obj.handle;
     }
 
   }  // namespace Scripting
