@@ -30,9 +30,10 @@ namespace REGoth
       {
         bs::UPtr<SymbolBase> symbol = bs::bs_unique_ptr<SymbolBase>(new T());
 
+        mStorage.emplace_back(std::move(symbol));
+
         SymbolIndex index = (SymbolIndex)(mStorage.size() - 1);
 
-        mStorage.emplace_back(std::move(symbol));
         mStorage.back()->name = name;
         mStorage.back()->index = index;
         mStorage.back()->type = T::TYPE;
@@ -63,7 +64,7 @@ namespace REGoth
        *
        * @return Reference to the symbol with the given index.
        */
-      SymbolBase& getSymbolBase(SymbolIndex index)
+      SymbolBase& getSymbolBase(SymbolIndex index) const
       {
         throwOnInvalidSymbol(index);
 
@@ -82,7 +83,7 @@ namespace REGoth
        * @return Reference to the symbol with the given index.
        */
       template <class T>
-      T& getSymbol(SymbolIndex index)
+      T& getSymbol(SymbolIndex index) const
       {
         throwOnInvalidSymbol(index);
         throwOnMismatchingType<T>(*mStorage[index]);
@@ -102,7 +103,7 @@ namespace REGoth
        * @return Reference to the symbol with the given name.
        */
       template <class T>
-      T& getSymbol(const bs::String& name)
+      T& getSymbol(const bs::String& name) const
       {
         SymbolIndex index = findIndexBySymbolName(name);
         throwOnInvalidSymbol(index);
@@ -120,7 +121,7 @@ namespace REGoth
        *
        * @return List of indices of all symbols where the predicate function returned true.
        */
-      bs::Vector<SymbolIndex> query(std::function<bool(const SymbolBase&)> addIf)
+      bs::Vector<SymbolIndex> query(std::function<bool(const SymbolBase&)> addIf) const
       {
         bs::Vector<SymbolIndex> result;
 
@@ -145,7 +146,7 @@ namespace REGoth
        *
        * @return Type of the symbol with the given index.
        */
-      SymbolType getSymbolType(SymbolIndex index)
+      SymbolType getSymbolType(SymbolIndex index) const
       {
         throwOnInvalidSymbol(index);
 
@@ -162,7 +163,7 @@ namespace REGoth
        *
        * @return Type of the symbol with the given name.
        */
-      SymbolType getSymbolType(const bs::String& name)
+      SymbolType getSymbolType(const bs::String& name) const
       {
         SymbolIndex index = findIndexBySymbolName(name);
         throwOnInvalidSymbol(index);
@@ -173,7 +174,7 @@ namespace REGoth
       /**
        * @return Whether a symbol with the given name exists.
        */
-      bool hasSymbolWithName(const bs::String& name)
+      bool hasSymbolWithName(const bs::String& name) const
       {
         return mSymbolsByName.find(name) != mSymbolsByName.end();
       }
@@ -187,7 +188,7 @@ namespace REGoth
        *
        * @return Index of the symbol with the given name.
        */
-      SymbolIndex findIndexBySymbolName(const bs::String& name)
+      SymbolIndex findIndexBySymbolName(const bs::String& name) const
       {
         auto it = mSymbolsByName.find(name);
 
@@ -205,13 +206,13 @@ namespace REGoth
        * @return The symbol at the given index cast to the passed type.
        */
       template <class T>
-      T& getTypedSymbolReference(SymbolIndex index)
+      T& getTypedSymbolReference(SymbolIndex index) const
       {
         return *(T*)(mStorage[index].get());
       }
 
       template <class T>
-      void throwOnMismatchingType(const SymbolBase& symbol)
+      void throwOnMismatchingType(const SymbolBase& symbol) const
       {
         if (T::TYPE != symbol.type)
         {
@@ -220,7 +221,7 @@ namespace REGoth
         }
       }
 
-      void throwOnInvalidSymbol(SymbolIndex index)
+      void throwOnInvalidSymbol(SymbolIndex index) const
       {
         using namespace bs;
 

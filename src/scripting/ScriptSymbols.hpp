@@ -1,38 +1,12 @@
 #pragma once
 #include "ScriptObjects.hpp"
+#include "ScriptTypes.hpp"
 #include <BsPrerequisites.h>
 
 namespace REGoth
 {
   namespace Scripting
   {
-    /**
-     * Index of a symbol into the symbol storage.
-     */
-    typedef bs::UINT32 SymbolIndex;
-    enum : SymbolIndex
-    {
-      SYMBOL_INDEX_MAX = UINT32_MAX
-    };
-
-    enum : SymbolIndex
-    {
-      SYMBOL_INDEX_INVALID = UINT32_MAX
-    };
-
-    enum class SymbolType
-    {
-      Float,
-      Int,
-      String,
-      Class,
-      ScriptFunction,
-      ExternalFunction,
-      Prototype,
-      Instance,
-      Unsupported,
-    };
-
     struct SymbolBase
     {
       /**
@@ -200,6 +174,11 @@ namespace REGoth
      * Writes information about the given symbol via gDebug().
      */
     void debugLogSymbol(const SymbolBase& symbol);
+
+    /**
+     * @return String representation of the given symbol type.
+     */
+    bs::String symbolTypeToString(SymbolType type);
 
   }  // namespace Scripting
 }  // namespace REGoth

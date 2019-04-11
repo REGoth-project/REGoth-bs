@@ -5,7 +5,7 @@ namespace REGoth
   namespace Scripting
   {
 
-    static bs::String symbolTypeToString(SymbolType type)
+    bs::String symbolTypeToString(SymbolType type)
     {
         switch (type)
         {

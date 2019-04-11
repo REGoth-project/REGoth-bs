@@ -1,21 +1,11 @@
 #pragma once
+#include "ScriptTypes.hpp"
 #include <BsPrerequisites.h>
 
 namespace REGoth
 {
   namespace Scripting
   {
-    /**
-     * Script objects will get a simple increasing number as a handle.
-     * No number can be used twice. An invalid handle will get the number 0.
-     */
-    typedef bs::UINT32 ScriptObjectHandle;
-
-    enum : ScriptObjectHandle
-    {
-      SCRIPT_OBJECT_HANDLE_INVALID = 0
-    };
-
     struct ScriptInts
     {
       bs::Vector<bs::INT32> values;
@@ -58,6 +48,7 @@ namespace REGoth
       bs::Map<bs::String, ScriptInts> ints;
       bs::Map<bs::String, ScriptFloats> floats;
       bs::Map<bs::String, ScriptStrings> strings;
+      bs::Map<bs::String, SymbolIndex> functionPointers;
     };
 
     /**
