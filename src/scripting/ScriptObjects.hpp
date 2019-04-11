@@ -64,6 +64,7 @@ namespace REGoth
      */
     class ScriptObjectStorage
     {
+    public:
       /**
        * @return Whether the given handle references an invalid object.
        */
