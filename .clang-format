@@ -15,6 +15,7 @@ PointerAlignment: Left
 NamespaceIndentation: All
 SortIncludes: true
 AllowShortFunctionsOnASingleLine: false
+AlignConsecutiveAssignments: true
 
 IncludeCategories:
   - Regex:           '<[^./]+>' # c++ stl includes
