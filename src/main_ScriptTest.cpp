@@ -1,6 +1,6 @@
 #include "REGothEngine.hpp"
 #include <scripting/ScriptSymbolStorage.hpp>
-#include <scripting/daedalus/DaedalusVMWithExternals.hpp>
+#include <scripting/ScriptVMInterface.hpp>
 #include <daedalus/DATFile.h>
 
 class REGothScriptTester : public REGoth::REGothEngine
@@ -16,10 +16,14 @@ public:
 
     Daedalus::DATFile dat("/home/andre/games/Gothic II/_work/Data/Scripts/_compiled/GOTHIC.DAT");
 
-    REGoth::Scripting::DaedalusVMWithExternals vm(dat);
+    REGoth::Scripting::ScriptVMInterface vm(dat);
+
     vm.initialize();
 
     vm.script_PrintPlus("Hello World!");
+    vm.script_PrintPlus("This is printed by Daedalus!");
+    vm.script_PrintPlus("It also appends a random number to the end, look: ");
+    vm.script_PrintPlus("Pretty cool, eh?");
   }
 
 protected:

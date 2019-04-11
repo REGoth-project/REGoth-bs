@@ -195,7 +195,11 @@ namespace REGoth
             "Top of script stack is a simple integer, but we were expecting it to be a variable!");
       }
 
-      return mStackInt.back().variable;
+      StackVariableValue v = mStackInt.back().variable;
+
+      mStackInt.pop_back();
+
+      return v;
     }
 
     DaedalusStack::StackVariableValue DaedalusStack::popFloatVariable()
@@ -207,7 +211,11 @@ namespace REGoth
             "Top of script stack is a simple float, but we were expecting it to be a variable!");
       }
 
-      return mStackFloat.back().variable;
+      StackVariableValue v = mStackFloat.back().variable;
+
+      mStackFloat.pop_back();
+
+      return v;
     }
 
     DaedalusStack::StackVariableValue DaedalusStack::popStringVariable()
@@ -219,7 +227,11 @@ namespace REGoth
             "Top of script stack is a simple string, but we were expecting it to be a variable!");
       }
 
-      return mStackString.back().variable;
+      StackVariableValue v = mStackString.back().variable;
+
+      mStackString.pop_back();
+
+      return v;
     }
   }  // namespace Scripting
 }  // namespace REGoth

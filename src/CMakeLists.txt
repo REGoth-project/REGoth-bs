@@ -30,6 +30,7 @@ add_library(REGothEngine
   scripting/ScriptVM.cpp
   scripting/ScriptSymbolQueries.cpp
   scripting/ScriptClassTemplates.cpp
+  scripting/ScriptVMInterface.cpp
   original-content/VirtualFileSystem.cpp
   world/ConstructFromZEN.cpp
   gui/skin_gothic.cpp

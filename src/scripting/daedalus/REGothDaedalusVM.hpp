@@ -90,8 +90,27 @@ namespace REGoth
        */
       void pushVariable(SymbolIndex symbolIndex, bs::UINT32 arrayIndex);
 
+      /**
+       * Register all externals here. Use registerExternal().
+       */
+      virtual void registerAllExternals() {};
+
+      /**
+       * Callback type for a script external function.
+       */
+      typedef void (DaedalusVM::*externalCallback)(void);
+
+      /**
+       * Registers an external function within the VM.
+       *
+       * @param  name      Name of the external function, UPPERCASE.
+       * @param  callback  Callback to be executed when the external function
+       *                   is called.
+       */
+      void registerExternal(const bs::String& name, externalCallback callback);
 
     protected:
+
       DaedalusStack mStack;
 
     private:
@@ -103,6 +122,8 @@ namespace REGoth
       bs::SPtr<DATSymbolStorageLoader> mInternals;
       bs::SPtr<Daedalus::DATFile> mDatFile;
       bs::SPtr<DaedalusClassVarResolver> mClassVarResolver;
+
+      bs::Map<SymbolIndex, externalCallback> mExternals;
     };
   }  // namespace Scripting
 }  // namespace REGoth

@@ -20,6 +20,8 @@ namespace REGoth
     void DaedalusVM::fillSymbolStorage()
     {
       REGoth::Scripting::convertDatToREGothSymbolStorage(mScriptSymbols, *mDatFile);
+
+      registerAllExternals();
     }
 
     void DaedalusVM::executeScriptFunction(const bs::String& name)
@@ -291,6 +293,21 @@ namespace REGoth
           break;
 
         case Daedalus::EParOp_CallExternal:
+          // -
+          {
+            auto it = mExternals.find(opcode.symbol);
+
+            if (it != mExternals.end())
+            {
+              (this->*it->second)();
+            }
+            else
+            {
+              REGOTH_THROW(
+                  NotImplementedException,
+                  "External not implemented: " + mScriptSymbols.getSymbolBase(opcode.symbol).name);
+            }
+          }
           break;
 
           // Other
@@ -452,6 +469,13 @@ namespace REGoth
       {
         mStack.pushFunction(symbolIndex);
       }
+    }
+
+    void DaedalusVM::registerExternal(const bs::String& name, externalCallback callback)
+    {
+      SymbolIndex symbol = mScriptSymbols.findIndexBySymbolName(name);
+
+      mExternals[symbol] = callback;
     }
 
   }  // namespace Scripting

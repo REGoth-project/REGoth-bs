@@ -20,6 +20,7 @@ namespace REGoth
     {
     public:
       ScriptVM() = default;
+      virtual ~ScriptVM() = default;
 
       /**
        * Initializes the ScriptVM. To be called after the object is constructed.
