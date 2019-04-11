@@ -167,7 +167,7 @@ instruction memory (byte code).
 
 .. note:: If the *External*-flag is set, the address of the function would not point into the
    instruction memory but rather be a *raw native function pointer* into the native game
-   code. This screams for security flaws and thus REGoth handles external functions differently.
+   code.
 
 
 Symbolkind *Instance*
@@ -211,19 +211,14 @@ related actions which are then handled by the native engine, for example letting
 character run to some location or adding a quest log entry.
 
 The original game stored *raw native function addresses* within the .DAT-file so their
-DaedalusVM could call directly into the native code. This screams for security issues
-and thus, we have to come up with a different solution.
+DaedalusVM could call directly into the native code. However, for better compatibility
+between version, those values are scrapped and re-evaluated after loading the .DAT-File.
 
-.. note::
-
-   These security flaws are used by *Ikarus* to extend Daedalus scripting in the
-   original engine.
-
-In REGoth, we just shift the lookup of the native function address back into the
-native engine code.  This is done by keeping a mapping of *External Symbol* to
-*Native Function* with the VM. Once the *Executor* encouters a ``CALL_EXTERNAL``
-it can then look up which native function to call via the symbol referenced
-within the instruction.
+In REGoth, we just do the lookup of the native function address in a similar
+fashion, by keeping a mapping of *External Symbol* to *Native Function* with the
+VM which is generated after loading. Once the *Executor* encouters a
+``CALL_EXTERNAL`` it can then look up which native function to call via the
+symbol referenced within the instruction.
 
 
 Global Registers
