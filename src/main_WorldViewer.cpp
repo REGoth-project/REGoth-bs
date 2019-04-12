@@ -4,7 +4,7 @@
 #include <Scene/BsSceneObject.h>
 #include <daedalus/DATFile.h>
 #include <scripting/ScriptVMInterface.hpp>
-#include <world/ConstructFromZEN.hpp>
+#include <world/GameWorld.hpp>
 
 class REGothWorldViewer : public REGoth::REGothEngine
 {
@@ -21,7 +21,7 @@ public:
     Daedalus::DATFile dat("/home/andre/games/Gothic II/_work/Data/Scripts/_compiled/GOTHIC.DAT");
     REGoth::Scripting::loadGothicDAT(dat);
 
-    REGoth::World::constructFromZEN("OLDWORLD.ZEN");
+    REGoth::World::loadWorldFromZEN("OLDWORLD.ZEN");
   }
 
 protected:

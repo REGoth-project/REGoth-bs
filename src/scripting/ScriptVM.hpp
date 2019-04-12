@@ -55,6 +55,15 @@ namespace REGoth
                                                   const bs::String& instanceName) = 0;
 
       /**
+       * Runs the init-scripts for the given world.
+       *
+       * Throws, if the requested world has no init script.
+       *
+       * @param  worldName  The world to init, e.g. `NEWWORLD`.
+       */
+      virtual void initializeWorld(const bs::String& worldName) = 0;
+
+      /**
        * Access to the script object storage
        */
       ScriptObjectStorage& scriptObjects()

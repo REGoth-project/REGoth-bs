@@ -1,10 +1,13 @@
 #include "ConstructFromZEN.hpp"
-#include "internals/ImportSingleVob.hpp"
+#include "ImportSingleVob.hpp"
 #include <BsZenLib/ImportStaticMesh.hpp>
 #include <BsZenLib/ZenResources.hpp>
 #include <Components/BsCMeshCollider.h>
 #include <Physics/BsPhysicsMesh.h>
 #include <Scene/BsSceneObject.h>
+#include <components/Waynet.hpp>
+#include <components/Waypoint.hpp>
+#include <excepction/Throw.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 #include <zenload/zCMesh.h>
 #include <zenload/zenParser.h>
@@ -21,6 +24,7 @@ namespace REGoth
   static bool importZEN(const bs::String& zenFile, OriginalZen& result);
   static bs::HSceneObject importWorldMesh(const OriginalZen& zen);
   static void importVobs(bs::HSceneObject sceneRoot, const OriginalZen& zen);
+  static void importWaynet(bs::HSceneObject sceneRoot, const OriginalZen& zen);
   static void walkVobTree(bs::HSceneObject bsfParent, const ZenLoad::zCVobData& zenParent);
 
   bs::HSceneObject World::constructFromZEN(const bs::String& zenFile)
@@ -38,6 +42,7 @@ namespace REGoth
     bs::HSceneObject worldMesh = importWorldMesh(zen);
 
     importVobs(worldMesh, zen);
+    importWaynet(worldMesh, zen);
 
     return worldMesh;
   }
@@ -106,7 +111,7 @@ namespace REGoth
 
     if (!mesh || !mesh->getMesh()) return {};
 
-    bs::HSceneObject meshSO = bs::SceneObject::create(meshFileName);
+    bs::HSceneObject meshSO    = bs::SceneObject::create(meshFileName);
     bs::HRenderable renderable = meshSO->addComponent<bs::CRenderable>();
     renderable->setMesh(mesh->getMesh());
     renderable->setMaterials(mesh->getMaterials());
@@ -133,6 +138,46 @@ namespace REGoth
     }
 
     return meshSO;
+  }
+
+  static void importWaynet(bs::HSceneObject sceneRoot, const OriginalZen& zen)
+  {
+    const ZenLoad::zCWayNetData& zenWaynet = zen.vobTree.waynet;
+
+    bs::HSceneObject waynetSO = bs::SceneObject::create("Waynet");
+    waynetSO->setParent(sceneRoot);
+
+    HWaynet waynet = waynetSO->addComponent<Waynet>();
+
+    bs::Vector<HWaypoint> waypoints;
+
+    for (const ZenLoad::zCWaypointData& zenWP : zenWaynet.waypoints)
+    {
+      bs::String wpName     = zenWP.wpName.c_str();
+      bs::HSceneObject wpSO = bs::SceneObject::create(wpName);
+      wpSO->setParent(sceneRoot);
+
+      bs::Vector3 positionCM = bs::Vector3(zenWP.position.x, zenWP.position.y, zenWP.position.z);
+
+      wpSO->setPosition(positionCM * 0.01f);
+      wpSO->setForward(bs::Vector3(zenWP.direction.x, zenWP.direction.y, zenWP.direction.z));
+
+      HWaypoint wp = wpSO->addComponent<Waypoint>();
+
+      waynet->addWaypoint(wp);
+      waypoints.push_back(wp);
+    }
+
+    for (const auto& edge : zenWaynet.edges)
+    {
+      if (edge.first > waypoints.size() || edge.second > waypoints.size())
+      {
+        REGOTH_THROW(InvalidParametersException, "Waynet Edge Indices out of range!");
+      }
+
+      waypoints[edge.first]->addPathTo(waypoints[edge.second]);
+      waypoints[edge.second]->addPathTo(waypoints[edge.first]);
+    }
   }
 
 }  // namespace REGoth

@@ -22,6 +22,8 @@ add_library(REGothEngine
   components/Item.cpp
   components/Character.cpp
   components/CharacterAI.cpp
+  components/Waypoint.cpp
+  components/Waynet.cpp
   animation/StateNaming.cpp
   animation/Animation.cpp
   scripting/daedalus/REGothDaedalusVM.cpp
@@ -38,7 +40,8 @@ add_library(REGothEngine
   scripting/ScriptVMInterface.cpp
   scripting/ScriptObjectMapping.cpp
   original-content/VirtualFileSystem.cpp
-  world/ConstructFromZEN.cpp
+  world/internals/ConstructFromZEN.cpp
+  world/GameWorld.cpp
   gui/skin_gothic.cpp
   world/internals/ImportSingleVob.cpp
   )
@@ -60,3 +63,6 @@ target_link_libraries(REGothFontViewer REGothEngine samples-common)
 
 add_executable(REGothScriptTester main_ScriptTest.cpp)
 target_link_libraries(REGothScriptTester REGothEngine samples-common)
+
+add_executable(REGothWaynetTester main_WaynetTest.cpp)
+target_link_libraries(REGothWaynetTester REGothEngine samples-common)

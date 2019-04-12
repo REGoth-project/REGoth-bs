@@ -193,6 +193,8 @@ namespace REGoth
       ScriptObjectHandle instanciateClass(const bs::String& className,
                                           const bs::String& instanceName) override;
 
+      void initializeWorld(const bs::String& worldName) override;
+
       void script_PrintPlus(const bs::String& text) override;
 
       void external_Print();

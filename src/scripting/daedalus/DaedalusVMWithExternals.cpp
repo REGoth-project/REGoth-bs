@@ -31,6 +31,14 @@ namespace REGoth
       return obj;
     }
 
+    void DaedalusVMWithExternals::initializeWorld(const bs::String& worldName)
+    {
+      // FIXME: Do STARTUP_* only on first load?
+      executeScriptFunction("STARTUP_" + worldName);
+
+      executeScriptFunction("INIT_" + worldName);
+    }
+
     void DaedalusVMWithExternals::registerAllExternals()
     {
       using This = DaedalusVMWithExternals;
