@@ -20,6 +20,8 @@ add_library(REGothEngine
   components/Visual.cpp
   components/VisualMorphMesh.cpp
   components/Item.cpp
+  components/Character.cpp
+  components/CharacterAI.cpp
   animation/StateNaming.cpp
   animation/Animation.cpp
   scripting/daedalus/REGothDaedalusVM.cpp
@@ -34,6 +36,7 @@ add_library(REGothEngine
   scripting/ScriptSymbolQueries.cpp
   scripting/ScriptClassTemplates.cpp
   scripting/ScriptVMInterface.cpp
+  scripting/ScriptObjectMapping.cpp
   original-content/VirtualFileSystem.cpp
   world/ConstructFromZEN.cpp
   gui/skin_gothic.cpp

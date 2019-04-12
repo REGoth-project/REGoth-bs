@@ -14,6 +14,7 @@ namespace REGoth
   {
     if (gGameScript().scriptObjects().isValid(mScriptObject))
     {
+      gGameScript().mapping().unmap(mScriptObject, SO());
       gGameScript().scriptObjects().destroy(mScriptObject);
     }
   }
@@ -22,6 +23,7 @@ namespace REGoth
                                                const bs::String& instance)
   {
     mScriptObject = gGameScript().instanciateClass(className, instance);
+    gGameScript().mapping().map(mScriptObject, SO());
   }
 
   Scripting::ScriptObject& ScriptBackedBy::scriptObjectData()

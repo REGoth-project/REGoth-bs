@@ -1,5 +1,6 @@
 #pragma once
 #include "ScriptClassTemplates.hpp"
+#include "ScriptObjectMapping.hpp"
 #include "ScriptObjects.hpp"
 #include "ScriptSymbolStorage.hpp"
 #include "ScriptSymbols.hpp"
@@ -56,7 +57,19 @@ namespace REGoth
       /**
        * Access to the script object storage
        */
-      ScriptObjectStorage& scriptObjects() { return mScriptObjects; }
+      ScriptObjectStorage& scriptObjects()
+      {
+        return mScriptObjects;
+      }
+
+      /**
+       * Access to the script object mapping
+       */
+      ScriptObjectMapping& mapping()
+      {
+        return mScriptObjectMapping;
+      }
+
     protected:
       /**
        * Get a list of all symbols and move them into the symbol storage vector.
@@ -68,6 +81,7 @@ namespace REGoth
       ScriptSymbolStorage mScriptSymbols;
       ScriptObjectStorage mScriptObjects;
       ScriptClassTemplates mClassTemplates;
+      ScriptObjectMapping mScriptObjectMapping;
     };
   }  // namespace Scripting
 }  // namespace REGoth
