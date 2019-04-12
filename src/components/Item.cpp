@@ -7,7 +7,18 @@ namespace REGoth
   Item::Item(const bs::HSceneObject& parent, const bs::String& instance)
       : ScriptBackedBy(parent, "C_ITEM", instance)
   {
+  }
+
+  void Item::onCreated()
+  {
+    ScriptBackedBy::onCreated();
+
     createVisual();
+  }
+
+  void Item::onDestroyed()
+  {
+    ScriptBackedBy::onDestroyed();
   }
 
   void Item::createVisual()

@@ -46,13 +46,15 @@ namespace REGoth
        *
        * Throws, if the requested class does not exist.
        *
-       * @param  classname     Script-class of the object to create, e.g. `C_ITEM`.
-       * @param  instanceName  Name of the instance to instanciate, e.g. `ITFO_APPLE`.
+       * @param  classname          Script-class of the object to create, e.g. `C_ITEM`.
+       * @param  instanceName       Name of the instance to instanciate, e.g. `ITFO_APPLE`.
+       * @param  mappedSceneObject  Scene-object to map the created script object to.
        *
        * @return Handle of the create script object.
        */
       virtual ScriptObjectHandle instanciateClass(const bs::String& className,
-                                                  const bs::String& instanceName) = 0;
+                                                  const bs::String& instanceName,
+                                                  bs::HSceneObject mappedSceneObject) = 0;
 
       /**
        * Runs the init-scripts for the given world.

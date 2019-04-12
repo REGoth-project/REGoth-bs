@@ -155,7 +155,7 @@ namespace REGoth
     {
       bs::String wpName     = zenWP.wpName.c_str();
       bs::HSceneObject wpSO = bs::SceneObject::create(wpName);
-      wpSO->setParent(sceneRoot);
+      wpSO->setParent(waynetSO);
 
       bs::Vector3 positionCM = bs::Vector3(zenWP.position.x, zenWP.position.y, zenWP.position.z);
 

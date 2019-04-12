@@ -5,6 +5,9 @@
 
 namespace REGoth
 {
+  class Item;
+  using HItem = bs::GameObjectHandle<Item>;
+
   /**
    * Component for an item laying on the floor. Will also create and handle
    * the visuals.
@@ -13,6 +16,11 @@ namespace REGoth
   {
   public:
     Item(const bs::HSceneObject& parent, const bs::String& instance);
+
+  protected:
+
+    void onCreated() override;
+    void onDestroyed() override;
 
   private:
 

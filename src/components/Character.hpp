@@ -4,6 +4,9 @@
 
 namespace REGoth
 {
+  class Character;
+  using HCharacter = bs::GameObjectHandle<Character>;
+
   /**
    * Character logic. Implements most of the * externals.
    */

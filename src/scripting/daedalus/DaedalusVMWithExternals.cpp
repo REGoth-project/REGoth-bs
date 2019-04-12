@@ -1,5 +1,8 @@
 #include "DaedalusVMWithExternals.hpp"
 #include "DaedalusClassVarResolver.hpp"
+#include <Scene/BsSceneObject.h>
+#include <components/Character.hpp>
+#include <world/GameWorld.hpp>
 
 namespace REGoth
 {
@@ -11,24 +14,85 @@ namespace REGoth
     }
 
     ScriptObjectHandle DaedalusVMWithExternals::instanciateClass(const bs::String& className,
-                                                                 const bs::String& instanceName)
+                                                                 const bs::String& instanceName,
+                                                                 bs::HSceneObject mappedSceneObject)
     {
-      ScriptObjectHandle obj    = instanciateBlankObjectOfClass(className);
-      const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instanceName);
+      // To instanciate a class the following has to happen:
+      //
+      //  1. Create a blank object of that class,
+      //  2. Save `self` and *Current Instance*,
+      //  3. Assign the new object to `self` and *Current Instance*,
+      //  4. Run the instance constructor
+      //  5. Restore `self` and *Current Instance*,
+      //  6. Assign the newly created object to the instances symbol
+      //
+      // *Current Instance* must be set so the class-members are resolved correctly.
+      // `self` must be set so that the constructor can refer to the object being created
+      // in function calls.
+      //
+      // The last created instance is also assigned to the instance symbol in step 6 so that
+      // it can be referred to by name inside the scripts. Though, this only makes sense for
+      // instances where there is usually only one instance active.
+      //
+      // Since the constructor *can* call externals which refer to the scene object, we need
+      // to also map the objects *before* executing the constructor.
+
+      ScriptObjectHandle obj = instanciateBlankObjectOfClass(className);
+      SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instanceName);
+
+      // Constructor might call an external and refer to the scene object, so map before doing
+      // anything.
+      mapping().map(obj, mappedSceneObject);
+      symbol.instance = obj;
+
       ScriptObjectHandle oldCurrentInstance = mClassVarResolver->getCurrentInstance();
+      ScriptObjectHandle oldSelf            = getInstance("SELF");
 
-      // Old REGoth sets 'self' symbol here. Do we really need that?
-
+      setInstance("SELF", obj);
       mClassVarResolver->setCurrentInstance(obj);
 
       executeScriptFunction(symbol.constructorAddress);
 
       mClassVarResolver->setCurrentInstance(oldCurrentInstance);
+      setInstance("SELF", oldSelf);
 
       ScriptObject& objData = mScriptObjects.get(obj);
-      debugLogScriptObject(objData);
+      // debugLogScriptObject(objData);
 
       return obj;
+    }
+
+    void DaedalusVMWithExternals::setInstance(const bs::String& instance,
+                                              ScriptObjectHandle scriptObject)
+    {
+      SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instance);
+
+      symbol.instance = scriptObject;
+    }
+
+    ScriptObjectHandle DaedalusVMWithExternals::getInstance(const bs::String& instance) const
+    {
+      const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instance);
+
+      return symbol.instance;
+    }
+
+    HCharacter DaedalusVMWithExternals::popCharacterInstance()
+    {
+      ScriptObjectHandle scriptObject = popInstanceScriptObject();
+
+      bs::HSceneObject characterSO = mapping().getMappedSceneObject(scriptObject);
+
+      HCharacter character = characterSO->getComponent<Character>();
+
+      if (!character)
+      {
+        REGOTH_THROW(InvalidParametersException,
+                     "Expected to find a character instance on the stack, but the scene object does "
+                     "not have a character-component!");
+      }
+
+      return character;
     }
 
     void DaedalusVMWithExternals::initializeWorld(const bs::String& worldName)
@@ -46,7 +110,11 @@ namespace REGoth
       registerExternal("PRINT", (externalCallback)&This::external_Print);
       registerExternal("HLP_RANDOM", (externalCallback)&This::external_HLP_Random);
       registerExternal("INTTOSTRING", (externalCallback)&This::external_IntToString);
+      registerExternal("NPC_ISPLAYER", (externalCallback)&This::external_NPC_IsPlayer);
+      registerExternal("WLD_INSERTNPC", (externalCallback)&This::external_WLD_InsertNpc);
       registerExternal("CONCATSTRINGS", (externalCallback)&This::external_ConcatStrings);
+      registerExternal("WLD_INSERTITEM", (externalCallback)&This::external_WLD_InsertItem);
+      registerExternal("NPC_SETTALENTSKILL", (externalCallback)&This::external_NPC_SetTalentSkill);
     }
 
     void DaedalusVMWithExternals::external_Print()
@@ -70,6 +138,38 @@ namespace REGoth
       bs::String a = popStringValue();
 
       mStack.pushString(ConcatStrings(a, b));
+    }
+
+    void DaedalusVMWithExternals::external_WLD_InsertItem()
+    {
+      bs::String spawnpoint = popStringValue();
+      SymbolIndex instance  = popIntValue();
+
+      gWorld().insertItem(mScriptSymbols.getSymbolName(instance), spawnpoint);
+    }
+
+    void DaedalusVMWithExternals::external_WLD_InsertNpc()
+    {
+      bs::String waypoint  = popStringValue();
+      SymbolIndex instance = popIntValue();
+
+      gWorld().insertCharacter(mScriptSymbols.getSymbolName(instance), waypoint);
+    }
+
+    void DaedalusVMWithExternals::external_NPC_IsPlayer()
+    {
+      HCharacter character = popCharacterInstance();
+
+      mStack.pushInt(character->isPlayer() ? 1 : 0);
+    }
+
+    void DaedalusVMWithExternals::external_NPC_SetTalentSkill()
+    {
+      bs::INT32 skill      = popIntValue();
+      bs::INT32 talent     = popIntValue();
+      HCharacter character = popCharacterInstance();
+
+      bs::gDebug().logWarning("[External] Using external stub: NPC_SetTalentSkill");
     }
 
     void DaedalusVMWithExternals::script_PrintPlus(const bs::String& text)

@@ -29,6 +29,17 @@ namespace REGoth
        */
       bs::Vector<SymbolIndex> findAllWithParentOf(const ScriptSymbolStorage& storage,
                                                   SymbolIndex parent);
+
+      /**
+       * Given an address, finds the symbol of the function starting at that address.
+       *
+       * @param  storage  The script symbol storage to query.
+       * @param  address  Address of the function to find.
+       *
+       * @return Symbol-index of the found function.
+       */
+      SymbolIndex findSymbolOfFunctionByAddress(const ScriptSymbolStorage& storage,
+                                                bs::UINT32 address);
     }  // namespace Queries
   }    // namespace Scripting
 }  // namespace REGoth

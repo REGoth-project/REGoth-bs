@@ -29,6 +29,28 @@ namespace REGoth
 
         return storage.query(isMemberVariable);
       }
+
+      SymbolIndex findSymbolOfFunctionByAddress(const ScriptSymbolStorage& storage,
+                                                bs::UINT32 address)
+      {
+        auto isCorrectFunction = [&](const SymbolBase& s) {
+          if (s.type != SymbolType::ScriptFunction) return false;
+          const SymbolScriptFunction& fn = (const SymbolScriptFunction&)s;
+
+          return fn.address == address;
+        };
+
+        auto result = storage.query(isCorrectFunction);
+
+        if (result.empty())
+        {
+          return SYMBOL_INDEX_INVALID;
+        }
+        else
+        {
+          return result[0];
+        }
+      }
     }  // namespace Queries
   }    // namespace Scripting
 }  // namespace REGoth

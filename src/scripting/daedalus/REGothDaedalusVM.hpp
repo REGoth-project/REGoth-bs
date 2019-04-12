@@ -8,6 +8,7 @@
 namespace Daedalus
 {
   class DATFile;
+  class PARStackOpCode;
 }
 
 namespace REGoth
@@ -77,6 +78,7 @@ namespace REGoth
       bs::INT32 popIntValue();
       float popFloatValue();
       bs::String popStringValue();
+      ScriptObjectHandle popInstanceScriptObject();
 
       /**
        * Pops a reference to an variable stored inside a script symbol.
@@ -124,10 +126,21 @@ namespace REGoth
       DaedalusStack mStack;
 
     private:
+
+      /**
+       * Disassembles and logs the given opcode in respect ti the call-depth.
+       */
+      void disassembleAndLogOpcode(const Daedalus::PARStackOpCode& opcode);
+
       /**
        * Program counter register
        */
-      bs::UINT32 mPC;
+      bs::UINT32 mPC = 0;
+
+      /**
+       * Function nesting counter.
+       */
+      bs::INT32 mCallDepth = 0;
 
       bs::SPtr<DATSymbolStorageLoader> mInternals;
       bs::SPtr<Daedalus::DATFile> mDatFile;

@@ -22,6 +22,10 @@ namespace REGoth
     virtual ~ScriptBackedBy();
 
   protected:
+
+    void onCreated() override;
+    void onDestroyed() override;
+
     /**
      * @return Script object backing this component.
      *
@@ -45,5 +49,8 @@ namespace REGoth
      * Script object backing this item
      */
     Scripting::ScriptObjectHandle mScriptObject;
+
+    bs::String mScriptClassName;
+    bs::String mScriptInstance;
   };
 }  // namespace REGoth

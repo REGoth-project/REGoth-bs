@@ -57,7 +57,7 @@ namespace REGoth
     {
       Daedalus::PARStackOpCode opcode = mDatFile->getStackOpCode(mPC);
 
-      bs::gDebug().logDebug("[DaedalusVM] Exec: " + disassembleOpcode(opcode, mScriptSymbols));
+      disassembleAndLogOpcode(opcode);
 
       mPC += opcode.opSize;
 
@@ -237,6 +237,8 @@ namespace REGoth
             auto& target = mScriptSymbols.getSymbol<SymbolInstance>(targetIndex);
             auto& source = mScriptSymbols.getSymbol<SymbolInstance>(sourceIndex);
 
+            bs::gDebug().logDebug("AssignInstance: " + target.name + " = " + source.name);
+
             target.instance = source.instance;
           }
           break;
@@ -291,9 +293,11 @@ namespace REGoth
             bs::UINT32 pc               = mPC;
 
             mPC = (bs::UINT32)opcode.address;
+            mCallDepth += 1;
 
             executeUntilReturn();
 
+            mCallDepth -= 1;
             mPC = pc;
             mClassVarResolver->setCurrentInstance(currentInstance);
           }
@@ -306,7 +310,15 @@ namespace REGoth
 
             if (it != mExternals.end())
             {
+              SymbolIndex currentInstance = mClassVarResolver->getCurrentInstance();
+              bs::UINT32 pc               = mPC;
+              mCallDepth += 1;
+
               (this->*it->second)();
+
+              mCallDepth -= 1;
+              mPC = pc;
+              mClassVarResolver->setCurrentInstance(currentInstance);
             }
             else
             {
@@ -321,7 +333,11 @@ namespace REGoth
           // -----------------------------------------------------------------------------------
 
         case Daedalus::EParOp_SetInstance:
-          mClassVarResolver->setCurrentInstance(opcode.symbol);
+          // Look up the instances object
+          {
+            const SymbolInstance& instance = mScriptSymbols.getSymbol<SymbolInstance>(opcode.symbol);
+            mClassVarResolver->setCurrentInstance(instance.instance);
+          }
           break;
 
         default:
@@ -369,6 +385,19 @@ namespace REGoth
       {
         return mStack.popString();
       }
+    }
+
+    ScriptObjectHandle DaedalusVM::popInstanceScriptObject()
+    {
+      SymbolIndex symbol   = mStack.popInstance();
+      const auto& instance = mScriptSymbols.getSymbol<SymbolInstance>(symbol);
+
+      if (instance.isClassVar)
+      {
+        REGOTH_THROW(InvalidParametersException, "Instances cannot be classvars!");
+      }
+
+      return instance.instance;
     }
 
     bs::INT32& DaedalusVM::popIntReference()
@@ -531,6 +560,31 @@ namespace REGoth
       SymbolIndex symbol = mScriptSymbols.findIndexBySymbolName(name);
 
       mExternals[symbol] = callback;
+    }
+
+    void DaedalusVM::disassembleAndLogOpcode(const Daedalus::PARStackOpCode& opcode)
+    {
+      bs::String depth = "";
+
+      for (bs::INT32 i = 0; i < mCallDepth; i++)
+      {
+        bs::INT32 level = i % 3;
+        switch (level)
+        {
+          case 0:
+            depth += "|";
+            break;
+          case 1:
+            depth += ";";
+            break;
+          case 2:
+            depth += ".";
+            break;
+        }
+      }
+
+      bs::gDebug().logDebug("[DaedalusVM] Exec: " + depth +
+                            disassembleOpcode(opcode, mScriptSymbols));
     }
 
   }  // namespace Scripting

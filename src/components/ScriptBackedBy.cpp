@@ -5,12 +5,22 @@ namespace REGoth
 {
   ScriptBackedBy::ScriptBackedBy(const bs::HSceneObject& parent, const bs::String& className,
                                  const bs::String& instance)
-      : bs::Component(parent)
+      : mScriptClassName(className)
+      , mScriptInstance(instance)
+      , bs::Component(parent)
   {
-    instanciateScriptObject(className, instance);
   }
 
   ScriptBackedBy::~ScriptBackedBy()
+  {
+  }
+
+  void ScriptBackedBy::onCreated()
+  {
+    instanciateScriptObject(mScriptClassName, mScriptInstance);
+  }
+
+  void ScriptBackedBy::onDestroyed()
   {
     if (gGameScript().scriptObjects().isValid(mScriptObject))
     {
@@ -22,8 +32,7 @@ namespace REGoth
   void ScriptBackedBy::instanciateScriptObject(const bs::String& className,
                                                const bs::String& instance)
   {
-    mScriptObject = gGameScript().instanciateClass(className, instance);
-    gGameScript().mapping().map(mScriptObject, SO());
+    mScriptObject = gGameScript().instanciateClass(className, instance, SO());
   }
 
   Scripting::ScriptObject& ScriptBackedBy::scriptObjectData()

@@ -6,6 +6,12 @@ namespace REGoth
   class Waynet;
   using HWaynet = bs::GameObjectHandle<Waynet>;
 
+  class Item;
+  using HItem = bs::GameObjectHandle<Item>;
+
+  class Character;
+  using HCharacter = bs::GameObjectHandle<Character>;
+
   namespace World
   {
     /**
@@ -43,8 +49,6 @@ namespace REGoth
         NoInitScripts,
       };
 
-      GameWorld(const bs::String& zenFile, Init init);
-
       /**
        * Returns the currently loaded worlds name.
        *
@@ -73,9 +77,42 @@ namespace REGoth
        * @param  instance   Script instance of the item, e.g. `ITFO_APPLE`.
        * @param  transform  Where the item should be inserted into the world.
        *
-       * @return Handle to Scene-Object of the item.
+       * @return Handle to the item.
        */
-      bs::HSceneObject insertItem(const bs::String& instance, const bs::Transform& transform);
+      HItem insertItem(const bs::String& instance, const bs::Transform& transform);
+
+      /**
+       * Inserts an item at the given spawnpoint.
+       *
+       * A spawnpoint can be either a waypoint or a freepoint.
+       *
+       * Throws if instance or spawnpoint does not exist.
+       *
+       * @param  instance    Script instance of the item, e.g. `ITFO_APPLE`.
+       * @param  spawnPoint  Where the item should be inserted into the world (Waypoint or
+       *                     Freepoint).
+       *
+       * @return Handle to the item.
+       */
+      HItem insertItem(const bs::String& instance, const bs::String& spawnPoint);
+
+      /**
+       * Inserts a character at the given waypoint.
+       *
+       * Throws if instance or waypoint does not exist.
+       *
+       * @param  instance  Script instanc og the character, e.g. `PC_HERO`.
+       * @param  waypoint  Waypoint where the character should be inserted at, e.g. `OC1`.
+       *
+       * @return Handle of the character.
+       */
+      HCharacter insertCharacter(const bs::String& instance, const bs::String& waypoint);
+
+
+      /**
+       * Internal method to load the world. Do not call directly.
+       */
+      bool _loadZen(const bs::String& zenFile, Init init);
 
     private:
       bs::SPtr<GameWorldInternal> mInternal;

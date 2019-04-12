@@ -1,4 +1,5 @@
 #include "DaedalusDisassembler.hpp"
+#include "scripting/ScriptSymbolQueries.hpp"
 #include <scripting/ScriptSymbolStorage.hpp>
 
 namespace REGoth
@@ -9,6 +10,34 @@ namespace REGoth
                                  const ScriptSymbolStorage& symbols)
     {
       auto symName = [&](SymbolIndex index) { return symbols.getSymbolBase(index).name; };
+
+      auto findFunctionFromAddress = [&](bs::UINT32 address) {
+        SymbolIndex index = Queries::findSymbolOfFunctionByAddress(symbols, address);
+
+        if (index == SYMBOL_INDEX_INVALID)
+        {
+          return bs::StringUtil::format("[invalid: {0}]", address);
+        }
+
+        return symName(index);
+      };
+
+      auto symValue = [&](SymbolIndex index, bs::UINT32 arrayindex = 0) {
+        SymbolBase& sym = symbols.getSymbolBase(index);
+
+        switch (sym.type)
+        {
+          case SymbolType::Int:
+            return bs::toString(symbols.getSymbol<SymbolInt>(index).ints.values[arrayindex]);
+          case SymbolType::Float:
+            return bs::toString(symbols.getSymbol<SymbolFloat>(index).floats.values[arrayindex]);
+          case SymbolType::String:
+            return "'" + symbols.getSymbol<SymbolString>(index).strings.values[arrayindex] + "'";
+        default:
+          return bs::String("[-]");
+        }
+      };
+
       switch (opcode.op)
       {
           // Arithmetic
@@ -95,14 +124,16 @@ namespace REGoth
           return bs::StringUtil::format("PushInt {0}", opcode.value);
 
         case Daedalus::EParOp_PushVar:
-          return bs::StringUtil::format("PushVar {0}", symName(opcode.symbol));
+          return bs::StringUtil::format("PushVar {0}: {1}", symName(opcode.symbol),
+                                        symValue(opcode.symbol));
 
         case Daedalus::EParOp_PushInstance:
-          return bs::StringUtil::format("PushInstance {0}", symName(opcode.symbol));
+          return bs::StringUtil::format("PushInstance {0}", symName(opcode.symbol),
+                                        symValue(opcode.symbol));
 
         case Daedalus::EParOp_PushArrayVar:
           return bs::StringUtil::format("PushArrayVar {0}[{1}]", symName(opcode.symbol),
-                                        (int)opcode.index);
+                                        (int)opcode.index, symValue(opcode.symbol, opcode.index));
 
           // Assign
           // ----------------------------------------------------------------------------------
@@ -150,7 +181,7 @@ namespace REGoth
           return bs::StringUtil::format("JumpIf {0}", opcode.address);
 
         case Daedalus::EParOp_Call:
-          return bs::StringUtil::format("Call {0}", opcode.address);
+          return bs::StringUtil::format("Call {0}", findFunctionFromAddress(opcode.address));
 
         case Daedalus::EParOp_CallExternal:
           return bs::StringUtil::format("CallExternal {0}", symName(opcode.symbol));

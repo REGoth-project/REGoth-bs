@@ -14,7 +14,7 @@ namespace REGoth
   {
     bs::HSceneObject waypointSO = SO()->findChild(name);
 
-    if (waypointSO) return {};
+    if (!waypointSO) return {};
 
     return waypointSO->getComponent<Waypoint>();
   }

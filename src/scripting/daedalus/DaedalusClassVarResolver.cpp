@@ -122,9 +122,17 @@ namespace REGoth
     void DaedalusClassVarResolver::throwIfCurrentInstanceNotOfClass(
         const bs::String& className) const
     {
+      if (!isCurrentInstanceValid())
+      {
+        REGOTH_THROW(InvalidParametersException,
+                     "Current Instance is not valid! Expected it to be a " + className);
+      }
+
       if (!isCurrentInstanceOfClass(className))
       {
-        REGOTH_THROW(InvalidParametersException, "Current Instance is not of class: " + className);
+        bs::String actual = mScriptObjects.get(mCurrentInstance).className;
+        REGOTH_THROW(InvalidParametersException,
+                     "Current Instance is a " + actual + ". But we expected " + className + "!");
       }
     }
 
