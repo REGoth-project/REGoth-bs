@@ -72,6 +72,21 @@ namespace REGoth
       }
 
       /**
+       * Looks up the name of the symbol at the given index.
+       *
+       * This will also do sanity checks on whether the given index is pointing to
+       * a valid object and throws if not.
+       *
+       * @param  index  Index of the symbol to look up.
+       *
+       * @return Name of the symbol with the given index.
+       */
+      const bs::String& getSymbolName(SymbolIndex index) const
+      {
+        return getSymbolBase(index).name;
+      }
+
+      /**
        * Looks up the symbol at the given index.
        *
        * This will also do sanity checks on whether the given index is pointing to
