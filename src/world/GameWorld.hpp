@@ -8,6 +8,31 @@ namespace REGoth
 
   namespace World
   {
+    /**
+     * This class handles the game world.
+     *
+     * It can create Items, Characters and other objects, and gives access
+     * to certain important scene objects and components like the Waynet.
+     *
+     * This is also the place where the WLD_*-externals should be implemented.
+     *
+     *
+     * # Loading a world
+     *
+     * To load a world, the global function `REGoth::World::loadWorldFromZEN()` has to
+     * be used. This function will replace any worlds loaded before with a new instance.
+     * However, it will not reset the scripting engine, so if this is not the first load,
+     * make sure to do that before loading another world.
+     *
+     * Example:
+     *
+     *     Daedalus::DATFile dat("paht/to/GOTHIC.DAT");
+     *
+     *     Scripting::loadGothicDAT(dat);
+     *
+     *     World::loadWorldFromZEN("OLDWORLD.ZEN");
+     *
+     */
     class GameWorldInternal;
     class GameWorld
     {
@@ -71,7 +96,8 @@ namespace REGoth
      *
      * @return  Whether loading was successful.
      */
-    bool loadWorldFromZEN(const bs::String& zenFile, GameWorld::Init init = GameWorld::Init::Everything);
+    bool loadWorldFromZEN(const bs::String& zenFile,
+                          GameWorld::Init init = GameWorld::Init::Everything);
 
   }  // namespace World
 
