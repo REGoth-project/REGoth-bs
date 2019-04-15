@@ -69,14 +69,17 @@ namespace REGoth
      *
      * Throws if the body mesh is not listed inside the model script.
      *
-     * @param  bodyMesh  Name of the body mesh to use, e.g. `HUM_BODY_NAKED0.ASC`.
+     * @param  bodyMesh  Name of the body mesh to use, e.g. `HUM_BODY_NAKED0`. The
+     *                   file extension must be omitted.
      */
     void setBodyMesh(const bs::String& bodyMesh);
 
     /**
      * Sets the headmesh for this model.
      *
-     * @param  head  File of the mesh to use as head, e.g. `HUM_HEAD.MMB`.
+     * @param  head  File of the mesh to use as head, e.g. `HUM_HEAD.MMB`. The file
+     *               extension is not required. If none was given, `.MMB` will be
+     *               assumed.
      */
     void setHeadMesh(const bs::String& headmesh, bs::UINT32 headTextureIdx = 0,
                      bs::UINT32 teethTextureIdx = 0);
@@ -109,6 +112,18 @@ namespace REGoth
      * Plays the given animation clip.
      */
     void playAnimation(bs::HAnimationClip clip);
+
+    /**
+     * Searches for the default idle animation for this character and plays it.
+     *
+     * The idle animation for humans is `S_RUN`. For monsters, that one doesn't exist
+     * since they are always in the *Fist*-Weaponmode. Therefore `S_FISTRUN` is being
+     * played instead.
+     *
+     * This method should be only for for testing, since playing the correct animations
+     * should be handled by other parts of the software.
+     */
+    void playDefaultIdleAnimation();
 
     /**
      * Tries to transition to the given animation name.

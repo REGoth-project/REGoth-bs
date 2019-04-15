@@ -58,6 +58,10 @@ namespace REGoth
 
       deleteObjectSubtree();
       buildObjectSubtree();
+
+      // TODO: This is only in while we don't have a proper animation controller/AI. Remove once
+      //       that is in!
+      playDefaultIdleAnimation();
     }
     else
     {
@@ -252,6 +256,28 @@ namespace REGoth
     }
   }
 
+  void REGoth::VisualCharacter::playDefaultIdleAnimation()
+  {
+    auto possibleAnims = {
+      "S_RUN",
+      "S_FISTRUN"
+    };
+
+    for (auto anim : possibleAnims)
+    {
+      bs::HAnimationClip clip = findAnimationClip(anim);
+
+      if (clip)
+      {
+        playAnimation(clip);
+        return;
+      }
+    }
+
+    // No animation found, stop all animations instead
+    playAnimation({});
+  }
+
   bool VisualCharacter::tryPlayTransitionAnimationTo(const bs::String& state)
   {
     bs::HAnimationClip clip;
@@ -416,3 +442,4 @@ namespace REGoth
   }
 
 }  // namespace REGoth
+
