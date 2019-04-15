@@ -9,9 +9,9 @@ namespace REGoth
   {
   }
 
-  void Item::onCreated()
+  void Item::onInitialized()
   {
-    ScriptBackedBy::onCreated();
+    ScriptBackedBy::onInitialized();
 
     createVisual();
   }

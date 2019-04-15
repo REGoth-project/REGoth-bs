@@ -102,6 +102,15 @@ namespace REGoth
     if (BsZenLib::HasCachedStaticMesh(meshFileName))
     {
       mesh = BsZenLib::LoadCachedStaticMesh(meshFileName);
+
+      // This shouldn't be needed, but sometimes the worldmesh in mesh->getMesh() seems to get lost?
+      if (!mesh.isLoaded())
+      {
+        bs::gDebug().logWarning("Failed to load cached world mesh of zen " + zen.fileName +
+                                "- rechaching it!");
+        mesh = BsZenLib::ImportAndCacheStaticMesh(meshFileName, zen.worldMesh,
+                                                  gVirtualFileSystem().getFileIndex());
+      }
     }
     else
     {
@@ -109,20 +118,17 @@ namespace REGoth
                                                 gVirtualFileSystem().getFileIndex());
     }
 
-    if (!mesh || !mesh->getMesh()) return {};
+    bs::HMesh actualMesh = mesh->getMesh();
+
+    if (!mesh.isLoaded())
+    {
+      REGOTH_THROW(InvalidStateException, "Failed to load world mesh for zen " + zen.fileName);
+    }
 
     bs::HSceneObject meshSO    = bs::SceneObject::create(meshFileName);
     bs::HRenderable renderable = meshSO->addComponent<bs::CRenderable>();
     renderable->setMesh(mesh->getMesh());
     renderable->setMaterials(mesh->getMaterials());
-
-    bs::HMesh actualMesh = mesh->getMesh();
-
-    if (!actualMesh)
-    {
-      bs::gDebug().logError("Mesh not there?");
-      return {};
-    }
 
     if (!actualMesh->getCachedData())
     {

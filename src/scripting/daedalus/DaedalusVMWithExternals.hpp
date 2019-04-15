@@ -210,6 +210,7 @@ namespace REGoth
                                           bs::HSceneObject mappedSceneObject) override;
 
       void initializeWorld(const bs::String& worldName) override;
+      void setHero(ScriptObjectHandle hero) override;
 
     protected:
       /**
@@ -246,12 +247,18 @@ namespace REGoth
 
       void external_Print();
       void external_HLP_Random();
+      void external_HLP_GetNpc();
       void external_IntToString();
       void external_ConcatStrings();
       void external_WLD_InsertItem();
       void external_WLD_InsertNpc();
       void external_NPC_IsPlayer();
       void external_NPC_SetTalentSkill();
+      void external_NPC_EquipItem();
+      void external_NPC_CreateInventoryItems();
+      void external_NPC_CreateInventoryItem();
+      void external_MDL_SetVisual();
+      void external_MDL_SetVisualBody();
 
       void registerAllExternals() override;
     };

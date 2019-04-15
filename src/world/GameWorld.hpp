@@ -101,18 +101,24 @@ namespace REGoth
        *
        * Throws if instance or waypoint does not exist.
        *
-       * @param  instance  Script instanc og the character, e.g. `PC_HERO`.
-       * @param  waypoint  Waypoint where the character should be inserted at, e.g. `OC1`.
+       * @param  instance    Script instanc og the character, e.g. `PC_HERO`.
+       * @param  spawnPoint  Name of the Scene Object where the character should be inserted at.
+       *                     This includes the names of Waypoints, Freepoints and other spots. An
+       *                     example for a waypoint would be `OC1`.
        *
        * @return Handle of the character.
        */
-      HCharacter insertCharacter(const bs::String& instance, const bs::String& waypoint);
-
+      HCharacter insertCharacter(const bs::String& instance, const bs::String& spawnPoint);
 
       /**
        * Internal method to load the world. Do not call directly.
        */
       bool _loadZen(const bs::String& zenFile, Init init);
+
+      /**
+       * Internal method to create an empty world. Do not call directly.
+       */
+      void _loadEmpty();
 
     private:
       bs::SPtr<GameWorldInternal> mInternal;
@@ -135,6 +141,15 @@ namespace REGoth
      */
     bool loadWorldFromZEN(const bs::String& zenFile,
                           GameWorld::Init init = GameWorld::Init::Everything);
+
+    /**
+     * Creates an empty game world. After this succeeded, gWorld() is available.
+     *
+     * It will not do a script-init and will not create a hero-character.
+     *
+     * The scripting system does not need to be initialized before calling this.
+     */
+    void loadWorldEmpty();
 
   }  // namespace World
 

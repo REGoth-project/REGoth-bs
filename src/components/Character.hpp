@@ -15,6 +15,14 @@ namespace REGoth
   public:
     Character(const bs::HSceneObject& parent, const bs::String& instance);
 
+    void onInitialized() override;
+
+    /**
+     * Registers this character as the hero. The hero will most likely be the player,
+     * but doesn't have to be, ie. if the player controls another character.
+     */
+    void useAsHero();
+
     /**
      * @return Distance from this Character to the given other Character in meters.
      *
@@ -281,5 +289,17 @@ namespace REGoth
     bool checkInfo(bool important);
 
     bs::INT32 GetStateTime();
+
+    /************************************************************************/
+    /* 								RTTI */
+    /************************************************************************/
+  public:
+    friend class RTTI_Character;
+    static bs::RTTITypeBase* getRTTIStatic();
+    bs::RTTITypeBase* getRTTI() const override;
+
+    // protected:
+  public:  // FIXME: Should be protected, it is only used by RRIT but `friend` doesn't seem to work?!
+    Character() = default;  // Serialization only
   };
 }  // namespace REGoth

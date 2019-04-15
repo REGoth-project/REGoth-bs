@@ -66,6 +66,11 @@ namespace REGoth
       virtual void initializeWorld(const bs::String& worldName) = 0;
 
       /**
+       * Set the scipt object of the `hero`. This will be most likely the player.
+       */
+      virtual void setHero(ScriptObjectHandle hero) = 0;
+
+      /**
        * Access to the script object storage
        */
       ScriptObjectStorage& scriptObjects()

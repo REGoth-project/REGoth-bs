@@ -9,6 +9,7 @@
 
 namespace REGoth
 {
+  class RTTI_VisualCharacter;
   class NodeVisuals;
   using HNodeVisuals = bs::GameObjectHandle<NodeVisuals>;
 
@@ -53,6 +54,24 @@ namespace REGoth
      * the mesh.
      */
     void setMesh(BsZenLib::Res::HMeshWithMaterials mesh);
+
+    /**
+     * Sets up the visual according to the given visual name.
+     *
+     * Throws if that visual does not exist.
+     *
+     * @param  visual  Name of the visual (model-script) to use, e.g. `HUMANS.MDS`.
+     */
+    void setVisual(const bs::String& visual);
+
+    /**
+     * Sets the body mesh.
+     *
+     * Throws if the body mesh is not listed inside the model script.
+     *
+     * @param  bodyMesh  Name of the body mesh to use, e.g. `HUM_BODY_NAKED0.ASC`.
+     */
+    void setBodyMesh(const bs::String& bodyMesh);
 
     /**
      * Sets the headmesh for this model.
@@ -180,8 +199,8 @@ namespace REGoth
 
     struct BodyState
     {
-      bs::String headVisual;
-      bs::String bodyVisual;
+      bs::String headVisual = "";
+      bs::String bodyVisual = "";
       bs::UINT32 headTextureIdx = 0;
       bs::UINT32 teethTextureIdx = 0;
       bs::UINT32 bodySkinColorIdx = 0;
@@ -206,7 +225,20 @@ namespace REGoth
     // Animation --------------------------------------------------------------
     bs::Map<bs::String, bs::HAnimationClip> mAnimationClips; /**< Animation names -> clip */
     bs::HAnimationClip mRootMotionLastClip; /**< Last clip we got the root motion from */
-    float mRootMotionLastTime; /**< Last time the animation was queried for root motion */
+    float mRootMotionLastTime = 0.0f; /**< Last time the animation was queried for root motion */
+
+
+    /************************************************************************/
+    /* 								RTTI */
+    /************************************************************************/
+  public:
+    friend RTTI_VisualCharacter;
+    static bs::RTTITypeBase* getRTTIStatic();
+    bs::RTTITypeBase* getRTTI() const override;
+
+  // protected:
+  public: // FIXME: Should be protected, it is only used by RRIT but `friend` doesn't seem to work?!
+    VisualCharacter() = default;  // Serialization only
   };
 
   using HVisualCharacter = bs::GameObjectHandle<VisualCharacter>;

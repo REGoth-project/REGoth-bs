@@ -1,5 +1,6 @@
 #include "ScriptBackedBy.hpp"
 #include <scripting/ScriptVMInterface.hpp>
+#include <RTTI/RTTI_ScriptBackedBy.hpp>
 
 namespace REGoth
 {
@@ -9,13 +10,14 @@ namespace REGoth
       , mScriptInstance(instance)
       , bs::Component(parent)
   {
+    setName("ScriptBackedBy");
   }
 
   ScriptBackedBy::~ScriptBackedBy()
   {
   }
 
-  void ScriptBackedBy::onCreated()
+  void ScriptBackedBy::onInitialized()
   {
     instanciateScriptObject(mScriptClassName, mScriptInstance);
   }
@@ -41,4 +43,13 @@ namespace REGoth
     return gGameScript().scriptObjects().get(mScriptObject);
   }
 
+  bs::RTTITypeBase* ScriptBackedBy::getRTTIStatic()
+  {
+    return RTTI_ScriptBackedBy::instance();
+  }
+
+  bs::RTTITypeBase* ScriptBackedBy::getRTTI() const
+  {
+    return ScriptBackedBy::getRTTIStatic();
+  }
 }  // namespace REGoth

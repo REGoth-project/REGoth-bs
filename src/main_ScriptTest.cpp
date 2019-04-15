@@ -23,16 +23,16 @@ public:
     Daedalus::DATFile dat("/home/andre/games/Gothic II/_work/Data/Scripts/_compiled/GOTHIC.DAT");
     REGoth::Scripting::loadGothicDAT(dat);
 
-    ScriptObjectHandle appleHandle = gGameScript().instanciateClass("C_ITEM", "ITFO_APPLE");
+    // ScriptObjectHandle appleHandle = gGameScript().instanciateClass("C_ITEM", "ITFO_APPLE");
 
-    ScriptObject& apple = REGoth::gGameScript().scriptObjects().get(appleHandle);
+    // ScriptObject& apple = REGoth::gGameScript().scriptObjects().get(appleHandle);
 
-    bs::gDebug().logDebug("Apple's visual: " + apple.stringValue("VISUAL"));
+    // bs::gDebug().logDebug("Apple's visual: " + apple.stringValue("VISUAL"));
 
-    gGameScript().script_PrintPlus("Hello World!");
-    gGameScript().script_PrintPlus("This is printed by Daedalus!");
-    gGameScript().script_PrintPlus("It also appends a random number to the end, look: ");
-    gGameScript().script_PrintPlus("Pretty cool, eh?");
+    // gGameScript().script_PrintPlus("Hello World!");
+    // gGameScript().script_PrintPlus("This is printed by Daedalus!");
+    // gGameScript().script_PrintPlus("It also appends a random number to the end, look: ");
+    // gGameScript().script_PrintPlus("Pretty cool, eh?");
 
     bs::HSceneObject item = bs::SceneObject::create("Apple");
     item->addComponent<REGoth::Item>("ITFO_APPLE");

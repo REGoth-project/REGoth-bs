@@ -1,36 +1,50 @@
 #include "VisualCharacter.hpp"
+#include "original-content/VirtualFileSystem.hpp"
 #include <Animation/BsAnimationClip.h>
+#include <BsZenLib/ImportPath.hpp>
+#include <BsZenLib/ImportSkeletalMesh.hpp>
 #include <Components/BsCAnimation.h>
 #include <Components/BsCRenderable.h>
 #include <Debug/BsDebug.h>
+#include <Mesh/BsMesh.h>
+#include <RTTI/RTTI_VisualCharacter.hpp>
 #include <Scene/BsSceneObject.h>
 #include <animation/Animation.hpp>
 #include <animation/StateNaming.hpp>
 #include <components/NodeVisuals.hpp>
+#include <excepction/Throw.hpp>
 
-const bs::String MODEL_NODE_NAME_R_HAND = "BIP01 R HAND";
-const bs::String MODEL_NODE_NAME_L_HAND = "BIP01 L HAND";
-const bs::String MODEL_NODE_NAME_R_FOOT = "BIP01 R FOOT";
-const bs::String MODEL_NODE_NAME_L_FOOT = "BIP01 L FOOT";
-const bs::String MODEL_NODE_NAME_HEAD = "BIP01 HEAD";
+const bs::String MODEL_NODE_NAME_R_HAND    = "BIP01 R HAND";
+const bs::String MODEL_NODE_NAME_L_HAND    = "BIP01 L HAND";
+const bs::String MODEL_NODE_NAME_R_FOOT    = "BIP01 R FOOT";
+const bs::String MODEL_NODE_NAME_L_FOOT    = "BIP01 L FOOT";
+const bs::String MODEL_NODE_NAME_HEAD      = "BIP01 HEAD";
 const bs::String MODEL_NODE_NAME_FOOTSTEPS = " FOOTSTEPS";
 
 namespace REGoth
 {
   VisualCharacter::VisualCharacter(const bs::HSceneObject& parent)
-      : Component(parent)
+      : bs::Component(parent)
   {
     setName("VisualCharacter");
   }
 
   void VisualCharacter::setModelScript(BsZenLib::Res::HModelScriptFile modelScript)
   {
+    if (modelScript->getName().empty())
+    {
+      REGOTH_THROW(InvalidParametersException, "ModelScript should have a name!");
+    }
+
+    deleteObjectSubtree();
     mModelScript = modelScript;
+
+    bs::gDebug().logDebug("Set model script: " + modelScript->getName());
 
     for (bs::HAnimationClip clip : mModelScript->getAnimationClips())
     {
       mAnimationClips[clip->getName()] = clip;
-      bs::gDebug().logDebug(clip->getName());
+      // bs::gDebug().logDebug(clip->getName());
     }
   }
 
@@ -47,9 +61,65 @@ namespace REGoth
     }
     else
     {
-      gDebug().logError("[VisualCharacter] Mesh " + mesh->getName() +
-                        " is not part of set model-script " +
-                        (mModelScript ? mModelScript->getName() : "<none>"));
+      REGOTH_THROW(InvalidParametersException,
+                   "Mesh " + mesh->getName() + " is not part of set model-script " +
+                       (mModelScript ? mModelScript->getName() : "<none>"));
+    }
+  }
+
+  void VisualCharacter::setVisual(const bs::String& visual)
+  {
+    BsZenLib::Res::HModelScriptFile modelScript;
+
+    // FIXME: Loading these from cache does work in the character viewer, but not in the world
+    // viewer?! This set is just a workaround so we always use model scripts from this run
+    // while caching only one of it. It should be removed once that is figured out.
+    static bs::Set<bs::String> s_cachedVisuals;
+    bool hasCachedItThisRun = s_cachedVisuals.find(visual) != s_cachedVisuals.end();
+
+    if (hasCachedItThisRun && BsZenLib::HasCachedMDS(visual))
+    {
+      modelScript = BsZenLib::LoadCachedMDS(visual);
+    }
+    else
+    {
+      modelScript = BsZenLib::ImportAndCacheMDS(visual, REGoth::gVirtualFileSystem().getFileIndex());
+      s_cachedVisuals.insert(visual);
+    }
+
+    if (!modelScript)
+    {
+      REGOTH_THROW(InvalidParametersException, "Model Script " + visual + " could not be loaded!");
+    }
+
+    setModelScript(modelScript);
+  }
+
+  void VisualCharacter::setBodyMesh(const bs::String& bodyMesh)
+  {
+    if (!mModelScript)
+    {
+      REGOTH_THROW(InvalidStateException, "No model script set! Has setVisual() been called?");
+    }
+
+    BsZenLib::Res::HMeshWithMaterials hmesh = mModelScript->getMeshByName(bodyMesh);
+
+    if (hmesh)
+    {
+      setMesh(hmesh);
+    }
+    else if (mModelScript->getMeshes().empty())
+    {
+      REGOTH_THROW(InvalidParametersException, "Did not find body mesh " + bodyMesh +
+                                                   " in model script '" + mModelScript->getName() +
+                                                   "' and it seems to be empty otherwise!");
+    }
+    else
+    {
+      bs::gDebug().logWarning(bs::StringUtil::format(
+          "[VisualCharacter] Did not find body mesh {0}  in model script "
+          "'{1}'', defaulting to first one: {2}",
+          bodyMesh, mModelScript->getName(), mModelScript->getMeshes()[0]->getName()));
     }
   }
 
@@ -72,9 +142,6 @@ namespace REGoth
 
   void VisualCharacter::deleteObjectSubtree()
   {
-    mSubRenderable = nullptr;
-    mSubAnimation = nullptr;
-
     for (bs::HSceneObject h : mSubObjects)
     {
       h->destroy();
@@ -95,15 +162,18 @@ namespace REGoth
   {
     bs::HSceneObject renderSO = createAndRegisterSubObject("Renderable");
 
-    mSubRenderable = renderSO->addComponent<bs::CRenderable>();
-    mSubAnimation = renderSO->addComponent<bs::CAnimation>();
+    mSubRenderable  = renderSO->addComponent<bs::CRenderable>();
+    mSubAnimation   = renderSO->addComponent<bs::CAnimation>();
     mSubNodeVisuals = renderSO->addComponent<NodeVisuals>();
   }
 
   bs::HSceneObject VisualCharacter::createAndRegisterSubObject(const bs::String& name)
   {
     bs::HSceneObject subSO = bs::SceneObject::create(name);
-    subSO->setParent(SO());
+
+    bool dontKeepWorldTransform = false;
+
+    subSO->setParent(SO(), dontKeepWorldTransform);
 
     mSubObjects.push_back(subSO);
 
@@ -137,7 +207,7 @@ namespace REGoth
     using namespace bs;
 
     bs::String command = string.substr(0, string.find_first_of(':'));
-    bs::String action = string.substr(command.length() + 1);
+    bs::String action  = string.substr(command.length() + 1);
 
     gDebug().logDebug("[VisualCharacter] Got animation event: " + command + ":" + action +
                       " while playing " + clip->getName());
@@ -187,7 +257,7 @@ namespace REGoth
     if (Animation::isTransitionNeeded(state))
     {
       bs::String from = getStateFromPlayingAnimation();
-      bs::String to = Animation::getStateName(state);
+      bs::String to   = Animation::getStateName(state);
 
       if (from.empty()) return false;
 
@@ -281,7 +351,7 @@ namespace REGoth
     mSubAnimation->getState(clipNow, state);
 
     float then = mRootMotionLastTime;
-    float now = state.time;
+    float now  = state.time;
 
     bs::Vector3 motion = Animation::getRootMotionSince(mRootMotionLastClip, then, now);
 
@@ -294,8 +364,8 @@ namespace REGoth
   void VisualCharacter::setHeadMesh(const bs::String& headmesh, bs::UINT32 headTextureIdx,
                                     bs::UINT32 teethTextureIdx)
   {
-    mBodyState.headVisual = headmesh;
-    mBodyState.headTextureIdx = headTextureIdx;
+    mBodyState.headVisual      = headmesh;
+    mBodyState.headTextureIdx  = headTextureIdx;
     mBodyState.teethTextureIdx = teethTextureIdx;
 
     updateHeadMesh();
@@ -317,6 +387,16 @@ namespace REGoth
     mSubNodeVisuals->attachVisualToNode(MODEL_NODE_NAME_HEAD, mBodyState.headVisual);
 
     // TODO: Fix texture and color
+  }
+
+  bs::RTTITypeBase* VisualCharacter::getRTTIStatic()
+  {
+    return RTTI_VisualCharacter::instance();
+  }
+
+  bs::RTTITypeBase* VisualCharacter::getRTTI() const
+  {
+    return VisualCharacter::getRTTIStatic();
   }
 
 }  // namespace REGoth

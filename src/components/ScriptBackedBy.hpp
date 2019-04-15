@@ -23,7 +23,7 @@ namespace REGoth
 
   protected:
 
-    void onCreated() override;
+    void onInitialized() override;
     void onDestroyed() override;
 
     /**
@@ -32,6 +32,11 @@ namespace REGoth
      * Throws if it does not exist.
      */
     Scripting::ScriptObject& scriptObjectData();
+
+    /**
+     * @return Handle of the script object backing this component.
+     */
+    Scripting::ScriptObjectHandle scriptObject() const { return mScriptObject; }
 
   private:
     /**
@@ -52,5 +57,17 @@ namespace REGoth
 
     bs::String mScriptClassName;
     bs::String mScriptInstance;
+
+    /************************************************************************/
+    /* RTTI                                                                 */
+    /************************************************************************/
+  public:
+    friend class RTTI_ScriptBackedBy;
+    static bs::RTTITypeBase* getRTTIStatic();
+    bs::RTTITypeBase* getRTTI() const override;
+
+    // protected:
+  public:  // FIXME: Should be protected, it is only used by RRIT but `friend` doesn't seem to work?!
+    ScriptBackedBy() = default;  // Serialization only
   };
 }  // namespace REGoth

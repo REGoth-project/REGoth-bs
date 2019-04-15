@@ -2,6 +2,7 @@
 #include "DaedalusClassVarResolver.hpp"
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
+#include <components/VisualCharacter.hpp>
 #include <world/GameWorld.hpp>
 
 namespace REGoth
@@ -62,6 +63,11 @@ namespace REGoth
       return obj;
     }
 
+    void DaedalusVMWithExternals::setHero(ScriptObjectHandle hero)
+    {
+      setInstance("HERO", hero);
+    }
+
     void DaedalusVMWithExternals::setInstance(const bs::String& instance,
                                               ScriptObjectHandle scriptObject)
     {
@@ -109,12 +115,18 @@ namespace REGoth
 
       registerExternal("PRINT", (externalCallback)&This::external_Print);
       registerExternal("HLP_RANDOM", (externalCallback)&This::external_HLP_Random);
+      registerExternal("HLP_GETNPC", (externalCallback)&This::external_HLP_GetNpc);
       registerExternal("INTTOSTRING", (externalCallback)&This::external_IntToString);
       registerExternal("NPC_ISPLAYER", (externalCallback)&This::external_NPC_IsPlayer);
       registerExternal("WLD_INSERTNPC", (externalCallback)&This::external_WLD_InsertNpc);
       registerExternal("CONCATSTRINGS", (externalCallback)&This::external_ConcatStrings);
       registerExternal("WLD_INSERTITEM", (externalCallback)&This::external_WLD_InsertItem);
       registerExternal("NPC_SETTALENTSKILL", (externalCallback)&This::external_NPC_SetTalentSkill);
+      registerExternal("EQUIPITEM", (externalCallback)&This::external_NPC_EquipItem);
+      registerExternal("CREATEINVITEMS", (externalCallback)&This::external_NPC_CreateInventoryItems);
+      registerExternal("CREATEINVITEM", (externalCallback)&This::external_NPC_CreateInventoryItem);
+      registerExternal("MDL_SETVISUAL", (externalCallback)&This::external_MDL_SetVisual);
+      registerExternal("MDL_SETVISUALBODY", (externalCallback)&This::external_MDL_SetVisualBody);
     }
 
     void DaedalusVMWithExternals::external_Print()
@@ -125,6 +137,13 @@ namespace REGoth
     void DaedalusVMWithExternals::external_HLP_Random()
     {
       mStack.pushInt(HLP_Random(popIntValue()));
+    }
+
+    void DaedalusVMWithExternals::external_HLP_GetNpc()
+    {
+      bs::INT32 symbolIndex = popIntValue();
+
+      mStack.pushInstance((SymbolIndex)symbolIndex);
     }
 
     void DaedalusVMWithExternals::external_IntToString()
@@ -170,6 +189,68 @@ namespace REGoth
       HCharacter character = popCharacterInstance();
 
       bs::gDebug().logWarning("[External] Using external stub: NPC_SetTalentSkill");
+    }
+
+    void DaedalusVMWithExternals::external_NPC_EquipItem()
+    {
+      bs::String instance  = popStringValue();
+      HCharacter character = popCharacterInstance();
+
+      character->equipItem(instance);
+    }
+    void DaedalusVMWithExternals::external_NPC_CreateInventoryItems()
+    {
+      bs::INT32 num        = popIntValue();
+      bs::String instance  = popStringValue();
+      HCharacter character = popCharacterInstance();
+
+      character->createInventoryItem(instance, num);
+    }
+
+    void DaedalusVMWithExternals::external_NPC_CreateInventoryItem()
+    {
+      bs::String instance  = popStringValue();
+      HCharacter character = popCharacterInstance();
+
+      character->createInventoryItem(instance, 1);
+    }
+
+    void DaedalusVMWithExternals::external_MDL_SetVisual()
+    {
+      bs::String visual    = popStringValue();
+      HCharacter character = popCharacterInstance();
+
+      HVisualCharacter characterVisual;
+
+      // if (!character->SO()->hasComponent<VisualCharacter>())
+      // {
+      // characterVisual = character->SO()->addComponent<VisualCharacter>();
+      // }
+      // else
+      // {
+      characterVisual = character->SO()->getComponent<VisualCharacter>();
+      // }
+
+      bs::StringUtil::toUpperCase(visual);
+      characterVisual->setVisual(visual);
+    }
+
+    void DaedalusVMWithExternals::external_MDL_SetVisualBody()
+    {
+      bs::INT32 armorInstance = popIntValue();
+      bs::INT32 teethTexIndex = popIntValue();
+      bs::INT32 headTexIndex  = popIntValue();
+      bs::String headMesh     = popStringValue();
+      bs::INT32 bodyTexColor  = popIntValue();
+      bs::INT32 bodyTexIndex  = popIntValue();
+      bs::String bodyMesh     = popStringValue();
+
+      HCharacter character = popCharacterInstance();
+
+      HVisualCharacter characterVisual = character->SO()->getComponent<VisualCharacter>();
+
+      bs::StringUtil::toUpperCase(bodyMesh);
+      characterVisual->setBodyMesh(bodyMesh);
     }
 
     void DaedalusVMWithExternals::script_PrintPlus(const bs::String& text)

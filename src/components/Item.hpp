@@ -19,7 +19,7 @@ namespace REGoth
 
   protected:
 
-    void onCreated() override;
+    void onInitialized() override;
     void onDestroyed() override;
 
   private:

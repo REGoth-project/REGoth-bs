@@ -1,10 +1,29 @@
 #include "Character.hpp"
+#include <components/VisualCharacter.hpp>
+#include <RTTI/RTTI_Character.hpp>
+#include <Scene/BsSceneObject.h>
+#include <scripting/ScriptVMInterface.hpp>
 
 namespace REGoth
 {
   Character::Character(const bs::HSceneObject& parent, const bs::String& instance)
       : ScriptBackedBy(parent, "C_NPC", instance)
   {
+    setName("Character");
+  }
+
+  void Character::onInitialized()
+  {
+    // Add visual component *before* running the script constructor since it
+    // needs to work on the visual
+    SO()->addComponent<VisualCharacter>();
+
+    ScriptBackedBy::onInitialized();
+  }
+
+  void Character::useAsHero()
+  {
+    gGameScript().setHero(scriptObject());
   }
 
   bool Character::checkInfo(bool important)
@@ -160,5 +179,15 @@ namespace REGoth
     bs::INT32 b;
 
     return b;
+  }
+
+  bs::RTTITypeBase* Character::getRTTIStatic()
+  {
+    return RTTI_Character::instance();
+  }
+
+  bs::RTTITypeBase* Character::getRTTI() const
+  {
+    return Character::getRTTIStatic();
   }
 }  // namespace REGoth

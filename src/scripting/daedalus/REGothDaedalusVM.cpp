@@ -57,7 +57,7 @@ namespace REGoth
     {
       Daedalus::PARStackOpCode opcode = mDatFile->getStackOpCode(mPC);
 
-      disassembleAndLogOpcode(opcode);
+      // disassembleAndLogOpcode(opcode);
 
       mPC += opcode.opSize;
 
@@ -237,8 +237,6 @@ namespace REGoth
             auto& target = mScriptSymbols.getSymbol<SymbolInstance>(targetIndex);
             auto& source = mScriptSymbols.getSymbol<SymbolInstance>(sourceIndex);
 
-            bs::gDebug().logDebug("AssignInstance: " + target.name + " = " + source.name);
-
             target.instance = source.instance;
           }
           break;
@@ -322,9 +320,9 @@ namespace REGoth
             }
             else
             {
-              REGOTH_THROW(
-                  NotImplementedException,
-                  "External not implemented: " + mScriptSymbols.getSymbolBase(opcode.symbol).name);
+              // REGOTH_THROW(
+              //     NotImplementedException,
+              //     "External not implemented: " + mScriptSymbols.getSymbolBase(opcode.symbol).name);
             }
           }
           break;

@@ -19,6 +19,12 @@
 #include <Input/BsVirtualInput.h>
 #include <Math/BsVector3.h>
 #include <Scene/BsSceneObject.h>
+#include <components/Character.hpp>
+#include <components/Waynet.hpp>
+#include <components/Waypoint.hpp>
+#include <daedalus/DATFile.h>
+#include <scripting/ScriptVMInterface.hpp>
+#include <world/GameWorld.hpp>
 
 class SimpleCharacterController : public bs::Component
 {
@@ -30,7 +36,7 @@ public:
 
     mVisual = visual;
 
-    playAnimationIfFound("S_RUN");
+    playAnimationIfFound("S_FISTRUN");
   }
 
   /** Triggered once per frame. Allows the component to handle input and move. */
@@ -38,10 +44,10 @@ public:
   {
     using namespace bs;
 
-    mGoingForward = gVirtualInput().isButtonHeld(VirtualButton("Forward"));
-    mGoingBack = gVirtualInput().isButtonHeld(VirtualButton("Back"));
-    mGoingLeft = gVirtualInput().isButtonHeld(VirtualButton("Left"));
-    mGoingRight = gVirtualInput().isButtonHeld(VirtualButton("Right"));
+    mGoingForward      = gVirtualInput().isButtonHeld(VirtualButton("Forward"));
+    mGoingBack         = gVirtualInput().isButtonHeld(VirtualButton("Back"));
+    mGoingLeft         = gVirtualInput().isButtonHeld(VirtualButton("Left"));
+    mGoingRight        = gVirtualInput().isButtonHeld(VirtualButton("Right"));
     mToggleMeleeWeapon = gVirtualInput().isButtonHeld(VirtualButton("ToggleMeleeWeapon"));
 
     DebugDraw::instance().clear();
@@ -62,7 +68,7 @@ public:
     {
       // Some animations have an empty `nextAnim`-field. Fall back to default
       // animation in that case
-      playAnimationIfFound("S_RUN");  // FIXME: Respect weapon mode
+      playAnimationIfFound("S_FISTRUN");  // FIXME: Respect weapon mode
     }
     else if (state.empty() || !mVisual->isPlayingAnimationInterruptable())
     {
@@ -71,7 +77,7 @@ public:
     }
     else if (mGoingForward)
     {
-      mVisual->tryPlayTransitionAnimationTo("S_RUNL");
+      mVisual->tryPlayTransitionAnimationTo("S_FISTRUNL");
     }
     else if (mGoingBack)
     {
@@ -83,7 +89,7 @@ public:
     // }
     else
     {
-      mVisual->tryPlayTransitionAnimationTo("S_RUN");
+      mVisual->tryPlayTransitionAnimationTo("S_FISTRUN");
     }
   }
 
@@ -148,44 +154,39 @@ public:
       gDebug().logDebug(s);
     }
 
-    HSceneObject playerSO = SceneObject::create("Player");
-
-    REGoth::HVisualCharacter playerVisual = playerSO->addComponent<REGoth::VisualCharacter>();
-    playerSO->addComponent<SimpleCharacterController>(playerVisual);
-    playerSO->addComponent<bs::ObjectRotator>();
-
-    // Load a model and its animations
-    BsZenLib::Res::HModelScriptFile model;
-
-    const String file = "HUMANS.MDS";
+    const String file   = "HUMANS.MDS";
     const String visual = "HUM_BODY_NAKED0.ASC";
 
-    if (BsZenLib::HasCachedMDS(file))
+    Daedalus::DATFile dat("/home/andre/games/Gothic II/_work/Data/Scripts/_compiled/GOTHIC.DAT");
+    REGoth::Scripting::loadGothicDAT(dat);
+
+    REGoth::World::loadWorldEmpty();
+
+    // Add some waypoint
+    bs::String wpName = "SOMEPLACE";
     {
-      model = BsZenLib::LoadCachedMDS(file);
-    }
-    else
-    {
-      model = BsZenLib::ImportAndCacheMDS(file, REGoth::gVirtualFileSystem().getFileIndex());
+      bs::HSceneObject wpSO = bs::SceneObject::create(wpName);
+
+      wpSO->setParent(REGoth::gWorld().waynet()->SO());
+      wpSO->setPosition(bs::Vector3(0, 0, 0));
+
+      REGoth::HWaypoint wp = wpSO->addComponent<REGoth::Waypoint>();
+      REGoth::gWorld().waynet()->addWaypoint(wp);
     }
 
-    if (!model || model->getMeshes().empty())
-    {
-      BS_EXCEPT(InvalidStateException, "Failed to load model or animations: " + file + "/" + visual);
-    }
+    REGoth::HCharacter character = REGoth::gWorld().insertCharacter("ORCWARRIOR_REST", wpName);
 
-    for (const auto& h : model->getMeshes())
-    {
-      // gDebug().logDebug(h->getName());
-    }
+    REGoth::HVisualCharacter playerVisual = character->SO()->getComponent<REGoth::VisualCharacter>();
+    // character->SO()->addComponent<SimpleCharacterController>(playerVisual);
+    character->SO()->addComponent<bs::ObjectRotator>();
 
-    playerVisual->setModelScript(model);
-    playerVisual->setMesh(model->getMeshes()[0]);
-    playerVisual->setHeadMesh("HUM_HEAD_PONY.MMB");
+    // playerVisual->setModelScript(model);
+    // playerVisual->setMesh(model->getMeshes()[0]);
+    // playerVisual->setHeadMesh("HUM_HEAD_PONY.MMB");
 
     Sphere bounds = playerVisual->getBounds().getSphere();
 
-    Vector3 cameraDirection = Vector3(2.0f, 1.0f, 2.0f);
+    Vector3 cameraDirection = Vector3(1,0,0);
     cameraDirection.normalize();
 
     auto cameraOffset = cameraDirection * bounds.getRadius() * 1.7f;
