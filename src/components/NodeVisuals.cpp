@@ -36,13 +36,15 @@ namespace REGoth
 
     bs::SPtr<bs::Skeleton> skeleton = getSkeleton();
 
-    for (bs::UINT32 i = 0; i < skeleton->getNumBones(); i++)
-    {
-      bs::gDebug().logDebug("Bone: " + skeleton->getBoneInfo(i).name);
-    }
+    // for (bs::UINT32 i = 0; i < skeleton->getNumBones(); i++)
+    // {
+    //   bs::gDebug().logDebug("Bone: " + skeleton->getBoneInfo(i).name);
+    // }
 
     bs::HSceneObject boneSO = bs::SceneObject::create(node);
-    boneSO->setParent(SO());
+
+    bool dontKeepWorldTransform = false;
+    boneSO->setParent(SO(), dontKeepWorldTransform);
 
     bs::HBone bone = boneSO->addComponent<bs::CBone>();
     bone->setBoneName(node);
