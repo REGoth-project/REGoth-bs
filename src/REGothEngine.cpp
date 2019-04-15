@@ -17,11 +17,27 @@ REGothEngine::~REGothEngine()
   shutdown();
 }
 
-bs::Vector<bs::String> REGothEngine::getVdfsPackagesToLoad()
+bs::Vector<bs::String> REGothEngine::getVdfsPackagesToLoad(const bs::Path& dataDirectory)
 {
-  return {
-      "Worlds.vdf", "Textures.vdf", "Meshes.vdf", "Anims.vdf", "Fonts.vdf",
-  };
+  bs::Vector<bs::Path> filePaths;
+  bs::Vector<bs::Path> dirPaths;
+
+  bs::FileSystem::getChildren(dataDirectory, filePaths, dirPaths);
+
+  bs::Vector<bs::String> packages;
+
+  for (auto& p : filePaths)
+  {
+    bs::String ext = p.getExtension();
+
+    bool caseSensitive = false;
+    if (bs::StringUtil::compare(ext, bs::String(".vdf"), caseSensitive) == 0)
+    {
+      packages.push_back(p.getFilename());
+    }
+  }
+
+  return packages;
 }
 
 void REGothEngine::loadOriginalGamePackages(const bs::String& argv0, const bs::Path& gameDirectory)
@@ -31,7 +47,8 @@ void REGothEngine::loadOriginalGamePackages(const bs::String& argv0, const bs::P
 
   bs::gDebug().logDebug("[VDFS] Indexing packages: ");
 
-  for (auto p : getVdfsPackagesToLoad())
+  // FIXME: Locate correct case of 'Data'-directory
+  for (auto p : getVdfsPackagesToLoad(gameDirectory + "Data"))
   {
     if (!gVirtualFileSystem().isPackageAvailable(p))
     {
