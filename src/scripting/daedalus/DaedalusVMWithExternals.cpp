@@ -238,9 +238,11 @@ namespace REGoth
     void DaedalusVMWithExternals::external_MDL_SetVisualBody()
     {
       bs::INT32 armorInstance = popIntValue();
+
       bs::INT32 teethTexIndex = popIntValue();
       bs::INT32 headTexIndex  = popIntValue();
       bs::String headMesh     = popStringValue();
+
       bs::INT32 bodyTexColor  = popIntValue();
       bs::INT32 bodyTexIndex  = popIntValue();
       bs::String bodyMesh     = popStringValue();
@@ -251,6 +253,10 @@ namespace REGoth
 
       bs::StringUtil::toUpperCase(bodyMesh);
       characterVisual->setBodyMesh(bodyMesh);
+
+      bs::StringUtil::toUpperCase(headMesh);
+      bs::gDebug().logDebug("Headmesh: " + headMesh);
+      characterVisual->setHeadMesh(headMesh);
     }
 
     void DaedalusVMWithExternals::script_PrintPlus(const bs::String& text)
