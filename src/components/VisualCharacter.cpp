@@ -370,6 +370,13 @@ namespace REGoth
     mBodyState.headTextureIdx  = headTextureIdx;
     mBodyState.teethTextureIdx = teethTextureIdx;
 
+    // Choose MMB as default filetype of no extension was given
+    if (!mBodyState.headVisual.empty() &&
+        mBodyState.headVisual.find_first_of('.') == bs::String::npos)
+    {
+      mBodyState.headVisual += ".MMB";
+    }
+
     updateHeadMesh();
   }
 
@@ -386,7 +393,14 @@ namespace REGoth
       BS_EXCEPT(InvalidStateException, "Animation component not initialized!");
     }
 
-    mSubNodeVisuals->attachVisualToNode(MODEL_NODE_NAME_HEAD, mBodyState.headVisual);
+    if (!mBodyState.headVisual.empty())
+    {
+      mSubNodeVisuals->attachVisualToNode(MODEL_NODE_NAME_HEAD, mBodyState.headVisual);
+    }
+    else
+    {
+      mSubNodeVisuals->clearNodeAttachment(MODEL_NODE_NAME_HEAD);
+    }
 
     // TODO: Fix texture and color
   }
