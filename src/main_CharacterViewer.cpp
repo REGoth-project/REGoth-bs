@@ -36,7 +36,7 @@ public:
 
     mVisual = visual;
 
-    playAnimationIfFound("S_FISTRUN");
+    playAnimationIfFound("S_RUN");
   }
 
   /** Triggered once per frame. Allows the component to handle input and move. */
@@ -68,7 +68,7 @@ public:
     {
       // Some animations have an empty `nextAnim`-field. Fall back to default
       // animation in that case
-      playAnimationIfFound("S_FISTRUN");  // FIXME: Respect weapon mode
+      playAnimationIfFound("S_RUN");  // FIXME: Respect weapon mode
     }
     else if (state.empty() || !mVisual->isPlayingAnimationInterruptable())
     {
@@ -77,7 +77,7 @@ public:
     }
     else if (mGoingForward)
     {
-      mVisual->tryPlayTransitionAnimationTo("S_FISTRUNL");
+      mVisual->tryPlayTransitionAnimationTo("S_RUNL");
     }
     else if (mGoingBack)
     {
@@ -89,7 +89,7 @@ public:
     // }
     else
     {
-      mVisual->tryPlayTransitionAnimationTo("S_FISTRUN");
+      mVisual->tryPlayTransitionAnimationTo("S_RUN");
     }
   }
 
@@ -154,9 +154,6 @@ public:
       gDebug().logDebug(s);
     }
 
-    const String file   = "HUMANS.MDS";
-    const String visual = "HUM_BODY_NAKED0.ASC";
-
     Daedalus::DATFile dat("/home/andre/games/Gothic II/_work/Data/Scripts/_compiled/GOTHIC.DAT");
     REGoth::Scripting::loadGothicDAT(dat);
 
@@ -174,10 +171,10 @@ public:
       REGoth::gWorld().waynet()->addWaypoint(wp);
     }
 
-    REGoth::HCharacter character = REGoth::gWorld().insertCharacter("ORCWARRIOR_REST", wpName);
+    REGoth::HCharacter character = REGoth::gWorld().insertCharacter("PC_HERO", wpName);
 
     REGoth::HVisualCharacter playerVisual = character->SO()->getComponent<REGoth::VisualCharacter>();
-    // character->SO()->addComponent<SimpleCharacterController>(playerVisual);
+    character->SO()->addComponent<SimpleCharacterController>(playerVisual);
     character->SO()->addComponent<bs::ObjectRotator>();
 
     // playerVisual->setModelScript(model);
