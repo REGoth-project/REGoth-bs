@@ -120,6 +120,8 @@ namespace REGoth
           "[VisualCharacter] Did not find body mesh {0}  in model script "
           "'{1}'', defaulting to first one: {2}",
           bodyMesh, mModelScript->getName(), mModelScript->getMeshes()[0]->getName()));
+
+      setMesh(mModelScript->getMeshes()[0]);
     }
   }
 
