@@ -203,15 +203,47 @@ namespace REGoth
             SymbolIndex sourceIndex = (SymbolIndex)popIntValue();
 
             auto& target = mScriptSymbols.getSymbol<SymbolScriptFunction>(targetIndex);
-            auto& source = mScriptSymbols.getSymbol<SymbolScriptFunction>(sourceIndex);
 
-            if (target.isClassVar)
+            SymbolBase& sourceBase = mScriptSymbols.getSymbolBase(sourceIndex);
+
+            bs::UINT32 sourceAddress;
+
+            if (sourceBase.type == SymbolType::ScriptFunction)
             {
-              mClassVarResolver->resolveClassVariableFunctionPointer(target.name) = source.address;
+              auto& sourceFunction = (SymbolScriptFunction&)sourceBase;
+              sourceAddress        = sourceFunction.address;
+            }
+            else if (sourceBase.type == SymbolType::Instance)
+            {
+              // Because deadalus' type safety isn't what it seems like, we need to handle this
+              // stupid edgecase of an instance being assigned to a function-pointer class variable.
+              // Specifically `C_ITEM.owner`, which is declared as `VAR FUNC owner` but is then
+              // given instances of class `C_NPC`.
+              //
+              // Since the original just seems to store the symbol index, not caring about the type,
+              // it works there. However, REGoth stores the function address, so we have to work around
+              // that by storing the instances constructor address. Let's just hope it will work...
+              //
+              // We could also add another type of symbol for function pointers, but then we have
+              // Symbols which *should* refer to functions, but sometimes refer to instances, which
+              // sucks as well.
+              auto& sourceInstance = (SymbolInstance&)sourceBase;
+              sourceAddress        = sourceInstance.constructorAddress;
             }
             else
             {
-              target.address = source.address;
+              REGOTH_THROW(InvalidParametersException,
+                           bs::StringUtil::format("Cannot get the address of symbol {0} of type {1}",
+                                                  sourceBase.name, (int)sourceBase.type));
+            }
+
+            if (target.isClassVar)
+            {
+              mClassVarResolver->resolveClassVariableFunctionPointer(target.name) = sourceAddress;
+            }
+            else
+            {
+              target.address = sourceAddress;
             }
           }
           break;
@@ -322,7 +354,8 @@ namespace REGoth
             {
               // REGOTH_THROW(
               //     NotImplementedException,
-              //     "External not implemented: " + mScriptSymbols.getSymbolBase(opcode.symbol).name);
+              //     "External not implemented: " +
+              //     mScriptSymbols.getSymbolBase(opcode.symbol).name);
             }
           }
           break;
