@@ -255,7 +255,6 @@ namespace REGoth
       characterVisual->setBodyMesh(bodyMesh);
 
       bs::StringUtil::toUpperCase(headMesh);
-      bs::gDebug().logDebug("Headmesh: " + headMesh);
       characterVisual->setHeadMesh(headMesh);
     }
 
