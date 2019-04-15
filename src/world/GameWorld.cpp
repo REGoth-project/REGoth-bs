@@ -89,44 +89,56 @@ namespace REGoth
       HItem insertItem(const bs::String& instance, const bs::String& spawnPoint)
       {
         bs::HSceneObject spawnPointSO = mSceneRoot->findChild(spawnPoint);
+        bs::Transform transform;
 
-        if (!spawnPointSO)
+        if (spawnPointSO)
         {
-          REGOTH_THROW(
-              InvalidParametersException,
-              bs::StringUtil::format("Spawnpoint {0} for item of instance {1} does not exist!",
-                                     spawnPoint, instance));
-        }
-
-        return insertItem(instance, spawnPointSO->getTransform());
-      }
-
-      HCharacter insertCharacter(const bs::String& instance, const bs::String& spawnPoint)
-      {
-        bs::HSceneObject characterSO = bs::SceneObject::create(instance);
-        characterSO->setParent(mSceneRoot);
-
-        bs::HSceneObject spawnPointSO = mSceneRoot->findChild(spawnPoint);
-
-        if (!spawnPointSO)
-        {
-          // REGOTH_THROW(
-          //     InvalidParametersException,
-          //     bs::StringUtil::format("Spawnpoint '{0}' for character of instance {1} does not exist!",
-          //                            spawnPoint, instance));
+          transform = spawnPointSO->getTransform();
         }
         else
         {
           // FIXME: What to do on invalid spawnpoints?
-          characterSO->setPosition(spawnPointSO->getTransform().pos());
-          characterSO->setRotation(spawnPointSO->getTransform().rot());
+          // REGOTH_THROW(InvalidParametersException,
+          //     bs::StringUtil::format("Spawnpoint {0} for item of instance {1} does not exist!",
+          //                            spawnPoint, instance));
         }
 
+        return insertItem(instance, transform);
+      }
+
+      HCharacter insertCharacter(const bs::String& instance, const bs::Transform& transform)
+      {
+        bs::HSceneObject characterSO = bs::SceneObject::create(instance);
+        characterSO->setParent(mSceneRoot);
+
+        characterSO->setPosition(transform.pos());
+        characterSO->setRotation(transform.rot());
+
         HVisualCharacter visual = characterSO->addComponent<VisualCharacter>();
-        // visual->setVisual("HUMANS.MDS");
-        // visual->setBodyMesh("HUM_BODY_NAKED0.MDM");
 
         return characterSO->addComponent<Character>(instance);
+      }
+
+      HCharacter insertCharacter(const bs::String& instance, const bs::String& spawnPoint)
+      {
+        bs::HSceneObject spawnPointSO = mSceneRoot->findChild(spawnPoint);
+        bs::Transform transform;
+
+        if (spawnPointSO)
+        {
+          transform = spawnPointSO->getTransform();
+        }
+        else
+        {
+          // FIXME: What to do on invalid spawnpoints?
+          // REGOTH_THROW(
+          //     InvalidParametersException,
+          //     bs::StringUtil::format("Spawnpoint '{0}' for character of instance {1} does not
+          //     exist!",
+          //                            spawnPoint, instance));
+        }
+
+        return insertCharacter(instance, transform);
       }
 
       bs::String mWorldName;
