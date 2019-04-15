@@ -232,7 +232,10 @@ namespace REGoth
         if (T::TYPE != symbol.type)
         {
           using namespace bs;
-          BS_EXCEPT(InvalidStateException, "Symbol Index limit reached!");
+          BS_EXCEPT(
+              InvalidStateException,
+              bs::StringUtil::format("Symbol Type does not match expectation! Expected {0}, got {1}",
+                                     (int)T::TYPE, (int)symbol.type));
         }
       }
 
