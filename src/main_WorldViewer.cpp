@@ -21,7 +21,7 @@ public:
     Daedalus::DATFile dat("/home/andre/games/Gothic II/_work/Data/Scripts/_compiled/GOTHIC.DAT");
     REGoth::Scripting::loadGothicDAT(dat);
 
-    REGoth::World::loadWorldFromZEN("DRAGONISLAND.ZEN");
+    REGoth::World::loadWorldFromZEN("ADDONWORLD.ZEN");
   }
 
 protected:
