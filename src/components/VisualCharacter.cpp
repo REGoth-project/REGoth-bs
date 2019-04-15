@@ -39,8 +39,6 @@ namespace REGoth
     deleteObjectSubtree();
     mModelScript = modelScript;
 
-    bs::gDebug().logDebug("Set model script: " + modelScript->getName());
-
     for (bs::HAnimationClip clip : mModelScript->getAnimationClips())
     {
       mAnimationClips[clip->getName()] = clip;
