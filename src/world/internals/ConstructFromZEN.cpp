@@ -47,6 +47,21 @@ namespace REGoth
     return worldMesh;
   }
 
+  bs::HSceneObject World::loadWorldMeshFromZEN(const bs::String& zenFile)
+  {
+    OriginalZen zen;
+
+    bool hasLoadedZEN = importZEN(zenFile, zen);
+
+    if (!hasLoadedZEN)
+    {
+      bs::gDebug().logWarning("[ConstructFromZEN] Failed to read zen-file: " + zenFile);
+      return {};
+    }
+
+    return importWorldMesh(zen);
+  }
+
   static void importVobs(bs::HSceneObject sceneRoot, const OriginalZen& zen)
   {
     for (const ZenLoad::zCVobData& root : zen.vobTree.rootVobs)
