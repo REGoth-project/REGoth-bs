@@ -11,6 +11,8 @@ Welcome to REGoth's documentation!
    :caption: Contents:
    
    content/extending-docs
+   content/setting-up-app
+   content/world
    content/case-study-object-kinds
    content/case-study-scene-structure
    content/case-study-character-statemachine
@@ -24,4 +26,4 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
--- * -. doxygenindex::
+* -. doxygenindex::
