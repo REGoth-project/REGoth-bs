@@ -29,8 +29,9 @@ else()
   find_package(bsf REQUIRED)
 endif()
 
-# Find BsZenLib
-set(BSZENLIB_SKIP_FIND_BSF ON)
+# BsZenLib will try to find bs:f for itself as well. Since we already
+# have a bsf-target, skip that.
+set(BSZENLIB_SKIP_FIND_BSF ON CACHE BOOL "" FORCE)
 add_subdirectory(lib/BsZenLib)
 
 ###############################################################################
