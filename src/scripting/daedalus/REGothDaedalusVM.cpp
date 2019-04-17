@@ -221,8 +221,9 @@ namespace REGoth
               // given instances of class `C_NPC`.
               //
               // Since the original just seems to store the symbol index, not caring about the type,
-              // it works there. However, REGoth stores the function address, so we have to work around
-              // that by storing the instances constructor address. Let's just hope it will work...
+              // it works there. However, REGoth stores the function address, so we have to work
+              // around that by storing the instances constructor address. Let's just hope it will
+              // work...
               //
               // We could also add another type of symbol for function pointers, but then we have
               // Symbols which *should* refer to functions, but sometimes refer to instances, which
@@ -274,24 +275,39 @@ namespace REGoth
           break;
 
         case Daedalus::EParOp_Assign:
-          popIntReference() = popIntValue();
-          break;
+        {
+          auto& ref = popIntReference();
+          ref       = popIntValue();
+        }
+        break;
 
         case Daedalus::EParOp_AssignAdd:
-          popIntReference() += popIntValue();
-          break;
+        {
+          auto& ref = popIntReference();
+          ref += popIntValue();
+        }
+        break;
 
         case Daedalus::EParOp_AssignSubtract:
-          popIntReference() -= popIntValue();
-          break;
+        {
+          auto& ref = popIntReference();
+          ref -= popIntValue();
+        }
+        break;
 
         case Daedalus::EParOp_AssignMultiply:
-          popIntReference() *= popIntValue();
-          break;
+        {
+          auto& ref = popIntReference();
+          ref *= popIntValue();
+        }
+        break;
 
         case Daedalus::EParOp_AssignDivide:
-          popIntReference() /= popIntValue();
-          break;
+        {
+          auto& ref = popIntReference();
+          ref /= popIntValue();
+        }
+        break;
 
         case Daedalus::EParOp_AssignStringRef:
           REGOTH_THROW(NotImplementedException, "AssignStringRef is not implemented.");
