@@ -11,10 +11,10 @@ Welcome to REGoth's documentation!
    :caption: Contents:
    
    content/extending-docs
-   content/object-kinds
-   content/scene-structure
-   content/character-statemachine
-   content/daedalus-vm
+   content/case-study-object-kinds
+   content/case-study-scene-structure
+   content/case-study-character-statemachine
+   content/case-study-daedalus-vm
 
 
 

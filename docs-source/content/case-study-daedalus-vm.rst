@@ -1,5 +1,5 @@
-Daedalus VM
-===========
+Case-Study: Daedalus VM
+=======================
     
 Implementation of a virtual machine able to execute Daedalus Bytecode.
 

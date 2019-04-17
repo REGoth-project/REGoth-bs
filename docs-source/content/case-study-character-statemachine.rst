@@ -1,6 +1,6 @@
 
-Character Statemachine
-======================
+Case-Study: Character Statemachine
+==================================
 
 Which actions a character can do at what time is decided by the characters *state machine*. It consists
 out of a center main state *standing* and a number of action-states like *Fight Left* or *Run Forward*.
