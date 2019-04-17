@@ -133,7 +133,7 @@ void REGothEngine::setupMainCamera()
 
   // Add a scene object containing a camera component
   HSceneObject sceneCameraSO = SceneObject::create("SceneCamera");
-  HCamera sceneCamera = sceneCameraSO->addComponent<CCamera>();
+  HCamera sceneCamera        = sceneCameraSO->addComponent<CCamera>();
   sceneCamera->setMain(true);
   sceneCamera->setMSAACount(1);
 
@@ -141,12 +141,12 @@ void REGothEngine::setupMainCamera()
   auto rs = sceneCamera->getRenderSettings();
 
   rs->screenSpaceReflections.enabled = false;
-  rs->ambientOcclusion.enabled = false;
-  rs->enableIndirectLighting = true;
-  rs->enableFXAA = false;
-  rs->enableHDR = false;
-  rs->enableTonemapping = false;
-  rs->cullDistance = 100.0f;
+  rs->ambientOcclusion.enabled       = false;
+  rs->enableIndirectLighting         = true;
+  rs->enableFXAA                     = false;
+  rs->enableHDR                      = false;
+  rs->enableTonemapping              = false;
+  rs->cullDistance                   = 100.0f;
 
   sceneCamera->setRenderSettings(rs);
 
@@ -190,7 +190,7 @@ int ::REGoth::main(REGothEngine& regoth, int argc, char** argv)
   }
 
   const bs::String engineExecutablePath = argv[0];
-  const bs::String gameDirectory = argv[1];
+  const bs::String gameDirectory        = argv[1];
 
   bs::gDebug().logDebug("[Main] Running REGothEngine");
   bs::gDebug().logDebug("[Main]  - Engine executable: " + engineExecutablePath);

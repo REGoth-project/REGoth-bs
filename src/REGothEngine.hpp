@@ -38,7 +38,8 @@ namespace REGoth
      *
      * By default, all packages within the games Data-Directory are loaded.
      *
-     * @param  dataDirectory  Path of the Data-Directory of the game files (Where the .VDF-files are).
+     * @param  dataDirectory  Path of the Data-Directory of the game files (Where the .VDF-files
+     * are).
      * @return List of VDFS-Packages to be loaded by the engine
      */
     virtual bs::Vector<bs::String> getVdfsPackagesToLoad(const bs::Path& dataDirectory);
@@ -98,8 +99,8 @@ namespace REGoth
      * Shutdown bsf
      */
     void shutdown();
-  protected:
 
+  protected:
     /**
      * Main camera this engines renders with
      */
