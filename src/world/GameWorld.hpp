@@ -32,7 +32,7 @@ namespace REGoth
      *
      * Example:
      *
-     *     Daedalus::DATFile dat("paht/to/GOTHIC.DAT");
+     *     Daedalus::DATFile dat("path/to/GOTHIC.DAT");
      *
      *     Scripting::loadGothicDAT(dat);
      *
