@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Case-Study: Kinds of Objects in Gothic &mdash; REGoth  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Case-Study: Scene Structure" href="case-study-scene-structure.html" />
+    <link rel="prev" title="World" href="world.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> REGoth
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Case-Study: Kinds of Objects in Gothic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#vob">Vob</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#npc-non-player-character">NPC (Non-Player-Character)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mob-interactive-objects">MOB (Interactive Objects)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-scene-structure.html">Case-Study: Scene Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-character-statemachine.html">Case-Study: Character Statemachine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-daedalus-vm.html">Case-Study: Daedalus VM</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">REGoth</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Case-Study: Kinds of Objects in Gothic</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/content/case-study-object-kinds.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="case-study-kinds-of-objects-in-gothic">
+<span id="object-kinds"></span><h1>Case-Study: Kinds of Objects in Gothic<a class="headerlink" href="#case-study-kinds-of-objects-in-gothic" title="Permalink to this headline">¶</a></h1>
+<p>This chapter is a collection of some of the kinds of Objects used in the original
+engine, what they are and how they are implemented in REGoth.</p>
+<div class="section" id="vob">
+<h2>Vob<a class="headerlink" href="#vob" title="Permalink to this headline">¶</a></h2>
+<p>The name “Vob” is short for “Virtual Object”, which is what Objects placed
+into the 3D world are called in the original engine.</p>
+<p>Since Gothic uses an Object-Oriented engine, this is usually the class other Objects
+are based on.</p>
+<p>The most useful properties of a vob include:</p>
+<ul class="simple">
+<li>Name</li>
+<li>Transform (Position, Rotation, <strong>no scale</strong>)</li>
+<li>Visual (3D-Model, ParticleSystem, …)</li>
+<li>(probably more)</li>
+</ul>
+<p>As said before, a Vob is one of the most basic building blocks of a 3D-World in
+Gothic. For most gameplay relevant object, a subclass of Vob will be placed
+into the world. The raw Vob-class is however used for decorative objects like
+3D-Models or particle systems.</p>
+</div>
+<div class="section" id="npc-non-player-character">
+<h2>NPC (Non-Player-Character)<a class="headerlink" href="#npc-non-player-character" title="Permalink to this headline">¶</a></h2>
+<p>Even though the name explicitly states, that this is NOT something controlled by
+the player, in the original Gothic this  Class is used for real NPCs, monsters,
+as well as the player. A better name could have been “Character Controller”.</p>
+<p>The NPC class is rather complex. Some of its tasks are:</p>
+<ul class="simple">
+<li>Walking physics and collision detection</li>
+<li>Decisions on which Animation to play</li>
+<li>Inventory management</li>
+<li>Fighting</li>
+<li>Footstep sounds and effects</li>
+<li>Handle dying, being knocked out</li>
+<li>Handle attributes such as Health, Strength, skills</li>
+<li>Some AI related tasks</li>
+<li>Daily routine</li>
+<li>(probably more)</li>
+</ul>
+</div>
+<div class="section" id="mob-interactive-objects">
+<h2>MOB (Interactive Objects)<a class="headerlink" href="#mob-interactive-objects" title="Permalink to this headline">¶</a></h2>
+<p>The MOB class is the base for all objects a character could interact with, like
+doors, beds and chests.</p>
+<p>Mobs are constructed using a SkeletalMesh and some Animations, with some bones
+having a special purpose: For each spot the character could interact from, there
+has to be a bone. Upon interaction, the character will be teleported to the
+nearest empty interation-spot. Once there, the character and the Mob will start
+to play an animation.</p>
+<p>Which animation that would be, is defined by the <em>state</em> the Mob is in. A chest,
+for example, has the states:</p>
+<ol class="arabic simple" start="0">
+<li>Idle</li>
+<li>Closed</li>
+<li>Open</li>
+</ol>
+<p>Depending on which state should be activated after an action by the character, a
+transition animation is played.  For the chest, a transition animation
+<code class="docutils literal notranslate"><span class="pre">0-to-1</span></code> would be the character going down to knee in front of the chest.
+Once the character wants to open the chest, a transition animation <code class="docutils literal notranslate"><span class="pre">1-to-2</span></code>
+will be played in which the character opens the chest.</p>
+<p>Once a state has been reached, an animation (typically only 1 frame) is looped
+over and over again, ie. how the character knees in front of the chest.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="case-study-scene-structure.html" class="btn btn-neutral float-right" title="Case-Study: Scene Structure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="world.html" class="btn btn-neutral" title="World" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, The REGoth-Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

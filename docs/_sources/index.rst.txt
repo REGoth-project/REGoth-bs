@@ -11,10 +11,12 @@ Welcome to REGoth's documentation!
    :caption: Contents:
    
    content/extending-docs
-   content/object-kinds
-   content/scene-structure
-   content/character-statemachine
-   content/daedalus-vm
+   content/setting-up-app
+   content/world
+   content/case-study-object-kinds
+   content/case-study-scene-structure
+   content/case-study-character-statemachine
+   content/case-study-daedalus-vm
 
 
 
@@ -24,4 +26,4 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
--- * -. doxygenindex::
+* -. doxygenindex::
