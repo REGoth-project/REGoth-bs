@@ -24,6 +24,7 @@ add_library(REGothEngine
   components/CharacterAI.cpp
   components/Waypoint.cpp
   components/Waynet.cpp
+  components/CharacterKeyboardInput.cpp
   animation/StateNaming.cpp
   animation/Animation.cpp
   scripting/daedalus/REGothDaedalusVM.cpp
@@ -69,3 +70,6 @@ target_link_libraries(REGothScriptTester REGothEngine samples-common)
 
 add_executable(REGothWaynetTester main_WaynetTest.cpp)
 target_link_libraries(REGothWaynetTester REGothEngine samples-common)
+
+add_executable(REGothCharacterMovementTester main_CharacterMovementTest.cpp)
+target_link_libraries(REGothCharacterMovementTester REGothEngine samples-common)

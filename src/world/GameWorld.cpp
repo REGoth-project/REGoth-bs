@@ -1,8 +1,10 @@
 #include "GameWorld.hpp"
 #include "internals/ConstructFromZEN.hpp"
+#include <Components/BsCCharacterController.h>
 #include <Debug/BsDebugDraw.h>
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
+#include <components/CharacterAI.hpp>
 #include <components/Item.hpp>
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
@@ -114,7 +116,9 @@ namespace REGoth
         characterSO->setPosition(transform.pos());
         characterSO->setRotation(transform.rot());
 
-        HVisualCharacter visual = characterSO->addComponent<VisualCharacter>();
+        characterSO->addComponent<VisualCharacter>();
+        characterSO->addComponent<bs::CCharacterController>();
+        characterSO->addComponent<CharacterAI>();
 
         return characterSO->addComponent<Character>(instance);
       }
@@ -137,6 +141,9 @@ namespace REGoth
           //     exist!",
           //                            spawnPoint, instance));
         }
+
+        transform.move(
+            bs::Vector3(0, 0.5f, 0));  // FIXME: Can we move the center to the feet somehow instead?
 
         return insertCharacter(instance, transform);
       }

@@ -1,6 +1,6 @@
 #include "Animation.hpp"
-#include <Animation/BsAnimationClip.h>
 #include <Animation/BsAnimation.h>
+#include <Animation/BsAnimationClip.h>
 
 using namespace REGoth;
 
@@ -16,24 +16,34 @@ bs::Vector3 Animation::getRootMotionSince(bs::HAnimationClip clip, float then, f
 
   // TODO: Look after rotation too
   const auto& curve = clip->getRootMotion()->position;
-  const bool loop = false;
+
+  enum : bool
+  {
+    Wrap  = true,
+    Clamp = false
+  };
 
   if (then <= now)
   {
-    bs::Vector3 positionThen = curve.evaluate(then, loop);
-    bs::Vector3 positionNow = curve.evaluate(now, loop);
+    bs::Vector3 positionThen = curve.evaluate(then, Clamp);
+    bs::Vector3 positionNow  = curve.evaluate(now, Clamp);
 
     return positionNow - positionThen;
   }
-  else
+  else /* now < then */
   {
+    return bs::Vector3(bs::BsZero);
+
     // Wrapped, need to also take care of the time spent before the wrap
-    bs::Vector3 atEnd = curve.evaluate(curve.getLength(), loop);
-    bs::Vector3 positionThen = curve.evaluate(then, loop);
-    bs::Vector3 positionNow = curve.evaluate(now, loop);
+    // bs::Vector3 atEnd = curve.evaluate(curve.getLength(), Clamp);
 
-    bs::Vector3 toEnd = atEnd - positionThen;
+    // bs::Vector3 positionThen = curve.evaluate(then, Clamp);
+    // bs::Vector3 positionNow  = curve.evaluate(now, Clamp);
 
-    return toEnd + positionNow;
+    // bs::Vector3 toEnd = atEnd - positionThen;
+    // bs::Vector3 fromStart = positionNow;
+
+    // return fromStart;
+    // return toEnd + fromStart;
   }
 }

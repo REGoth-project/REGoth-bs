@@ -14,10 +14,6 @@ namespace REGoth
 
   void Character::onInitialized()
   {
-    // Add visual component *before* running the script constructor since it
-    // needs to work on the visual
-    SO()->addComponent<VisualCharacter>();
-
     ScriptBackedBy::onInitialized();
   }
 

@@ -197,6 +197,8 @@ namespace REGoth
     using namespace bs;
 
     // We do manual looping
+    // mSubAnimation->setWrapMode(AnimWrapMode::Clamp);
+    // FIXME: Animation Events are broken for clamped animations (in bsf)
     mSubAnimation->setWrapMode(AnimWrapMode::Loop);
 
     // Subscribe to animation events
@@ -213,8 +215,18 @@ namespace REGoth
     bs::String command = string.substr(0, string.find_first_of(':'));
     bs::String action  = string.substr(command.length() + 1);
 
-    gDebug().logDebug("[VisualCharacter] Got animation event: " + command + ":" + action +
-                      " while playing " + clip->getName());
+    bs::AnimationClipState state;
+    mSubAnimation->getState(clip, state);
+
+    // gDebug().logDebug(bs::StringUtil::format(
+    //     "[VisualCharacter] Got animation event: {0}:{1} while playing {2} at {3}", command, action,
+    //     clip->getName(), state.time));
+
+    // gDebug().logDebug("Animation has the following events: ");
+    // for (auto& event : clip->getEvents())
+    // {
+    //   gDebug().logDebug(bs::StringUtil::format(" - {0}: {1}", event.time, event.name));
+    // }
 
     if (command == "PLAYCLIP")
     {
@@ -256,10 +268,7 @@ namespace REGoth
 
   void REGoth::VisualCharacter::playDefaultIdleAnimation()
   {
-    auto possibleAnims = {
-      "S_RUN",
-      "S_FISTRUN"
-    };
+    auto possibleAnims = {"S_RUN", "S_FISTRUN"};
 
     for (auto anim : possibleAnims)
     {
@@ -361,16 +370,29 @@ namespace REGoth
 
     bs::HAnimationClip clipNow = mSubAnimation->getClip(0);
 
+    bs::Vector3 motion = bs::Vector3(bs::BsZero);
+
     if (mRootMotionLastClip != clipNow)
     {
-      mRootMotionLastClip = clipNow;
+      // Make sure to get the last bits of the last clip too
+      if (mRootMotionLastClip)
+      {
+        bs::AnimationClipState state;
+        mSubAnimation->getState(mRootMotionLastClip, state);
+
+        float then = mRootMotionLastTime;
+        float now  = mRootMotionLastClip->getLength();
+
+        motion += Animation::getRootMotionSince(mRootMotionLastClip, then, now);
+      }
+
       mRootMotionLastTime = 0.0f;
-      return bs::Vector3(bs::BsZero);
+      mRootMotionLastClip = clipNow;
     }
 
     if (!clipNow)
     {
-      return bs::Vector3(bs::BsZero);
+      return motion;
     }
 
     bs::AnimationClipState state;
@@ -379,7 +401,15 @@ namespace REGoth
     float then = mRootMotionLastTime;
     float now  = state.time;
 
-    bs::Vector3 motion = Animation::getRootMotionSince(mRootMotionLastClip, then, now);
+    // fixedUpdate might be called more often than the animation timing is updated
+    // Comparing floats here is intentional, since we don't touch them in the meantime.
+    if (then != now)
+    {
+      motion += Animation::getRootMotionSince(clipNow, then, now);
+
+      // bs::gDebug().logDebug(bs::StringUtil::format("RootMotion {0} -> {1}: {2}", then, now,
+      // bs::toString(motion)));
+    }
 
     mRootMotionLastTime = now;
     mRootMotionLastClip = clipNow;
@@ -440,4 +470,3 @@ namespace REGoth
   }
 
 }  // namespace REGoth
-
