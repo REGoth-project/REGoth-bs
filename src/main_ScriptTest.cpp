@@ -3,6 +3,7 @@
 #include <Scene/BsSceneObject.h>
 #include <components/Item.hpp>
 #include <daedalus/DATFile.h>
+#include <original-content/OriginalGameFiles.hpp>
 #include <scripting/ScriptSymbolStorage.hpp>
 #include <scripting/ScriptVMInterface.hpp>
 
@@ -20,7 +21,7 @@ public:
     using ScriptObject       = Scripting::ScriptObject;
     using ScriptObjectHandle = Scripting::ScriptObjectHandle;
 
-    Daedalus::DATFile dat("/home/andre/games/Gothic II/_work/Data/Scripts/_compiled/GOTHIC.DAT");
+    Daedalus::DATFile dat(REGoth::gOriginalGameFiles().gothicDat().toString().c_str());
     REGoth::Scripting::loadGothicDAT(dat);
 
     // ScriptObjectHandle appleHandle = gGameScript().instanciateClass("C_ITEM", "ITFO_APPLE");

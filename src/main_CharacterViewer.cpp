@@ -23,6 +23,7 @@
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
 #include <daedalus/DATFile.h>
+#include <original-content/OriginalGameFiles.hpp>
 #include <scripting/ScriptVMInterface.hpp>
 #include <world/GameWorld.hpp>
 
@@ -154,7 +155,7 @@ public:
       gDebug().logDebug(s);
     }
 
-    Daedalus::DATFile dat("/home/andre/games/Gothic II/_work/Data/Scripts/_compiled/GOTHIC.DAT");
+    Daedalus::DATFile dat(REGoth::gOriginalGameFiles().gothicDat().toString().c_str());
     REGoth::Scripting::loadGothicDAT(dat);
 
     REGoth::World::loadWorldEmpty();
@@ -183,7 +184,7 @@ public:
 
     Sphere bounds = playerVisual->getBounds().getSphere();
 
-    Vector3 cameraDirection = Vector3(1,0,0);
+    Vector3 cameraDirection = Vector3(1, 0, 0);
     cameraDirection.normalize();
 
     auto cameraOffset = cameraDirection * bounds.getRadius() * 1.7f;

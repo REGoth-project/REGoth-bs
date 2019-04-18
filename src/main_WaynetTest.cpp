@@ -7,6 +7,7 @@
 #include <components/Waypoint.hpp>
 #include <daedalus/DATFile.h>
 #include <excepction/Throw.hpp>
+#include <original-content/OriginalGameFiles.hpp>
 #include <scripting/ScriptVMInterface.hpp>
 #include <world/GameWorld.hpp>
 
@@ -24,7 +25,7 @@ public:
   {
     using namespace REGoth;
 
-    Daedalus::DATFile dat("/home/andre/games/Gothic II/_work/Data/Scripts/_compiled/GOTHIC.DAT");
+    Daedalus::DATFile dat(REGoth::gOriginalGameFiles().gothicDat().toString().c_str());
     Scripting::loadGothicDAT(dat);
 
     World::loadWorldFromZEN("OLDWORLD.ZEN", World::GameWorld::Init::NoInitScripts);

@@ -3,6 +3,7 @@
 #include <Components/BsCCamera.h>
 #include <Scene/BsSceneObject.h>
 #include <daedalus/DATFile.h>
+#include <original-content/OriginalGameFiles.hpp>
 #include <scripting/ScriptVMInterface.hpp>
 #include <world/GameWorld.hpp>
 
@@ -18,7 +19,7 @@ public:
 
   void setupScene() override
   {
-    Daedalus::DATFile dat("/home/andre/games/Gothic II/_work/Data/Scripts/_compiled/GOTHIC.DAT");
+    Daedalus::DATFile dat(REGoth::gOriginalGameFiles().gothicDat().toString().c_str());
     REGoth::Scripting::loadGothicDAT(dat);
 
     REGoth::World::loadWorldFromZEN("ADDONWORLD.ZEN");
