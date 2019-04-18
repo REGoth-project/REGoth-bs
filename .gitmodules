@@ -1,3 +1,6 @@
 [submodule "lib/BsZenLib"]
 	path = lib/BsZenLib
 	url = https://github.com/REGoth-project/BsZenLib.git
+[submodule "lib/bsf"]
+	path = lib/bsf
+	url = https://github.com/GameFoundry/bsf.git

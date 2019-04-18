@@ -1,32 +1,51 @@
-cmake_minimum_required (VERSION 3.9.0)
+cmake_minimum_required (VERSION 3.12.0)
 project (REGoth)
 
-include(FetchContent)
+option(REGOTH_USE_SYSTEM_BSF "Whether to use the system installed bsf via find_package." OFF)
 
 ###############################################################################
 #                                Configuration                                #
 ###############################################################################
 
-set(REGOTH_BSF_SUBMODULE_PATH "" CACHE PATH "Path to bsf sources to add as cmake subdirectory")
+# Make sure to use the C++14 standard
+set(CMAKE_CXX_STANDARD 14)
 
 # Set up binary output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+# Add compiler flags required by bsf (See: https://www.bsframework.io/docs/build.html)
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR 
+   CMAKE_CXX_COMPILER_ID MATCHES "AppleClang" OR
+   CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    add_compile_options(-fno-rtti)
+
+    # So that REGoth-Symbols will show up in the bs:f-crash handler
+    add_compile_options(-rdynamic)
+endif()
+
 ###############################################################################
 #                            Add external libraries                           #
 ###############################################################################
 
-# Let CMake know where to find the Findbsf.cmake file (at current folder)
+# Let CMake know where to find the Findbsf.cmake file
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
-if(REGOTH_BSF_SUBMODULE_PATH)
-  # Optionally include bsf as cmake submodule for easier development on bsf
-  add_subdirectory(${REGOTH_BSF_SUBMODULE_PATH} bsf)
-else()
-  # Find bsf libraries and headers
+if (REGOTH_USE_SYSTEM_BSF)
   find_package(bsf REQUIRED)
+else()
+  # Need to reset RPATH-settings to default again because bsf has messed with them.
+  # See https://gitlab.kitware.com/cmake/community/wikis/doc/cmake/RPATH-handling
+  # use, i.e. don't skip the full RPATH for the build tree
+  set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+
+  # when building, don't use the install RPATH already
+  # (but later on when installing)
+  set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+
+  add_subdirectory(lib/bsf)
+
 endif()
 
 # BsZenLib will try to find bs:f for itself as well. Since we already

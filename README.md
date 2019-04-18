@@ -9,7 +9,45 @@ https://regoth-project.github.io/REGoth-bs/index.html
 
 ## Engine
 
-(TODO)
+The project is built via CMake. You will need at least CMake 3.9.0.
+
+### Linux
+
+To build the project for Linux, 
+run the following commands from within the directory where you cloned REGoth:
+
+```sh
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+cmake --build . --parallel 8
+```
+
+**Note**: If the linker complains about missing `.so` files when you try to run an executable,
+try running it as `LD_LIBRARY_PATH=../lib ./REGothSomething`.
+
+### Windows using Visual Studio Code
+
+This is the recommended way for developing on Windows. Visual Studio Code works
+really well with the CMake-files of REGoth. Just make sure to install the
+official C/C++ and CMake extensions.
+
+### Windows using Visual Studio
+
+To build the project for Windows, you need to be aware of some common pitfalls:
+
+ 1. Always build x64, as bs:f does not support x86. To do that, make sure to use
+    the correct Visual-Studio-Generator.
+ 2. Similar to `make`, Visual Studio will not do parallel builds by default.
+
+These are the commands:
+
+```sh
+md build
+cd build
+cmake ..
+cmake --build . --config RelWithDebInfo --parallel 8
+```
 
 ## Building the Documentation
 
