@@ -162,6 +162,9 @@ epub_exclude_files = ['search.html']
 
 # -- Extension configuration -------------------------------------------------
 
+# Enable :numfig:`...` syntax
+numfig = True
+
 # -- Breathe --
 breathe_projects = {"REGoth": "@DOXYGEN_XML_OUTPUT_DIR@"}
 breathe_default_project = "REGoth"
