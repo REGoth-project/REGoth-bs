@@ -41,6 +41,7 @@ add_library(REGothEngine
   scripting/ScriptVMInterface.cpp
   scripting/ScriptObjectMapping.cpp
   original-content/VirtualFileSystem.cpp
+  original-content/OriginalGameFiles.cpp
   world/internals/ConstructFromZEN.cpp
   world/GameWorld.cpp
   gui/skin_gothic.cpp
