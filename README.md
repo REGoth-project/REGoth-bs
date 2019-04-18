@@ -45,7 +45,7 @@ These are the commands:
 ```sh
 md build
 cd build
-cmake ..
+cmake -G"Visual Studio 15 2017 Win64" ..
 cmake --build . --config RelWithDebInfo --parallel 8
 ```
 
