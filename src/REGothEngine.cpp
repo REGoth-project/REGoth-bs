@@ -9,6 +9,7 @@
 #include <Resources/BsResourceManifest.h>
 #include <Resources/BsResources.h>
 #include <Scene/BsSceneObject.h>
+#include <original-content/OriginalGameFiles.hpp>
 
 using namespace REGoth;
 
@@ -17,48 +18,23 @@ REGothEngine::~REGothEngine()
   shutdown();
 }
 
-bs::Vector<bs::String> REGothEngine::getVdfsPackagesToLoad(const bs::Path& dataDirectory)
+bs::Vector<bs::Path> REGothEngine::getVdfsPackagesToLoad(const bs::Path& dataDirectory)
 {
-  bs::Vector<bs::Path> filePaths;
-  bs::Vector<bs::Path> dirPaths;
-
-  bs::FileSystem::getChildren(dataDirectory, filePaths, dirPaths);
-
-  bs::Vector<bs::String> packages;
-
-  for (auto& p : filePaths)
-  {
-    bs::String ext = p.getExtension();
-
-    bool caseSensitive = false;
-    if (bs::StringUtil::compare(ext, bs::String(".vdf"), caseSensitive) == 0)
-    {
-      packages.push_back(p.getFilename());
-    }
-  }
-
-  return packages;
+  return gOriginalGameFiles().allVdfsPackages();
 }
 
 void REGothEngine::loadOriginalGamePackages(const bs::String& argv0, const bs::Path& gameDirectory)
 {
   gVirtualFileSystem().setPathToEngineExecutable(argv0);
-  gVirtualFileSystem().setGameDirectory(gameDirectory);
+  gOriginalGameFiles().setOriginalFilesRoot(gameDirectory);
 
   bs::gDebug().logDebug("[VDFS] Indexing packages: ");
 
   // FIXME: Locate correct case of 'Data'-directory
   for (auto p : getVdfsPackagesToLoad(gameDirectory + "Data"))
   {
-    if (!gVirtualFileSystem().isPackageAvailable(p))
-    {
-      bs::gDebug().logDebug("[VDFS]  - " + bs::String(p) + " (not found)");
-    }
-    else
-    {
-      bs::gDebug().logDebug("[VDFS]  - " + bs::String(p));
-      gVirtualFileSystem().loadPackage(p);
-    }
+    bs::gDebug().logDebug("[VDFS]  - " + p.getFilename());
+    gVirtualFileSystem().loadPackage(p);
   }
 }
 

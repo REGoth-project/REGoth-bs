@@ -11,29 +11,12 @@ public:
   InternalVirtualFileSystem() = default;
   virtual ~InternalVirtualFileSystem() = default;
 
-  bs::Path gameDirectory;
   VDFS::FileIndex fileIndex;
   bool isFinalized = false;
 
-  bool isReadyToLoadPackages()
-  {
-    if (gameDirectory.isEmpty())
-    {
-      return false;
-    }
-    else
-    {
-      return true;
-    }
-  }
-
   bool isReadyToReadFiles()
   {
-    if (!isReadyToLoadPackages())
-    {
-      return false;
-    }
-    else if (!isFinalized)
+    if (!isFinalized)
     {
       return false;
     }
@@ -41,17 +24,6 @@ public:
     {
       return true;
     }
-  }
-
-  bs::Path fullPackagePath(const bs::String& package)
-  {
-    return findCaseSensitivePath(gameDirectory + "Data" + package);
-  }
-
-  bs::Path findCaseSensitivePath(const bs::Path& path)
-  {
-    // TODO: Implement findCaseSensitivePath()!
-    return path;
   }
 
   void finalizeFileIndex()
@@ -68,52 +40,18 @@ void VirtualFileSystem::setPathToEngineExecutable(const bs::String& argv0)
   mInternal = bs::bs_shared_ptr_new<InternalVirtualFileSystem>();
 }
 
-void VirtualFileSystem::setGameDirectory(const bs::Path& gameDirectory)
+bool VirtualFileSystem::loadPackage(const bs::Path& package)
 {
   using namespace bs;
 
   throwOnMissingInternalState();
-
-  mInternal->gameDirectory = gameDirectory;
-}
-
-bool VirtualFileSystem::isPackageAvailable(const bs::String& package) const
-{
-  using namespace bs;
-
-  throwOnMissingInternalState();
-
-  auto fullPackagePath = mInternal->fullPackagePath(package);
-
-  return bs::FileSystem::isFile(fullPackagePath);
-}
-
-bool VirtualFileSystem::loadPackage(const bs::String& package)
-{
-  using namespace bs;
-
-  throwOnMissingInternalState();
-
-  if (!mInternal->isReadyToLoadPackages())
-  {
-    BS_EXCEPT(InvalidStateException, "VDFS is not ready to load packages yet.");
-  }
 
   if (mInternal->isFinalized)
   {
     BS_EXCEPT(InvalidStateException, "Cannot load packages on finalized file index.");
   }
 
-  if (!isPackageAvailable(package))
-  {
-    return false;
-  }
-
-  auto fullPackagePath = mInternal->fullPackagePath(package);
-
-  mInternal->fileIndex.loadVDF(fullPackagePath.toString().c_str());
-
-  return true;
+  return mInternal->fileIndex.loadVDF(package.toString().c_str());
 }
 
 bs::Vector<bs::String> VirtualFileSystem::listAllFiles()

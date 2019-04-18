@@ -62,45 +62,19 @@ namespace REGoth
     void setPathToEngineExecutable(const bs::String& argv0);
 
     /**
-     * Before the VDFS can load packages, it needs to know where gothics data files are,
-     * which can be set using this function.
-     *
-     * @param gameDirectory  Path to gothics root directory
-     */
-    void setGameDirectory(const bs::Path& gameDirectory);
-
-    /**
-     * Checks gothics data-directory for a package with the given name (case-insensitive).
-     *
-     * @note Needs a game directory to work. See setGameDirectory().
-     *
-     * @param  package  Name of the package, with extension (eg. "Meshes.vdf").
-     *
-     * @return Whether the given package is available.
-     */
-    bool isPackageAvailable(const bs::String& package) const;
-
-    /**
      * Loads a package into the global file index.
      *
-     * The package will be loaded from the games data directory, if possible.
      * After loading, the files of the given package can be found inside the
      * file index and their data can be obtained using readFile().
-     *
-     * To check whether a package exists, call isPackageAvailable(). However,
-     * loadPackage() *will* do the same check inside and return whether the
-     * package exists.
      *
      * Also not that you *cannot* load more packages after you have read the
      * first file. Make sure to load all packages first.
      *
-     * @note   Needs a game directory to work. See setGameDirectory().
-     *
-     * @param  package  Name of the package, with extension (eg. "Meshes.vdf").
+     * @param  package  Path of the package to load.
      *
      * @return Whether the package could be loaded.
      */
-    bool loadPackage(const bs::String& package);
+    bool loadPackage(const bs::Path& package);
 
     /**
      * Returns a list of all files known to the index.
