@@ -81,7 +81,9 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setting-up-app.html">Setting up a Test-Application</a></li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
+<li class="toctree-l1"><a class="reference internal" href="waynet.html">Waynet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case-study-object-kinds.html">Case-Study: Kinds of Objects in Gothic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case-study-scene-structure.html">Case-Study: Scene Structure</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Case-Study: Character Statemachine</a><ul>
@@ -321,7 +323,7 @@ Run --&gt; transitionToIdle : Run Forward-Button no longer down
 
 transitionToIdle --&gt; [*] : Animation Done"/>
 </p>
-<p class="caption"><span class="caption-text">Statechart for running forward.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">Statechart for running forward.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p>While in the <em>Run</em>-State, turning shall be allowed but without playing an animation. Turning Left shall take precedence over turning Right.</p>
 </div>
@@ -345,7 +347,7 @@ PlayAnimation -right-&gt; CheckKeys : Animation finished
 CheckKeys -left-&gt; PlayAnimation : Jump Back-button down
 CheckKeys -down-&gt; [*]           : Jump Back button up"/>
 </p>
-<p class="caption"><span class="caption-text">Statechart for jump backwards.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">Statechart for jump backwards.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <p>While in the <em>PlayAnimation</em>-State, turning shall be allowed but without playing an animation. Turning Left shall take precedence over turning Right.</p>
 </div>
@@ -366,7 +368,7 @@ StrafeLeft --&gt; StrafeLeft : While Strafe Left-button down
 
 StrafeLeft --&gt; [*] : Strafe Left-button Up"/>
 </p>
-<p class="caption"><span class="caption-text">Statechart for <em>Strafe Left</em>.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">Statechart for <em>Strafe Left</em>.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
 <p>While in the <em>StrafeLeft</em>-State, turning shall be allowed but without playing an animation. Turning Left shall take precedence over turning Right.</p>
 </div>
@@ -387,7 +389,7 @@ StrafeRight --&gt; StrafeRight : While Strafe Right-button down
 
 StrafeRight --&gt; [*] : Strafe Right-button Up"/>
 </p>
-<p class="caption"><span class="caption-text">Statechart for <em>Strafe Right</em>.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 5 </span><span class="caption-text">Statechart for <em>Strafe Right</em>.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
 <p>While in the <em>StrafeRight</em>-State, turning shall be allowed but without playing an animation. Turning Left shall take precedence over turning Right.</p>
 </div>

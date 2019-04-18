@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Waynet &mdash; REGoth  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Case-Study: Kinds of Objects in Gothic" href="case-study-object-kinds.html" />
+    <link rel="prev" title="World" href="world.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> REGoth
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setting-up-app.html">Setting up a Test-Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Waynet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-the-waynet">What is the Waynet?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-waynet-components">The Waynet-Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-pathfinding-works">How Pathfinding works</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-object-kinds.html">Case-Study: Kinds of Objects in Gothic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-scene-structure.html">Case-Study: Scene Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-character-statemachine.html">Case-Study: Character Statemachine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-daedalus-vm.html">Case-Study: Daedalus VM</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">REGoth</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Waynet</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/content/waynet.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="waynet">
+<h1>Waynet<a class="headerlink" href="#waynet" title="Permalink to this headline">¶</a></h1>
+<p>This chapter will discuss what the waynet is, what it is used for and how to access it in REGoth.</p>
+<p>Most of waynet-related operations can be found inside the components <code class="docutils literal notranslate"><span class="pre">Waynet</span></code>
+and <code class="docutils literal notranslate"><span class="pre">Waypoint</span></code> defined in</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">src/components/Waynet.hpp</span></code> and</li>
+<li><code class="docutils literal notranslate"><span class="pre">src/components/Waypoint.hpp</span></code>, respectively.</li>
+</ul>
+</div></blockquote>
+<div class="section" id="what-is-the-waynet">
+<h2>What is the Waynet?<a class="headerlink" href="#what-is-the-waynet" title="Permalink to this headline">¶</a></h2>
+<p>The Waynet’s main use case is to allow AI controlled characters to navigate
+through the world. It tells the AI which paths can be taken to reach a certain
+destination. Think of it like a <em>street-map</em> for the AI. See <a class="reference internal" href="#fig-waynet"><span class="std std-numref">Fig. 1</span></a> for
+an example.</p>
+<div class="figure" id="id1">
+<span id="fig-waynet"></span><img alt="Waynet of the Old-Camp in Gothic 2" src="../_images/waynet.png" />
+<p class="caption"><span class="caption-number">Fig. 1 </span><span class="caption-text">Waynet of the Old-Camp in Gothic 2 visualized. The places at the
+intersections are called <em>Waypoints</em>. A line from one <em>Waypoint</em> to another
+means that there is a path between them the AI can take.</span></p>
+</div>
+<p>This <em>street-map</em> is built up from <em>Waypoints</em> and <em>Paths</em>. Waypoints are normal
+Scene-Objects with the <code class="docutils literal notranslate"><span class="pre">Waypoint</span></code>-component attached. This component stores
+references to all other Waypoints that can be reached directly from its
+location. If a Waypoint is in reach of another Waypoint, that means there is a
+<em>Path</em> between the two.</p>
+</div>
+<div class="section" id="the-waynet-components">
+<h2>The Waynet-Components<a class="headerlink" href="#the-waynet-components" title="Permalink to this headline">¶</a></h2>
+<p>Once a world has been loaded (See <a class="reference internal" href="world.html#world"><span class="std std-ref">World</span></a>), the worlds Waynet can be queried by
+<code class="docutils literal notranslate"><span class="pre">REGoth::gWorld().waynet()</span></code>. This will return a handle of a <code class="docutils literal notranslate"><span class="pre">Waynet</span></code>-Component.</p>
+<p>This <code class="docutils literal notranslate"><span class="pre">Waynet</span></code>-component offers a list of all known Waypoints and functions to search for
+specific ones. Since every Waypoint is a normal Scene-Object, you can also simply do a
+recursive search for the name you are looking for from the scenes root object.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are querying a Waypoint by name and you are not <em>completely</em> that the object you are
+looking for is indeed a Waypoint, it’s better to search the full scene.</p>
+</div>
+<p>If you have a <code class="docutils literal notranslate"><span class="pre">Waypoint</span></code>-component at hand, you can query the paths reachable from that Waypoint
+from it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">TODO:</span> <span class="pre">Pathfinding</span> <span class="pre">should</span> <span class="pre">also</span> <span class="pre">be</span> <span class="pre">implemented</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">waynet,</span> <span class="pre">or</span> <span class="pre">at</span> <span class="pre">least</span> <span class="pre">accessible</span> <span class="pre">from</span> <span class="pre">it.</span></code></p>
+</div>
+<div class="section" id="how-pathfinding-works">
+<h2>How Pathfinding works<a class="headerlink" href="#how-pathfinding-works" title="Permalink to this headline">¶</a></h2>
+<p>Pathfinding describes the process of finding the shortest path between two locations. Those two
+locations do not need to be directly <em>on</em> the waynet, but a Waypoint should be in reach for
+the start and end locations.</p>
+<p>A naive solution would be to simply use a shortest-path algorithm like <em>Dijkstras-Algorithm</em> to find the
+sequence of Waypoints that would get the AI to its destination.</p>
+<p>It turns out that this is not the full story. In Gothic, AI controlled characters will often not use the
+shortest possible path, but go an other route. How that is determined is unknown.</p>
+<p>For example: When using the shortest path possible, the character showing the way from the old
+camp to the swamp will go though the forest, while he goes around the forest in
+the original.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Since the Waynet is supposed to be static, it might be beneficial to precompute the distances
+between Waypoints and store them in an acceleration structure for faster pathfinding.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">TODO:</span> <span class="pre">Need</span> <span class="pre">more</span> <span class="pre">information.</span></code></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="case-study-object-kinds.html" class="btn btn-neutral float-right" title="Case-Study: Kinds of Objects in Gothic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="world.html" class="btn btn-neutral" title="World" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, The REGoth-Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

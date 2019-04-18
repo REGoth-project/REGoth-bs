@@ -13,6 +13,7 @@ Welcome to REGoth's documentation!
    content/extending-docs
    content/setting-up-app
    content/world
+   content/waynet
    content/case-study-object-kinds
    content/case-study-scene-structure
    content/case-study-character-statemachine
