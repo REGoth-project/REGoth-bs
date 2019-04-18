@@ -111,7 +111,7 @@ bool VirtualFileSystem::loadPackage(const bs::String& package)
 
   auto fullPackagePath = mInternal->fullPackagePath(package);
 
-  mInternal->fileIndex.loadVDF(fullPackagePath.toPlatformString().c_str());
+  mInternal->fileIndex.loadVDF(fullPackagePath.toString().c_str());
 
   return true;
 }
