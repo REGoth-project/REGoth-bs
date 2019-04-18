@@ -1,5 +1,10 @@
-# REGoth-bs
-REGoth using bs::f
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/REGoth/Lobby)
+
+# REGoth-bs 
+
+OpenSource-Reimplementation of the zEngine, used by the game "Gothic" and "Gothic II".
+
+We have an active Chatroom on [Gitter](https://gitter.im/REGoth/Lobby)! If you want to reach us, this is the best way!
 
 # Documentation
 
