@@ -1,6 +1,5 @@
 #include "BsFPSCamera.h"
 #include "REGothEngine.hpp"
-#include <original-content/OriginalGameFiles.hpp>
 #include <BsZenLib/ImportTexture.hpp>
 #include <Components/BsCCamera.h>
 #include <Components/BsCPlaneCollider.h>
@@ -38,8 +37,7 @@ public:
   {
     using namespace REGoth;
 
-    Daedalus::DATFile dat(REGoth::gOriginalGameFiles().gothicDat().toString().c_str());
-    Scripting::loadGothicDAT(dat);
+    Scripting::loadGothicDAT(gVirtualFileSystem().readFile("GOTHIC.DAT"));
 
     // World::loadWorldFromZEN("ADDONWORLD.ZEN", World::GameWorld::Init::NoInitScripts);
     World::loadWorldEmpty();

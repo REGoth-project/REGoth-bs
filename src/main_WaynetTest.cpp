@@ -7,7 +7,7 @@
 #include <components/Waypoint.hpp>
 #include <daedalus/DATFile.h>
 #include <excepction/Throw.hpp>
-#include <original-content/OriginalGameFiles.hpp>
+#include <original-content/VirtualFileSystem.hpp>
 #include <scripting/ScriptVMInterface.hpp>
 #include <world/GameWorld.hpp>
 
@@ -25,8 +25,7 @@ public:
   {
     using namespace REGoth;
 
-    Daedalus::DATFile dat(REGoth::gOriginalGameFiles().gothicDat().toString().c_str());
-    Scripting::loadGothicDAT(dat);
+    Scripting::loadGothicDAT(gVirtualFileSystem().readFile("GOTHIC.DAT"));
 
     World::loadWorldFromZEN("OLDWORLD.ZEN", World::GameWorld::Init::NoInitScripts);
 
