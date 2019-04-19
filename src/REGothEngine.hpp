@@ -42,7 +42,7 @@ namespace REGoth
      * are).
      * @return List of VDFS-Packages to be loaded by the engine
      */
-    virtual bs::Vector<bs::Path> getVdfsPackagesToLoad(const bs::Path& dataDirectory);
+    virtual bs::Vector<bs::Path> getVdfsPackagesToLoad();
 
     /**
      * Load VDFS packages from the original game.

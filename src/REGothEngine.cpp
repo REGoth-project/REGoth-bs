@@ -18,7 +18,7 @@ REGothEngine::~REGothEngine()
   shutdown();
 }
 
-bs::Vector<bs::Path> REGothEngine::getVdfsPackagesToLoad(const bs::Path& dataDirectory)
+bs::Vector<bs::Path> REGothEngine::getVdfsPackagesToLoad()
 {
   return gOriginalGameFiles().allVdfsPackages();
 }
@@ -30,8 +30,7 @@ void REGothEngine::loadOriginalGamePackages(const bs::String& argv0, const bs::P
 
   bs::gDebug().logDebug("[VDFS] Indexing packages: ");
 
-  // FIXME: Locate correct case of 'Data'-directory
-  for (auto p : getVdfsPackagesToLoad(gameDirectory + "Data"))
+  for (auto p : getVdfsPackagesToLoad())
   {
     bs::gDebug().logDebug("[VDFS]  - " + p.getFilename());
     gVirtualFileSystem().loadPackage(p);
