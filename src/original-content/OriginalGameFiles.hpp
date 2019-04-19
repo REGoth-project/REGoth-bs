@@ -23,16 +23,14 @@ namespace REGoth
   class OriginalGameFiles
   {
   public:
-    OriginalGameFiles() = default;
-
     /**
-     * Set where the original files can be found. This must be set
-     * before the other methods will return meaningful results.
+     * Construct a new OriginalGameFiles Object given the root path
+     * of the original game.
      *
      * @param  root  Root of the original game file directory,
      *               which contains `system`, `_work` and so on.
      */
-    void setOriginalFilesRoot(const bs::Path& root);
+    OriginalGameFiles(const bs::Path& root);
 
     /**
      * @return List of all .vdf-packages found in the `Data`-directory.
@@ -51,7 +49,6 @@ namespace REGoth
     bs::Path vdfsFileEntryPoint() const;
 
   private:
-
     /**
      * Outputs all files found in the given directory which match the given extension.
      *
@@ -62,7 +59,8 @@ namespace REGoth
      *
      * @return List of all files in the given directory with the given extension.
      */
-    bs::Vector<bs::Path> filterFilesInDirectoryByExt(const bs::Path& path, const bs::String& ext) const;
+    bs::Vector<bs::Path> filterFilesInDirectoryByExt(const bs::Path& path,
+                                                     const bs::String& ext) const;
 
     /**
      * @return Actual path to the data-directory
@@ -113,10 +111,5 @@ namespace REGoth
      */
     bs::Map<bs::Path, bs::UINT32> mCaseMap;
   };
-
-  /**
-   * Access to the original game files.
-   */
-  OriginalGameFiles& gOriginalGameFiles();
 
 }  // namespace REGoth

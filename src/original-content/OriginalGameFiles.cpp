@@ -4,14 +4,9 @@
 
 namespace REGoth
 {
-  void OriginalGameFiles::setOriginalFilesRoot(const bs::Path& root)
+  OriginalGameFiles::OriginalGameFiles(const bs::Path& root)
+    : mRoot(root)
   {
-    mRoot = root;
-
-    if (mRoot.getTail() == "")
-    {
-    }
-
     if (vdfsFileEntryPoint() == bs::Path::BLANK)
     {
       REGOTH_THROW(FileNotFoundException,
@@ -146,11 +141,5 @@ namespace REGoth
     }
 
     return matching;
-  }
-
-  OriginalGameFiles& gOriginalGameFiles()
-  {
-    static OriginalGameFiles s_Instance;
-    return s_Instance;
   }
 }  // namespace REGoth

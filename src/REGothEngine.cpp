@@ -18,25 +18,21 @@ REGothEngine::~REGothEngine()
   shutdown();
 }
 
-bs::Vector<bs::Path> REGothEngine::getVdfsPackagesToLoad()
-{
-  return gOriginalGameFiles().allVdfsPackages();
-}
-
 void REGothEngine::loadOriginalGamePackages(const bs::String& argv0, const bs::Path& gameDirectory)
 {
+  OriginalGameFiles files = OriginalGameFiles(gameDirectory);
+
   gVirtualFileSystem().setPathToEngineExecutable(argv0);
-  gOriginalGameFiles().setOriginalFilesRoot(gameDirectory);
 
   bs::gDebug().logDebug("[VDFS] Indexing packages: ");
 
-  for (auto p : getVdfsPackagesToLoad())
+  for (auto p : files.allVdfsPackages())
   {
     bs::gDebug().logDebug("[VDFS]  - " + p.getFilename());
     gVirtualFileSystem().loadPackage(p);
   }
 
-  gVirtualFileSystem().mountDirectory(gOriginalGameFiles().vdfsFileEntryPoint());
+  gVirtualFileSystem().mountDirectory(files.vdfsFileEntryPoint());
 }
 
 bool REGothEngine::hasFoundGameFiles()

@@ -7,6 +7,8 @@
 
 namespace REGoth
 {
+  class OriginalGameFiles;
+
   /**
    * This is the REGoth-Core-Class, which initializes the engine, sets the
    * input and the scene.
@@ -32,17 +34,6 @@ namespace REGoth
   public:
     REGothEngine() = default;
     virtual ~REGothEngine();
-
-    /**
-     * Construct a list of VDFS-packages to load here.
-     *
-     * By default, all packages within the games Data-Directory are loaded.
-     *
-     * @param  dataDirectory  Path of the Data-Directory of the game files (Where the .VDF-files
-     * are).
-     * @return List of VDFS-Packages to be loaded by the engine
-     */
-    virtual bs::Vector<bs::Path> getVdfsPackagesToLoad();
 
     /**
      * Load VDFS packages from the original game.
