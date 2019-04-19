@@ -37,12 +37,18 @@ namespace REGoth
     /**
      * @return List of all .vdf-packages found in the `Data`-directory.
      */
-    bs::Vector<bs::Path> allVdfsPackages();
+    bs::Vector<bs::Path> allVdfsPackages() const;
 
     /**
      * @return Actual path to the GOTHIC.DAT file
      */
-    bs::Path gothicDat();
+    bs::Path gothicDat() const;
+
+    /**
+     * @return Actual path the `_work/Data` directory where files outside
+     *         .vdf-packages are stored but should still accessible via VDFS.
+     */
+    bs::Path vdfsFileEntryPoint() const;
 
   private:
 
@@ -56,12 +62,12 @@ namespace REGoth
      *
      * @return List of all files in the given directory with the given extension.
      */
-    bs::Vector<bs::Path> filterFilesInDirectoryByExt(const bs::Path& path, const bs::String& ext);
+    bs::Vector<bs::Path> filterFilesInDirectoryByExt(const bs::Path& path, const bs::String& ext) const;
 
     /**
      * @return Actual path to the data-directory
      */
-    bs::Path dataDirectory();
+    bs::Path dataDirectory() const;
 
     /**
      * Given a case-insensitive path, this tries to find the real, case-sensitive path.
@@ -74,7 +80,7 @@ namespace REGoth
      * @param  path  Case-insensitive path to look at relative to the game root.
      * @return First file that matched the case insensitive path.
      */
-    bs::Path findCaseSensitivePathOf(const bs::Path& path);
+    bs::Path findCaseSensitivePathOf(const bs::Path& path) const;
 
     /**
      * Given a directory and the name of a directory or file, this will try to find
@@ -89,7 +95,7 @@ namespace REGoth
      * @return Input path with the given directory or file appended in the correct case.
      *         bs::Path::BLANK if the given directory or file was not found.
      */
-    bs::Path appendCaseInsensitiveThing(const bs::Path& path, const bs::String& thing);
+    bs::Path appendCaseInsensitiveThing(const bs::Path& path, const bs::String& thing) const;
 
     /**
      * Root of the original game directory

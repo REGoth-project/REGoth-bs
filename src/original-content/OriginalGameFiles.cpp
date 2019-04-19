@@ -10,47 +10,62 @@ namespace REGoth
 
     if (mRoot.getTail() == "")
     {
-      
+    }
+
+    if (vdfsFileEntryPoint() == bs::Path::BLANK)
+    {
+      REGOTH_THROW(FileNotFoundException,
+                   bs::StringUtil::format(
+                       "Game-file directory {0} does not seem to have a '_work/data'-directory!",
+                       mRoot.toString()));
     }
 
     if (dataDirectory() == bs::Path::BLANK)
     {
-      REGOTH_THROW(FileNotFoundException,
-                   bs::StringUtil::format(
-                       "Game-file directory {0} does not seem to have a 'data'-directory!", mRoot.toString()));
+      REGOTH_THROW(
+          FileNotFoundException,
+          bs::StringUtil::format("Game-file directory {0} does not seem to have a 'data'-directory!",
+                                 mRoot.toString()));
     }
 
     if (gothicDat() == bs::Path::BLANK)
     {
-      REGOTH_THROW(FileNotFoundException,
-                   bs::StringUtil::format(
-                       "Game-file directory {0} does not seem to contain GOTHIC.DAT", mRoot.toString()));
+      REGOTH_THROW(
+          FileNotFoundException,
+          bs::StringUtil::format("Game-file directory {0} does not seem to contain GOTHIC.DAT",
+                                 mRoot.toString()));
     }
 
     if (allVdfsPackages().empty())
     {
-      REGOTH_THROW(FileNotFoundException,
-                   bs::StringUtil::format(
-                     "Game-file directory {0} does not seem to contain any .vdf-files!", mRoot.toString()));
+      REGOTH_THROW(
+          FileNotFoundException,
+          bs::StringUtil::format("Game-file directory {0} does not seem to contain any .vdf-files!",
+                                 mRoot.toString()));
     }
   }
 
-  bs::Path OriginalGameFiles::gothicDat()
+  bs::Path OriginalGameFiles::gothicDat() const
   {
     return findCaseSensitivePathOf("_work/Data/Scripts/_compiled/GOTHIC.DAT");
   }
 
-  bs::Path OriginalGameFiles::dataDirectory()
+  bs::Path OriginalGameFiles::dataDirectory() const
   {
     return findCaseSensitivePathOf("data/");
   }
 
-  bs::Vector<bs::Path> OriginalGameFiles::allVdfsPackages()
+  bs::Path OriginalGameFiles::vdfsFileEntryPoint() const
+  {
+    return findCaseSensitivePathOf("_work/data/");
+  }
+
+  bs::Vector<bs::Path> OriginalGameFiles::allVdfsPackages() const
   {
     return filterFilesInDirectoryByExt(dataDirectory(), ".vdf");
   }
 
-  bs::Path OriginalGameFiles::findCaseSensitivePathOf(const bs::Path& path)
+  bs::Path OriginalGameFiles::findCaseSensitivePathOf(const bs::Path& path) const
   {
     bs::Path actual = mRoot;
 
@@ -75,7 +90,7 @@ namespace REGoth
   }
 
   bs::Path OriginalGameFiles::appendCaseInsensitiveThing(const bs::Path& path,
-                                                         const bs::String& directory)
+                                                         const bs::String& directory) const
   {
     bs::Vector<bs::Path> files;
     bs::Vector<bs::Path> dirs;
@@ -108,7 +123,7 @@ namespace REGoth
   }
 
   bs::Vector<bs::Path> OriginalGameFiles::filterFilesInDirectoryByExt(const bs::Path& path,
-                                                                      const bs::String& ext)
+                                                                      const bs::String& ext) const
   {
     bs::Vector<bs::Path> files;
     bs::Vector<bs::Path> dirs;
