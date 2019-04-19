@@ -31,8 +31,10 @@ namespace REGoth
      * Initializes the scripting system with a Gothic DAT-File.
      * If this is called a second time, everything will be scrapped,
      * all existing handles will be invalidated.
+     *
+     * @param  gothicDAT  Byte-Data of the GOTHIC.DAT to load.
      */
-    void loadGothicDAT(const Daedalus::DATFile& datFile);
+    void loadGothicDAT(const bs::Vector<bs::UINT8>& gothicDAT);
   }
 
   /**
