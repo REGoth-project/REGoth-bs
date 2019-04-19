@@ -35,6 +35,7 @@
 
 #pragma once
 
+#include <BsPrerequisites.h>
 #include <FileSystem/BsPath.h>
 
 namespace VDFS
@@ -75,6 +76,19 @@ namespace REGoth
      * @return Whether the package could be loaded.
      */
     bool loadPackage(const bs::Path& package);
+
+    /**
+     * Mounts the directory at the given path.
+     *
+     * The directory-structure itself will be flattened so basically the directory
+     * is recursivly searched and all files are added to the index at root level.
+     *
+     * Throws if the given path does not end in a valid directory or if the VDFS
+     * was already finalized (happens on first file read).
+     *
+     * @param  path  Path of the directory to add.
+     */
+    void mountDirectory(const bs::Path& path);
 
     /**
      * Returns a list of all files known to the index.

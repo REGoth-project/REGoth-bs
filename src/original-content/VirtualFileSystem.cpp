@@ -8,7 +8,7 @@ using namespace REGoth;
 class REGoth::InternalVirtualFileSystem
 {
 public:
-  InternalVirtualFileSystem() = default;
+  InternalVirtualFileSystem()          = default;
   virtual ~InternalVirtualFileSystem() = default;
 
   VDFS::FileIndex fileIndex;
@@ -40,6 +40,37 @@ void VirtualFileSystem::setPathToEngineExecutable(const bs::String& argv0)
   mInternal = bs::bs_shared_ptr_new<InternalVirtualFileSystem>();
 }
 
+void VirtualFileSystem::mountDirectory(const bs::Path& path)
+{
+  using namespace bs;
+
+  throwOnMissingInternalState();
+
+  if (mInternal->isFinalized)
+  {
+    BS_EXCEPT(InvalidStateException, "Cannot mount directories on finalized file index.");
+  }
+
+  bs::gDebug().logDebug("[VDFS] Mounting directory: " + path.toString() + " (recursive):");
+
+  auto onDirectory = [&](const bs::Path& p) {
+    bs::Path relative = p.getRelative(path);
+    bs::gDebug().logDebug("[VDFS]  - " + relative.toString());
+
+    mInternal->fileIndex.mountFolder(p.toString().c_str());
+
+    return true;
+  };
+
+  enum
+  {
+    Recursive    = true,
+    NonRecursive = false,
+  };
+
+  bs::FileSystem::iterate(path, nullptr, onDirectory, Recursive);
+}
+
 bool VirtualFileSystem::loadPackage(const bs::Path& package)
 {
   using namespace bs;
@@ -59,7 +90,7 @@ bs::Vector<bs::String> VirtualFileSystem::listAllFiles()
   std::vector<std::string> allStl = mInternal->fileIndex.getKnownFiles();
   bs::Vector<bs::String> all(allStl.size());
 
-  for(size_t i = 0; i < allStl.size(); i++)
+  for (size_t i = 0; i < allStl.size(); i++)
   {
     all[i] = allStl[i].c_str();
   }

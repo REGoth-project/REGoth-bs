@@ -35,6 +35,8 @@ void REGothEngine::loadOriginalGamePackages(const bs::String& argv0, const bs::P
     bs::gDebug().logDebug("[VDFS]  - " + p.getFilename());
     gVirtualFileSystem().loadPackage(p);
   }
+
+  gVirtualFileSystem().mountDirectory(gOriginalGameFiles().vdfsFileEntryPoint());
 }
 
 bool REGothEngine::hasFoundGameFiles()
