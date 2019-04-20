@@ -1,6 +1,7 @@
 #include "VirtualFileSystem.hpp"
 #include <Error/BsException.h>
 #include <FileSystem/BsFileSystem.h>
+#include <excepction/Throw.hpp>
 #include <vdfs/fileIndex.h>
 
 using namespace REGoth;
@@ -133,6 +134,24 @@ bool REGoth::VirtualFileSystem::hasFile(const bs::String& file) const
   }
 
   return mInternal->fileIndex.hasFile(file.c_str());
+}
+
+void REGoth::VirtualFileSystem::throwIfFileIsMissing(const bs::String& file,
+                                                     const bs::String& message) const
+{
+  if (!hasFile(file))
+  {
+    if (message.empty())
+    {
+      REGOTH_THROW(
+          InvalidStateException,
+          bs::StringUtil::format("Expected file {0} inside VDFS, but it could not be found!", file));
+    }
+    else
+    {
+      REGOTH_THROW(InvalidStateException, message);
+    }
+  }
 }
 
 bool REGoth::VirtualFileSystem::hasFoundGameFiles() const
