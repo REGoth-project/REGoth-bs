@@ -24,96 +24,27 @@ const bs::String MODEL_NODE_NAME_FOOTSTEPS = " FOOTSTEPS";
 namespace REGoth
 {
   VisualCharacter::VisualCharacter(const bs::HSceneObject& parent)
-      : bs::Component(parent)
+    : VisualSkeletalAnimation(parent)
   {
     setName("VisualCharacter");
   }
-
-  void VisualCharacter::setModelScript(BsZenLib::Res::HModelScriptFile modelScript)
-  {
-    if (modelScript->getName().empty())
-    {
-      REGOTH_THROW(InvalidParametersException, "ModelScript should have a name!");
-    }
-
-    deleteObjectSubtree();
-    mModelScript = modelScript;
-
-    for (bs::HAnimationClip clip : mModelScript->getAnimationClips())
-    {
-      mAnimationClips[clip->getName()] = clip;
-      // bs::gDebug().logDebug(clip->getName());
-    }
-  }
-
-  void VisualCharacter::setMesh(BsZenLib::Res::HMeshWithMaterials mesh)
-  {
-    using namespace bs;
-
-    if (isMeshRegisteredInModelScript(mesh))
-    {
-      mMesh = mesh;
-
-      deleteObjectSubtree();
-      buildObjectSubtree();
-
-      // TODO: This is only in while we don't have a proper animation controller/AI. Remove once
-      //       that is in!
-      playDefaultIdleAnimation();
-    }
-    else
-    {
-      REGOTH_THROW(InvalidParametersException,
-                   "Mesh " + mesh->getName() + " is not part of set model-script " +
-                       (mModelScript ? mModelScript->getName() : "<none>"));
-    }
-  }
-
-  void VisualCharacter::setVisual(const bs::String& visual)
-  {
-    BsZenLib::Res::HModelScriptFile modelScript;
-
-    // FIXME: Loading these from cache does work in the character viewer, but not in the world
-    // viewer?! This set is just a workaround so we always use model scripts from this run
-    // while caching only one of it. It should be removed once that is figured out.
-    static bs::Set<bs::String> s_cachedVisuals;
-    bool hasCachedItThisRun = s_cachedVisuals.find(visual) != s_cachedVisuals.end();
-
-    if (hasCachedItThisRun && BsZenLib::HasCachedMDS(visual))
-    {
-      modelScript = BsZenLib::LoadCachedMDS(visual);
-    }
-    else
-    {
-      modelScript = BsZenLib::ImportAndCacheMDS(visual, REGoth::gVirtualFileSystem().getFileIndex());
-      s_cachedVisuals.insert(visual);
-    }
-
-    if (!modelScript)
-    {
-      REGOTH_THROW(InvalidParametersException, "Model Script " + visual + " could not be loaded!");
-    }
-
-    setModelScript(modelScript);
-  }
-
   void VisualCharacter::setBodyMesh(const bs::String& bodyMesh)
   {
-    if (!mModelScript)
+    if (!modelScript())
     {
       REGOTH_THROW(InvalidStateException, "No model script set! Has setVisual() been called?");
     }
 
-    BsZenLib::Res::HMeshWithMaterials hmesh = mModelScript->getMeshByName(bodyMesh);
+    BsZenLib::Res::HMeshWithMaterials hmesh = modelScript()->getMeshByName(bodyMesh);
 
     if (hmesh)
     {
       setMesh(hmesh);
     }
-    else if (mModelScript->getMeshes().empty())
+    else if (modelScript()->getMeshes().empty())
     {
       REGOTH_THROW(InvalidParametersException, "Did not find body mesh " + bodyMesh +
-                                                   " in model script '" + mModelScript->getName() +
+                                                   " in model script '" + modelScript()->getName() +
                                                    "' and it seems to be empty otherwise!");
     }
     else
@@ -121,300 +52,10 @@ namespace REGoth
       bs::gDebug().logWarning(bs::StringUtil::format(
           "[VisualCharacter] Did not find body mesh {0}  in model script "
           "'{1}'', defaulting to first one: {2}",
-          bodyMesh, mModelScript->getName(), mModelScript->getMeshes()[0]->getName()));
+          bodyMesh, modelScript()->getName(), modelScript()->getMeshes()[0]->getName()));
 
-      setMesh(mModelScript->getMeshes()[0]);
+      setMesh(modelScript()->getMeshes()[0]);
     }
-  }
-
-  bs::Bounds VisualCharacter::getBounds() const
-  {
-    return mSubRenderable ? mSubRenderable->getBounds() : bs::Bounds();
-  }
-
-  bool VisualCharacter::isMeshRegisteredInModelScript(BsZenLib::Res::HMeshWithMaterials mesh)
-  {
-    if (!mModelScript) return false;
-
-    for (const auto& m : mModelScript->getMeshes())
-    {
-      if (m == mesh) return true;
-    }
-
-    return false;
-  }
-
-  void VisualCharacter::deleteObjectSubtree()
-  {
-    for (bs::HSceneObject h : mSubObjects)
-    {
-      h->destroy();
-    }
-
-    mSubObjects.clear();
-  }
-
-  void VisualCharacter::buildObjectSubtree()
-  {
-    createAndRegisterSubComponents();
-
-    setupRenderableComponent();
-    setupAnimationComponent();
-  }
-
-  void VisualCharacter::createAndRegisterSubComponents()
-  {
-    bs::HSceneObject renderSO = createAndRegisterSubObject("Renderable");
-
-    mSubRenderable  = renderSO->addComponent<bs::CRenderable>();
-    mSubAnimation   = renderSO->addComponent<bs::CAnimation>();
-    mSubNodeVisuals = renderSO->addComponent<NodeVisuals>();
-  }
-
-  bs::HSceneObject VisualCharacter::createAndRegisterSubObject(const bs::String& name)
-  {
-    bs::HSceneObject subSO = bs::SceneObject::create(name);
-
-    bool dontKeepWorldTransform = false;
-
-    subSO->setParent(SO(), dontKeepWorldTransform);
-
-    mSubObjects.push_back(subSO);
-
-    return subSO;
-  }
-
-  void VisualCharacter::setupRenderableComponent()
-  {
-    using namespace bs;
-
-    mSubRenderable->setMesh(mMesh->getMesh());
-    mSubRenderable->setMaterials(mMesh->getMaterials());
-  }
-
-  void VisualCharacter::setupAnimationComponent()
-  {
-    using namespace bs;
-
-    // We do manual looping
-    // mSubAnimation->setWrapMode(AnimWrapMode::Clamp);
-    // FIXME: Animation Events are broken for clamped animations (in bsf)
-    mSubAnimation->setWrapMode(AnimWrapMode::Loop);
-
-    // Subscribe to animation events
-    mSubAnimation->onEventTriggered.connect([this](auto clip, auto string) {
-      // Call objects actual method
-      this->onAnimationEvent(clip, string);
-    });
-  }
-
-  void VisualCharacter::onAnimationEvent(const bs::HAnimationClip& clip, bs::String string)
-  {
-    using namespace bs;
-
-    bs::String command = string.substr(0, string.find_first_of(':'));
-    bs::String action  = string.substr(command.length() + 1);
-
-    bs::AnimationClipState state;
-    mSubAnimation->getState(clip, state);
-
-    // gDebug().logDebug(bs::StringUtil::format(
-    //     "[VisualCharacter] Got animation event: {0}:{1} while playing {2} at {3}", command, action,
-    //     clip->getName(), state.time));
-
-    // gDebug().logDebug("Animation has the following events: ");
-    // for (auto& event : clip->getEvents())
-    // {
-    //   gDebug().logDebug(bs::StringUtil::format(" - {0}: {1}", event.time, event.name));
-    // }
-
-    if (command == "PLAYCLIP")
-    {
-      HAnimationClip clip = findAnimationClip(action);
-
-      if (clip)
-      {
-        playAnimation(clip);
-      }
-      else
-      {
-        gDebug().logWarning("[VisualCharacter] Unknown next animation: " + action);
-      }
-    }
-    else
-    {
-      gDebug().logWarning("[VisualCharacter] Unknown animation event: " + string);
-    }
-  }
-
-  void VisualCharacter::playAnimation(bs::HAnimationClip clip)
-  {
-    using namespace bs;
-
-    if (!mSubAnimation)
-    {
-      BS_EXCEPT(InvalidStateException, "Animation component not initialized!");
-    }
-
-    if (clip)
-    {
-      mSubAnimation->play(clip);
-    }
-    else
-    {
-      mSubAnimation->stopAll();
-    }
-  }
-
-  void REGoth::VisualCharacter::playDefaultIdleAnimation()
-  {
-    auto possibleAnims = {"S_RUN", "S_FISTRUN"};
-
-    for (auto anim : possibleAnims)
-    {
-      bs::HAnimationClip clip = findAnimationClip(anim);
-
-      if (clip)
-      {
-        playAnimation(clip);
-        return;
-      }
-    }
-
-    // No animation found, stop all animations instead
-    playAnimation({});
-  }
-
-  bool VisualCharacter::tryPlayTransitionAnimationTo(const bs::String& state)
-  {
-    bs::HAnimationClip clip;
-
-    if (Animation::isTransitionNeeded(state))
-    {
-      bs::String from = getStateFromPlayingAnimation();
-      bs::String to   = Animation::getStateName(state);
-
-      if (from.empty()) return false;
-
-      bs::String transition =
-          Animation::constructTransitionAnimationName(REGoth::Animation::WeaponMode::None, from, to);
-
-      if (transition.empty()) return false;
-
-      clip = findAnimationClip(transition);
-    }
-    else
-    {
-      clip = findAnimationClip(state);
-    }
-
-    if (!clip) return false;
-
-    if (!isAnimationPlaying(clip))
-    {
-      playAnimation(clip);
-    }
-
-    return true;
-  }
-
-  bs::HAnimationClip VisualCharacter::findAnimationClip(const bs::String& name) const
-  {
-    using namespace bs;
-
-    bs::String actualName = "HUMANS-" + name;
-
-    auto result = mAnimationClips.find(actualName);
-
-    if (result == mAnimationClips.end()) return {};
-
-    return result->second;
-  }
-
-  bool VisualCharacter::isAnimationPlaying(bs::HAnimationClip clip) const
-  {
-    for (bs::UINT32 i = 0; i < mSubAnimation->getNumClips(); i++)
-    {
-      if (mSubAnimation->getClip(i) == clip) return true;
-    }
-
-    return false;
-  }
-
-  bs::String VisualCharacter::getPlayingAnimationName() const
-  {
-    if (!mSubAnimation->isPlaying()) return "";
-    if (!mSubAnimation->getClip(0)) return "";
-
-    bs::String full = mSubAnimation->getClip(0)->getName();
-
-    // Strip the "HUMANS-" part
-    return full.substr(full.find_first_of('-') + 1);
-  }
-
-  bool VisualCharacter::isPlayingAnimationInterruptable() const
-  {
-    bs::String name = getPlayingAnimationName();
-
-    return name.find("-T_") == bs::String::npos;
-  }
-
-  bs::String VisualCharacter::getStateFromPlayingAnimation() const
-  {
-    return Animation::getStateName(getPlayingAnimationName());
-  }
-
-  bs::Vector3 VisualCharacter::resolveFrameRootMotion()
-  {
-    if (!mSubAnimation) return bs::Vector3(bs::BsZero);
-
-    bs::HAnimationClip clipNow = mSubAnimation->getClip(0);
-
-    bs::Vector3 motion = bs::Vector3(bs::BsZero);
-
-    if (mRootMotionLastClip != clipNow)
-    {
-      // Make sure to get the last bits of the last clip too
-      if (mRootMotionLastClip)
-      {
-        bs::AnimationClipState state;
-        mSubAnimation->getState(mRootMotionLastClip, state);
-
-        float then = mRootMotionLastTime;
-        float now  = mRootMotionLastClip->getLength();
-
-        motion += Animation::getRootMotionSince(mRootMotionLastClip, then, now);
-      }
-
-      mRootMotionLastTime = 0.0f;
-      mRootMotionLastClip = clipNow;
-    }
-
-    if (!clipNow)
-    {
-      return motion;
-    }
-
-    bs::AnimationClipState state;
-    mSubAnimation->getState(clipNow, state);
-
-    float then = mRootMotionLastTime;
-    float now  = state.time;
-
-    // fixedUpdate might be called more often than the animation timing is updated
-    // Comparing floats here is intentional, since we don't touch them in the meantime.
-    if (then != now)
-    {
-      motion += Animation::getRootMotionSince(clipNow, then, now);
-
-      // bs::gDebug().logDebug(bs::StringUtil::format("RootMotion {0} -> {1}: {2}", then, now,
-      // bs::toString(motion)));
-    }
-
-    mRootMotionLastTime = now;
-    mRootMotionLastClip = clipNow;
-
-    return motion;
   }
 
   void VisualCharacter::setHeadMesh(const bs::String& headmesh, bs::UINT32 headTextureIdx,
@@ -442,18 +83,13 @@ namespace REGoth
   {
     using namespace bs;
 
-    if (!mSubAnimation)
-    {
-      BS_EXCEPT(InvalidStateException, "Animation component not initialized!");
-    }
-
     if (!mBodyState.headVisual.empty())
     {
-      mSubNodeVisuals->attachVisualToNode(MODEL_NODE_NAME_HEAD, mBodyState.headVisual);
+      nodeVisuals()->attachVisualToNode(MODEL_NODE_NAME_HEAD, mBodyState.headVisual);
     }
     else
     {
-      mSubNodeVisuals->clearNodeAttachment(MODEL_NODE_NAME_HEAD);
+      nodeVisuals()->clearNodeAttachment(MODEL_NODE_NAME_HEAD);
     }
 
     // TODO: Fix texture and color

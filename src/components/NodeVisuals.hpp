@@ -1,5 +1,6 @@
 #pragma once
 #include <BsPrerequisites.h>
+#include <BsZenLib/ZenResources.hpp>
 #include <Scene/BsComponent.h>
 
 namespace REGoth
@@ -36,6 +37,17 @@ namespace REGoth
     void attachVisualToNode(const bs::String& node, const bs::String& visual);
 
     /**
+     * Attaches the given mesh to the given node.
+     *
+     * Existing attachments will be replaced.
+     * If the node cannot be found, then nothing happens.
+     *
+     * @param  node    The node name to attach to, e.g. `BIP01 HEAD`.
+     * @param  visual  The original file name of the visual, e.g. `STONE.3DS`.
+     */
+    void attachMeshToNode(const bs::String& node, BsZenLib::Res::HMeshWithMaterials mesh);
+
+    /**
      * Removes the current attachment from the given node, if one exists.
      *
      * @param  node  Name of the node to remove the attached visual from.
@@ -43,7 +55,6 @@ namespace REGoth
     void clearNodeAttachment(const bs::String& node);
 
   private:
-
     /**
      * @return The current skeleton used by the scene objects renderable component.
      */
@@ -51,4 +62,4 @@ namespace REGoth
   };
 
   using HNodeVisuals = bs::GameObjectHandle<NodeVisuals>;
-}
+}  // namespace REGoth
