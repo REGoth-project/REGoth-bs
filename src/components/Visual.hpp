@@ -9,7 +9,7 @@ namespace REGoth
     {
       StaticMesh,
       MorphMesh,
-      SkeletalMesh,
+      InteractiveObject,
       Decal,
       Particles,
       Unknown,
@@ -22,6 +22,10 @@ namespace REGoth
      * instance matching the files type. For example, a `.3DS` file is handled by the
      * `StaticMesh`-Visual (`zCProgMeshProto` in the original).
      *
+     * @note   This will assume all `.ASC` files to be an interactive object, while
+     *         `.ASC` are also used for character models. So don't use this function
+     *         for characters, please.
+     *
      * @param  visual  File name of the visual, e.g. `STONE.3DS`.
      *
      * @return Which kind of visual the given filename should use.
@@ -32,6 +36,10 @@ namespace REGoth
      * Creates a matching visual component and attaches it to the given scene object.
      *
      * For example `STONE.3DS` will create a static mesh visual component.
+     *
+     * @note   This will assume all `.ASC` files to be an interactive object, while
+     *         `.ASC` are also used for character models. So don't use this function
+     *         for characters, please.
      *
      * @param  so      Scene-Object to create the component for.
      * @param  visual  Name of the visual to create (The filename, that is), like `STONE.3DS`.
