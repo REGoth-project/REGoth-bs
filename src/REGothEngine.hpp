@@ -7,8 +7,6 @@
 
 namespace REGoth
 {
-  class OriginalGameFiles;
-
   /**
    * This is the REGoth-Core-Class, which initializes the engine, sets the
    * input and the scene.
