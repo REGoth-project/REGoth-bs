@@ -6,7 +6,6 @@
 #include "Utility/BsTime.h"
 #include "animation/StateNaming.hpp"
 #include "components/VisualCharacter.hpp"
-#include "original-content/VirtualFileSystem.hpp"
 #include <BsZenLib/ImportAnimation.hpp>
 #include <BsZenLib/ImportMorphMesh.hpp>
 #include <BsZenLib/ImportPath.hpp>
