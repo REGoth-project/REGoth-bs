@@ -85,6 +85,21 @@ namespace REGoth
     }
   }
 
+  void VisualSkeletalAnimation::useFirstMeshOfModelScript()
+  {
+    if (!mModelScript)
+    {
+      REGOTH_THROW(InvalidStateException, "Expected Model Script but none was set!");
+    }
+
+    if (mModelScript->getMeshes().empty())
+    {
+      REGOTH_THROW(InvalidStateException, "Model Script seems to not have any meshes!");
+    }
+
+    setMesh(mModelScript->getMeshes()[0]);
+  }
+
   void VisualSkeletalAnimation::setVisual(const bs::String& visual)
   {
     BsZenLib::Res::HModelScriptFile modelScript;
@@ -111,6 +126,9 @@ namespace REGoth
     }
 
     setModelScript(modelScript);
+
+    // Using the first registered mesh as the default seems to be like the original is doing it
+    useFirstMeshOfModelScript();
   }
 
   bs::Bounds VisualSkeletalAnimation::getBounds() const

@@ -35,4 +35,6 @@ namespace REGoth
   public:  // FIXME: Should be protected, it is only used by RTTI but friend doesn't seem to work?!
     VisualInteractiveObject () = default;  // Serialization only
   };
+
+  using HVisualInteractiveObject = bs::GameObjectHandle<VisualInteractiveObject>;
 }  // namespace REGoth

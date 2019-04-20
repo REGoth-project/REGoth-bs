@@ -55,33 +55,26 @@ namespace REGoth
     void setMesh(BsZenLib::Res::HMeshWithMaterials mesh);
 
     /**
+     * Assigns the first mesh found in the model script via setMesh().
+     *
+     * Can be used instead of calling setMesh(), for example if you know
+     * the model-script only contains a single mesh (like for interactive objects).
+     * Note that setVisual() automatically uses this.
+     *
+     * Throws if no model script has been assigned before or it it is empty.
+     */
+    void useFirstMeshOfModelScript();
+
+    /**
      * Sets up the visual according to the given visual name.
+     *
+     * Will automatically resolve and set the model script and assign its first mesh.
      *
      * Throws if that visual does not exist.
      *
      * @param  visual  Name of the visual (model-script) to use, e.g. `HUMANS.MDS`.
      */
     void setVisual(const bs::String& visual);
-
-    /**
-     * Sets the body mesh.
-     *
-     * Throws if the body mesh is not listed inside the model script.
-     *
-     * @param  bodyMesh  Name of the body mesh to use, e.g. `HUM_BODY_NAKED0`. The
-     *                   file extension must be omitted.
-     */
-    void setBodyMesh(const bs::String& bodyMesh);
-
-    /**
-     * Sets the headmesh for this model.
-     *
-     * @param  head  File of the mesh to use as head, e.g. `HUM_HEAD.MMB`. The file
-     *               extension is not required. If none was given, `.MMB` will be
-     *               assumed.
-     */
-    void setHeadMesh(const bs::String& headmesh, bs::UINT32 headTextureIdx = 0,
-                     bs::UINT32 teethTextureIdx = 0);
 
     /**
      * Calculates how far the characters animation has moved since the last
