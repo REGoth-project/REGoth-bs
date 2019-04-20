@@ -1,7 +1,11 @@
 add_library(samples-common
+  common/BsCameraZoomer.h
   common/BsCameraZoomer.cpp
+  common/BsFPSCamera.h
   common/BsFPSCamera.cpp
+  common/BsFPSWalker.h
   common/BsFPSWalker.cpp
+  common/BsObjectRotator.h
   common/BsObjectRotator.cpp
  )
 
@@ -9,42 +13,79 @@ target_include_directories(samples-common PUBLIC common)
 target_link_libraries(samples-common PUBLIC bsf)
 
 add_library(REGothEngine
+  REGothEngine.hpp
   REGothEngine.cpp
+  components/CharacterState.hpp
   components/CharacterState.cpp
+  components/VisualCharacter.hpp
   components/VisualCharacter.cpp
+  components/VisualStaticMesh.hpp
   components/VisualStaticMesh.cpp
+  components/StartSpot.hpp
   components/StartSpot.cpp
+  components/Spot.hpp
   components/Spot.cpp
+  components/NodeVisuals.hpp
   components/NodeVisuals.cpp
+  components/ScriptBackedBy.hpp
   components/ScriptBackedBy.cpp
+  components/Visual.hpp
   components/Visual.cpp
+  components/VisualMorphMesh.hpp
   components/VisualMorphMesh.cpp
+  components/Item.hpp
   components/Item.cpp
+  components/Character.hpp
   components/Character.cpp
+  components/CharacterAI.hpp
   components/CharacterAI.cpp
+  components/Waypoint.hpp
   components/Waypoint.cpp
+  components/Waynet.hpp
   components/Waynet.cpp
+  components/CharacterKeyboardInput.hpp
   components/CharacterKeyboardInput.cpp
+  animation/StateNaming.hpp
   animation/StateNaming.cpp
+  animation/Animation.hpp
   animation/Animation.cpp
+  scripting/daedalus/REGothDaedalusVM.hpp
   scripting/daedalus/REGothDaedalusVM.cpp
+  scripting/daedalus/DATSymbolStorageLoader.hpp
   scripting/daedalus/DATSymbolStorageLoader.cpp
+  scripting/daedalus/DaedalusClassVarResolver.hpp
   scripting/daedalus/DaedalusClassVarResolver.cpp
+  scripting/daedalus/DaedalusStack.hpp
   scripting/daedalus/DaedalusStack.cpp
+  scripting/daedalus/DaedalusDisassembler.hpp
   scripting/daedalus/DaedalusDisassembler.cpp
+  scripting/daedalus/DaedalusVMWithExternals.hpp
   scripting/daedalus/DaedalusVMWithExternals.cpp
+  scripting/ScriptSymbols.hpp
   scripting/ScriptSymbols.cpp
+  scripting/ScriptObjects.hpp
   scripting/ScriptObjects.cpp
+  scripting/ScriptVM.hpp
   scripting/ScriptVM.cpp
+  scripting/ScriptSymbolQueries.hpp
   scripting/ScriptSymbolQueries.cpp
+  scripting/ScriptClassTemplates.hpp
   scripting/ScriptClassTemplates.cpp
+  scripting/ScriptVMInterface.hpp
   scripting/ScriptVMInterface.cpp
+  scripting/ScriptObjectMapping.hpp
   scripting/ScriptObjectMapping.cpp
+  original-content/VirtualFileSystem.hpp
   original-content/VirtualFileSystem.cpp
+  original-content/OriginalGameFiles.hpp
   original-content/OriginalGameFiles.cpp
+  world/internals/ConstructFromZEN.hpp
   world/internals/ConstructFromZEN.cpp
+  world/GameWorld.hpp
   world/GameWorld.cpp
+  gui/skin_gothic.hpp
   gui/skin_gothic.cpp
+  world/internals/ImportSingleVob.hpp
   world/internals/ImportSingleVob.cpp
   )
 
