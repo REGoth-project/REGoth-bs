@@ -31,6 +31,8 @@ references to all other Waypoints that can be reached directly from its
 location. If a Waypoint is in reach of another Waypoint, that means there is a
 *Path* between the two.
 
+The scripts actually only tell the target destination a character should go to,
+so some sort of algorithm to find the shortest path to it is needed.
 
 The Waynet-Components
 ---------------------
@@ -44,7 +46,7 @@ recursive search for the name you are looking for from the scenes root object.
 
 .. note::
 
-   If you are querying a Waypoint by name and you are not *completely* that the object you are
+   If you are querying a Waypoint by name and you are not *completely* sure that the object you are
    looking for is indeed a Waypoint, it's better to search the full scene.
 
 If you have a ``Waypoint``-component at hand, you can query the paths reachable from that Waypoint

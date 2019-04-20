@@ -1,4 +1,5 @@
 #include "ScriptVMInterface.hpp"
+#include <daedalus/DATFile.h>
 
 namespace REGoth
 {
@@ -6,9 +7,11 @@ namespace REGoth
   {
     static bs::SPtr<ScriptVMInterface> s_GameScript = nullptr;
 
-    void loadGothicDAT(const Daedalus::DATFile& datFile)
+    void loadGothicDAT(const bs::Vector<bs::UINT8>& gothicDAT)
     {
-      s_GameScript = bs::bs_unique_ptr_new<ScriptVMInterface>(datFile);
+      Daedalus::DATFile dat(gothicDAT.data(), gothicDAT.size());
+
+      s_GameScript = bs::bs_unique_ptr_new<ScriptVMInterface>(dat);
       s_GameScript->initialize();
     }
 

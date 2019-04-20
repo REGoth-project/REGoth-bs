@@ -34,17 +34,6 @@ namespace REGoth
     virtual ~REGothEngine();
 
     /**
-     * Construct a list of VDFS-packages to load here.
-     *
-     * By default, all packages within the games Data-Directory are loaded.
-     *
-     * @param  dataDirectory  Path of the Data-Directory of the game files (Where the .VDF-files
-     * are).
-     * @return List of VDFS-Packages to be loaded by the engine
-     */
-    virtual bs::Vector<bs::String> getVdfsPackagesToLoad(const bs::Path& dataDirectory);
-
-    /**
      * Load VDFS packages from the original game.
      *
      * @param          argv0  First value of the argv array passed to main (Path to executable).

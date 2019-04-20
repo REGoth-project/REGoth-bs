@@ -8,32 +8,15 @@ using namespace REGoth;
 class REGoth::InternalVirtualFileSystem
 {
 public:
-  InternalVirtualFileSystem() = default;
+  InternalVirtualFileSystem()          = default;
   virtual ~InternalVirtualFileSystem() = default;
 
-  bs::Path gameDirectory;
   VDFS::FileIndex fileIndex;
   bool isFinalized = false;
 
-  bool isReadyToLoadPackages()
-  {
-    if (gameDirectory.isEmpty())
-    {
-      return false;
-    }
-    else
-    {
-      return true;
-    }
-  }
-
   bool isReadyToReadFiles()
   {
-    if (!isReadyToLoadPackages())
-    {
-      return false;
-    }
-    else if (!isFinalized)
+    if (!isFinalized)
     {
       return false;
     }
@@ -41,17 +24,6 @@ public:
     {
       return true;
     }
-  }
-
-  bs::Path fullPackagePath(const bs::String& package)
-  {
-    return findCaseSensitivePath(gameDirectory + "Data" + package);
-  }
-
-  bs::Path findCaseSensitivePath(const bs::Path& path)
-  {
-    // TODO: Implement findCaseSensitivePath()!
-    return path;
   }
 
   void finalizeFileIndex()
@@ -68,52 +40,49 @@ void VirtualFileSystem::setPathToEngineExecutable(const bs::String& argv0)
   mInternal = bs::bs_shared_ptr_new<InternalVirtualFileSystem>();
 }
 
-void VirtualFileSystem::setGameDirectory(const bs::Path& gameDirectory)
+void VirtualFileSystem::mountDirectory(const bs::Path& path)
 {
   using namespace bs;
 
   throwOnMissingInternalState();
 
-  mInternal->gameDirectory = gameDirectory;
-}
-
-bool VirtualFileSystem::isPackageAvailable(const bs::String& package) const
-{
-  using namespace bs;
-
-  throwOnMissingInternalState();
-
-  auto fullPackagePath = mInternal->fullPackagePath(package);
-
-  return bs::FileSystem::isFile(fullPackagePath);
-}
-
-bool VirtualFileSystem::loadPackage(const bs::String& package)
-{
-  using namespace bs;
-
-  throwOnMissingInternalState();
-
-  if (!mInternal->isReadyToLoadPackages())
+  if (mInternal->isFinalized)
   {
-    BS_EXCEPT(InvalidStateException, "VDFS is not ready to load packages yet.");
+    BS_EXCEPT(InvalidStateException, "Cannot mount directories on finalized file index.");
   }
+
+  bs::gDebug().logDebug("[VDFS] Mounting directory: " + path.toString() + " (recursive):");
+
+  auto onDirectory = [&](const bs::Path& p) {
+    bs::Path relative = p.getRelative(path);
+    bs::gDebug().logDebug("[VDFS]  - " + relative.toString());
+
+    mInternal->fileIndex.mountFolder(p.toString().c_str());
+
+    return true;
+  };
+
+  enum
+  {
+    Recursive    = true,
+    NonRecursive = false,
+  };
+
+  bs::FileSystem::iterate(path, nullptr, onDirectory, Recursive);
+}
+
+bool VirtualFileSystem::loadPackage(const bs::Path& package)
+{
+  using namespace bs;
+
+  throwOnMissingInternalState();
 
   if (mInternal->isFinalized)
   {
     BS_EXCEPT(InvalidStateException, "Cannot load packages on finalized file index.");
   }
 
-  if (!isPackageAvailable(package))
-  {
-    return false;
-  }
-
-  auto fullPackagePath = mInternal->fullPackagePath(package);
-
-  mInternal->fileIndex.loadVDF(fullPackagePath.toString().c_str());
-
-  return true;
+  return mInternal->fileIndex.loadVDF(package.toString().c_str());
 }
 
 bs::Vector<bs::String> VirtualFileSystem::listAllFiles()
@@ -121,7 +90,7 @@ bs::Vector<bs::String> VirtualFileSystem::listAllFiles()
   std::vector<std::string> allStl = mInternal->fileIndex.getKnownFiles();
   bs::Vector<bs::String> all(allStl.size());
 
-  for(size_t i = 0; i < allStl.size(); i++)
+  for (size_t i = 0; i < allStl.size(); i++)
   {
     all[i] = allStl[i].c_str();
   }

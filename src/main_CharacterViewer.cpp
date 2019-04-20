@@ -23,6 +23,7 @@
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
 #include <daedalus/DATFile.h>
+#include <original-content/VirtualFileSystem.hpp>
 #include <scripting/ScriptVMInterface.hpp>
 #include <world/GameWorld.hpp>
 
@@ -148,32 +149,32 @@ public:
   void setupScene() override
   {
     using namespace bs;
+    using namespace REGoth;
 
-    for (auto s : REGoth::gVirtualFileSystem().listAllFiles())
+    for (auto s : gVirtualFileSystem().listAllFiles())
     {
       gDebug().logDebug(s);
     }
 
-    Daedalus::DATFile dat("/home/andre/games/Gothic II/_work/Data/Scripts/_compiled/GOTHIC.DAT");
-    REGoth::Scripting::loadGothicDAT(dat);
+    Scripting::loadGothicDAT(gVirtualFileSystem().readFile("GOTHIC.DAT"));
 
-    REGoth::World::loadWorldEmpty();
+    World::loadWorldEmpty();
 
     // Add some waypoint
     bs::String wpName = "SOMEPLACE";
     {
       bs::HSceneObject wpSO = bs::SceneObject::create(wpName);
 
-      wpSO->setParent(REGoth::gWorld().waynet()->SO());
+      wpSO->setParent(gWorld().waynet()->SO());
       wpSO->setPosition(bs::Vector3(0, 0, 0));
 
-      REGoth::HWaypoint wp = wpSO->addComponent<REGoth::Waypoint>();
-      REGoth::gWorld().waynet()->addWaypoint(wp);
+      HWaypoint wp = wpSO->addComponent<Waypoint>();
+      gWorld().waynet()->addWaypoint(wp);
     }
 
-    REGoth::HCharacter character = REGoth::gWorld().insertCharacter("PC_HERO", wpName);
+    HCharacter character = gWorld().insertCharacter("PC_HERO", wpName);
 
-    REGoth::HVisualCharacter playerVisual = character->SO()->getComponent<REGoth::VisualCharacter>();
+    HVisualCharacter playerVisual = character->SO()->getComponent<VisualCharacter>();
     character->SO()->addComponent<SimpleCharacterController>(playerVisual);
     character->SO()->addComponent<bs::ObjectRotator>();
 
@@ -183,7 +184,7 @@ public:
 
     Sphere bounds = playerVisual->getBounds().getSphere();
 
-    Vector3 cameraDirection = Vector3(1,0,0);
+    Vector3 cameraDirection = Vector3(1, 0, 0);
     cameraDirection.normalize();
 
     auto cameraOffset = cameraDirection * bounds.getRadius() * 1.7f;

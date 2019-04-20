@@ -37,8 +37,7 @@ public:
   {
     using namespace REGoth;
 
-    Daedalus::DATFile dat("/home/andre/games/Gothic II/_work/Data/Scripts/_compiled/GOTHIC.DAT");
-    Scripting::loadGothicDAT(dat);
+    Scripting::loadGothicDAT(gVirtualFileSystem().readFile("GOTHIC.DAT"));
 
     // World::loadWorldFromZEN("ADDONWORLD.ZEN", World::GameWorld::Init::NoInitScripts);
     World::loadWorldEmpty();
