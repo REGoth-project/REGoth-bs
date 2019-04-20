@@ -1,6 +1,7 @@
 #include "REGothEngine.hpp"
 #include <BsApplication.h>
 #include <assert.h>
+#include <BsZenLib/ResourceManifest.hpp>
 #include "original-content/VirtualFileSystem.hpp"
 #include <BsZenLib/ImportPath.hpp>
 #include <Components/BsCCamera.h>
@@ -55,22 +56,7 @@ void REGothEngine::loadCachedResourceManifests()
 
   gDebug().logDebug("[REGothEngine] Loading cached resource manifests");
 
-  if (FileSystem::exists(BsZenLib::GothicPathToCachedManifest("resources")))
-  {
-    auto prevManifest = ResourceManifest::load(BsZenLib::GothicPathToCachedManifest("resources"),
-                                               BsZenLib::GetCacheDirectory());
-
-    gResources().registerResourceManifest(prevManifest);
-  }
-}
-
-void REGothEngine::saveCachedResourceManifests()
-{
-  using namespace bs;
-
-  SPtr<ResourceManifest> manifest = gResources().getResourceManifest("Default");
-  ResourceManifest::save(manifest, BsZenLib::GothicPathToCachedManifest("resources"),
-                         BsZenLib::GetCacheDirectory());
+  BsZenLib::LoadResourceManifest();
 }
 
 void REGothEngine::setupInput()
@@ -184,8 +170,6 @@ int ::REGoth::main(REGothEngine& regoth, int argc, char** argv)
   regoth.setupInput();
   regoth.setupMainCamera();
   regoth.setupScene();
-
-  regoth.saveCachedResourceManifests();
 
   regoth.run();
 

@@ -60,11 +60,6 @@ namespace REGoth
     void loadCachedResourceManifests();
 
     /**
-     * Saves all resources currently registered in the resource manager to a manifest.
-     */
-    void saveCachedResourceManifests();
-
-    /**
      * Assign buttons and axis to control the game
      */
     virtual void setupInput();
