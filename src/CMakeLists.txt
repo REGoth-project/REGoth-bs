@@ -23,6 +23,8 @@ add_library(REGothEngine
   components/VisualSkeletalAnimation.cpp
   components/VisualStaticMesh.hpp
   components/VisualStaticMesh.cpp
+  components/VisualInteractiveObject.hpp
+  components/VisualInteractiveObject.cpp
   components/StartSpot.hpp
   components/StartSpot.cpp
   components/Spot.hpp

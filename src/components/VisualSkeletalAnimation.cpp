@@ -271,6 +271,11 @@ namespace REGoth
     playAnimation({});
   }
 
+  bs::Vector<bs::String> VisualSkeletalAnimation::listPossibleDefaultAnimations() const
+  {
+    return {};
+  }
+
   bool VisualSkeletalAnimation::tryPlayTransitionAnimationTo(const bs::String& state)
   {
     bs::HAnimationClip clip;

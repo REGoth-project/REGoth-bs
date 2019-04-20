@@ -24,7 +24,7 @@ const bs::String MODEL_NODE_NAME_FOOTSTEPS = " FOOTSTEPS";
 namespace REGoth
 {
   VisualCharacter::VisualCharacter(const bs::HSceneObject& parent)
-    : VisualSkeletalAnimation(parent)
+      : VisualSkeletalAnimation(parent)
   {
     setName("VisualCharacter");
   }
@@ -93,6 +93,11 @@ namespace REGoth
     }
 
     // TODO: Fix texture and color
+  }
+
+  bs::Vector<bs::String> VisualCharacter::listPossibleDefaultAnimations() const
+  {
+    return {"S_RUN", "S_FISTRUN"};
   }
 
   bs::RTTITypeBase* VisualCharacter::getRTTIStatic()

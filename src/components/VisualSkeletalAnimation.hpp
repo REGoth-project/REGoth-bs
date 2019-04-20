@@ -162,6 +162,12 @@ namespace REGoth
 
   protected:
     /**
+     * @return A list of animations to try playing after initialization or
+     *         if no animation is playing.
+     */
+    virtual bs::Vector<bs::String> listPossibleDefaultAnimations() const;
+
+    /**
      * Called when a animation event was triggered
      */
     virtual void onAnimationEvent(const bs::HAnimationClip& clip, bs::String string);

@@ -47,6 +47,10 @@ namespace REGoth
     void setHeadMesh(const bs::String& headmesh, bs::UINT32 headTextureIdx = 0,
                      bs::UINT32 teethTextureIdx = 0);
 
+  protected:
+
+    bs::Vector<bs::String> listPossibleDefaultAnimations() const override;
+
   private:
 
     /**
