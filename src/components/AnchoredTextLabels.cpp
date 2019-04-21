@@ -1,4 +1,4 @@
-#include "Components/AnchoredTextLabels.h"
+#include "AnchoredTextLabels.h"
 #include <Components/BsCCamera.h>
 #include <GUI/BsCGUIWidget.h>
 #include <GUI/BsGUILabel.h>
