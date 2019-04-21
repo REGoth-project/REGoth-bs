@@ -1,4 +1,6 @@
 add_library(samples-common
+  common/BsAnchoredTextLabels.h
+  common/BsAnchoredTextLabels.cpp
   common/BsCameraZoomer.h
   common/BsCameraZoomer.cpp
   common/BsFPSCamera.h
