@@ -29,11 +29,14 @@ namespace REGoth
 
   void AnchoredTextLabels::onDestroyed()
   {
-    bs::GUIPanel* mainPanel = mGui->getPanel();
-
-    for (const auto& anchoredLabel : mLabels)
+    if (!mGui.isDestroyed())
     {
-      mainPanel->removeElement(anchoredLabel.mLabel);
+      bs::GUIPanel* mainPanel = mGui->getPanel();
+
+      for (const auto& anchoredLabel : mLabels)
+      {
+        mainPanel->removeElement(anchoredLabel.mLabel);
+      }
     }
   }
 
