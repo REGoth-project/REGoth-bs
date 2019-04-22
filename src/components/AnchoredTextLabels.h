@@ -22,6 +22,11 @@ namespace REGoth
      */
     void addLabel(const bs::Vector3& anchorPosition, const bs::HString& text);
 
+    /**
+     * Set the maximum distance to which labels in front of the camera are drawn.
+     */
+    void setMaximumDistance(float maximumDistance);
+
     /** Triggered once per frame. Allows the component to handle input and move. */
     void update() override;
 
@@ -32,9 +37,13 @@ namespace REGoth
       bs::GUILabel* mLabel;
     };
 
+    bool isPointWithinForwardDrawDistance(const bs::Transform& cameraTransform, const bs::Vector3& point);
+
     bs::HGUIWidget mGui;
     bs::Vector<AnchoredLabel> mLabels;
+
+    float mMaximumDistance;
   };
 
   using HAnchoredTextLabels = bs::GameObjectHandle<AnchoredTextLabels>;
-}  // namespace bs
+}  // namespace REGoth
