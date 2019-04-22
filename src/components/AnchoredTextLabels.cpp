@@ -9,21 +9,18 @@
 
 namespace REGoth
 {
-  AnchoredTextLabels::AnchoredTextLabels(const bs::HSceneObject& parent)
+  AnchoredTextLabels::AnchoredTextLabels(const bs::HSceneObject& parent, const bs::HGUIWidget& gui)
       : Component(parent)
+      , mGui(gui)
       , mMaximumDistance(std::numeric_limits<float>::max())
   {
     // Set a name for the component, so we can find it later if needed
     setName("AnchoredTextLabels");
 
-    // A GUI widget component is required for drawing the labels
-    mGui = parent->getComponent<bs::CGUIWidget>();
-
+    // The GUI widget component is required for drawing the labels
     if (mGui.isDestroyed())
     {
-      REGOTH_THROW(InvalidStateException,
-                   bs::StringUtil::format("Scene Object {0} does not have a CGUIWidget component!",
-                                          SO()->getName()));
+      REGOTH_THROW(InvalidStateException, "The provided CGUIWidget component is invalid.");
     }
   }
 

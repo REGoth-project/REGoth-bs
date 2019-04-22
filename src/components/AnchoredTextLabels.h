@@ -13,7 +13,7 @@ namespace REGoth
   class AnchoredTextLabels : public bs::Component
   {
   public:
-    AnchoredTextLabels(const bs::HSceneObject& parent);
+    AnchoredTextLabels(const bs::HSceneObject& parent, const bs::HGUIWidget& gui);
 
     void onDestroyed() override;
 
