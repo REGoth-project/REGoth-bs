@@ -38,7 +38,7 @@ namespace REGoth
     };
 
     bool isPointWithinForwardDrawDistance(const bs::Transform& cameraTransform,
-                                          const bs::Vector3& point);
+                                          const bs::Vector3& point) const;
 
     bs::HGUIWidget mGui;
     bs::Vector<AnchoredLabel> mLabels;

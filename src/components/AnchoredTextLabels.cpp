@@ -76,7 +76,7 @@ namespace REGoth
   }
 
   bool AnchoredTextLabels::isPointWithinForwardDrawDistance(const bs::Transform& cameraTransform,
-                                                            const bs::Vector3& point)
+                                                            const bs::Vector3& point) const
   {
     const bs::Vector3& cameraPosition = cameraTransform.getPosition();
     const bs::Vector3& cameraForward  = cameraTransform.getForward();
