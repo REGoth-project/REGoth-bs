@@ -26,7 +26,7 @@ namespace REGoth
     }
   }
 
-  AnchoredTextLabels::~AnchoredTextLabels()
+  void AnchoredTextLabels::onDestroyed()
   {
     bs::GUIPanel* mainPanel = mGui->getPanel();
 
