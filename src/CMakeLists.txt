@@ -15,6 +15,8 @@ target_link_libraries(samples-common PUBLIC bsf)
 add_library(REGothEngine
   REGothEngine.hpp
   REGothEngine.cpp
+  components/AnchoredTextLabels.h
+  components/AnchoredTextLabels.cpp
   components/CharacterState.hpp
   components/CharacterState.cpp
   components/VisualCharacter.hpp
