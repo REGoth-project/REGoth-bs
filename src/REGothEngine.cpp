@@ -1,29 +1,38 @@
 #include "REGothEngine.hpp"
 #include <BsApplication.h>
+#include <BsZenLib/ResourceManifest.hpp>
 #include <assert.h>
 #include <BsZenLib/ResourceManifest.hpp>
-#include "original-content/VirtualFileSystem.hpp"
+#include <BsZenLib/ImportMaterial.hpp>
 #include <BsZenLib/ImportPath.hpp>
 #include <Components/BsCCamera.h>
 #include <FileSystem/BsFileSystem.h>
+#include <Importer/BsImporter.h>
 #include <Input/BsVirtualInput.h>
-#include <Resources/BsResourceManifest.h>
-#include <Resources/BsResources.h>
 #include <Scene/BsSceneObject.h>
+#include <engine-content/EngineContent.hpp>
+#include <exception/Throw.hpp>
 #include <original-content/OriginalGameFiles.hpp>
+#include <original-content/VirtualFileSystem.hpp>
 
 using namespace REGoth;
+
+/**
+ * Name of REGoth's own content directory
+ */
+const bs::String REGOTH_CONTENT_DIR_NAME = "content";
 
 REGothEngine::~REGothEngine()
 {
   shutdown();
 }
 
-void REGothEngine::loadOriginalGamePackages(const bs::String& argv0, const bs::Path& gameDirectory)
+void REGothEngine::loadOriginalGamePackages(const bs::Path& executablePath,
+                                            const bs::Path& gameDirectory)
 {
   OriginalGameFiles files = OriginalGameFiles(gameDirectory);
 
-  gVirtualFileSystem().setPathToEngineExecutable(argv0);
+  gVirtualFileSystem().setPathToEngineExecutable(executablePath.toString());
 
   bs::gDebug().logDebug("[VDFS] Indexing packages: ");
 
@@ -41,6 +50,19 @@ bool REGothEngine::hasFoundGameFiles()
   return gVirtualFileSystem().hasFoundGameFiles();
 }
 
+void REGothEngine::findEngineContent(const bs::Path& executablePath)
+{
+  mEngineContent = bs::bs_shared_ptr_new<EngineContent>(executablePath);
+
+  if (!mEngineContent->hasFoundContentDirectory())
+  {
+    REGOTH_THROW(InvalidStateException, "Did not find REGoth content directory!");
+  }
+
+  bs::gDebug().logDebug("[REGothEngine] Found REGoth-content directory at: " +
+                        mEngineContent->contentPath().toString());
+}
+
 void REGothEngine::initializeBsf()
 {
   using namespace bs;
@@ -56,6 +78,16 @@ void REGothEngine::loadCachedResourceManifests()
 
   gDebug().logDebug("[REGothEngine] Loading cached resource manifests");
 
+  if (!mEngineContent)
+  {
+    REGOTH_THROW(InvalidStateException,
+                 "Engine Content not initialized, has findEngineContent() been called?");
+  }
+
+  gDebug().logDebug("[REGothEngine]   - REGoth Assets");
+  mEngineContent->loadResourceManifest();
+
+  gDebug().logDebug("[REGothEngine]   - Original Gothic Assets");
   BsZenLib::LoadResourceManifest();
 }
 
@@ -101,7 +133,7 @@ void REGothEngine::setupMainCamera()
 
   rs->screenSpaceReflections.enabled = false;
   rs->ambientOcclusion.enabled       = false;
-  rs->enableIndirectLighting         = true;
+  rs->enableIndirectLighting         = false;
   rs->enableFXAA                     = false;
   rs->enableHDR                      = false;
   rs->enableTonemapping              = false;
@@ -115,6 +147,25 @@ void REGothEngine::setupMainCamera()
 void REGothEngine::setupScene()
 {
   bs::gDebug().logDebug("[REGothEngine] Setting up scene");
+}
+
+void REGothEngine::setShaders()
+{
+  if (!mEngineContent)
+  {
+    REGOTH_THROW(InvalidStateException,
+                 "Has not found REGoth content yet, has findEngineContent() been called?");
+  }
+
+  EngineContent::Shaders shaders = mEngineContent->loadShaders();
+
+  BsZenLib::SetShaderFor(BsZenLib::ShaderKind::Opaque, shaders.opaque);
+
+  // FIXME: Use correct shader
+  BsZenLib::SetShaderFor(BsZenLib::ShaderKind::AlphaMasked, shaders.opaque);
+
+  // FIXME: Use correct shader
+  BsZenLib::SetShaderFor(BsZenLib::ShaderKind::Transparent, shaders.opaque);
 }
 
 void REGothEngine::run()
@@ -148,15 +199,20 @@ int ::REGoth::main(REGothEngine& regoth, int argc, char** argv)
     return -1;
   }
 
-  const bs::String engineExecutablePath = argv[0];
-  const bs::String gameDirectory        = argv[1];
+  bs::Path engineExecutablePath = bs::Path(argv[0]);
+  bs::Path gameDirectory        = bs::Path(argv[1]);
+
+  engineExecutablePath.makeAbsolute(bs::FileSystem::getWorkingDirectoryPath());
+  gameDirectory.makeAbsolute(bs::FileSystem::getWorkingDirectoryPath());
 
   bs::gDebug().logDebug("[Main] Running REGothEngine");
-  bs::gDebug().logDebug("[Main]  - Engine executable: " + engineExecutablePath);
-  bs::gDebug().logDebug("[Main]  - Game directory:    " + gameDirectory);
+  bs::gDebug().logDebug("[Main]  - Engine executable: " + engineExecutablePath.toString());
+  bs::gDebug().logDebug("[Main]  - Game directory:    " + gameDirectory.toString());
+
+  bs::gDebug().logDebug("[Main] Finding REGoth content-directory");
+  regoth.findEngineContent(engineExecutablePath);
 
   bs::gDebug().logDebug("[Main] Loading original game packages");
-
   regoth.loadOriginalGamePackages(engineExecutablePath, gameDirectory);
 
   if (!regoth.hasFoundGameFiles())
@@ -167,6 +223,7 @@ int ::REGoth::main(REGothEngine& regoth, int argc, char** argv)
 
   regoth.loadCachedResourceManifests();
 
+  regoth.setShaders();
   regoth.setupInput();
   regoth.setupMainCamera();
   regoth.setupScene();

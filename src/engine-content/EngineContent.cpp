@@ -5,7 +5,7 @@
 #include <Importer/BsImporter.h>
 #include <Resources/BsResourceManifest.h>
 #include <Resources/BsResources.h>
-#include <excepction/Throw.hpp>
+#include <exception/Throw.hpp>
 
 const bs::String REGOTH_CONTENT_MANIFEST_NAME = "engine-cache";
 
