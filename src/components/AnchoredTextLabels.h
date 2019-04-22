@@ -15,6 +15,8 @@ namespace REGoth
   public:
     AnchoredTextLabels(const bs::HSceneObject& parent);
 
+    ~AnchoredTextLabels();
+
     /**
      * Adds a label with the given text at the anchor position in world coordinates.
      */

@@ -27,6 +27,16 @@ namespace REGoth
     }
   }
 
+  AnchoredTextLabels::~AnchoredTextLabels()
+  {
+    bs::GUIPanel* mainPanel = mGui->getPanel();
+
+    for (const auto& anchoredLabel : mLabels)
+    {
+      mainPanel->removeElement(anchoredLabel.mLabel);
+    }
+  }
+
   void AnchoredTextLabels::addLabel(const bs::Vector3& anchorPosition, const bs::HString& text)
   {
     bs::GUILabel* label = bs::GUILabel::create(text);
