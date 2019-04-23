@@ -5,7 +5,7 @@
 #include <GUI/BsGUIPanel.h>
 #include <Math/BsMath.h>
 #include <Scene/BsSceneObject.h>
-#include <excepction/Throw.hpp>
+#include <exception/Throw.hpp>
 
 namespace REGoth
 {

@@ -1,7 +1,7 @@
 #pragma once
 #include "ScriptTypes.hpp"
 #include <BsPrerequisites.h>
-#include <excepction/Throw.hpp>
+#include <exception/Throw.hpp>
 
 namespace REGoth
 {

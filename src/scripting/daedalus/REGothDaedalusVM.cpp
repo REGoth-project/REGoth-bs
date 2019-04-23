@@ -3,7 +3,7 @@
 #include "DaedalusClassVarResolver.hpp"
 #include "DaedalusDisassembler.hpp"
 #include <daedalus/DATFile.h>
-#include <excepction/Throw.hpp>
+#include <exception/Throw.hpp>
 
 namespace REGoth
 {

@@ -12,7 +12,7 @@
 #include <animation/Animation.hpp>
 #include <animation/StateNaming.hpp>
 #include <components/NodeVisuals.hpp>
-#include <excepction/Throw.hpp>
+#include <exception/Throw.hpp>
 
 const bs::String MODEL_NODE_NAME_R_HAND    = "BIP01 R HAND";
 const bs::String MODEL_NODE_NAME_L_HAND    = "BIP01 L HAND";

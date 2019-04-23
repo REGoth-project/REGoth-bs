@@ -1,6 +1,6 @@
 #include "ScriptClassTemplates.hpp"
 #include "ScriptSymbolQueries.hpp"
-#include <excepction/Throw.hpp>
+#include <exception/Throw.hpp>
 
 namespace REGoth
 {
