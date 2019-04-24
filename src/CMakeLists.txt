@@ -21,8 +21,12 @@ add_library(REGothEngine
   components/CharacterState.cpp
   components/VisualCharacter.hpp
   components/VisualCharacter.cpp
+  components/VisualSkeletalAnimation.hpp
+  components/VisualSkeletalAnimation.cpp
   components/VisualStaticMesh.hpp
   components/VisualStaticMesh.cpp
+  components/VisualInteractiveObject.hpp
+  components/VisualInteractiveObject.cpp
   components/StartSpot.hpp
   components/StartSpot.cpp
   components/Spot.hpp
@@ -118,3 +122,6 @@ target_link_libraries(REGothWaynetTester REGothEngine samples-common)
 
 add_executable(REGothCharacterMovementTester main_CharacterMovementTest.cpp)
 target_link_libraries(REGothCharacterMovementTester REGothEngine samples-common)
+
+add_executable(REGothMobViewer main_MobViewer.cpp)
+target_link_libraries(REGothMobViewer REGothEngine samples-common)

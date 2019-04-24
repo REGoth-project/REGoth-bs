@@ -1,4 +1,5 @@
 #include "NodeVisuals.hpp"
+#include <Components/BsCRenderable.h>
 #include <Animation/BsSkeleton.h>
 #include <Components/BsCBone.h>
 #include <Components/BsCRenderable.h>
@@ -32,19 +33,15 @@ namespace REGoth
   {
     clearNodeAttachment(node);
 
-    assert(hasNode(node));
-
-    bs::SPtr<bs::Skeleton> skeleton = getSkeleton();
-
-    // for (bs::UINT32 i = 0; i < skeleton->getNumBones(); i++)
-    // {
-    //   bs::gDebug().logDebug("Bone: " + skeleton->getBoneInfo(i).name);
-    // }
-
     bs::HSceneObject boneSO = bs::SceneObject::create(node);
 
-    bool dontKeepWorldTransform = false;
-    boneSO->setParent(SO(), dontKeepWorldTransform);
+    enum
+    {
+      KeepWorldTransform = true,
+      MoveRelativeToParent = false,
+    };
+
+    boneSO->setParent(SO(), MoveRelativeToParent);
 
     bs::HBone bone = boneSO->addComponent<bs::CBone>();
     bone->setBoneName(node);
@@ -58,6 +55,28 @@ namespace REGoth
       bs::gDebug().logWarning("[NodeVisuals] Failed to attach visual '" + visual + "' to node '" +
                               node + "'");
     }
+  }
+
+  void NodeVisuals::attachMeshToNode(const bs::String& node, BsZenLib::Res::HMeshWithMaterials mesh)
+  {
+    clearNodeAttachment(node);
+
+    bs::HSceneObject boneSO = bs::SceneObject::create(node);
+
+    enum
+    {
+      KeepWorldTransform   = true,
+      MoveRelativeToParent = false,
+    };
+
+    boneSO->setParent(SO(), MoveRelativeToParent);
+
+    bs::HBone bone = boneSO->addComponent<bs::CBone>();
+    bone->setBoneName(node);
+
+    bs::HRenderable renderable = boneSO->addComponent<bs::CRenderable>();
+    renderable->setMesh(mesh->getMesh());
+    renderable->setMaterials(mesh->getMaterials());
   }
 
   void NodeVisuals::clearNodeAttachment(const bs::String& node)

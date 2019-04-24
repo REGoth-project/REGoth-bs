@@ -1,5 +1,6 @@
 #include "ImportSingleVob.hpp"
 #include <Components/BsCLight.h>
+#include <components/Visual.hpp>
 #include <Math/BsMatrix4.h>
 #include <Scene/BsSceneObject.h>
 #include <components/StartSpot.hpp>
@@ -28,6 +29,10 @@ namespace REGoth
   static bs::HSceneObject import_oCItem(const ZenLoad::zCVobData& vob);
   static bs::HSceneObject import_zCVobSound(const ZenLoad::zCVobData& vob);
   static bs::HSceneObject import_zCVobAnimate(const ZenLoad::zCVobData& vob);
+  static bs::HSceneObject import_oCMobInter(const ZenLoad::zCVobData& vob);
+  static bs::HSceneObject import_oCMobContainer(const ZenLoad::zCVobData& vob);
+  static bs::HSceneObject import_oCMobBed(const ZenLoad::zCVobData& vob);
+  static bs::HSceneObject import_oCMobDoor(const ZenLoad::zCVobData& vob);
   static void addVisualTo(bs::HSceneObject sceneObject, const bs::String& visualName);
 
   bs::HSceneObject World::importSingleVob(const ZenLoad::zCVobData& vob)
@@ -59,6 +64,22 @@ namespace REGoth
     else if (vob.objectClass == "zCVobAnimate:zCVob")
     {
       return import_zCVobAnimate(vob);
+    }
+    else if (vob.objectClass == "oCMobInter:oCMOB:zCVob")
+    {
+      return import_oCMobInter(vob);
+    }
+    else if (vob.objectClass == "oCMobContainer:oCMobInter:oCMOB:zCVob")
+    {
+      return import_oCMobContainer(vob);
+    }
+    else if (vob.objectClass == "oCMobBed:oCMobInter:oCMOB:zCVob")
+    {
+      return import_oCMobBed(vob);
+    }
+    else if (vob.objectClass == "oCMobDoor:oCMobInter:oCMOB:zCVob")
+    {
+      return import_oCMobDoor(vob);
     }
     else
     {
@@ -171,18 +192,51 @@ namespace REGoth
     return so;
   }
 
+  static bs::HSceneObject import_oCMobInter(const ZenLoad::zCVobData& vob)
+  {
+    bs::HSceneObject so = import_zCVob(vob);
+
+    // TODO: Implement
+
+    return so;
+  }
+
+  static bs::HSceneObject import_oCMobContainer(const ZenLoad::zCVobData& vob)
+  {
+    bs::HSceneObject so = import_zCVob(vob);
+
+    // TODO: Implement
+
+    return so;
+  }
+
+  static bs::HSceneObject import_oCMobBed(const ZenLoad::zCVobData& vob)
+  {
+    bs::HSceneObject so = import_zCVob(vob);
+
+    // TODO: Implement
+
+    return so;
+  }
+
+  static bs::HSceneObject import_oCMobDoor(const ZenLoad::zCVobData& vob)
+  {
+    bs::HSceneObject so = import_zCVob(vob);
+
+    // TODO: Implement
+
+    return so;
+  }
+
   /**
    * Adds the given visual to the scene object. If that's not possible
    * nothing will be added.
    */
   static void addVisualTo(bs::HSceneObject sceneObject, const bs::String& visualName)
   {
-    if (visualName.find(".3DS") != bs::String::npos)
-    {
-      HVisualStaticMesh visual = sceneObject->addComponent<VisualStaticMesh>();
-      visual->setMesh(visualName);
-    }
-    else
+    bool hasAdded = Visual::addToSceneObject(sceneObject, visualName);
+
+    if (!hasAdded)
     {
       bs::gDebug().logWarning("[ImportSingleVob] Unsupported visual: " + visualName);
     }

@@ -1,6 +1,6 @@
 #include "VirtualFileSystem.hpp"
-#include <Error/BsException.h>
 #include <FileSystem/BsFileSystem.h>
+#include <excepction/Throw.hpp>
 #include <vdfs/fileIndex.h>
 
 using namespace REGoth;
@@ -42,13 +42,11 @@ void VirtualFileSystem::setPathToEngineExecutable(const bs::String& argv0)
 
 void VirtualFileSystem::mountDirectory(const bs::Path& path)
 {
-  using namespace bs;
-
   throwOnMissingInternalState();
 
   if (mInternal->isFinalized)
   {
-    BS_EXCEPT(InvalidStateException, "Cannot mount directories on finalized file index.");
+    REGOTH_THROW(InvalidStateException, "Cannot mount directories on finalized file index.");
   }
 
   bs::gDebug().logDebug("[VDFS] Mounting directory: " + path.toString() + " (recursive):");
@@ -73,13 +71,11 @@ void VirtualFileSystem::mountDirectory(const bs::Path& path)
 
 bool VirtualFileSystem::loadPackage(const bs::Path& package)
 {
-  using namespace bs;
-
   throwOnMissingInternalState();
 
   if (mInternal->isFinalized)
   {
-    BS_EXCEPT(InvalidStateException, "Cannot load packages on finalized file index.");
+    REGOTH_THROW(InvalidStateException, "Cannot load packages on finalized file index.");
   }
 
   return mInternal->fileIndex.loadVDF(package.toString().c_str());
@@ -100,8 +96,6 @@ bs::Vector<bs::String> VirtualFileSystem::listAllFiles()
 
 bs::Vector<bs::UINT8> VirtualFileSystem::readFile(const bs::String& file) const
 {
-  using namespace bs;
-
   throwOnMissingInternalState();
 
   if (!mInternal->isFinalized)
@@ -111,7 +105,7 @@ bs::Vector<bs::UINT8> VirtualFileSystem::readFile(const bs::String& file) const
 
   if (!mInternal->isReadyToReadFiles())
   {
-    BS_EXCEPT(InvalidStateException, "VDFS is not ready to read files yet.");
+    REGOTH_THROW(InvalidStateException, "VDFS is not ready to read files yet.");
   }
 
   std::vector<uint8_t> stlData;
@@ -124,15 +118,31 @@ bs::Vector<bs::UINT8> VirtualFileSystem::readFile(const bs::String& file) const
 
 bool REGoth::VirtualFileSystem::hasFile(const bs::String& file) const
 {
-  using namespace bs;
-
   if (!mInternal)
   {
-    BS_EXCEPT(InvalidStateException,
-              "VDFS internal state not available, call setPathToEngineExecutable()");
+    REGOTH_THROW(InvalidStateException,
+                 "VDFS internal state not available, call setPathToEngineExecutable()");
   }
 
   return mInternal->fileIndex.hasFile(file.c_str());
+}
+
+void REGoth::VirtualFileSystem::throwIfFileIsMissing(const bs::String& file,
+                                                     const bs::String& message) const
+{
+  if (!hasFile(file))
+  {
+    if (message.empty())
+    {
+      REGOTH_THROW(
+          InvalidStateException,
+          bs::StringUtil::format("Expected file {0} inside VDFS, but it could not be found!", file));
+    }
+    else
+    {
+      REGOTH_THROW(InvalidStateException, message);
+    }
+  }
 }
 
 bool REGoth::VirtualFileSystem::hasFoundGameFiles() const
@@ -156,12 +166,10 @@ const VDFS::FileIndex& VirtualFileSystem::getFileIndex()
 
 void VirtualFileSystem::throwOnMissingInternalState() const
 {
-  using namespace bs;
-
   if (!mInternal)
   {
-    BS_EXCEPT(InvalidStateException,
-              "VDFS internal state not available, call setPathToEngineExecutable()");
+    REGOTH_THROW(InvalidStateException,
+                 "VDFS internal state not available, call setPathToEngineExecutable()");
   }
 }
 

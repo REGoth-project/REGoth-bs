@@ -151,8 +151,6 @@ int main(int argc, char** argv)
     }
   }
 
-  regoth.saveCachedResourceManifests();
-
   HSceneObject startSO = worldSO->findChild("zCVobStartpoint:zCVob");
 
   Vector3 startPosition = startSO ? startSO->getTransform().getPosition() : Vector3(bs::BsZero);

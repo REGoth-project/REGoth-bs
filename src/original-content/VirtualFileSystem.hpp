@@ -128,6 +128,13 @@ namespace REGoth
      */
     bool hasFile(const bs::String& file) const;
 
+    /**
+     * Throws if the given file is missing in the file index.
+     *
+     * @param  file     File to search for, see hasFile().
+     * @param  message  (Optional) Message to append to the exception text.
+     */
+    void throwIfFileIsMissing(const bs::String& file, const bs::String& message = "") const;
 
     /**
      * @return Whether (at least some) of the game files were found in the given data directory

@@ -1,4 +1,5 @@
 #include "Visual.hpp"
+#include "VisualInteractiveObject.hpp"
 #include "VisualMorphMesh.hpp"
 #include "VisualStaticMesh.hpp"
 #include <Scene/BsSceneObject.h>
@@ -7,15 +8,27 @@ namespace REGoth
 {
   Visual::VisualKind Visual::guessVisualKind(const bs::String& visual)
   {
-    const bool lowercase = true;
+    enum
+    {
+      CompareCaseSensitive = false,
+      ConvertToLowercase   = true,
+    };
 
-    if (bs::StringUtil::endsWith(visual, ".3ds", lowercase))
+    if (bs::StringUtil::endsWith(visual, ".3ds", ConvertToLowercase))
     {
       return VisualKind::StaticMesh;
     }
-    else if (bs::StringUtil::endsWith(visual, ".mmb", lowercase))
+    else if (bs::StringUtil::endsWith(visual, ".mmb", ConvertToLowercase))
     {
       return VisualKind::MorphMesh;
+    }
+    else if (bs::StringUtil::endsWith(visual, ".mms", ConvertToLowercase))
+    {
+      return VisualKind::MorphMesh;
+    }
+    else if (bs::StringUtil::endsWith(visual, ".asc", ConvertToLowercase))
+    {
+      return VisualKind::InteractiveObject;
     }
     else
     {
@@ -39,6 +52,14 @@ namespace REGoth
     {
       HVisualMorphMesh mesh = so->addComponent<VisualMorphMesh>();
       mesh->setMesh(visual);
+
+      return true;
+    }
+    if (kind == VisualKind::InteractiveObject)
+    {
+      HVisualInteractiveObject mesh = so->addComponent<VisualInteractiveObject>();
+
+      mesh->setVisual(visual);
 
       return true;
     }
