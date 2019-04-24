@@ -1,6 +1,6 @@
 #include "VirtualFileSystem.hpp"
 #include <FileSystem/BsFileSystem.h>
-#include <excepction/Throw.hpp>
+#include <exception/Throw.hpp>
 #include <vdfs/fileIndex.h>
 
 using namespace REGoth;

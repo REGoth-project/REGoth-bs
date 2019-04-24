@@ -15,7 +15,7 @@
 #include <animation/Animation.hpp>
 #include <animation/StateNaming.hpp>
 #include <components/NodeVisuals.hpp>
-#include <excepction/Throw.hpp>
+#include <exception/Throw.hpp>
 
 namespace REGoth
 {
