@@ -10,6 +10,9 @@ namespace REGoth
   class Waypoint;
   using HWaypoint = bs::GameObjectHandle<Waypoint>;
 
+  class AnchoredTextLabels;
+  using HAnchoredTextLabels = bs::GameObjectHandle<AnchoredTextLabels>;
+
   /**
    * Waynet of a world.
    *
@@ -65,7 +68,7 @@ namespace REGoth
     /**
      * Draws the waynet as lines.
      */
-    void debugDraw();
+    void debugDraw(const REGoth::HAnchoredTextLabels& textLabels);
 
   private:
     bs::Vector<HWaypoint> mWaypoints;
