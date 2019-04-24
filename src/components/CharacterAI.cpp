@@ -4,7 +4,7 @@
 #include <Scene/BsSceneObject.h>
 #include <animation/StateNaming.hpp>
 #include <components/VisualCharacter.hpp>
-#include <excepction/Throw.hpp>
+#include <exception/Throw.hpp>
 
 namespace REGoth
 {

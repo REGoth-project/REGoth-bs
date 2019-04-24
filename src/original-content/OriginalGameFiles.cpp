@@ -1,6 +1,6 @@
 #include "OriginalGameFiles.hpp"
 #include <FileSystem/BsFileSystem.h>
-#include <excepction/Throw.hpp>
+#include <exception/Throw.hpp>
 
 namespace REGoth
 {

@@ -9,7 +9,7 @@
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
-#include <excepction/Throw.hpp>
+#include <exception/Throw.hpp>
 #include <scripting/ScriptVMInterface.hpp>
 
 namespace REGoth

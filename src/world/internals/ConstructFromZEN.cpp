@@ -7,7 +7,7 @@
 #include <Scene/BsSceneObject.h>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
-#include <excepction/Throw.hpp>
+#include <exception/Throw.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 #include <zenload/zCMesh.h>
 #include <zenload/zenParser.h>

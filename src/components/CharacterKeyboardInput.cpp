@@ -1,7 +1,7 @@
 #include "CharacterKeyboardInput.hpp"
 #include <RTTI/RTTI_CharacterKeyboardInput.hpp>
 #include <components/CharacterAI.hpp>
-#include <excepction/Throw.hpp>
+#include <exception/Throw.hpp>
 
 namespace REGoth
 {
