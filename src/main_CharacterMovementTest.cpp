@@ -1,4 +1,5 @@
 #include "BsFPSCamera.h"
+#include <BsZenLib/ImportMaterial.hpp>
 #include "REGothEngine.hpp"
 #include <BsZenLib/ImportTexture.hpp>
 #include <Components/BsCCamera.h>
@@ -45,7 +46,8 @@ public:
     bs::HTexture floorTexture = BsZenLib::ImportTexture("NW_NATURE_STONEGROUND_01.TGA",
                                                         REGoth::gVirtualFileSystem().getFileIndex());
 
-    bs::HShader shader = bs::gBuiltinResources().getBuiltinShader(bs::BuiltinShader::Standard);
+    // bs::HShader shader = bs::gBuiltinResources().getBuiltinShader(bs::BuiltinShader::Standard);
+    bs::HShader shader = BsZenLib::GetShaderOfKind(BsZenLib::ShaderKind::Opaque);
     bs::HMaterial planeMaterial = bs::Material::create(shader);
     planeMaterial->setTexture("gAlbedoTex", floorTexture);
 

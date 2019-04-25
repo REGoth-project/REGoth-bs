@@ -1,10 +1,9 @@
 #include "REGothEngine.hpp"
 #include <BsApplication.h>
-#include <BsZenLib/ResourceManifest.hpp>
 #include <assert.h>
-#include <BsZenLib/ResourceManifest.hpp>
 #include <BsZenLib/ImportMaterial.hpp>
 #include <BsZenLib/ImportPath.hpp>
+#include <BsZenLib/ResourceManifest.hpp>
 #include <Components/BsCCamera.h>
 #include <FileSystem/BsFileSystem.h>
 #include <Importer/BsImporter.h>
@@ -43,6 +42,18 @@ void REGothEngine::loadOriginalGamePackages(const bs::Path& executablePath,
   }
 
   gVirtualFileSystem().mountDirectory(files.vdfsFileEntryPoint());
+}
+
+void REGoth::REGothEngine::saveCachedResourceManifests()
+{
+  bs::gDebug().logDebug("[REGothEngine] Saving resource manifests:");
+
+  bs::gDebug().logDebug("[REGothEngine]   - Gothic Cache");
+  BsZenLib::SaveResourceManifest();
+
+  // REGothEngine-Content manifest is saved after every resource load since
+  // there are only a few resources to handle. If that ever takes too long
+  // the manifest should be saved here.
 }
 
 bool REGothEngine::hasFoundGameFiles()
@@ -94,8 +105,6 @@ void REGothEngine::loadCachedResourceManifests()
 void REGothEngine::setupInput()
 {
   using namespace bs;
-
-  bs::gDebug().logDebug("[REGothEngine] Setting up default input scheme");
 
   auto inputConfig = gVirtualInput().getConfiguration();
 
@@ -223,12 +232,24 @@ int ::REGoth::main(REGothEngine& regoth, int argc, char** argv)
 
   regoth.loadCachedResourceManifests();
 
+  bs::gDebug().logDebug("[REGothEngine] Loading Shaders");
+
   regoth.setShaders();
   regoth.setupInput();
+
+  bs::gDebug().logDebug("[REGothEngine] Setting up Main Camera");
+
   regoth.setupMainCamera();
+
+  bs::gDebug().logDebug("[REGothEngine] Setting up Scene");
+
   regoth.setupScene();
 
+  regoth.saveCachedResourceManifests();
+
   regoth.run();
+
+  regoth.saveCachedResourceManifests();
 
   regoth.shutdown();
 
