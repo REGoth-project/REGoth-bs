@@ -12,7 +12,9 @@ namespace REGoth
       : public bs::RTTIType<ScriptBackedBy, bs::Component, RTTI_ScriptBackedBy>
   {
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+    BS_RTTI_MEMBER_PLAIN(mScriptClassName, 0)
+    BS_RTTI_MEMBER_PLAIN(mScriptInstance, 1)
+    BS_RTTI_MEMBER_PLAIN(mScriptObject, 2)
     BS_END_RTTI_MEMBERS
 
   public:

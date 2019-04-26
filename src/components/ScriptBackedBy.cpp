@@ -1,6 +1,6 @@
 #include "ScriptBackedBy.hpp"
-#include <scripting/ScriptVMInterface.hpp>
 #include <RTTI/RTTI_ScriptBackedBy.hpp>
+#include <scripting/ScriptVMInterface.hpp>
 
 namespace REGoth
 {
@@ -19,7 +19,13 @@ namespace REGoth
 
   void ScriptBackedBy::onInitialized()
   {
-    instanciateScriptObject(mScriptClassName, mScriptInstance);
+    // When loading a saved instance this will have been already set and we
+    // already have a valid handle. Only create a new instance on a really new
+    // object.
+    if (!hasInstantiatedScriptObject())
+    {
+      instantiateScriptObject(mScriptClassName, mScriptInstance);
+    }
   }
 
   void ScriptBackedBy::onDestroyed()
@@ -31,10 +37,15 @@ namespace REGoth
     }
   }
 
-  void ScriptBackedBy::instanciateScriptObject(const bs::String& className,
+  void ScriptBackedBy::instantiateScriptObject(const bs::String& className,
                                                const bs::String& instance)
   {
     mScriptObject = gGameScript().instanciateClass(className, instance, SO());
+  }
+
+  bool ScriptBackedBy::hasInstantiatedScriptObject() const
+  {
+    return mScriptObject != Scripting::SCRIPT_OBJECT_HANDLE_INVALID;
   }
 
   Scripting::ScriptObject& ScriptBackedBy::scriptObjectData()
@@ -43,13 +54,5 @@ namespace REGoth
     return gGameScript().scriptObjects().get(mScriptObject);
   }
 
-  bs::RTTITypeBase* ScriptBackedBy::getRTTIStatic()
-  {
-    return RTTI_ScriptBackedBy::instance();
-  }
-
-  bs::RTTITypeBase* ScriptBackedBy::getRTTI() const
-  {
-    return ScriptBackedBy::getRTTIStatic();
-  }
+  REGOTH_COMPONENT_DEFINE_RTTI(ScriptBackedBy)
 }  // namespace REGoth
