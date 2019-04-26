@@ -4,6 +4,7 @@
 #include <Components/BsCRenderable.h>
 #include <Scene/BsSceneObject.h>
 #include <original-content/VirtualFileSystem.hpp>
+#include <RTTI/RTTI_VisualStaticMesh.hpp>
 
 namespace REGoth
 {
@@ -53,4 +54,5 @@ namespace REGoth
     return SO()->getComponent<bs::CRenderable>() != nullptr;
   }
 
+  REGOTH_DEFINE_RTTI(VisualStaticMesh);
 }  // namespace REGoth

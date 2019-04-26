@@ -109,6 +109,7 @@ add_library(REGothEngine
   RTTI/RTTI_TypeIDs.hpp
   RTTI/RTTIUtil.hpp
   RTTI/RTTI_VisualCharacter.hpp
+  RTTI/RTTI_VisualStaticMesh.hpp
   RTTI/RTTI_VisualInteractiveObject.hpp
   RTTI/RTTI_VisualSkeletalAnimation.hpp
   RTTI/RTTI_Waynet.hpp

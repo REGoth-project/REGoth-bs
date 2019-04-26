@@ -16,5 +16,6 @@ namespace REGoth
     TID_REGOTH_ScriptObject            = 60008,
     TID_REGOTH_Waypoint                = 60009,
     TID_REGOTH_Waynet                  = 60010,
+    TID_REGOTH_VisualStaticMesh        = 60011,
   };
 }  // namespace REGoth
