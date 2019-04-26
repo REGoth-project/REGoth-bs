@@ -1,7 +1,7 @@
 #include "Character.hpp"
-#include <components/VisualCharacter.hpp>
 #include <RTTI/RTTI_Character.hpp>
 #include <Scene/BsSceneObject.h>
+#include <components/VisualCharacter.hpp>
 #include <scripting/ScriptVMInterface.hpp>
 
 namespace REGoth
@@ -177,13 +177,5 @@ namespace REGoth
     return b;
   }
 
-  bs::RTTITypeBase* Character::getRTTIStatic()
-  {
-    return RTTI_Character::instance();
-  }
-
-  bs::RTTITypeBase* Character::getRTTI() const
-  {
-    return Character::getRTTIStatic();
-  }
+  REGOTH_DEFINE_RTTI(Character);
 }  // namespace REGoth

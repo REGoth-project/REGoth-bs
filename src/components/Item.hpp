@@ -33,5 +33,11 @@ namespace REGoth
      * Script object backing this item
      */
     Scripting::ScriptObjectHandle mScriptObject;
+
+  public:
+    REGOTH_DECLARE_RTTI(Item);
+
+  public:  // FIXME: Should be protected, it is only used by RTTI but friend doesn't seem to work?!
+    Item() = default;  // Serialization only
   };
 }  // namespace REGoth

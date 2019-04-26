@@ -235,13 +235,5 @@ namespace REGoth
   {
   }
 
-  bs::RTTITypeBase* CharacterAI::getRTTIStatic()
-  {
-    return RTTI_CharacterAI::instance();
-  }
-
-  bs::RTTITypeBase* CharacterAI::getRTTI() const
-  {
-    return CharacterAI::getRTTIStatic();
-  }
+  REGOTH_DEFINE_RTTI(CharacterAI);
 }  // namespace REGoth

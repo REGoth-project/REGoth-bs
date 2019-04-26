@@ -6,6 +6,7 @@
 #include <BsPrerequisites.h>
 #include <BsZenLib/ZenResources.hpp>
 #include <Scene/BsComponent.h>
+#include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
 {
@@ -47,6 +48,12 @@ namespace REGoth
      * Renderable this is setting up for drawing
      */
     bs::HRenderable mRenderable;
+
+  public:
+    REGOTH_DECLARE_RTTI(VisualMorphMesh)
+
+  public:  // FIXME: RTTI, make protected
+    VisualMorphMesh() = default;
   };
 
   using HVisualMorphMesh = bs::GameObjectHandle<VisualMorphMesh>;

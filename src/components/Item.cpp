@@ -1,5 +1,6 @@
 #include "Item.hpp"
 #include "Visual.hpp"
+#include <RTTI/RTTI_Item.hpp>
 #include <scripting/ScriptObject.hpp>
 
 namespace REGoth
@@ -11,9 +12,15 @@ namespace REGoth
 
   void Item::onInitialized()
   {
+    bool isNewScriptObject = !hasInstantiatedScriptObject();
+
     ScriptBackedBy::onInitialized();
 
-    createVisual();
+    // When loading a world from a saved prefab, the visual will already have been created.
+    if (isNewScriptObject)
+    {
+      createVisual();
+    }
   }
 
   void Item::onDestroyed()
@@ -26,4 +33,6 @@ namespace REGoth
     bs::String visual = scriptObjectData().stringValue("VISUAL");
     Visual::addToSceneObject(SO(), visual);
   }
+
+  REGOTH_DEFINE_RTTI(Item)
 }  // namespace REGoth

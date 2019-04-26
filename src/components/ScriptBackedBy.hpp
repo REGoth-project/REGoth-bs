@@ -64,12 +64,12 @@ namespace REGoth
      */
     Scripting::ScriptObjectHandle scriptObject() const { return mScriptObject; }
 
-  private:
-
     /**
      * @return Whether we already have instantiated a script object.
      */
     bool hasInstantiatedScriptObject() const;
+
+  private:
 
     /**
      * Instanciates the class backing this component. Must be called early, otherwise
