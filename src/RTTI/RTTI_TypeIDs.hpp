@@ -13,5 +13,6 @@ namespace REGoth
     TID_REGOTH_VisualSkeletalAnimation = 60005,
     TID_REGOTH_VisualInteractiveObject = 60006,
     TID_REGOTH_ScriptObjectStorage     = 60007,
+    TID_REGOTH_ScriptObject            = 60008,
   };
 }  // namespace REGoth

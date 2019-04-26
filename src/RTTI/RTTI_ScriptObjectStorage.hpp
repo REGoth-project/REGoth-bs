@@ -5,6 +5,7 @@
 #include <Reflection/BsRTTIType.h>
 #include <scripting/ScriptObjectStorage.hpp>
 
+
 namespace REGoth
 {
   namespace Scripting
@@ -12,8 +13,11 @@ namespace REGoth
     class RTTI_ScriptObjectStorage
         : public bs::RTTIType<ScriptObjectStorage, bs::IReflectable, RTTI_ScriptObjectStorage>
     {
+      using UINT32 = bs::UINT32;
+
       BS_BEGIN_RTTI_MEMBERS
-      // TODO: Fill RTTI Members
+      // BS_RTTI_MEMBER_PLAIN(mObjects, 0) // FIXME: Maps with reflected objects not working?
+      BS_RTTI_MEMBER_PLAIN(mNextHandle, 1)
       BS_END_RTTI_MEMBERS
 
     public:

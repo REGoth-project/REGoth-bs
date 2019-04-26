@@ -2,6 +2,7 @@
 #include "ScriptTypes.hpp"
 #include <BsPrerequisites.h>
 #include <exception/Throw.hpp>
+#include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
 {
@@ -10,7 +11,7 @@ namespace REGoth
     /**
      * General script object, storing key/value pairs of different types.
      */
-    struct ScriptObject
+    struct ScriptObject : public bs::IReflectable
     {
       /**
        * Name of the script class this object represents
@@ -109,6 +110,9 @@ namespace REGoth
                                                      " at member " + name + " of type " + type +
                                                      " with index " + bs::toString(index));
       }
+
+    public:
+      REGOTH_DECLARE_RTTI(ScriptObject);
     };
 
     /**

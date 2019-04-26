@@ -1,4 +1,5 @@
 #include "ScriptObject.hpp"
+#include <RTTI/RTTI_ScriptObject.hpp>
 
 namespace REGoth
 {
@@ -59,6 +60,8 @@ namespace REGoth
 
       bs::gDebug().logDebug("");
     }
+
+    REGOTH_DEFINE_RTTI(ScriptObject)
 
   }  // namespace Scripting
 }  // namespace REGoth
