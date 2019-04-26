@@ -27,10 +27,6 @@ add_library(REGothEngine
   components/VisualStaticMesh.cpp
   components/VisualInteractiveObject.hpp
   components/VisualInteractiveObject.cpp
-  components/StartSpot.hpp
-  components/StartSpot.cpp
-  components/Spot.hpp
-  components/Spot.cpp
   components/NodeVisuals.hpp
   components/NodeVisuals.cpp
   components/ScriptBackedBy.hpp
@@ -146,3 +142,6 @@ target_link_libraries(REGothCharacterMovementTester REGothEngine samples-common)
 
 add_executable(REGothMobViewer main_MobViewer.cpp)
 target_link_libraries(REGothMobViewer REGothEngine samples-common)
+
+add_executable(REGothWorldCacheTest main_WorldCacheTest.cpp)
+target_link_libraries(REGothWorldCacheTest REGothEngine samples-common)

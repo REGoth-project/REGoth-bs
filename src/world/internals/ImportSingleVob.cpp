@@ -3,10 +3,8 @@
 #include <components/Visual.hpp>
 #include <Math/BsMatrix4.h>
 #include <Scene/BsSceneObject.h>
-#include <components/StartSpot.hpp>
 #include <components/VisualStaticMesh.hpp>
 #include <zenload/zTypes.h>
-#include <components/Spot.hpp>
 #include <components/Item.hpp>
 
 namespace Internal
@@ -148,7 +146,7 @@ namespace REGoth
   {
     bs::HSceneObject so = import_zCVob(vob);
 
-    so->addComponent<StartSpot>();
+    // Startpoint is found by name of the scene object
 
     return so;
   }
@@ -160,7 +158,7 @@ namespace REGoth
   {
     bs::HSceneObject so = import_zCVob(vob);
 
-    so->addComponent<Spot>();
+    // Spots are found by name of the scene object
 
     return so;
   }
