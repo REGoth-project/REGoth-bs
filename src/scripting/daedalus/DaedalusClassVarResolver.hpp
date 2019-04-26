@@ -3,7 +3,7 @@
 #pragma once
 #include <BsPrerequisites.h>
 #include "scripting/ScriptSymbolStorage.hpp"
-#include <scripting/ScriptObject.hpp>
+#include <scripting/ScriptObjectStorage.hpp>
 
 namespace REGoth
 {
