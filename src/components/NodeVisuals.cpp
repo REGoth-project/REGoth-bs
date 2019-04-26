@@ -1,9 +1,9 @@
 #include "NodeVisuals.hpp"
-#include <Components/BsCRenderable.h>
 #include <Animation/BsSkeleton.h>
 #include <Components/BsCBone.h>
 #include <Components/BsCRenderable.h>
 #include <Mesh/BsMesh.h>
+#include <RTTI/RTTI_NodeVisuals.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/Visual.hpp>
 #include <components/VisualStaticMesh.hpp>
@@ -37,7 +37,7 @@ namespace REGoth
 
     enum
     {
-      KeepWorldTransform = true,
+      KeepWorldTransform   = true,
       MoveRelativeToParent = false,
     };
 
@@ -99,4 +99,6 @@ namespace REGoth
 
     return renderable->getMesh()->getSkeleton();
   }
+
+  REGOTH_DEFINE_RTTI(NodeVisuals)
 }  // namespace REGoth

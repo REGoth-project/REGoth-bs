@@ -112,6 +112,7 @@ add_library(REGothEngine
   RTTI/RTTI_VisualStaticMesh.hpp
   RTTI/RTTI_VisualInteractiveObject.hpp
   RTTI/RTTI_VisualSkeletalAnimation.hpp
+  RTTI/RTTI_NodeVisuals.hpp
   RTTI/RTTI_Waynet.hpp
   RTTI/RTTI_Waypoint.hpp
   )

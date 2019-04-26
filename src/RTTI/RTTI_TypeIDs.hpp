@@ -17,5 +17,6 @@ namespace REGoth
     TID_REGOTH_Waypoint                = 60009,
     TID_REGOTH_Waynet                  = 60010,
     TID_REGOTH_VisualStaticMesh        = 60011,
+    TID_REGOTH_NodeVisuals             = 60012,
   };
 }  // namespace REGoth
