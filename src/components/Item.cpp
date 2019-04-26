@@ -1,6 +1,6 @@
 #include "Item.hpp"
 #include "Visual.hpp"
-#include <scripting/ScriptObjects.hpp>
+#include <scripting/ScriptObject.hpp>
 
 namespace REGoth
 {

@@ -1,4 +1,4 @@
-#include "ScriptObjects.hpp"
+#include "ScriptObject.hpp"
 
 namespace REGoth
 {

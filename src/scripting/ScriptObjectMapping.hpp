@@ -1,5 +1,5 @@
 #pragma once
-#include "ScriptObjects.hpp"
+#include "ScriptObject.hpp"
 #include <BsPrerequisites.h>
 
 namespace REGoth

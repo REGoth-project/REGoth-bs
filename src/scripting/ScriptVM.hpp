@@ -1,7 +1,7 @@
 #pragma once
 #include "ScriptClassTemplates.hpp"
 #include "ScriptObjectMapping.hpp"
-#include "ScriptObjects.hpp"
+#include "ScriptObject.hpp"
 #include "ScriptSymbolStorage.hpp"
 #include "ScriptSymbols.hpp"
 #include <BsPrerequisites.h>

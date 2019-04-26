@@ -1,6 +1,6 @@
 #pragma once
 #include <BsPrerequisites.h>
-#include <scripting/ScriptObjects.hpp>
+#include <scripting/ScriptObject.hpp>
 
 namespace Daedalus
 {
