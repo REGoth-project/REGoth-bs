@@ -54,5 +54,5 @@ namespace REGoth
     return gGameScript().scriptObjects().get(mScriptObject);
   }
 
-  REGOTH_COMPONENT_DEFINE_RTTI(ScriptBackedBy)
+  REGOTH_DEFINE_RTTI(ScriptBackedBy)
 }  // namespace REGoth

@@ -2,7 +2,7 @@
 #include <BsPrerequisites.h>
 #include <Scene/BsComponent.h>
 #include <scripting/ScriptTypes.hpp>
-#include <RTTI/RTTIUtil_Component.hpp>
+#include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
 {
@@ -91,7 +91,7 @@ namespace REGoth
     bs::String mScriptInstance;
 
   public:
-    REGOTH_COMPONENT_DECLARE_RTTI(ScriptBackedBy)
+    REGOTH_DECLARE_RTTI(ScriptBackedBy)
 
   public:
     ScriptBackedBy() = default; // For RTTI

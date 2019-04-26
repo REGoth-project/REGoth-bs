@@ -38,7 +38,7 @@
  *       might have to make the parameterless constructor public until that
  *       is figured out.
  */
-#define REGOTH_COMPONENT_DECLARE_RTTI(classname) \
+#define REGOTH_DECLARE_RTTI(classname) \
   friend class RTTI_##classname;                 \
   static bs::RTTITypeBase* getRTTIStatic();      \
   bs::RTTITypeBase* getRTTI() const override;
@@ -57,7 +57,7 @@
  * The current namespace needs direct access to the components class.
  * Also note that there is not semicolon after the makro!
  */
-#define REGOTH_COMPONENT_DEFINE_RTTI(classname) \
+#define REGOTH_DEFINE_RTTI(classname) \
                                                 \
   bs::RTTITypeBase* classname::getRTTIStatic()  \
   {                                             \
