@@ -72,6 +72,8 @@ add_library(REGothEngine
   scripting/ScriptSymbols.cpp
   scripting/ScriptObject.hpp
   scripting/ScriptObject.cpp
+  scripting/ScriptObjectStorage.hpp
+  scripting/ScriptObjectStorage.cpp
   scripting/ScriptVM.hpp
   scripting/ScriptVM.cpp
   scripting/ScriptSymbolQueries.hpp

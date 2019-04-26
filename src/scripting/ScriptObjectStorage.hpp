@@ -1,5 +1,6 @@
 #pragma once
 #include "ScriptObject.hpp"
+#include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
 {
@@ -16,57 +17,32 @@ namespace REGoth
      * script objects will be taken out of the map, but all other handles will
      * remain intact.
      */
-    class ScriptObjectStorage
+    class ScriptObjectStorage : public bs::IReflectable
     {
     public:
+      ScriptObjectStorage() = default;
+      virtual ~ScriptObjectStorage();
+
       /**
        * @return Whether the given handle references an invalid object.
        */
-      bool isDestroyed(ScriptObjectHandle handle) const
-      {
-        if (handle == SCRIPT_OBJECT_HANDLE_INVALID) return true;
-
-        return mObjects.find(handle) == mObjects.end();
-      }
+      bool isDestroyed(ScriptObjectHandle handle) const;
 
       /**
        * @return Whether the given handle references a valid object.
        */
-      bool isValid(ScriptObjectHandle handle) const
-      {
-        return !isDestroyed(handle);
-      }
+      bool isValid(ScriptObjectHandle handle) const;
 
       /**
        * @return a new blank script object, with only the handle set.
        */
-      ScriptObject& create()
-      {
-        ScriptObject object;
-        object.handle = mNextHandle;
-        mNextHandle += 1;
-
-        if (object.handle > mNextHandle)
-        {
-          REGOTH_THROW(InvalidStateException, "Script Object Handle overflow");
-        }
-
-        return mObjects.insert({object.handle, std::move(object)}).first->second;
-      }
+      ScriptObject& create();
 
       /**
        * Destroys the given script object. All handles to it will
        * then be invalid.
        */
-      void destroy(ScriptObjectHandle scriptObjectHandle)
-      {
-        if (isDestroyed(scriptObjectHandle))
-        {
-          REGOTH_THROW(InvalidStateException, "Script Object was destroyed already!");
-        }
-
-        mObjects.erase(scriptObjectHandle);
-      }
+      void destroy(ScriptObjectHandle scriptObjectHandle);
 
       /**
        * Looks up a script object via its handle.
@@ -77,36 +53,20 @@ namespace REGoth
        *
        * @return Reference to the script objects data.
        */
-      ScriptObject& get(ScriptObjectHandle handle)
-      {
-        if (handle == SCRIPT_OBJECT_HANDLE_INVALID)
-        {
-          REGOTH_THROW(InvalidStateException, "Script Object Handle is invalid!");
-        }
-
-        auto it = mObjects.find(handle);
-
-        if (it == mObjects.end())
-        {
-          REGOTH_THROW(InvalidStateException, "Script Object Handle does reference a known object!");
-        }
-
-        return it->second;
-      }
+      ScriptObject& get(ScriptObjectHandle handle);
 
       /**
        * Removes all script objects created so far and resets the handle counter.
        * All existing handles are to be seen as invalidated after this operation.
        */
-      void clear()
-      {
-        mObjects.clear();
-        mNextHandle = 1;
-      }
+      void clear();
 
     private:
       bs::Map<ScriptObjectHandle, ScriptObject> mObjects;
       ScriptObjectHandle mNextHandle = 1;
+
+    public:
+      REGOTH_DECLARE_RTTI(ScriptObjectStorage)
     };
   }
 }
