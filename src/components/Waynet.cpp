@@ -1,5 +1,6 @@
 #include "Waynet.hpp"
 #include <Debug/BsDebugDraw.h>
+#include <RTTI/RTTI_Waynet.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/AnchoredTextLabels.h>
 #include <components/Waypoint.hpp>
@@ -41,5 +42,7 @@ namespace REGoth
       }
     }
   }
+
+  REGOTH_DEFINE_RTTI(Waynet)
 
 }  // namespace REGoth

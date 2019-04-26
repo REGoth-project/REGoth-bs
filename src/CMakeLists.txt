@@ -100,6 +100,19 @@ add_library(REGothEngine
   gui/skin_gothic.cpp
   world/internals/ImportSingleVob.hpp
   world/internals/ImportSingleVob.cpp
+  RTTI/RTTI_CharacterAI.hpp
+  RTTI/RTTI_Character.hpp
+  RTTI/RTTI_CharacterKeyboardInput.hpp
+  RTTI/RTTI_ScriptBackedBy.hpp
+  RTTI/RTTI_ScriptObject.hpp
+  RTTI/RTTI_ScriptObjectStorage.hpp
+  RTTI/RTTI_TypeIDs.hpp
+  RTTI/RTTIUtil.hpp
+  RTTI/RTTI_VisualCharacter.hpp
+  RTTI/RTTI_VisualInteractiveObject.hpp
+  RTTI/RTTI_VisualSkeletalAnimation.hpp
+  RTTI/RTTI_Waynet.hpp
+  RTTI/RTTI_Waypoint.hpp
   )
 
 target_link_libraries(REGothEngine PUBLIC bsf BsZenLib)

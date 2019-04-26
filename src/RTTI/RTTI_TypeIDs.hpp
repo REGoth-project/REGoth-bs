@@ -14,5 +14,7 @@ namespace REGoth
     TID_REGOTH_VisualInteractiveObject = 60006,
     TID_REGOTH_ScriptObjectStorage     = 60007,
     TID_REGOTH_ScriptObject            = 60008,
+    TID_REGOTH_Waypoint                = 60009,
+    TID_REGOTH_Waynet                  = 60010,
   };
 }  // namespace REGoth
