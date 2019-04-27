@@ -33,10 +33,17 @@ namespace REGoth
 {
   namespace Scripting
   {
+    using UINT32 = bs::UINT32;
+
     class RTTI_SymbolBase : public bs::RTTIType<SymbolBase, bs::IReflectable, RTTI_SymbolBase>
     {
       BS_BEGIN_RTTI_MEMBERS
-      // TODO: Fill RTTI Members
+      BS_RTTI_MEMBER_PLAIN(name, 0)
+      BS_RTTI_MEMBER_PLAIN(type, 1)
+      BS_RTTI_MEMBER_PLAIN(index, 2)
+      BS_RTTI_MEMBER_PLAIN(parent, 3)
+      BS_RTTI_MEMBER_PLAIN(isClassVar, 4)
+      BS_RTTI_MEMBER_PLAIN(isKeptAfterLoad, 5)
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolBase)
@@ -45,7 +52,7 @@ namespace REGoth
     class RTTI_SymbolInt : public bs::RTTIType<SymbolInt, SymbolBase, RTTI_SymbolInt>
     {
       BS_BEGIN_RTTI_MEMBERS
-      // TODO: Fill RTTI Members
+      BS_RTTI_MEMBER_PLAIN_ARRAY_NAMED(ints, ints.values, 0)
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolInt)
@@ -54,7 +61,7 @@ namespace REGoth
     class RTTI_SymbolFloat : public bs::RTTIType<SymbolFloat, SymbolBase, RTTI_SymbolFloat>
     {
       BS_BEGIN_RTTI_MEMBERS
-      // TODO: Fill RTTI Members
+      BS_RTTI_MEMBER_PLAIN_ARRAY_NAMED(floats, floats.values, 0)
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolFloat)
@@ -63,7 +70,7 @@ namespace REGoth
     class RTTI_SymbolString : public bs::RTTIType<SymbolString, SymbolBase, RTTI_SymbolString>
     {
       BS_BEGIN_RTTI_MEMBERS
-      // TODO: Fill RTTI Members
+      BS_RTTI_MEMBER_PLAIN_ARRAY_NAMED(strings, strings.values, 0)
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolString)
@@ -72,7 +79,7 @@ namespace REGoth
     class RTTI_SymbolClass : public bs::RTTIType<SymbolClass, SymbolBase, RTTI_SymbolClass>
     {
       BS_BEGIN_RTTI_MEMBERS
-      // TODO: Fill RTTI Members
+      // None
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolClass)
@@ -81,7 +88,7 @@ namespace REGoth
     class RTTI_SymbolScriptFunction : public bs::RTTIType<SymbolScriptFunction, SymbolBase, RTTI_SymbolScriptFunction>
     {
       BS_BEGIN_RTTI_MEMBERS
-      // TODO: Fill RTTI Members
+      BS_RTTI_MEMBER_PLAIN(address, 0)
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolScriptFunction)
@@ -90,7 +97,7 @@ namespace REGoth
     class RTTI_SymbolExternalFunction : public bs::RTTIType<SymbolExternalFunction, SymbolBase, RTTI_SymbolExternalFunction>
     {
       BS_BEGIN_RTTI_MEMBERS
-      // TODO: Fill RTTI Members
+      // None
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolExternalFunction)
@@ -99,7 +106,7 @@ namespace REGoth
     class RTTI_SymbolPrototype : public bs::RTTIType<SymbolPrototype, SymbolBase, RTTI_SymbolPrototype>
     {
       BS_BEGIN_RTTI_MEMBERS
-      // TODO: Fill RTTI Members
+      BS_RTTI_MEMBER_PLAIN(constructorAddress, 0)
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolPrototype)
@@ -108,7 +115,8 @@ namespace REGoth
     class RTTI_SymbolInstance : public bs::RTTIType<SymbolInstance, SymbolBase, RTTI_SymbolInstance>
     {
       BS_BEGIN_RTTI_MEMBERS
-      // TODO: Fill RTTI Members
+      BS_RTTI_MEMBER_PLAIN(constructorAddress, 0)
+      BS_RTTI_MEMBER_PLAIN(instance, 1)
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolInstance)
@@ -117,7 +125,7 @@ namespace REGoth
     class RTTI_SymbolUnsupported : public bs::RTTIType<SymbolUnsupported, SymbolBase, RTTI_SymbolUnsupported>
     {
       BS_BEGIN_RTTI_MEMBERS
-      // TODO: Fill RTTI Members
+      // None
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolUnsupported)
