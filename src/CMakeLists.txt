@@ -86,6 +86,10 @@ add_library(REGothEngine
   original-content/VirtualFileSystem.cpp
   original-content/OriginalGameFiles.hpp
   original-content/OriginalGameFiles.cpp
+  engine-content/EngineContent.cpp
+  engine-content/EngineContent.hpp
+  engine-content/internal/FindEngineContent.cpp
+  engine-content/internal/FindEngineContent.hpp
   world/internals/ConstructFromZEN.hpp
   world/internals/ConstructFromZEN.cpp
   world/GameWorld.hpp

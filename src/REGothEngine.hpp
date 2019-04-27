@@ -7,6 +7,8 @@
 
 namespace REGoth
 {
+  class EngineContent;
+
   /**
    * This is the REGoth-Core-Class, which initializes the engine, sets the
    * input and the scene.
@@ -36,10 +38,10 @@ namespace REGoth
     /**
      * Load VDFS packages from the original game.
      *
-     * @param          argv0  First value of the argv array passed to main (Path to executable).
-     * @param  gameDirectory  Location where Gothics game files can be found.
+     * @param  executablePath  Path to the currently running executable (argv[0])
+     * @param  gameDirectory   Location where Gothics game files can be found.
      */
-    void loadOriginalGamePackages(const bs::String& argv0, const bs::Path& gameDirectory);
+    void loadOriginalGamePackages(const bs::Path& executablePath, const bs::Path& gameDirectory);
 
     /**
      * When called after loadOriginalGamePackages(), this will check whether Gothics game files were
@@ -60,6 +62,11 @@ namespace REGoth
     void loadCachedResourceManifests();
 
     /**
+     * Save resource manifests containing resources loaded during this run.
+     */
+    void saveCachedResourceManifests();
+
+    /**
      * Assign buttons and axis to control the game
      */
     virtual void setupInput();
@@ -75,6 +82,18 @@ namespace REGoth
     virtual void setupScene();
 
     /**
+     * Set shaders to be used when re-caching the materials.
+     */
+    virtual void setShaders();
+
+    /**
+     * Find the location of REGoths own `content`-directory.
+     *
+     * @param  executablePath  Path to the currently running executable.
+     */
+    void findEngineContent(const bs::Path& executablePath);
+
+    /**
      * Run the main-loop
      */
     void run();
@@ -85,10 +104,16 @@ namespace REGoth
     void shutdown();
 
   protected:
+
     /**
      * Main camera this engines renders with
      */
     bs::HCamera mMainCamera;
+
+    /**
+     * Path to REGoth's own `content`-directory and resource loader.
+     */
+    bs::SPtr<EngineContent> mEngineContent;
   };
 
   /**
