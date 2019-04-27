@@ -15,6 +15,8 @@ namespace REGoth
       BS_BEGIN_RTTI_MEMBERS
       BS_RTTI_MEMBER_REFL(mScriptSymbols, 1)
       BS_RTTI_MEMBER_REFL(mScriptObjects, 2)
+      BS_RTTI_MEMBER_REFL(mClassTemplates, 3)
+      BS_RTTI_MEMBER_REFL(mScriptObjectMapping, 4)
       BS_END_RTTI_MEMBERS
 
     public:
