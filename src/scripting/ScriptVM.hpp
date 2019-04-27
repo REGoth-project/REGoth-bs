@@ -5,6 +5,8 @@
 #include "ScriptSymbolStorage.hpp"
 #include "ScriptSymbols.hpp"
 #include <BsPrerequisites.h>
+#include <RTTI/RTTIUtil.hpp>
+#include <Reflection/BsIReflectable.h>
 
 namespace REGoth
 {
@@ -17,7 +19,7 @@ namespace REGoth
      * game, to *maybe* get rid of Daedalus in the feature and to keep the software
      * clean of any scripting nonsense.
      */
-    class ScriptVM
+    class ScriptVM : public bs::IReflectable
     {
     public:
       ScriptVM()          = default;
@@ -98,6 +100,9 @@ namespace REGoth
       ScriptObjectStorage mScriptObjects;
       ScriptClassTemplates mClassTemplates;
       ScriptObjectMapping mScriptObjectMapping;
+
+    public:
+      REGOTH_DECLARE_RTTI(ScriptVM);
     };
   }  // namespace Scripting
 }  // namespace REGoth

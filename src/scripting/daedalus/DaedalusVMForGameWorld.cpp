@@ -1,5 +1,6 @@
 #include "DaedalusVMForGameWorld.hpp"
 #include "DaedalusClassVarResolver.hpp"
+#include <RTTI/RTTI_DaedalusVMForGameWorld.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
 #include <components/GameWorld.hpp>
@@ -265,5 +266,7 @@ namespace REGoth
       mStack.pushString(text);
       executeScriptFunction("PrintPlus");
     }
+
+    REGOTH_DEFINE_RTTI(DaedalusVMForGameWorld)
   }  // namespace Scripting
 }  // namespace REGoth

@@ -1,4 +1,5 @@
 #include "ScriptVMForGameWorld.hpp"
+#include <RTTI/RTTI_ScriptVMForGameWorld.hpp>
 #include <daedalus/DATFile.h>
 
 namespace REGoth
@@ -10,6 +11,9 @@ namespace REGoth
         : DaedalusVMForGameWorld(gameWorld, datFile)
     {
     }
+
+
+    REGOTH_DEFINE_RTTI(ScriptVMForGameWorld);
   }  // namespace Scripting
 
 }  // namespace REGoth

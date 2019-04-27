@@ -12,7 +12,10 @@ namespace REGoth
     : public bs::RTTIType<GameWorld, bs::Component, RTTI_GameWorld>
   {
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+    BS_RTTI_MEMBER_PLAIN(mZenFile, 0)
+    BS_RTTI_MEMBER_REFL(mWaynet, 1)
+    BS_RTTI_MEMBER_REFLPTR(mScriptVM, 2)
+    BS_RTTI_MEMBER_PLAIN(mIsInitialized, 3)
     BS_END_RTTI_MEMBERS
 
     public:

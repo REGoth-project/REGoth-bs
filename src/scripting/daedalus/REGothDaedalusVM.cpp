@@ -2,6 +2,7 @@
 #include "DATSymbolStorageLoader.hpp"
 #include "DaedalusClassVarResolver.hpp"
 #include "DaedalusDisassembler.hpp"
+#include <RTTI/RTTI_REGothDaedalusVM.hpp>
 #include <daedalus/DATFile.h>
 #include <exception/Throw.hpp>
 
@@ -634,5 +635,6 @@ namespace REGoth
                             disassembleOpcode(opcode, mScriptSymbols));
     }
 
+    REGOTH_DEFINE_RTTI(DaedalusVM);
   }  // namespace Scripting
 }  // namespace REGoth

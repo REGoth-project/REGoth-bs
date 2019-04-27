@@ -20,8 +20,11 @@ namespace REGoth
     TID_REGOTH_NodeVisuals             = 60012,
     TID_REGOTH_Item                    = 60013,
     TID_REGOTH_VisualMorphMesh         = 60014,
-    TID_REGOTH_World                   = 60015,
-    TID_REGOTH_GameWorld               = 60016,
-    TID_REGOTH_NeedsGameWorld          = 60017,
+    TID_REGOTH_GameWorld               = 60015,
+    TID_REGOTH_NeedsGameWorld          = 60016,
+    TID_REGOTH_ScriptVM                = 60017,
+    TID_REGOTH_DaedalusVM              = 60018,
+    TID_REGOTH_ScriptVMForGameWorld    = 60019,
+    TID_REGOTH_DaedalusVMForGameWorld  = 60020,
   };
 }  // namespace REGoth

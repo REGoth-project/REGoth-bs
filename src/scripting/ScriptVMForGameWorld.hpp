@@ -1,8 +1,8 @@
 /**\file
  */
 #pragma once
-#include "daedalus/DaedalusVMForGameWorld.hpp"
 #include <BsPrerequisites.h>
+#include "daedalus/DaedalusVMForGameWorld.hpp"
 
 namespace REGoth
 {
@@ -21,6 +21,11 @@ namespace REGoth
       ScriptVMForGameWorld(HGameWorld gameWorld, const Daedalus::DATFile& datFile);
 
     protected:
+    public:
+      REGOTH_DECLARE_RTTI(ScriptVMForGameWorld);
+
+    public:                              // FIXME: RTTI protected
+      ScriptVMForGameWorld() = default;  // For RTTI
     };
-  }
-}
+  }  // namespace Scripting
+}  // namespace REGoth

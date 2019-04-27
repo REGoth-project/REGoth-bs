@@ -85,6 +85,12 @@ namespace REGoth
        * Handle to the game world this is used in
        */
       HGameWorld mWorld;
+
+    public:
+      REGOTH_DECLARE_RTTI(DaedalusVMForGameWorld);
+
+    public:                              // FIXME: RTTI protected
+      DaedalusVMForGameWorld() = default;  // For RTTI
     };
   }  // namespace Scripting
 }  // namespace REGoth
