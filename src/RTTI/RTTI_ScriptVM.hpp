@@ -13,7 +13,8 @@ namespace REGoth
     class RTTI_ScriptVM : public bs::RTTIType<ScriptVM, bs::IReflectable, RTTI_ScriptVM>
     {
       BS_BEGIN_RTTI_MEMBERS
-      // TODO: Fill RTTI Members
+      BS_RTTI_MEMBER_REFL(mScriptSymbols, 1)
+      BS_RTTI_MEMBER_REFL(mScriptObjects, 2)
       BS_END_RTTI_MEMBERS
 
     public:

@@ -1,11 +1,16 @@
 #include "ScriptClassTemplates.hpp"
 #include "ScriptSymbolQueries.hpp"
+#include <RTTI/RTTI_ScriptClassTemplates.hpp>
 #include <exception/Throw.hpp>
 
 namespace REGoth
 {
   namespace Scripting
   {
+    ScriptClassTemplates::ScriptClassTemplates()
+    {
+    }
+
     void ScriptClassTemplates::createClassTemplates(const ScriptSymbolStorage& scriptSymbols)
     {
       auto classes = Queries::findAllClasses(scriptSymbols);
@@ -87,5 +92,6 @@ namespace REGoth
       return it->second;
     }
 
+    REGOTH_DEFINE_RTTI(ScriptClassTemplates)
   }  // namespace Scripting
 }  // namespace REGoth

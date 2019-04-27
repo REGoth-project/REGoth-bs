@@ -1,4 +1,3 @@
-#pragma once
 #include "ScriptSymbolStorage.hpp"
 #include <RTTI/RTTI_ScriptSymbolStorage.hpp>
 

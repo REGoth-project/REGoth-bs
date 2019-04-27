@@ -40,5 +40,6 @@ namespace REGoth
     TID_REGOTH_ScriptSymbolPrototype        = 600032,
     TID_REGOTH_ScriptSymbolInstance         = 600033,
     TID_REGOTH_ScriptSymbolUnsupported      = 600034,
+    TID_REGOTH_ScriptClassTemplates         = 600035,
   };
 }  // namespace REGoth

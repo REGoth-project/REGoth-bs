@@ -29,7 +29,7 @@ namespace REGoth
       template <typename T>
       SymbolIndex appendSymbol(const bs::String& name)
       {
-        bs::UPtr<SymbolBase> symbol = bs::bs_unique_ptr<SymbolBase>(new T());
+        bs::SPtr<SymbolBase> symbol = bs::bs_shared_ptr_new<T>();
 
         mStorage.emplace_back(std::move(symbol));
 
@@ -256,7 +256,7 @@ namespace REGoth
         }
       }
 
-      bs::Vector<bs::UPtr<SymbolBase>> mStorage;
+      bs::Vector<bs::SPtr<SymbolBase>> mStorage;
       bs::Map<bs::String, SymbolIndex> mSymbolsByName;
 
     public:
