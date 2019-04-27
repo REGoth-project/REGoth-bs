@@ -16,8 +16,7 @@
 #include <daedalus/DATFile.h>
 #include <exception/Throw.hpp>
 #include <original-content/VirtualFileSystem.hpp>
-#include <scripting/ScriptVMInterface.hpp>
-#include <world/GameWorld.hpp>
+#include <components/GameWorld.hpp>
 
 class REGothCharacterMovementTester : public REGoth::REGothEngine
 {
@@ -38,10 +37,7 @@ public:
   {
     using namespace REGoth;
 
-    Scripting::loadGothicDAT(gVirtualFileSystem().readFile("GOTHIC.DAT"));
-
-    // World::loadWorldFromZEN("ADDONWORLD.ZEN", World::GameWorld::Init::NoInitScripts);
-    World::loadWorldEmpty();
+    HGameWorld world = GameWorld::createEmpty();
 
     bs::HTexture floorTexture = BsZenLib::ImportTexture("NW_NATURE_STONEGROUND_01.TGA",
                                                         REGoth::gVirtualFileSystem().getFileIndex());
@@ -70,14 +66,14 @@ public:
     {
       bs::HSceneObject wpSO = bs::SceneObject::create(wpName);
 
-      wpSO->setParent(REGoth::gWorld().waynet()->SO());
+      wpSO->setParent(world->waynet()->SO());
       wpSO->setPosition(bs::Vector3(0, 0, 0));
 
       REGoth::HWaypoint wp = wpSO->addComponent<REGoth::Waypoint>();
-      REGoth::gWorld().waynet()->addWaypoint(wp);
+      world->waynet()->addWaypoint(wp);
     }
 
-    REGoth::HCharacter character = REGoth::gWorld().insertCharacter("PC_HERO", wpName);
+    REGoth::HCharacter character = world->insertCharacter("PC_HERO", wpName);
     character->SO()->addComponent<REGoth::CharacterKeyboardInput>();
 
     mMainCamera->SO()->setPosition(bs::Vector3(2, 0.5f, 0));

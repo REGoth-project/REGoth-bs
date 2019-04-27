@@ -5,7 +5,7 @@
 #include <daedalus/DATFile.h>
 #include <original-content/VirtualFileSystem.hpp>
 #include <scripting/ScriptSymbolStorage.hpp>
-#include <scripting/ScriptVMInterface.hpp>
+#include <components/GameWorld.hpp>
 
 class REGothScriptTester : public REGoth::REGothEngine
 {
@@ -21,7 +21,7 @@ public:
     using ScriptObject       = Scripting::ScriptObject;
     using ScriptObjectHandle = Scripting::ScriptObjectHandle;
 
-    Scripting::loadGothicDAT(gVirtualFileSystem().readFile("GOTHIC.DAT"));
+    HGameWorld world = GameWorld::createEmpty();
 
     // ScriptObjectHandle appleHandle = gGameScript().instanciateClass("C_ITEM", "ITFO_APPLE");
 
@@ -34,8 +34,7 @@ public:
     // gGameScript().script_PrintPlus("It also appends a random number to the end, look: ");
     // gGameScript().script_PrintPlus("Pretty cool, eh?");
 
-    bs::HSceneObject item = bs::SceneObject::create("Apple");
-    item->addComponent<REGoth::Item>("ITFO_APPLE");
+    world->insertItem("ITFO_APPLE", bs::Transform::IDENTITY);
 
     mMainCamera->SO()->setPosition(bs::Vector3(0, 1, 1));
     mMainCamera->SO()->lookAt(bs::Vector3(0, 0, 0));

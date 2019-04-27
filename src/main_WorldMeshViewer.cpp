@@ -16,7 +16,7 @@ public:
 
   void setupScene() override
   {
-    REGoth::World::loadWorldMeshFromZEN("ADDONWORLD.ZEN");
+    REGoth::Internals::loadWorldMeshFromZEN("ADDONWORLD.ZEN");
   }
 
 protected:

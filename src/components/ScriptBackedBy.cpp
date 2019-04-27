@@ -1,6 +1,7 @@
 #include "ScriptBackedBy.hpp"
 #include <RTTI/RTTI_ScriptBackedBy.hpp>
-#include <scripting/ScriptVMInterface.hpp>
+#include <components/GameWorld.hpp>
+#include <scripting/ScriptVMForGameWorld.hpp>
 
 namespace REGoth
 {
@@ -8,7 +9,7 @@ namespace REGoth
                                  const bs::String& instance)
       : mScriptClassName(className)
       , mScriptInstance(instance)
-      , bs::Component(parent)
+      , NeedsGameWorld(parent)
   {
     setName("ScriptBackedBy");
   }
@@ -30,17 +31,17 @@ namespace REGoth
 
   void ScriptBackedBy::onDestroyed()
   {
-    if (gGameScript().scriptObjects().isValid(mScriptObject))
+    if (gameWorld()->scriptVM().scriptObjects().isValid(mScriptObject))
     {
-      gGameScript().mapping().unmap(mScriptObject, SO());
-      gGameScript().scriptObjects().destroy(mScriptObject);
+      gameWorld()->scriptVM().mapping().unmap(mScriptObject, SO());
+      gameWorld()->scriptVM().scriptObjects().destroy(mScriptObject);
     }
   }
 
   void ScriptBackedBy::instantiateScriptObject(const bs::String& className,
                                                const bs::String& instance)
   {
-    mScriptObject = gGameScript().instanciateClass(className, instance, SO());
+    mScriptObject = gameWorld()->scriptVM().instanciateClass(className, instance, SO());
   }
 
   bool ScriptBackedBy::hasInstantiatedScriptObject() const
@@ -51,7 +52,7 @@ namespace REGoth
   Scripting::ScriptObject& ScriptBackedBy::scriptObjectData()
   {
     // Will throw if the handle is invalid
-    return gGameScript().scriptObjects().get(mScriptObject);
+    return gameWorld()->scriptVM().scriptObjects().get(mScriptObject);
   }
 
   REGOTH_DEFINE_RTTI(ScriptBackedBy)

@@ -3,6 +3,7 @@
 #include <Scene/BsComponent.h>
 #include <scripting/ScriptTypes.hpp>
 #include <RTTI/RTTIUtil.hpp>
+#include "NeedsGameWorld.hpp"
 
 namespace REGoth
 {
@@ -40,7 +41,7 @@ namespace REGoth
    * When loading the object again, we have to hope our handle stayed the same and will
    * skip creating a new instance of the backing script object inside `onInitialized()`.
    */
-  class ScriptBackedBy : public bs::Component
+  class ScriptBackedBy : public NeedsGameWorld
   {
   public:
     ScriptBackedBy(const bs::HSceneObject& parent, const bs::String& className,

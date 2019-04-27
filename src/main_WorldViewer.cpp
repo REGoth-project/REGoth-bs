@@ -2,10 +2,7 @@
 #include "REGothEngine.hpp"
 #include <Components/BsCCamera.h>
 #include <Scene/BsSceneObject.h>
-#include <daedalus/DATFile.h>
-#include <original-content/VirtualFileSystem.hpp>
-#include <scripting/ScriptVMInterface.hpp>
-#include <world/GameWorld.hpp>
+#include <components/GameWorld.hpp>
 
 class REGothWorldViewer : public REGoth::REGothEngine
 {
@@ -21,9 +18,7 @@ public:
   {
     using namespace REGoth;
 
-    Scripting::loadGothicDAT(gVirtualFileSystem().readFile("GOTHIC.DAT"));
-
-    World::loadWorldFromZEN("ADDONWORLD.ZEN");
+    HGameWorld world = GameWorld::importZEN("ADDONWORLD.ZEN");
   }
 
 protected:

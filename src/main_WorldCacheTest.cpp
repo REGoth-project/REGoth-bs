@@ -15,8 +15,7 @@
 #include <daedalus/DATFile.h>
 #include <exception/Throw.hpp>
 #include <original-content/VirtualFileSystem.hpp>
-#include <scripting/ScriptVMInterface.hpp>
-#include <world/GameWorld.hpp>
+#include <components/GameWorld.hpp>
 
 class REGothWorldCacheTest : public REGoth::REGothEngine
 {
@@ -32,63 +31,27 @@ public:
   {
     using namespace REGoth;
 
-    Scripting::loadGothicDAT(gVirtualFileSystem().readFile("GOTHIC.DAT"));
-
-    const bs::String world = "NEWWORLD.ZEN";
+    const bs::String world = "OLDWORLD.ZEN";
+    const bs::String saveGame = "MySafeGame";
 
     bs::Timer timer;
 
-    if (!bs::FileSystem::exists(BsZenLib::GothicPathToCachedWorld(world)))
+    if (!bs::FileSystem::exists(BsZenLib::GothicPathToCachedWorld(saveGame)))
     {
-      bs::gDebug().logDebug("[REGothWorldCacheTest] Caching world: " + world);
-      bs::gDebug().logDebug("[REGothWorldCacheTest]   - Loading...");
+      bs::gDebug().logDebug("[REGothWorldCacheTest] Importing and caching ZEN: " + world);
 
-      timer.reset();
-      World::loadWorldFromZEN(world, World::GameWorld::Init::NoInitScripts);
+      HGameWorld gameWorld = GameWorld::importZEN(world);
 
-      bs::gDebug().logDebug("[REGothWorldCacheTest]   -  ^--> " +
-                            bs::toString(timer.getMicroseconds() * bs::Time::MICROSEC_TO_SEC) + "s");
+      bs::gDebug().logDebug("[REGothWorldCacheTest] Saving world...");
 
-      bs::gDebug().logDebug("[REGothWorldCacheTest]   - Creating prefab...");
-
-      timer.reset();
-      bs::HPrefab cached = bs::Prefab::create(gWorld().sceneRoot());
-
-      bs::gDebug().logDebug("[REGothWorldCacheTest]   -  ^--> " +
-                            bs::toString(timer.getMicroseconds() * bs::Time::MICROSEC_TO_SEC) + "s");
-
-      bs::gDebug().logDebug("[REGothWorldCacheTest]   - Saving prefab...");
-
-      timer.reset();
-      bs::gResources().save(cached, BsZenLib::GothicPathToCachedWorld(world), true);
-
-      bs::gDebug().logDebug("[REGothWorldCacheTest]   -  ^--> " +
-                            bs::toString(timer.getMicroseconds() * bs::Time::MICROSEC_TO_SEC) + "s");
-
-      bs::gDebug().logDebug("[REGothWorldCacheTest]   - Done!");
+      gameWorld->save(saveGame);
     }
     else
     {
-      bs::gDebug().logDebug("[REGothWorldCacheTest] Loading world from Cache: " + world);
+      bs::gDebug().logDebug("[REGothWorldCacheTest] Loading world from SaveGame: " + world);
 
-      bs::gDebug().logDebug("[REGothWorldCacheTest]   - Loading prefab...");
-
-      timer.reset();
-      bs::HPrefab prefab =
-          bs::gResources().load<bs::Prefab>(BsZenLib::GothicPathToCachedWorld(world));
-
-      bs::gDebug().logDebug("[REGothWorldCacheTest]   -  ^--> " +
-                            bs::toString(timer.getMicroseconds() * bs::Time::MICROSEC_TO_SEC) + "s");
-
-      bs::gDebug().logDebug("[REGothWorldCacheTest]   - Instantiating prefab...");
-
-      timer.reset();
-      prefab->instantiate();
-
-      bs::gDebug().logDebug("[REGothWorldCacheTest]   -  ^--> " +
-                            bs::toString(timer.getMicroseconds() * bs::Time::MICROSEC_TO_SEC) + "s");
-
-      bs::gDebug().logDebug("[REGothWorldCacheTest]   - Done!");
+      bs::HPrefab world = GameWorld::load(saveGame);
+      world->instantiate();
     }
   }
 };

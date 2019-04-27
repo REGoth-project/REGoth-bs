@@ -1,5 +1,6 @@
 #include "BsCameraZoomer.h"
 #include "BsFPSCamera.h"
+#include <components/GameWorld.hpp>
 #include "BsFPSWalker.h"
 #include "BsObjectRotator.h"
 #include "REGothEngine.hpp"
@@ -23,8 +24,6 @@
 #include <components/Waypoint.hpp>
 #include <daedalus/DATFile.h>
 #include <original-content/VirtualFileSystem.hpp>
-#include <scripting/ScriptVMInterface.hpp>
-#include <world/GameWorld.hpp>
 
 class SimpleCharacterController : public bs::Component
 {
@@ -155,23 +154,21 @@ public:
       gDebug().logDebug(s);
     }
 
-    Scripting::loadGothicDAT(gVirtualFileSystem().readFile("GOTHIC.DAT"));
-
-    World::loadWorldEmpty();
+    HGameWorld world = GameWorld::createEmpty();
 
     // Add some waypoint
     bs::String wpName = "SOMEPLACE";
     {
       bs::HSceneObject wpSO = bs::SceneObject::create(wpName);
 
-      wpSO->setParent(gWorld().waynet()->SO());
+      wpSO->setParent(world->waynet()->SO());
       wpSO->setPosition(bs::Vector3(0, 0, 0));
 
       HWaypoint wp = wpSO->addComponent<Waypoint>();
-      gWorld().waynet()->addWaypoint(wp);
+      world->waynet()->addWaypoint(wp);
     }
 
-    HCharacter character = gWorld().insertCharacter("PC_HERO", wpName);
+    HCharacter character = world->insertCharacter("PC_HERO", wpName);
 
     HVisualCharacter playerVisual = character->SO()->getComponent<VisualCharacter>();
     character->SO()->addComponent<SimpleCharacterController>(playerVisual);

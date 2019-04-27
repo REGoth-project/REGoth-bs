@@ -31,6 +31,10 @@ add_library(REGothEngine
   components/NodeVisuals.cpp
   components/ScriptBackedBy.hpp
   components/ScriptBackedBy.cpp
+  components/GameWorld.hpp
+  components/GameWorld.cpp
+  components/NeedsGameWorld.hpp
+  components/NeedsGameWorld.cpp
   components/Visual.hpp
   components/Visual.cpp
   components/VisualMorphMesh.hpp
@@ -62,8 +66,8 @@ add_library(REGothEngine
   scripting/daedalus/DaedalusStack.cpp
   scripting/daedalus/DaedalusDisassembler.hpp
   scripting/daedalus/DaedalusDisassembler.cpp
-  scripting/daedalus/DaedalusVMWithExternals.hpp
-  scripting/daedalus/DaedalusVMWithExternals.cpp
+  scripting/daedalus/DaedalusVMForGameWorld.hpp
+  scripting/daedalus/DaedalusVMForGameWorld.cpp
   scripting/ScriptSymbols.hpp
   scripting/ScriptSymbols.cpp
   scripting/ScriptObject.hpp
@@ -76,8 +80,8 @@ add_library(REGothEngine
   scripting/ScriptSymbolQueries.cpp
   scripting/ScriptClassTemplates.hpp
   scripting/ScriptClassTemplates.cpp
-  scripting/ScriptVMInterface.hpp
-  scripting/ScriptVMInterface.cpp
+  scripting/ScriptVMForGameWorld.hpp
+  scripting/ScriptVMForGameWorld.cpp
   scripting/ScriptObjectMapping.hpp
   scripting/ScriptObjectMapping.cpp
   original-content/VirtualFileSystem.hpp
@@ -90,8 +94,6 @@ add_library(REGothEngine
   engine-content/internal/FindEngineContent.hpp
   world/internals/ConstructFromZEN.hpp
   world/internals/ConstructFromZEN.cpp
-  world/GameWorld.hpp
-  world/GameWorld.cpp
   gui/skin_gothic.hpp
   gui/skin_gothic.cpp
   world/internals/ImportSingleVob.hpp

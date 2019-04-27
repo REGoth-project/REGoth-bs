@@ -1,8 +1,9 @@
 #include "Character.hpp"
 #include <RTTI/RTTI_Character.hpp>
 #include <Scene/BsSceneObject.h>
+#include <components/GameWorld.hpp>
 #include <components/VisualCharacter.hpp>
-#include <scripting/ScriptVMInterface.hpp>
+#include <scripting/ScriptVMForGameWorld.hpp>
 
 namespace REGoth
 {
@@ -19,7 +20,7 @@ namespace REGoth
 
   void Character::useAsHero()
   {
-    gGameScript().setHero(scriptObject());
+    gameWorld()->scriptVM().setHero(scriptObject());
   }
 
   bool Character::checkInfo(bool important)

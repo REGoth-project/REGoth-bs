@@ -4,38 +4,36 @@
 #include <BsCorePrerequisites.h>
 #include <Private/RTTI/BsGameObjectRTTI.h>  // Says private, but bs:f uses this too in their RTTIs
 #include <Reflection/BsRTTIType.h>
-#include <components/ScriptBackedBy.hpp>
+#include <components/World.hpp>
 
 namespace REGoth
 {
-  class RTTI_ScriptBackedBy
-      : public bs::RTTIType<ScriptBackedBy, NeedsGameWorld, RTTI_ScriptBackedBy>
+  class RTTI_World
+    : public bs::RTTIType<World, bs::Component, RTTI_World>
   {
     BS_BEGIN_RTTI_MEMBERS
-    BS_RTTI_MEMBER_PLAIN(mScriptClassName, 0)
-    BS_RTTI_MEMBER_PLAIN(mScriptInstance, 1)
-    BS_RTTI_MEMBER_PLAIN(mScriptObject, 2)
+    // TODO: Fill RTTI Members
     BS_END_RTTI_MEMBERS
 
-  public:
-    RTTI_ScriptBackedBy()
+    public:
+    RTTI_World()
     {
     }
 
     bs::SPtr<bs::IReflectable> newRTTIObject() override
     {
-      return bs::GameObjectRTTI::createGameObject<ScriptBackedBy>();
+      return bs::GameObjectRTTI::createGameObject<World>();
     }
 
     const bs::String& getRTTIName() override
     {
-      static bs::String name = "ScriptBackedBy";
+      static bs::String name = "World";
       return name;
     }
 
     bs::UINT32 getRTTIId() override
     {
-      return TID_REGOTH_ScriptBackedBy;
+      return TID_REGOTH_World;
     }
   };
 
