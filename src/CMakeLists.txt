@@ -70,6 +70,8 @@ add_library(REGothEngine
   scripting/daedalus/DaedalusVMForGameWorld.cpp
   scripting/ScriptSymbols.hpp
   scripting/ScriptSymbols.cpp
+  scripting/ScriptSymbolStorage.hpp
+  scripting/ScriptSymbolStorage.cpp
   scripting/ScriptObject.hpp
   scripting/ScriptObject.cpp
   scripting/ScriptObjectStorage.hpp

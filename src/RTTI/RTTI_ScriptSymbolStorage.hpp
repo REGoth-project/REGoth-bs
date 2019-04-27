@@ -1,47 +1,43 @@
 #pragma once
 
-#include "RTTIPlainTypes.hpp"
 #include "RTTI_TypeIDs.hpp"
 #include <BsCorePrerequisites.h>
 #include <Private/RTTI/BsGameObjectRTTI.h>  // Says private, but bs:f uses this too in their RTTIs
 #include <Reflection/BsRTTIType.h>
-#include <scripting/ScriptObject.hpp>
+#include <scripting/ScriptSymbolStorage.hpp>
 
 namespace REGoth
 {
   namespace Scripting
   {
-    class RTTI_ScriptObject : public bs::RTTIType<ScriptObject, bs::IReflectable, RTTI_ScriptObject>
+    class RTTI_ScriptSymbolStorage
+        : public bs::RTTIType<ScriptSymbolStorage, bs::IReflectable, RTTI_ScriptSymbolStorage>
     {
       BS_BEGIN_RTTI_MEMBERS
-      BS_RTTI_MEMBER_PLAIN(className, 0)
-      BS_RTTI_MEMBER_PLAIN(handle, 1)
-      BS_RTTI_MEMBER_PLAIN(ints, 2)
-      BS_RTTI_MEMBER_PLAIN(floats, 3)
-      BS_RTTI_MEMBER_PLAIN(strings, 4)
-      BS_RTTI_MEMBER_PLAIN(functionPointers, 5)
+      BS_RTTI_MEMBER_PLAIN(mSymbolsByName, 1)
       BS_END_RTTI_MEMBERS
 
     public:
-      RTTI_ScriptObject()
+      RTTI_ScriptSymbolStorage()
       {
       }
 
       bs::SPtr<bs::IReflectable> newRTTIObject() override
       {
-        return bs::bs_shared_ptr_new<ScriptObject>();
+        return bs::bs_shared_ptr_new<ScriptSymbolStorage>();
       }
 
       const bs::String& getRTTIName() override
       {
-        static bs::String name = "ScriptObject";
+        static bs::String name = "ScriptSymbolStorage";
         return name;
       }
 
       bs::UINT32 getRTTIId() override
       {
-        return TID_REGOTH_ScriptObject;
+        return TID_REGOTH_ScriptSymbolStorage;
       }
     };
   }  // namespace Scripting
+  // namespace Scripting
 }  // namespace REGoth

@@ -1,6 +1,7 @@
 #pragma once
 #include "ScriptSymbols.hpp"
 #include <BsPrerequisites.h>
+#include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
 {
@@ -12,7 +13,7 @@ namespace REGoth
      * This is the only place where symbols should created and have
      * their types and names be set.
      */
-    class ScriptSymbolStorage
+    class ScriptSymbolStorage : public bs::IReflectable
     {
     public:
       ScriptSymbolStorage() = default;
@@ -257,6 +258,9 @@ namespace REGoth
 
       bs::Vector<bs::UPtr<SymbolBase>> mStorage;
       bs::Map<bs::String, SymbolIndex> mSymbolsByName;
+
+    public:
+      REGOTH_DECLARE_RTTI(ScriptSymbolStorage)
     };
   }  // namespace Scripting
 }  // namespace REGoth

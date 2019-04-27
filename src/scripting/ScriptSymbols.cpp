@@ -1,4 +1,5 @@
 #include "ScriptSymbols.hpp"
+#include <RTTI/RTTI_ScriptSymbols.hpp>
 
 namespace REGoth
 {
@@ -78,5 +79,15 @@ namespace REGoth
       bs::gDebug().logDebug(line);
     }
 
+    REGOTH_DEFINE_RTTI(SymbolBase)
+    REGOTH_DEFINE_RTTI(SymbolInt)
+    REGOTH_DEFINE_RTTI(SymbolFloat)
+    REGOTH_DEFINE_RTTI(SymbolString)
+    REGOTH_DEFINE_RTTI(SymbolClass)
+    REGOTH_DEFINE_RTTI(SymbolScriptFunction)
+    REGOTH_DEFINE_RTTI(SymbolExternalFunction)
+    REGOTH_DEFINE_RTTI(SymbolPrototype)
+    REGOTH_DEFINE_RTTI(SymbolInstance)
+    REGOTH_DEFINE_RTTI(SymbolUnsupported)
   }  // namespace Scripting
 }  // namespace REGoth

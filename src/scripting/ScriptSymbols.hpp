@@ -1,5 +1,6 @@
 #pragma once
 #include "ScriptObject.hpp"
+#include <RTTI/RTTIUtil.hpp>
 #include "ScriptTypes.hpp"
 #include <BsPrerequisites.h>
 
@@ -7,7 +8,7 @@ namespace REGoth
 {
   namespace Scripting
   {
-    struct SymbolBase
+    struct SymbolBase : public bs::IReflectable
     {
       /**
        * Name of this symbol
@@ -50,6 +51,8 @@ namespace REGoth
        * @note In the original daedalus this is called `const`, but those are not really const.
        */
       bool isKeptAfterLoad;
+
+      REGOTH_DECLARE_RTTI(SymbolBase)
     };
 
     /**
@@ -60,6 +63,8 @@ namespace REGoth
       static constexpr SymbolType TYPE = SymbolType::Int;
 
       ScriptInts ints;
+
+      REGOTH_DECLARE_RTTI(SymbolInt)
     };
 
     /**
@@ -69,8 +74,9 @@ namespace REGoth
     {
       static constexpr SymbolType TYPE = SymbolType::Float;
 
-      bs::Vector<float> values;
       ScriptFloats floats;
+
+      REGOTH_DECLARE_RTTI(SymbolFloat)
     };
 
     /**
@@ -80,8 +86,9 @@ namespace REGoth
     {
       static constexpr SymbolType TYPE = SymbolType::String;
 
-      bs::Vector<bs::String> values;
       ScriptStrings strings;
+
+      REGOTH_DECLARE_RTTI(SymbolString)
     };
 
     /**
@@ -91,6 +98,8 @@ namespace REGoth
     struct SymbolClass : SymbolBase
     {
       static constexpr SymbolType TYPE = SymbolType::Class;
+
+      REGOTH_DECLARE_RTTI(SymbolClass)
     };
 
     /**
@@ -105,6 +114,8 @@ namespace REGoth
        * Bytecode address of where this function starts.
        */
       bs::UINT32 address;
+
+      REGOTH_DECLARE_RTTI(SymbolScriptFunction)
     };
 
     /**
@@ -119,6 +130,8 @@ namespace REGoth
        * Since the mapping of external functions to native ones is done at VM-level, this
        * struct is left empty.
        */
+
+      REGOTH_DECLARE_RTTI(SymbolExternalFunction)
     };
 
     /**
@@ -135,6 +148,8 @@ namespace REGoth
        * Bytecode address of where the constructor function starts.
        */
       bs::UINT32 constructorAddress;
+
+      REGOTH_DECLARE_RTTI(SymbolPrototype)
     };
 
     /**
@@ -159,6 +174,8 @@ namespace REGoth
        * Instance referenced by this symbol.
        */
       ScriptObjectHandle instance = SCRIPT_OBJECT_HANDLE_INVALID;
+
+      REGOTH_DECLARE_RTTI(SymbolInstance)
     };
 
     /**
@@ -170,6 +187,8 @@ namespace REGoth
     struct SymbolUnsupported : SymbolBase
     {
       static constexpr SymbolType TYPE = SymbolType::Unsupported;
+
+      REGOTH_DECLARE_RTTI(SymbolUnsupported)
     };
 
     /**
