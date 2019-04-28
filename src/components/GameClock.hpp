@@ -21,48 +21,49 @@ namespace REGoth
     void update() override;
 
     /**
-     * @return Current ingame clock day.
+     * @return Current ingame day.
      */
-    bs::UINT32 getDay() const;
+    bs::INT32 getDay() const;
 
     /**
-     * @return Current ingame clock hour.
+     * @return Current hour of time of day (hh:mm).
      */
     bs::UINT8 getHour() const;
 
     /**
-     * @return Current ingame clock minute.
+     * @return Current Minute of time of day (hh:mm).
      */
     bs::UINT8 getMinute() const;
 
     /**
-     * @return  Whether the current ingame clock (hh::mm) is between the two given values.
+     * @return  Whether the current ingame time of day (hh::mm) is between the two given times of day.
+     *
+     * @note    The first time of day can be after the second time of day.
      *
      * @param   hour1
-     *              Lower limit of elapsed ingame time in hours to check against.
-     *              Is added to param min1.
+     *              Hour of the first time of day (\p hour1 : \p min1 ) to check against.
      * @param   min1
-     *              Lower limit of elapsed ingame time in minutes to check against.
-     *              Is added to parameter hour1.
+     *              Minute of the first time of day (\p hour1 : \p min1 ) to check against.
      * @param   hour2
-     *              Upper limit of elapsed ingame time in hours to check against.
-     *              Is added to param min2.     
+     *              Hour of the second time of day (\p hour2 : \p min2 ) to check against.
      * @param   min2
-     *              Upper limit of elapsed ingame time in minutes. to check against.
-     *              Is added to parameter hour2.
+     *              Minute of the second time of day (\p hour2 : \p min2 ) to check against.
      */
-    bool isTime(bs::UINT8 hour1, bs::UINT8 min1, bs::UINT8 hour2, bs::UINT8 min2) const;
+    bool isTime(bs::INT32 hour1, bs::INT32 min1, bs::INT32 hour2, bs::INT32 min2) const;
     
     /**
-     * Sets the ingame clock to the given hh:mm.
-     * Skips to the next occurence of the given hh::mm advancing the day.
+     * Sets the ingame clock (hh:mm) to the given time in hour and minute.
      * 
+     * @note   Values for \p hour can be over 23 to advance days too.
+     *         Calling setTime(24+15, 0) sets the clock to 15:00 and advances one day.
+     *
      * @param  hour
-     *             Can be a value over 23 to advance to the next day.
+     *             Accepts any value (int32), but will use \p hour%24 internally.
+     *             Can also advance days - see note.
      * @param  min
-     *             Minute.
+     *             Accepts any value (int32), but will use \p min%60 internally.
      */
-    void setTime(bs::UINT8 hour, bs::UINT8 min);
+    void setTime(bs::INT32 hour, bs::INT32 min);
 
   private:
     float mElapsedSeconds       = 0.0;

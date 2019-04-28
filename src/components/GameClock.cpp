@@ -1,7 +1,6 @@
 #include "GameClock.hpp"
 #include <RTTI/RTTI_GameClock.hpp>
 #include <Scene/BsSceneObject.h>
-#include <exception/Throw.hpp>
 #include <Math/BsMath.h>
 
 namespace REGoth
@@ -9,7 +8,7 @@ namespace REGoth
   constexpr float SECONDS_IN_A_MINUTE = 60;
   constexpr float SECONDS_IN_AN_HOUR  = 60 * SECONDS_IN_A_MINUTE;
   constexpr float SECONDS_IN_A_DAY    = 24 * SECONDS_IN_AN_HOUR;
-  constexpr float CLOCK_SPEED_FACTOR  = 14.5;
+  constexpr float CLOCK_SPEED_FACTOR  = SECONDS_IN_A_DAY/6000; // see https://forum.worldofplayers.de/forum/threads/396326-Tipp-Tageweise-springen-%28auch-zur%C3%BCck%29?p=6231841&viewfull=1#post6231841
 
   GameClock::GameClock(const bs::HSceneObject& parent)
     : bs::Component(parent)
@@ -23,42 +22,76 @@ namespace REGoth
     mElapsedIngameSeconds += delta * CLOCK_SPEED_FACTOR;
   }
 
-  bs::UINT32 GameClock::getDay() const
+  bs::INT32 GameClock::getDay() const
   {
-    return bs::Math::floorToPosInt(mElapsedIngameSeconds/SECONDS_IN_A_DAY);
+    return bs::Math::floorToPosInt(mElapsedIngameSeconds / SECONDS_IN_A_DAY);
   }
 
   bs::UINT8 GameClock::getHour() const
   {
-    float elapsedSecondsOfDay = mElapsedIngameSeconds-(getDay()*SECONDS_IN_A_DAY);
+    float elapsedSecondsOfDay = mElapsedIngameSeconds - (getDay() * SECONDS_IN_A_DAY);
     
-    return bs::Math::floorToPosInt(elapsedSecondsOfDay/SECONDS_IN_AN_HOUR);
+    return bs::Math::floorToPosInt(elapsedSecondsOfDay / SECONDS_IN_AN_HOUR);
   }
 
   bs::UINT8 GameClock::getMinute() const
   {
-    float elapsedSecondsOfHour = mElapsedIngameSeconds-(getDay()*SECONDS_IN_A_DAY)-(getHour()*SECONDS_IN_AN_HOUR);
+    float elapsedSecondsOfHour = mElapsedIngameSeconds - (getDay() * SECONDS_IN_A_DAY) - (getHour() * SECONDS_IN_AN_HOUR);
 
-    return bs::Math::floorToPosInt(elapsedSecondsOfHour/SECONDS_IN_A_MINUTE);
+    return bs::Math::floorToPosInt(elapsedSecondsOfHour / SECONDS_IN_A_MINUTE);
   }
 
-  bool GameClock::isTime(bs::UINT8 hour1, bs::UINT8 min1, bs::UINT8 hour2, bs::UINT8 min2) const
+  bool GameClock::isTime(bs::INT32 hour1, bs::INT32 min1, bs::INT32 hour2, bs::INT32 min2) const
   {
-    float elapsedSecondsOfDay = mElapsedIngameSeconds-(getDay()*SECONDS_IN_A_DAY);
-    float lowerElapsedSecondsOfDay = ((hour1*SECONDS_IN_AN_HOUR)+(min1*SECONDS_IN_A_MINUTE))*CLOCK_SPEED_FACTOR;
-    float upperElapsedSecondsOfDay = ((hour2*SECONDS_IN_AN_HOUR)+(min2*SECONDS_IN_A_MINUTE))*CLOCK_SPEED_FACTOR;
+    // TODO: Do we need to handle negative input parameters smaller than -24?
+    hour1 = (hour1 + 24) % 24;
+    min1  = (min1  + 60) % 60;
+    hour2 = (hour2 + 24) % 24;
+    min2  = (min2  + 60) % 60;
 
-    // TODO: Not sure if Gothic allows the order of the input times to be reversed
-    return (elapsedSecondsOfDay>lowerElapsedSecondsOfDay && elapsedSecondsOfDay<upperElapsedSecondsOfDay);
+    float currentTimeOfDayInSeconds = mElapsedIngameSeconds - (getDay() * SECONDS_IN_A_DAY);
+    float firstTimeOfDayInSeconds   = (hour1*SECONDS_IN_AN_HOUR + min1*SECONDS_IN_A_MINUTE);
+    float secondTimeOfDayInSeconds  = (hour2*SECONDS_IN_AN_HOUR + min2*SECONDS_IN_A_MINUTE);
+
+    if (firstTimeOfDayInSeconds != secondTimeOfDayInSeconds)
+    {
+      secondTimeOfDayInSeconds -= 60.0; // Gothic subtracts one minute from the second time here to counter issues happening with overlapping times for Daily Routines. - markusobi
+    }
+
+    bool retval;
+    if ( hour1 == hour2 && min1 == min2)
+    {
+      retval = false;
+    }
+    else if (firstTimeOfDayInSeconds > secondTimeOfDayInSeconds)
+    {
+      retval = (currentTimeOfDayInSeconds >= firstTimeOfDayInSeconds) || (currentTimeOfDayInSeconds <= secondTimeOfDayInSeconds);
+    }
+    else /* firstTimeOfDayInSeconds < secondTimeOfDayInSeconds */
+    {
+      retval = (currentTimeOfDayInSeconds >= firstTimeOfDayInSeconds) && (currentTimeOfDayInSeconds <= secondTimeOfDayInSeconds);
+    }
+
+    return retval;
   }
 
-  void GameClock::setTime(bs::UINT8 hour, bs::UINT8 min)
+  void GameClock::setTime(bs::INT32 hour, bs::INT32 min)
   {
-    bs::INT8 minutesToAdvance = (min%60)-getMinute();
-    bs::INT8 hoursToAdvance = (hour%24)-getHour();
-    bs::UINT8 daysToAdvance = hour/24;
+    // TODO: Negative input parameters are supported for hour, but what about negative values that result in negative remaining hours?
+    //       Do we need to handle negative Minutes at all?
+    float elapsedDaysInSeconds = getDay() * SECONDS_IN_A_DAY;
+    bs::INT32 daysToAdvance    = hour / 24;
 
-    mElapsedIngameSeconds += ((daysToAdvance*SECONDS_IN_A_DAY)+(hoursToAdvance*SECONDS_IN_AN_HOUR)+(minutesToAdvance*SECONDS_IN_A_MINUTE))*CLOCK_SPEED_FACTOR;
+    hour = hour % 24;
+    min  = min % 60;
+
+    mElapsedIngameSeconds = elapsedDaysInSeconds + (daysToAdvance*SECONDS_IN_A_DAY + hour*SECONDS_IN_AN_HOUR + min*SECONDS_IN_A_MINUTE);
+
+    // TODO: According to https://forum.worldofplayers.de/forum/threads/396326-Tipp-Tageweise-springen-%28auch-zur%C3%BCck%29?p=6231841&viewfull=1#post6231841
+    //       if this shall be the Wld_setTime external, it also needs to implement these three functions here
+    //       RoutineManager.SetDailyRoutinePos(RoutinesOnly)
+    //       Game.SetObjectRoutineTimeChange(GameHour, GameMinute, Hour, Minute)
+    //       SpawnManager.SpawnImmediately(ResetSpawnTime)
   }
 
   bs::RTTITypeBase* GameClock::getRTTIStatic()
