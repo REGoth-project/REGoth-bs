@@ -51,6 +51,8 @@ add_library(REGothEngine
   components/Waynet.cpp
   components/CharacterKeyboardInput.hpp
   components/CharacterKeyboardInput.cpp
+  components/GameClock.hpp
+  components/GameClock.cpp
   exception/Throw.hpp
   animation/StateNaming.hpp
   animation/StateNaming.cpp
