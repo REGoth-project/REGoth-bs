@@ -4,6 +4,7 @@
 #include <Components/BsCRenderable.h>
 #include <RTTI/RTTI_VisualMorphMesh.hpp>
 #include <Scene/BsSceneObject.h>
+#include <components/ShadowSampling.hpp>
 #include <log/logging.hpp>
 #include <original-content/OriginalGameResources.hpp>
 
@@ -38,7 +39,11 @@ namespace REGoth
       BS_EXCEPT(InvalidStateException, "Scene object should not already have a CRenderable!");
     }
 
-    return SO()->addComponent<bs::CRenderable>();
+    auto renderable = SO()->addComponent<bs::CRenderable>();
+
+    SO()->addComponent<ShadowSampling>();
+
+    return renderable;
   }
 
   bool VisualMorphMesh::hasRenderableComponent()

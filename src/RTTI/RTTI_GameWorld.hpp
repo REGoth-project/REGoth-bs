@@ -2,6 +2,7 @@
 
 #include "RTTIUtil.hpp"
 #include <components/GameWorld.hpp>
+#include <visual/ShadowSampler.hpp>
 
 namespace REGoth
 {
@@ -16,8 +17,9 @@ namespace REGoth
     BS_RTTI_MEMBER_REFLPTR(mScriptVM, 2)
     BS_RTTI_MEMBER_PLAIN(mIsInitialized, 3)
     BS_RTTI_MEMBER_REFL(mGameClock, 4)
-    BS_RTTI_MEMBER_REFL_ARRAY(mAllCharacters, 5)
-    BS_RTTI_MEMBER_REFL_ARRAY(mAllItems, 6)
+    BS_RTTI_MEMBER_REFLPTR(mShadowSampler, 5)
+    BS_RTTI_MEMBER_REFL_ARRAY(mAllCharacters, 6)
+    BS_RTTI_MEMBER_REFL_ARRAY(mAllItems, 7)
     BS_END_RTTI_MEMBERS
 
     public:

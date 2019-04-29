@@ -27,6 +27,8 @@ namespace REGoth
     class ScriptVMForGameWorld;
   }
 
+  class ShadowSampler;
+
   /**
    * Component to be attached to the scene root which manages the game world.
    *
@@ -138,6 +140,14 @@ namespace REGoth
     HGameClock gameclock() const
     {
       return mGameClock;
+    }
+
+	/**
+     * @return  Shadow sampler for the world.
+     */
+    bs::SPtr<ShadowSampler>& shadowsampler()
+    {
+      return mShadowSampler;
     }
 
     /**
@@ -336,6 +346,11 @@ namespace REGoth
      * Access to the GameClock of this World.
      */
     HGameClock mGameClock;
+
+	/**
+     * Access to the ShadowSampler of for the world visual.
+     */
+    bs::SPtr<ShadowSampler> mShadowSampler;
 
     /**
      * Script-VM with GOTHIC.DAT loaded.

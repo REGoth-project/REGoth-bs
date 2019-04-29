@@ -5,6 +5,7 @@
 #include <log/logging.hpp>
 #include <original-content/OriginalGameResources.hpp>
 #include <original-content/VirtualFileSystem.hpp>
+#include <components/ShadowSampling.hpp>
 
 namespace REGoth
 {
@@ -37,7 +38,11 @@ namespace REGoth
       BS_EXCEPT(InvalidStateException, "Scene object should not already have a CRenderable!");
     }
 
-    return SO()->addComponent<bs::CRenderable>();
+    auto renderable = SO()->addComponent<bs::CRenderable>();
+
+    SO()->addComponent<ShadowSampling>();
+
+    return renderable;
   }
 
   bool VisualStaticMesh::hasRenderableComponent()

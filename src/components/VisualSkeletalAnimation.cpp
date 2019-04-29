@@ -10,6 +10,7 @@
 #include <animation/Animation.hpp>
 #include <animation/StateNaming.hpp>
 #include <components/NodeVisuals.hpp>
+#include <components/ShadowSampling.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 #include <original-content/OriginalGameResources.hpp>
@@ -179,6 +180,7 @@ namespace REGoth
     renderSO->getParent()->rotate(rotate90Y);
 
     mSubRenderable  = renderSO->addComponent<bs::CRenderable>();
+    renderSO->addComponent<ShadowSampling>();
     mSubAnimation   = renderSO->addComponent<bs::CAnimation>();
     mSubNodeVisuals = renderSO->addComponent<NodeVisuals>();
   }

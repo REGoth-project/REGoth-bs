@@ -5,6 +5,7 @@
 #include <Mesh/BsMesh.h>
 #include <RTTI/RTTI_NodeVisuals.hpp>
 #include <Scene/BsSceneObject.h>
+#include <components/ShadowSampling.hpp>
 #include <components/Visual.hpp>
 #include <components/VisualStaticMesh.hpp>
 #include <log/logging.hpp>
@@ -78,6 +79,8 @@ namespace REGoth
     bs::HRenderable renderable = boneSO->addComponent<bs::CRenderable>();
     renderable->setMesh(mesh->getMesh());
     renderable->setMaterials(mesh->getMaterials());
+
+    boneSO->addComponent<ShadowSampling>();
   }
 
   void NodeVisuals::clearNodeAttachment(const bs::String& node)

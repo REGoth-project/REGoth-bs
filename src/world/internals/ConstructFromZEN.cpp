@@ -18,6 +18,7 @@
 #include <original-content/VirtualFileSystem.hpp>
 #include <zenload/zCMesh.h>
 #include <zenload/zenParser.h>
+#include <visual/RaycastShadowSampler.hpp>
 
 namespace REGoth
 {
@@ -49,6 +50,16 @@ namespace REGoth
 
     bs::HSceneObject worldMesh = importWorldMesh(zen);
     worldMesh->setParent(gameWorld->SO());
+
+    auto worldMeshRenderable = worldMesh->getComponent<bs::CRenderable>();
+    auto worldMeshCollider   = worldMesh->getComponent<bs::CMeshCollider>();
+
+    if (!worldMeshRenderable || !worldMeshCollider)
+    {
+      // TODO: ERROR
+    }
+
+    gameWorld->shadowsampler() = bs::bs_shared_ptr_new<RaycastShadowSampler>(worldMeshRenderable->getMesh(), worldMeshCollider);
 
     importVobs(gameWorld->SO(), gameWorld, zen);
     importWaynet(gameWorld->SO(), zen);

@@ -145,7 +145,7 @@ shader Surface
 
       encodeGBuffer(surfaceData, OutGBufferA, OutGBufferB, OutGBufferC, OutGBufferD);
 
-      OutSceneColor = surfaceData.albedo.rgb * input.color.rgb;
+      OutSceneColor = surfaceData.albedo.rgb * input.color.rgb * gColor.rgb;
     }
   };
 };
