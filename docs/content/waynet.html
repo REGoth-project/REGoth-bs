@@ -185,6 +185,8 @@ Scene-Objects with the <code class="docutils literal notranslate"><span class="p
 references to all other Waypoints that can be reached directly from its
 location. If a Waypoint is in reach of another Waypoint, that means there is a
 <em>Path</em> between the two.</p>
+<p>The scripts actually only tell the target destination a character should go to,
+so some sort of algorithm to find the shortest path to it is needed.</p>
 </div>
 <div class="section" id="the-waynet-components">
 <h2>The Waynet-Components<a class="headerlink" href="#the-waynet-components" title="Permalink to this headline">¶</a></h2>
@@ -195,7 +197,7 @@ specific ones. Since every Waypoint is a normal Scene-Object, you can also simpl
 recursive search for the name you are looking for from the scenes root object.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If you are querying a Waypoint by name and you are not <em>completely</em> that the object you are
+<p class="last">If you are querying a Waypoint by name and you are not <em>completely</em> sure that the object you are
 looking for is indeed a Waypoint, it’s better to search the full scene.</p>
 </div>
 <p>If you have a <code class="docutils literal notranslate"><span class="pre">Waypoint</span></code>-component at hand, you can query the paths reachable from that Waypoint
