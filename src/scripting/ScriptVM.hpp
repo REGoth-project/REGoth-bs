@@ -62,6 +62,7 @@ namespace REGoth
        * Runs the init-scripts for the given world.
        *
        * Throws, if the requested world has no init script.
+       * Throws, if no hero character is in the world yet.
        *
        * @param  worldName  The world to init, e.g. `NEWWORLD`.
        */
@@ -71,6 +72,11 @@ namespace REGoth
        * Set the scipt object of the `hero`. This will be most likely the player.
        */
       virtual void setHero(ScriptObjectHandle hero) = 0;
+
+      /**
+       * @return Script object currently set as `hero`.
+       */
+      virtual ScriptObjectHandle getHero() = 0;
 
       /**
        * Access to the script object storage

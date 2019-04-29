@@ -111,15 +111,6 @@ namespace REGoth
     virtual ~GameWorld();
 
     /**
-     * Called when a ZEN-file has been successfully imported.
-     * This is where further initializations can take place, such as
-     * running the worlds script init routine.
-     */
-    virtual void onImportedZEN()
-    {
-    }
-
-    /**
      * Returns the currently loaded worlds name.
      *
      * The world name is parsed from the ZEN-files name. So, a world
@@ -153,7 +144,7 @@ namespace REGoth
      * Items, which need script constructors to run. However, it will
      * not run the worlds init-script routine as that could be unwanted
      * for some samples or tools. To run the init-script routine,
-     * the virtual method `onImportedZEN()` should be overridden.
+     * the see `runInitScripts()`.
      *
      * Since importing a ZEN can take a while, you can `save()` the
      * world afterwards and load from the save, which is much quicker.
@@ -185,6 +176,21 @@ namespace REGoth
      * @return Prefab of the saved world.
      */
     static bs::HPrefab load(const bs::String& saveName);
+
+    /**
+     * Runs the worlds init script.
+     *
+     * Running a worlds init script should only be necessary after the initial
+     * import of a ZEN-file or more specifically: When the player has chosen
+     * *New Game* in the main menu. Calling the script init functions will place
+     * all NPCs into the game and set up the world for playing.
+     *
+     * @note  Some script instances *need* to access the `hero`-instance, so before
+     *        calling this, a hero needs to have been created! To help debugging and
+     *        not exit with an obscure script error, this method will throw if the
+     *        hero has not been created yet.
+     */
+    void runInitScripts();
 
     /**
      * Inserts an item at the given location.
@@ -239,8 +245,18 @@ namespace REGoth
      */
     HCharacter insertCharacter(const bs::String& instance, const bs::Transform& transform);
 
+    /**
+     * @return The character currently set as hero. Empty handle if no hero is currently set.
+     */
+    HCharacter hero() const;
+
   protected:
     void onInitialized() override;
+
+    /**
+     * Called when a ZEN-file has been successfully imported.
+     */
+    void onImportedZEN();
 
   private:
     /**

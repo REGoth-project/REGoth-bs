@@ -71,6 +71,11 @@ namespace REGoth
       setInstance("HERO", hero);
     }
 
+    ScriptObjectHandle DaedalusVMForGameWorld::getHero()
+    {
+      return getInstance("HERO");
+    }
+
     void DaedalusVMForGameWorld::setInstance(const bs::String& instance,
                                              ScriptObjectHandle scriptObject)
     {
@@ -106,6 +111,12 @@ namespace REGoth
 
     void DaedalusVMForGameWorld::initializeWorld(const bs::String& worldName)
     {
+      // Some scripts already refer to the hero, so make sure that has been set
+      if (getInstance("HERO") == SCRIPT_OBJECT_HANDLE_INVALID)
+      {
+        REGOTH_THROW(InvalidStateException, "Hero-instance must be set to call world init scripts!");
+      }
+
       // FIXME: Do STARTUP_* only on first load?
       executeScriptFunction("STARTUP_" + worldName);
 

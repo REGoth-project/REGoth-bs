@@ -147,6 +147,15 @@ namespace REGoth
     return rootSO->addComponent<GameWorld>(zenFile);
   }
 
+  void GameWorld::onImportedZEN()
+  {
+  }
+
+  void GameWorld::runInitScripts()
+  {
+    mScriptVM->initializeWorld(worldName());
+  }
+
   HGameWorld GameWorld::createEmpty()
   {
     bs::HSceneObject rootSO = bs::SceneObject::create("root");
@@ -176,6 +185,18 @@ namespace REGoth
   bs::String GameWorld::worldName() const
   {
     return mZenFile.substr(0, mZenFile.find_first_of('.'));
+  }
+
+  HCharacter GameWorld::hero() const
+  {
+    auto scriptObject = mScriptVM->getHero();
+
+    if (scriptObject == Scripting::SCRIPT_OBJECT_HANDLE_INVALID)
+      return {};
+
+    bs::HSceneObject heroSO = mScriptVM->mapping().getMappedSceneObject(scriptObject);
+
+    return heroSO->getComponent<Character>();
   }
 
   void GameWorld::save(const bs::String& saveName)

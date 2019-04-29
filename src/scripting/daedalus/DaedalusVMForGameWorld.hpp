@@ -28,6 +28,7 @@ namespace REGoth
 
       void initializeWorld(const bs::String& worldName) override;
       void setHero(ScriptObjectHandle hero) override;
+      ScriptObjectHandle getHero() override;
 
     protected:
       /**
