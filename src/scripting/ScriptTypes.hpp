@@ -43,15 +43,9 @@ namespace REGoth
       SCRIPT_OBJECT_HANDLE_INVALID = 0
     };
 
-    template <typename T>
-    struct ScriptValues
-    {
-      bs::Vector<T> values;
-    };
-
-    using ScriptInts = ScriptValues<bs::INT32>;
-    using ScriptFloats = ScriptValues<float>;
-    using ScriptStrings = ScriptValues<bs::String>;
+    using ScriptInts = bs::Vector<bs::INT32>;
+    using ScriptFloats = bs::Vector<float>;
+    using ScriptStrings = bs::Vector<bs::String>;
 
   }  // namespace Scripting
 }  // namespace REGoth

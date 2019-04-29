@@ -189,16 +189,16 @@ namespace REGoth
       {
         fillBase(target, source);
 
-        target.ints.values.resize(source.properties.elemProps.count);
+        target.ints.resize(source.properties.elemProps.count);
 
-        if (target.ints.values.size() < source.intData.size())
+        if (target.ints.size() < source.intData.size())
         {
-          target.ints.values.resize(source.intData.size());
+          target.ints.resize(source.intData.size());
         }
 
         for (bs::UINT32 i = 0; i < (bs::UINT32)source.intData.size(); i++)
         {
-          target.ints.values[i] = source.intData[i];
+          target.ints[i] = source.intData[i];
         }
       }
 
@@ -206,16 +206,16 @@ namespace REGoth
       {
         fillBase(target, source);
 
-        target.floats.values.resize(source.properties.elemProps.count);
+        target.floats.resize(source.properties.elemProps.count);
 
-        if (target.floats.values.size() < source.floatData.size())
+        if (target.floats.size() < source.floatData.size())
         {
-          target.floats.values.resize(source.floatData.size());
+          target.floats.resize(source.floatData.size());
         }
 
         for (bs::UINT32 i = 0; i < (bs::UINT32)source.floatData.size(); i++)
         {
-          target.floats.values[i] = source.floatData[i];
+          target.floats[i] = source.floatData[i];
         }
       }
 
@@ -223,16 +223,16 @@ namespace REGoth
       {
         fillBase(target, source);
 
-        target.strings.values.resize(source.properties.elemProps.count);
+        target.strings.resize(source.properties.elemProps.count);
 
-        if (target.strings.values.size() < source.strData.size())
+        if (target.strings.size() < source.strData.size())
         {
-          target.strings.values.resize(source.strData.size());
+          target.strings.resize(source.strData.size());
         }
 
         for (bs::UINT32 i = 0; i < (bs::UINT32)source.strData.size(); i++)
         {
-          target.strings.values[i] = source.strData[i].c_str();
+          target.strings[i] = source.strData[i].c_str();
         }
       }
 

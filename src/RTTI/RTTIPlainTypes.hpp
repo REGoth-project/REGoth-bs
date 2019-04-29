@@ -11,6 +11,7 @@ namespace bs
    *
    * @see		RTTIPlainType
    */
+  #if 0
   template <class T>
   struct RTTIPlainType<REGoth::Scripting::ScriptValues<T>>
   {
@@ -64,6 +65,7 @@ namespace bs
       return (UINT32)dataSize;
     }
   };
+  #endif
 
 }
 // namespace REGoth

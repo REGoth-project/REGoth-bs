@@ -460,29 +460,29 @@ namespace REGoth
         {
           ScriptInts& ints = mClassVarResolver->resolveClassVariableInts(symbol.name);
 
-          if (var.arrayIndex >= ints.values.size())
+          if (var.arrayIndex >= ints.size())
           {
             REGOTH_THROW(
                 InvalidParametersException,
                 bs::StringUtil::format("Array index out of range! (index: {0}, ArraySize: {1})",
-                                       var.arrayIndex, ints.values.size()));
+                                       var.arrayIndex, ints.size()));
           }
 
-          return ints.values[var.arrayIndex];
+          return ints[var.arrayIndex];
         }
         else
         {
           SymbolInt& symbolInt = (SymbolInt&)symbol;
 
-          if (var.arrayIndex >= symbolInt.ints.values.size())
+          if (var.arrayIndex >= symbolInt.ints.size())
           {
             REGOTH_THROW(
                 InvalidParametersException,
                 bs::StringUtil::format("Array index out of range! (index: {0}, ArraySize: {1})",
-                                       var.arrayIndex, symbolInt.ints.values.size()));
+                                       var.arrayIndex, symbolInt.ints.size()));
           }
 
-          return symbolInt.ints.values[var.arrayIndex];
+          return symbolInt.ints[var.arrayIndex];
         }
       }
       else
@@ -503,29 +503,29 @@ namespace REGoth
         {
           ScriptFloats& floats = mClassVarResolver->resolveClassVariableFloats(symbol.name);
 
-          if (var.arrayIndex >= floats.values.size())
+          if (var.arrayIndex >= floats.size())
           {
             REGOTH_THROW(
                 InvalidParametersException,
                 bs::StringUtil::format("Array index out of range! (index: {0}, ArraySize: {1})",
-                                       var.arrayIndex, floats.values.size()));
+                                       var.arrayIndex, floats.size()));
           }
 
-          return floats.values[var.arrayIndex];
+          return floats[var.arrayIndex];
         }
         else
         {
           SymbolFloat& symbolFloat = (SymbolFloat&)symbol;
 
-          if (var.arrayIndex >= symbolFloat.floats.values.size())
+          if (var.arrayIndex >= symbolFloat.floats.size())
           {
             REGOTH_THROW(
                 InvalidParametersException,
                 bs::StringUtil::format("Array index out of range! (index: {0}, ArraySize: {1})",
-                                       var.arrayIndex, symbolFloat.floats.values.size()));
+                                       var.arrayIndex, symbolFloat.floats.size()));
           }
 
-          return symbolFloat.floats.values[var.arrayIndex];
+          return symbolFloat.floats[var.arrayIndex];
         }
       }
       else
@@ -546,29 +546,29 @@ namespace REGoth
         {
           ScriptStrings& strings = mClassVarResolver->resolveClassVariableStrings(symbol.name);
 
-          if (var.arrayIndex >= strings.values.size())
+          if (var.arrayIndex >= strings.size())
           {
             REGOTH_THROW(
                 InvalidParametersException,
                 bs::StringUtil::format("Array index out of range! (index: {0}, ArraySize: {1})",
-                                       var.arrayIndex, strings.values.size()));
+                                       var.arrayIndex, strings.size()));
           }
 
-          return strings.values[var.arrayIndex];
+          return strings[var.arrayIndex];
         }
         else
         {
           SymbolString& symbolString = (SymbolString&)symbol;
 
-          if (var.arrayIndex >= symbolString.strings.values.size())
+          if (var.arrayIndex >= symbolString.strings.size())
           {
             REGOTH_THROW(
                 InvalidParametersException,
                 bs::StringUtil::format("Array index out of range! (index: {0}, ArraySize: {1})",
-                                       var.arrayIndex, symbolString.strings.values.size()));
+                                       var.arrayIndex, symbolString.strings.size()));
           }
 
-          return symbolString.strings.values[var.arrayIndex];
+          return symbolString.strings[var.arrayIndex];
         }
       }
       else

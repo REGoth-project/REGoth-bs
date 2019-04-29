@@ -52,7 +52,7 @@ namespace REGoth
     class RTTI_SymbolInt : public bs::RTTIType<SymbolInt, SymbolBase, RTTI_SymbolInt>
     {
       BS_BEGIN_RTTI_MEMBERS
-      BS_RTTI_MEMBER_PLAIN_ARRAY_NAMED(ints, ints.values, 0)
+      BS_RTTI_MEMBER_PLAIN_ARRAY_NAMED(ints, ints, 0)
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolInt)
@@ -61,7 +61,7 @@ namespace REGoth
     class RTTI_SymbolFloat : public bs::RTTIType<SymbolFloat, SymbolBase, RTTI_SymbolFloat>
     {
       BS_BEGIN_RTTI_MEMBERS
-      BS_RTTI_MEMBER_PLAIN_ARRAY_NAMED(floats, floats.values, 0)
+      BS_RTTI_MEMBER_PLAIN_ARRAY_NAMED(floats, floats, 0)
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolFloat)
@@ -70,7 +70,7 @@ namespace REGoth
     class RTTI_SymbolString : public bs::RTTIType<SymbolString, SymbolBase, RTTI_SymbolString>
     {
       BS_BEGIN_RTTI_MEMBERS
-      BS_RTTI_MEMBER_PLAIN_ARRAY_NAMED(strings, strings.values, 0)
+      BS_RTTI_MEMBER_PLAIN_ARRAY_NAMED(strings, strings, 0)
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolString)

@@ -62,17 +62,18 @@ namespace REGoth
     public:
       RTTI_ScriptClassTemplates()
       {
-        addReflectableArrayField("templates", 0,                                //
-                                 &RTTI_ScriptClassTemplates::getTemplate,        //
-                                 &RTTI_ScriptClassTemplates::getSizeTemplates,   //
-                                 &RTTI_ScriptClassTemplates::setTemplate,        //
-                                 &RTTI_ScriptClassTemplates::setSizeTemplates);  //
+        // FIXME: Breaks with an obscure error
+        // addReflectableArrayField("templates", 0,                                //
+        //                          &RTTI_ScriptClassTemplates::getTemplate,        //
+        //                          &RTTI_ScriptClassTemplates::getSizeTemplates,   //
+        //                          &RTTI_ScriptClassTemplates::setTemplate,        //
+        //                          &RTTI_ScriptClassTemplates::setSizeTemplates);  //
 
-        addPlainArrayField("classNames", 1,                                //
-                           &RTTI_ScriptClassTemplates::getClassName,        //
-                           &RTTI_ScriptClassTemplates::getSizeClassNames,   //
-                           &RTTI_ScriptClassTemplates::setClassName,        //
-                           &RTTI_ScriptClassTemplates::setSizeClassNames);  //
+        // addPlainArrayField("classNames", 1,                                //
+        //                    &RTTI_ScriptClassTemplates::getClassName,        //
+        //                    &RTTI_ScriptClassTemplates::getSizeClassNames,   //
+        //                    &RTTI_ScriptClassTemplates::setClassName,        //
+        //                    &RTTI_ScriptClassTemplates::setSizeClassNames);  //
       }
 
       void onSerializationStarted(ScriptClassTemplates* obj)

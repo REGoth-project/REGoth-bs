@@ -11,6 +11,8 @@ namespace REGoth
 {
   namespace Scripting
   {
+    using UINT32 = bs::UINT32;
+
     class RTTI_ScriptObject : public bs::RTTIType<ScriptObject, bs::IReflectable, RTTI_ScriptObject>
     {
       BS_BEGIN_RTTI_MEMBERS

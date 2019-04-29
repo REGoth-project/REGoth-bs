@@ -50,12 +50,12 @@ namespace REGoth
           throwVariableDoesNotExist(name, "String");
         }
 
-        if (arrayIndex >= it->second.values.size())
+        if (arrayIndex >= it->second.size())
         {
           throwArrayOutOfRange(name, "String", arrayIndex);
         }
 
-        return it->second.values[arrayIndex];
+        return it->second[arrayIndex];
       }
 
       /**
@@ -70,12 +70,12 @@ namespace REGoth
           throwVariableDoesNotExist(name, "Float");
         }
 
-        if (arrayIndex >= it->second.values.size())
+        if (arrayIndex >= it->second.size())
         {
           throwArrayOutOfRange(name, "Float", arrayIndex);
         }
 
-        return it->second.values[arrayIndex];
+        return it->second[arrayIndex];
       }
 
       /**
@@ -90,12 +90,12 @@ namespace REGoth
           throwVariableDoesNotExist(name, "Int");
         }
 
-        if (arrayIndex >= it->second.values.size())
+        if (arrayIndex >= it->second.size())
         {
           throwArrayOutOfRange(name, "Int", arrayIndex);
         }
 
-        return it->second.values[arrayIndex];
+        return it->second[arrayIndex];
       }
 
       void throwVariableDoesNotExist(const bs::String& name, const bs::String& type)
