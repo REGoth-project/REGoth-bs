@@ -14,9 +14,9 @@ namespace REGoth
     : bs::Component(parent)
   { }
 
-  void GameClock::update()
+  void GameClock::fixedUpdate()
   {
-    float delta = bs::gTime().getFrameDelta();
+    float delta = bs::gTime().getFixedFrameDelta();
 
     mElapsedSeconds       += delta;
     mElapsedIngameSeconds += delta * CLOCK_SPEED_FACTOR;
@@ -27,14 +27,14 @@ namespace REGoth
     return bs::Math::floorToPosInt(mElapsedIngameSeconds / SECONDS_IN_A_DAY);
   }
 
-  bs::UINT8 GameClock::getHour() const
+  bs::INT32 GameClock::getHour() const
   {
     float elapsedSecondsOfDay = mElapsedIngameSeconds - (getDay() * SECONDS_IN_A_DAY);
     
     return bs::Math::floorToPosInt(elapsedSecondsOfDay / SECONDS_IN_AN_HOUR);
   }
 
-  bs::UINT8 GameClock::getMinute() const
+  bs::INT32 GameClock::getMinute() const
   {
     float elapsedSecondsOfHour = mElapsedIngameSeconds - (getDay() * SECONDS_IN_A_DAY) - (getHour() * SECONDS_IN_AN_HOUR);
 

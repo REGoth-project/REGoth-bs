@@ -12,7 +12,8 @@ namespace REGoth
       : public bs::RTTIType<GameClock, bs::Component, RTTI_GameClock>
   {
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+      BS_RTTI_MEMBER_PLAIN(mElapsedSeconds, 0)
+      BS_RTTI_MEMBER_PLAIN(mElapsedIngameSeconds, 0)
     BS_END_RTTI_MEMBERS
 
   public:

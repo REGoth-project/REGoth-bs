@@ -16,9 +16,9 @@ namespace REGoth
     GameClock(const bs::HSceneObject& parent);
 
     /**
-     * Triggered once per frame. Updates elapsedSeconds for play and ingame time.
+     * Triggered once every fixed time step. Updates elapsedSeconds for play and ingame time.
      */
-    void update() override;
+    void fixedUpdate() override;
 
     /**
      * @return Current ingame day.
@@ -28,12 +28,12 @@ namespace REGoth
     /**
      * @return Current hour of time of day (hh:mm).
      */
-    bs::UINT8 getHour() const;
+    bs::INT32 getHour() const;
 
     /**
      * @return Current Minute of time of day (hh:mm).
      */
-    bs::UINT8 getMinute() const;
+    bs::INT32 getMinute() const;
 
     /**
      * @return  Whether the current ingame time of day (hh::mm) is between the two given times of day.
@@ -73,7 +73,7 @@ namespace REGoth
   /* RTTI                                                                 */
   /************************************************************************/
   public:
-    friend class RTTI_CharacterKeyboardInput;
+    friend class RTTI_GameClock;
     static bs::RTTITypeBase* getRTTIStatic();
     bs::RTTITypeBase* getRTTI() const override;
 
