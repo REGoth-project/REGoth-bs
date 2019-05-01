@@ -1,9 +1,6 @@
 #pragma once
 
-#include "RTTI_TypeIDs.hpp"
-#include <BsCorePrerequisites.h>
-#include <Private/RTTI/BsGameObjectRTTI.h>  // Says private, but bs:f uses this too in their RTTIs
-#include <Reflection/BsRTTIType.h>
+#include "RTTIUtil.hpp"
 #include <components/ScriptBackedBy.hpp>
 
 namespace REGoth
@@ -22,21 +19,7 @@ namespace REGoth
     {
     }
 
-    bs::SPtr<bs::IReflectable> newRTTIObject() override
-    {
-      return bs::GameObjectRTTI::createGameObject<ScriptBackedBy>();
-    }
-
-    const bs::String& getRTTIName() override
-    {
-      static bs::String name = "ScriptBackedBy";
-      return name;
-    }
-
-    bs::UINT32 getRTTIId() override
-    {
-      return TID_REGOTH_ScriptBackedBy;
-    }
+    REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT(ScriptBackedBy)
   };
 
 }  // namespace REGoth

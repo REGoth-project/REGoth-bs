@@ -1,9 +1,6 @@
 #pragma once
 
-#include "RTTI_TypeIDs.hpp"
-#include <BsCorePrerequisites.h>
-#include <Private/RTTI/BsGameObjectRTTI.h>  // Says private, but bs:f uses this too in their RTTIs
-#include <Reflection/BsRTTIType.h>
+#include "RTTIUtil.hpp"
 #include <components/CharacterKeyboardInput.hpp>
 
 namespace REGoth
@@ -20,21 +17,7 @@ namespace REGoth
     {
     }
 
-    bs::SPtr<bs::IReflectable> newRTTIObject() override
-    {
-      return bs::GameObjectRTTI::createGameObject<CharacterKeyboardInput>();
-    }
-
-    const bs::String& getRTTIName() override
-    {
-      static bs::String name = "CharacterKeyboardInput";
-      return name;
-    }
-
-    bs::UINT32 getRTTIId() override
-    {
-      return TID_REGOTH_CharacterKeyboardInput;
-    }
+    REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT(CharacterKeyboardInput)
   };
 
 }  // namespace REGoth

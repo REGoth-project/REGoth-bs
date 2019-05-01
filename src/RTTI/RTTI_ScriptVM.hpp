@@ -1,9 +1,6 @@
 #pragma once
 
-#include "RTTI_TypeIDs.hpp"
-#include <BsCorePrerequisites.h>
-#include <Private/RTTI/BsGameObjectRTTI.h>  // Says private, but bs:f uses this too in their RTTIs
-#include <Reflection/BsRTTIType.h>
+#include "RTTIUtil.hpp"
 #include <scripting/ScriptVM.hpp>
 
 namespace REGoth
@@ -29,22 +26,7 @@ namespace REGoth
         obj->mClassTemplates.createClassTemplates(obj->mScriptSymbols);
       }
 
-      bs::SPtr<bs::IReflectable> newRTTIObject() override
-      {
-        REGOTH_THROW(InvalidParametersException, "Cannot create instance of abstract class!");
-        return nullptr;
-      }
-
-      const bs::String& getRTTIName() override
-      {
-        static bs::String name = "ScriptVM";
-        return name;
-      }
-
-      bs::UINT32 getRTTIId() override
-      {
-        return TID_REGOTH_ScriptVM;
-      }
+      REGOTH_IMPLEMENT_RTTI_CLASS_ABSTRACT(ScriptVM)
     };
   }  // namespace Scripting
 

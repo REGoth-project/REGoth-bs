@@ -1,8 +1,6 @@
 #pragma once
 
-#include "RTTI_TypeIDs.hpp"
-#include <BsCorePrerequisites.h>
-#include <Reflection/BsRTTIType.h>
+#include "RTTIUtil.hpp"
 #include <scripting/ScriptObjectStorage.hpp>
 
 namespace REGoth
@@ -93,21 +91,7 @@ namespace REGoth
         }
       }
 
-      bs::SPtr<bs::IReflectable> newRTTIObject() override
-      {
-        return bs::bs_shared_ptr_new<ScriptObjectStorage>();
-      }
-
-      const bs::String& getRTTIName() override
-      {
-        static bs::String name = "ScriptObjectStorage";
-        return name;
-      }
-
-      bs::UINT32 getRTTIId() override
-      {
-        return TID_REGOTH_ScriptObjectStorage;
-      }
+      REGOTH_IMPLEMENT_RTTI_CLASS_FOR_REFLECTABLE(ScriptObjectStorage)
 
       bs::Vector<ScriptObject> mObjects;
       bs::Vector<ScriptObjectHandle> mObjectHandles;

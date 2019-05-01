@@ -1,9 +1,6 @@
 #pragma once
 
-#include "RTTI_TypeIDs.hpp"
-#include <BsCorePrerequisites.h>
-#include <Private/RTTI/BsGameObjectRTTI.h>  // Says private, but bs:f uses this too in their RTTIs
-#include <Reflection/BsRTTIType.h>
+#include "RTTIUtil.hpp"
 #include <scripting/ScriptSymbolStorage.hpp>
 
 namespace REGoth
@@ -25,21 +22,7 @@ namespace REGoth
       {
       }
 
-      bs::SPtr<bs::IReflectable> newRTTIObject() override
-      {
-        return bs::bs_shared_ptr_new<ScriptSymbolStorage>();
-      }
-
-      const bs::String& getRTTIName() override
-      {
-        static bs::String name = "ScriptSymbolStorage";
-        return name;
-      }
-
-      bs::UINT32 getRTTIId() override
-      {
-        return TID_REGOTH_ScriptSymbolStorage;
-      }
+      REGOTH_IMPLEMENT_RTTI_CLASS_FOR_REFLECTABLE(ScriptSymbolStorage)
     };
   }  // namespace Scripting
   // namespace Scripting

@@ -1,9 +1,6 @@
 #pragma once
 
-#include "RTTI_TypeIDs.hpp"
-#include <BsCorePrerequisites.h>
-#include <Private/RTTI/BsGameObjectRTTI.h>  // Says private, but bs:f uses this too in their RTTIs
-#include <Reflection/BsRTTIType.h>
+#include "RTTIUtil.hpp"
 #include <scripting/daedalus/DaedalusVMForGameWorld.hpp>
 
 namespace REGoth
@@ -22,21 +19,7 @@ namespace REGoth
       {
       }
 
-      bs::SPtr<bs::IReflectable> newRTTIObject() override
-      {
-        return bs::bs_shared_ptr_new<DaedalusVMForGameWorld>();
-      }
-
-      const bs::String& getRTTIName() override
-      {
-        static bs::String name = "DaedalusVMForGameWorld";
-        return name;
-      }
-
-      bs::UINT32 getRTTIId() override
-      {
-        return TID_REGOTH_DaedalusVMForGameWorld;
-      }
+      REGOTH_IMPLEMENT_RTTI_CLASS_FOR_REFLECTABLE(DaedalusVMForGameWorld)
     };
   }  // namespace Scripting
 

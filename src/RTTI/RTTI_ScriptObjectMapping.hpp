@@ -1,9 +1,6 @@
 #pragma once
 
-#include "RTTI_TypeIDs.hpp"
-#include <BsCorePrerequisites.h>
-#include <Private/RTTI/BsGameObjectRTTI.h>  // Says private, but bs:f uses this too in their RTTIs
-#include <Reflection/BsRTTIType.h>
+#include "RTTIUtil.hpp"
 #include <scripting/ScriptObjectMapping.hpp>
 
 namespace REGoth
@@ -91,22 +88,7 @@ namespace REGoth
           obj->mScriptToSceneObjectMapping[mScriptHandles[i]] = mObjects[i];
         }
       }
-
-      bs::SPtr<bs::IReflectable> newRTTIObject() override
-      {
-        return bs::bs_shared_ptr_new<ScriptObjectMapping>();
-      }
-
-      const bs::String& getRTTIName() override
-      {
-        static bs::String name = "ScriptObjectMapping";
-        return name;
-      }
-
-      bs::UINT32 getRTTIId() override
-      {
-        return TID_REGOTH_ScriptObjectMapping;
-      }
+      REGOTH_IMPLEMENT_RTTI_CLASS_FOR_REFLECTABLE(ScriptObjectMapping)
 
       bs::Vector<bs::HSceneObject> mObjects;
       bs::Vector<ScriptObjectHandle> mScriptHandles;

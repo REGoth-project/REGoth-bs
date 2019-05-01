@@ -1,4 +1,8 @@
 #pragma once
+#include "RTTI_TypeIDs.hpp"
+#include <BsCorePrerequisites.h>
+#include <Private/RTTI/BsGameObjectRTTI.h>  // Says private, but bs:f uses this too in their RTTIs
+#include <Reflection/BsRTTIType.h>
 
 /**
  * \file
@@ -38,9 +42,9 @@
  *       might have to make the parameterless constructor public until that
  *       is figured out.
  */
-#define REGOTH_DECLARE_RTTI(classname) \
-  friend class RTTI_##classname;                 \
-  static bs::RTTITypeBase* getRTTIStatic();      \
+#define REGOTH_DECLARE_RTTI(classname)      \
+  friend class RTTI_##classname;            \
+  static bs::RTTITypeBase* getRTTIStatic(); \
   bs::RTTITypeBase* getRTTI() const override;
 
 /**
@@ -57,14 +61,84 @@
  * The current namespace needs direct access to the components class.
  * Also note that there is not semicolon after the makro!
  */
-#define REGOTH_DEFINE_RTTI(classname) \
-                                                \
-  bs::RTTITypeBase* classname::getRTTIStatic()  \
-  {                                             \
-    return RTTI_##classname::instance();        \
-  }                                             \
-                                                \
-  bs::RTTITypeBase* classname::getRTTI() const  \
-  {                                             \
-    return classname::getRTTIStatic();          \
+#define REGOTH_DEFINE_RTTI(classname)          \
+                                               \
+  bs::RTTITypeBase* classname::getRTTIStatic() \
+  {                                            \
+    return RTTI_##classname::instance();       \
+  }                                            \
+                                               \
+  bs::RTTITypeBase* classname::getRTTI() const \
+  {                                            \
+    return classname::getRTTIStatic();         \
+  }
+
+/**
+ * For use in the RTTI-class. Implements the glue code to create an instance of the component
+ * the RTTI describes.
+ *
+ * Use this if the RTTI describes a class derived from bs::Component.
+ */
+#define REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT(classname)  \
+                                                              \
+  bs::SPtr<bs::IReflectable> newRTTIObject() override         \
+  {                                                           \
+    return bs::GameObjectRTTI::createGameObject<classname>(); \
+  }                                                           \
+                                                              \
+  const bs::String& getRTTIName() override                    \
+  {                                                           \
+    static bs::String name = #classname;                      \
+    return name;                                              \
+  }                                                           \
+                                                              \
+  bs::UINT32 getRTTIId() override                             \
+  {                                                           \
+    return TID_REGOTH_##classname;                            \
+  }
+
+/**
+ * For use in the RTTI-class. Implements the glue code to create an instance of the object the
+ * RTTI describes.
+ *
+ * Use this if the RTTI describes a class derived from bs::IReflectable.
+ */
+#define REGOTH_IMPLEMENT_RTTI_CLASS_FOR_REFLECTABLE(classname)     \
+                                                                   \
+  bs::SPtr<bs::IReflectable> newRTTIObject() override              \
+  {                                                                \
+    return bs::bs_shared_ptr_new<classname>();                     \
+  }                                                                \
+                                                                   \
+  const bs::String& getRTTIName() override                         \
+  {                                                                \
+    static bs::String name = #classname;                           \
+    return name;                                                   \
+  }                                                                \
+                                                                   \
+  bs::UINT32 getRTTIId() override                                  \
+  {                                                                \
+    return TID_REGOTH_##classname;                                 \
+  }
+
+/**
+ * For use in the RTTI-class. Implements the glue code for an abstract class
+ * which cannot be instantiated.
+ */
+#define REGOTH_IMPLEMENT_RTTI_CLASS_ABSTRACT(classname)                                    \
+                                                                                           \
+  bs::SPtr<bs::IReflectable> newRTTIObject() override                                      \
+  {                                                                                        \
+    REGOTH_THROW(InvalidParametersException, "Cannot create instance of abstract class!"); \
+  }                                                                                        \
+                                                                                           \
+  const bs::String& getRTTIName() override                                                 \
+  {                                                                                        \
+    static bs::String name = #classname;                                                   \
+    return name;                                                                           \
+  }                                                                                        \
+                                                                                           \
+  bs::UINT32 getRTTIId() override                                                          \
+  {                                                                                        \
+    return TID_REGOTH_##classname;                                                         \
   }
