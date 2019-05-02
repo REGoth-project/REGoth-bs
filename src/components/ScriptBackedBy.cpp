@@ -20,6 +20,8 @@ namespace REGoth
 
   void ScriptBackedBy::onInitialized()
   {
+    NeedsGameWorld::onInitialized();
+
     // When loading a saved instance this will have been already set and we
     // already have a valid handle. Only create a new instance on a really new
     // object.
