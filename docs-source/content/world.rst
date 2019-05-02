@@ -113,7 +113,7 @@ As you can see, this is using an internal header, so handle it with care.
 Using the world
 ---------------
 
-Once you have successfully initialized a world, you can use created ``GameWorld``-component
+Once you have successfully initialized a world, you can use the created ``GameWorld``-component
 to access it. See ``src/components/GameWorld.hpp`` for the ``GameWorld``-class.
 
 The ``GameWorld``-class allows you to create your own NPCs, Items and also gives
