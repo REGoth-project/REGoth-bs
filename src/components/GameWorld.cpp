@@ -58,7 +58,9 @@ namespace REGoth
 
     onImportedZEN();
 
-    mGameClock = SO()->addComponent<GameClock>();
+    bs::HSceneObject gameclockSO = bs::SceneObject::create("GameClock");
+    gameclockSO->setParent(SO());
+    mGameClock = gameclockSO->addComponent<GameClock>();
 
     mIsInitialized = true;
   }

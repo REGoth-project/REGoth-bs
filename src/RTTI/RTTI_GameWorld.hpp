@@ -13,6 +13,7 @@ namespace REGoth
     BS_RTTI_MEMBER_REFL(mWaynet, 1)
     BS_RTTI_MEMBER_REFLPTR(mScriptVM, 2)
     BS_RTTI_MEMBER_PLAIN(mIsInitialized, 3)
+    BS_RTTI_MEMBER_REFL(mGameClock, 4)
     BS_END_RTTI_MEMBERS
 
     public:
