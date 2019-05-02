@@ -15,8 +15,8 @@
 #pragma once
 #include "RTTI_TypeIDs.hpp"
 #include <BsCorePrerequisites.h>
-#include <Private/RTTI/BsGameObjectRTTI.h>  // Says private, but bs:f uses this too in their RTTIs
 #include <Reflection/BsRTTIType.h>
+#include <Scene/BsSceneObject.h>
 
 /**
  * For use in the actual components header. Declares the functions for accessing
@@ -79,22 +79,22 @@
  *
  * Use this if the RTTI describes a class derived from bs::Component.
  */
-#define REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT(classname)  \
-                                                              \
-  bs::SPtr<bs::IReflectable> newRTTIObject() override         \
-  {                                                           \
-    return bs::GameObjectRTTI::createGameObject<classname>(); \
-  }                                                           \
-                                                              \
-  const bs::String& getRTTIName() override                    \
-  {                                                           \
-    static bs::String name = #classname;                      \
-    return name;                                              \
-  }                                                           \
-                                                              \
-  bs::UINT32 getRTTIId() override                             \
-  {                                                           \
-    return TID_REGOTH_##classname;                            \
+#define REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT(classname)   \
+                                                               \
+  bs::SPtr<bs::IReflectable> newRTTIObject() override          \
+  {                                                            \
+    return bs::SceneObject::createEmptyComponent<classname>(); \
+  }                                                            \
+                                                               \
+  const bs::String& getRTTIName() override                     \
+  {                                                            \
+    static bs::String name = #classname;                       \
+    return name;                                               \
+  }                                                            \
+                                                               \
+  bs::UINT32 getRTTIId() override                              \
+  {                                                            \
+    return TID_REGOTH_##classname;                             \
   }
 
 /**
@@ -103,22 +103,22 @@
  *
  * Use this if the RTTI describes a class derived from bs::IReflectable.
  */
-#define REGOTH_IMPLEMENT_RTTI_CLASS_FOR_REFLECTABLE(classname)     \
-                                                                   \
-  bs::SPtr<bs::IReflectable> newRTTIObject() override              \
-  {                                                                \
-    return bs::bs_shared_ptr_new<classname>();                     \
-  }                                                                \
-                                                                   \
-  const bs::String& getRTTIName() override                         \
-  {                                                                \
-    static bs::String name = #classname;                           \
-    return name;                                                   \
-  }                                                                \
-                                                                   \
-  bs::UINT32 getRTTIId() override                                  \
-  {                                                                \
-    return TID_REGOTH_##classname;                                 \
+#define REGOTH_IMPLEMENT_RTTI_CLASS_FOR_REFLECTABLE(classname) \
+                                                               \
+  bs::SPtr<bs::IReflectable> newRTTIObject() override          \
+  {                                                            \
+    return bs::bs_shared_ptr_new<classname>();                 \
+  }                                                            \
+                                                               \
+  const bs::String& getRTTIName() override                     \
+  {                                                            \
+    static bs::String name = #classname;                       \
+    return name;                                               \
+  }                                                            \
+                                                               \
+  bs::UINT32 getRTTIId() override                              \
+  {                                                            \
+    return TID_REGOTH_##classname;                             \
   }
 
 /**
