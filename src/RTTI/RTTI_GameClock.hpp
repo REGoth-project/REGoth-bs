@@ -21,21 +21,7 @@ namespace REGoth
     {
     }
 
-    bs::SPtr<bs::IReflectable> newRTTIObject() override
-    {
-      return bs::GameObjectRTTI::createGameObject<GameClock>();
-    }
-
-    const bs::String& getRTTIName() override
-    {
-      static bs::String name = "GameClock";
-      return name;
-    }
-
-    bs::UINT32 getRTTIId() override
-    {
-      return TID_REGOTH_GameClock;
-    }
+    REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT(GameClock)
   };
 
 }  // namespace REGoth

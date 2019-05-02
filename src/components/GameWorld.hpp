@@ -11,6 +11,9 @@ namespace REGoth
   class Waynet;
   using HWaynet = bs::GameObjectHandle<Waynet>;
 
+  class GameClock;
+  using HGameClock = bs::GameObjectHandle<GameClock>;
+
   class Character;
   using HCharacter = bs::GameObjectHandle<Character>;
 
@@ -126,6 +129,14 @@ namespace REGoth
     HWaynet waynet() const
     {
       return mWaynet;
+    }
+
+    /**
+     * @return  Handle to the GameClock of the world.
+     */
+    HGameClock gameclock() const
+    {
+      return mGameClock;
     }
 
     /**
@@ -280,6 +291,11 @@ namespace REGoth
      * Access to the Waynet of this world.
      */
     HWaynet mWaynet;
+
+    /**
+     * Access to the GameClock of this World.
+     */
+    HGameClock mGameClock;
 
     /**
      * Script-VM with GOTHIC.DAT loaded.

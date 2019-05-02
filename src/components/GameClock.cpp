@@ -94,13 +94,5 @@ namespace REGoth
     //       SpawnManager.SpawnImmediately(ResetSpawnTime)
   }
 
-  bs::RTTITypeBase* GameClock::getRTTIStatic()
-  {
-    return RTTI_GameClock::instance();
-  }
-
-  bs::RTTITypeBase* GameClock::getRTTI() const
-  {
-    return GameClock::getRTTIStatic();
-  }
+  REGOTH_DEFINE_RTTI(GameClock)
 }  // namespace REGoth

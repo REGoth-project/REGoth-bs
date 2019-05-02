@@ -2,6 +2,7 @@
 #include <BsPrerequisites.h>
 #include <Scene/BsComponent.h>
 #include <Utility/BsTime.h>
+#include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
 {
@@ -73,9 +74,7 @@ namespace REGoth
   /* RTTI                                                                 */
   /************************************************************************/
   public:
-    friend class RTTI_GameClock;
-    static bs::RTTITypeBase* getRTTIStatic();
-    bs::RTTITypeBase* getRTTI() const override;
+    REGOTH_DECLARE_RTTI(GameClock)
 
   // protected:
   public:  // FIXME: Should be protected, it is only used by RTTI but friend doesn't seem to work?!

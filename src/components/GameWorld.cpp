@@ -9,6 +9,7 @@
 #include <components/Item.hpp>
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
+#include <components/GameClock.hpp>
 #include <daedalus/DATFile.h>
 #include <exception/Throw.hpp>
 #include <original-content/VirtualFileSystem.hpp>
@@ -56,6 +57,8 @@ namespace REGoth
     }
 
     onImportedZEN();
+
+    mGameClock = SO()->addComponent<GameClock>();
 
     mIsInitialized = true;
   }

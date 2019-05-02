@@ -117,6 +117,7 @@ add_library(REGothEngine
   RTTI/RTTI_NodeVisuals.hpp
   RTTI/RTTI_Waynet.hpp
   RTTI/RTTI_Waypoint.hpp
+  RTTI/RTTI_GameClock.hpp
   )
 
 target_link_libraries(REGothEngine PUBLIC bsf BsZenLib)
