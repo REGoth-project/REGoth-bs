@@ -13,7 +13,7 @@ namespace REGoth
   {
     BS_BEGIN_RTTI_MEMBERS
       BS_RTTI_MEMBER_PLAIN(mElapsedSeconds, 0)
-      BS_RTTI_MEMBER_PLAIN(mElapsedIngameSeconds, 0)
+      BS_RTTI_MEMBER_PLAIN(mElapsedIngameSeconds, 1)
     BS_END_RTTI_MEMBERS
 
   public:
