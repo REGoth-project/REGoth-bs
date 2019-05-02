@@ -27,7 +27,7 @@
  *    class MyComponent : public bs::Component
  *    {
  *    public:
- *      REGOTH_COMPONENT_DECLARE_RTTI(MyComponent)
+ *      REGOTH_DECLARE_RTTI(MyComponent)
  *
  *    protected:
  *      MyComponent() = default; // For RTTI
@@ -55,7 +55,7 @@
  *
  *     namespace REGoth
  *     {
- *       REGOTH_COMPONENT_DEFINE_RTTI(MyComponent)
+ *       REGOTH_DEFINE_RTTI(MyComponent)
  *     }
  *
  * The current namespace needs direct access to the components class.
