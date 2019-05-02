@@ -18,6 +18,9 @@ namespace REGoth
     virtual ~NeedsGameWorld();
 
   protected:
+
+    void onInitialized() override;
+
     /**
      * @return GameWorld this scene object is in.
      */

@@ -9,11 +9,20 @@ namespace REGoth
       : bs::Component(parent)
   {
     setName("NeedsGameWorld");
-    findGameWorld();
   }
 
   NeedsGameWorld::~NeedsGameWorld()
   {
+  }
+
+  void NeedsGameWorld::onInitialized()
+  {
+    // Find GameWorld only if this isn't being deserialized
+    if (!mGameWorld)
+    {
+      findGameWorld();
+    }
+
   }
 
   void NeedsGameWorld::findGameWorld()
