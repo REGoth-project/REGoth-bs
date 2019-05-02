@@ -1,9 +1,3 @@
-#pragma once
-#include "RTTI_TypeIDs.hpp"
-#include <BsCorePrerequisites.h>
-#include <Private/RTTI/BsGameObjectRTTI.h>  // Says private, but bs:f uses this too in their RTTIs
-#include <Reflection/BsRTTIType.h>
-
 /**
  * \file
  *
@@ -17,6 +11,12 @@
  * The second part is cluttering the component definition and is always the same,
  * hence a makro is useful here.
  */
+
+#pragma once
+#include "RTTI_TypeIDs.hpp"
+#include <BsCorePrerequisites.h>
+#include <Private/RTTI/BsGameObjectRTTI.h>  // Says private, but bs:f uses this too in their RTTIs
+#include <Reflection/BsRTTIType.h>
 
 /**
  * For use in the actual components header. Declares the functions for accessing
