@@ -79,19 +79,31 @@ namespace REGoth
   {
     // TODO: Negative input parameters are supported for hour, but what about negative values that result in negative remaining hours?
     //       Do we need to handle negative Minutes at all?
-    float elapsedDaysInSeconds = getDay() * SECONDS_IN_A_DAY;
     bs::INT32 daysToAdvance    = hour / 24;
-
+    bs::INT32 day = getDay()+daysToAdvance;
     hour = hour % 24;
     min  = min % 60;
 
-    mElapsedIngameSeconds = elapsedDaysInSeconds + (daysToAdvance*SECONDS_IN_A_DAY + hour*SECONDS_IN_AN_HOUR + min*SECONDS_IN_A_MINUTE);
+    setTime((bs::UINT32)day, (bs::UINT8)hour, (bs::UINT8)min);
 
     // TODO: According to https://forum.worldofplayers.de/forum/threads/396326-Tipp-Tageweise-springen-%28auch-zur%C3%BCck%29?p=6231841&viewfull=1#post6231841
     //       if this shall be the Wld_setTime external, it also needs to implement these three functions here
     //       RoutineManager.SetDailyRoutinePos(RoutinesOnly)
     //       Game.SetObjectRoutineTimeChange(GameHour, GameMinute, Hour, Minute)
     //       SpawnManager.SpawnImmediately(ResetSpawnTime)
+  }
+
+  void GameClock::setDay(bs::UINT32 day)
+  {
+    bs::UINT8 hour = (bs::UINT8)getHour();
+    bs::UINT8 min = (bs::UINT8)getMinute();
+
+    setTime(day, hour, min);
+  }
+
+  void GameClock::setTime(bs::UINT32 day, bs::UINT8 hour, bs::UINT8 min)
+  {
+    mElapsedIngameSeconds = day*SECONDS_IN_A_DAY + hour*SECONDS_IN_AN_HOUR + min*SECONDS_IN_A_MINUTE;
   }
 
   REGOTH_DEFINE_RTTI(GameClock)

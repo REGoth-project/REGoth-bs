@@ -66,9 +66,13 @@ namespace REGoth
      */
     void setTime(bs::INT32 hour, bs::INT32 min);
 
+    void setDay(bs::UINT32 day);
+
   private:
     float mElapsedSeconds       = 0.0;
     float mElapsedIngameSeconds = 0.0;
+
+    void setTime(bs::UINT32 day, bs::UINT8 hour, bs::UINT8 min);
 
   /************************************************************************/
   /* RTTI                                                                 */
