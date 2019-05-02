@@ -293,7 +293,7 @@ namespace REGoth
   public:
     REGOTH_DECLARE_RTTI(Character);
 
-  public:  // FIXME: Should be protected, it is only used by RTTI but friend doesn't seem to work?!
-    Character() = default;  // Serialization only
+  protected:
+    Character() = default;  // For RTTI
   };
 }  // namespace REGoth

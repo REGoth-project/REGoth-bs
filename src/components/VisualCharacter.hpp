@@ -48,11 +48,9 @@ namespace REGoth
                      bs::UINT32 teethTextureIdx = 0);
 
   protected:
-
     bs::Vector<bs::String> listPossibleDefaultAnimations() const override;
 
   private:
-
     /**
      * Replaces the current body mesh of this model from the current body-state
      */
@@ -76,17 +74,11 @@ namespace REGoth
     // Body Visual Settings ---------------------------------------------------
     BodyState mBodyState;
 
-    /************************************************************************/
-    /* 								RTTI */
-    /************************************************************************/
   public:
-    friend RTTI_VisualCharacter;
-    static bs::RTTITypeBase* getRTTIStatic();
-    bs::RTTITypeBase* getRTTI() const override;
+    REGOTH_DECLARE_RTTI(Character);
 
-    // protected:
-  public:  // FIXME: Should be protected, it is only used by RRIT but `friend` doesn't seem to work?!
-    VisualCharacter() = default;  // Serialization only
+  protected:
+    VisualCharacter() = default; // For RTTI
   };
 
   using HVisualCharacter = bs::GameObjectHandle<VisualCharacter>;

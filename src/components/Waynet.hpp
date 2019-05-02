@@ -77,7 +77,7 @@ namespace REGoth
   public:
     REGOTH_DECLARE_RTTI(Waynet)
 
-  public:  // FIXME: RTTI, make protected
-    Waynet() = default;
+  protected:
+    Waynet() = default; // For RTTI
   };
 }  // namespace REGoth

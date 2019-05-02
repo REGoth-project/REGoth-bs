@@ -46,7 +46,7 @@ namespace REGoth
   public:
     REGOTH_DECLARE_RTTI(NeedsGameWorld)
 
-  public:                            // FIXME: RTTI, make protected
-    NeedsGameWorld() = default;  // Serialization only
+  protected:
+    NeedsGameWorld() = default; // For RTTI
   };
 }  // namespace REGoth

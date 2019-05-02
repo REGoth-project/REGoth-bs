@@ -52,8 +52,8 @@ namespace REGoth
   public:
     REGOTH_DECLARE_RTTI(VisualStaticMesh)
 
-  public:  // FIXME: RTTI, make protected
-    VisualStaticMesh() = default;
+  protected:
+    VisualStaticMesh() = default; // For RTTI
   };
 
   using HVisualStaticMesh = bs::GameObjectHandle<VisualStaticMesh>;

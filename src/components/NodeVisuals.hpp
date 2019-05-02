@@ -64,8 +64,8 @@ namespace REGoth
   public:
     REGOTH_DECLARE_RTTI(NodeVisuals)
 
-  public:  // FIXME: RTTI, make protected
-    NodeVisuals() = default;
+  protected:
+    NodeVisuals() = default; // For RTTI
   };
 
   using HNodeVisuals = bs::GameObjectHandle<NodeVisuals>;

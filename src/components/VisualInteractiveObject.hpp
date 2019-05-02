@@ -21,19 +21,11 @@ namespace REGoth
 
     bs::Vector<bs::String> listPossibleDefaultAnimations() const override;
 
-  private:
-
-    /************************************************************************/
-    /* RTTI                                                                 */
-    /************************************************************************/
   public:
-    friend class RTTI_VisualInteractiveObject ;
-    static bs::RTTITypeBase* getRTTIStatic();
-    bs::RTTITypeBase* getRTTI() const override;
+    REGOTH_DECLARE_RTTI(Character);
 
-    // protected:
-  public:  // FIXME: Should be protected, it is only used by RTTI but friend doesn't seem to work?!
-    VisualInteractiveObject () = default;  // Serialization only
+  protected:
+    VisualInteractiveObject() = default; // For RTTI
   };
 
   using HVisualInteractiveObject = bs::GameObjectHandle<VisualInteractiveObject>;

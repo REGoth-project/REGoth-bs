@@ -257,8 +257,8 @@ namespace REGoth
   public:
     REGOTH_DECLARE_RTTI(VisualSkeletalAnimation)
 
-  public:  // FIXME: Should be protected, it is only used by RRIT but `friend` doesn't seem to work?!
-    VisualSkeletalAnimation() = default;  // Serialization only
+  protected:
+    VisualSkeletalAnimation() = default; // For RTTI
   };
 
   using HVisualSkeletalAnimation = bs::GameObjectHandle<VisualSkeletalAnimation>;

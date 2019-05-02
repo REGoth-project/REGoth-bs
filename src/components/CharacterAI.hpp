@@ -108,8 +108,9 @@ namespace REGoth
 
   public:
     REGOTH_DECLARE_RTTI(CharacterAI);
-  public:  // FIXME: Should be protected, it is only used by RTTI but friend doesn't seem to work?!
-    CharacterAI() = default;  // Serialization only
+
+  protected:
+    CharacterAI() = default;  // For RTTI
   };
 
   using HCharacterAI = bs::GameObjectHandle<CharacterAI>;

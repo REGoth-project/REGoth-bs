@@ -43,7 +43,7 @@ namespace REGoth
   public:
     REGOTH_DECLARE_RTTI(Waypoint)
 
-  public: // FIXME: RTTI, make protected
-    Waypoint() = default;
+  protected:
+    Waypoint() = default; // For RTTI
   };
 }

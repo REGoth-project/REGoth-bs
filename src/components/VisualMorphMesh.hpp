@@ -52,8 +52,8 @@ namespace REGoth
   public:
     REGOTH_DECLARE_RTTI(VisualMorphMesh)
 
-  public:  // FIXME: RTTI, make protected
-    VisualMorphMesh() = default;
+  protected:
+    VisualMorphMesh() = default; // For RTTI
   };
 
   using HVisualMorphMesh = bs::GameObjectHandle<VisualMorphMesh>;

@@ -94,7 +94,7 @@ namespace REGoth
   public:
     REGOTH_DECLARE_RTTI(ScriptBackedBy)
 
-  public:
-    ScriptBackedBy() = default; // For RTTI
+  protected:
+    ScriptBackedBy() = default;  // For RTTI
   };
 }  // namespace REGoth

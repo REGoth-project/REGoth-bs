@@ -36,13 +36,9 @@
  * The parameterless constructor is still required to be defined manually. Also
  * note that there is not semicolon after the makro!
  * Futhermore, the makro invocation needs to be in `public`-land of the component.
- *
- * @note There seems to be a problem with `friend` declaring the RTTI-class
- *       since that doesn't seem to get access to the constructor. So you
- *       might have to make the parameterless constructor public until that
- *       is figured out.
  */
 #define REGOTH_DECLARE_RTTI(classname)      \
+  friend class bs::SceneObject;             \
   friend class RTTI_##classname;            \
   static bs::RTTITypeBase* getRTTIStatic(); \
   bs::RTTITypeBase* getRTTI() const override;
