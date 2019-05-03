@@ -157,6 +157,7 @@ namespace REGoth
     bs::HSceneObject so = import_zCVob(vob, parentSO);
 
     // Startpoint is found by name of the scene object
+    bs::gDebug().logDebug("[ImportSingleVob] Found startpoint: " + so->getName());
 
     return so;
   }
