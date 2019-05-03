@@ -18,13 +18,5 @@ namespace REGoth
     return {"S_S0"};
   }
 
-  bs::RTTITypeBase* VisualInteractiveObject::getRTTIStatic()
-  {
-    return RTTI_VisualInteractiveObject::instance();
-  }
-
-  bs::RTTITypeBase* VisualInteractiveObject::getRTTI() const
-  {
-    return VisualInteractiveObject::getRTTIStatic();
-  }
+  REGOTH_DEFINE_RTTI(VisualInteractiveObject)
 }  // namespace REGoth

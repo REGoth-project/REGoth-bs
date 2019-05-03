@@ -65,13 +65,5 @@ namespace REGoth
     }
   }
 
-  bs::RTTITypeBase* CharacterKeyboardInput::getRTTIStatic()
-  {
-    return RTTI_CharacterKeyboardInput::instance();
-  }
-
-  bs::RTTITypeBase* CharacterKeyboardInput::getRTTI() const
-  {
-    return CharacterKeyboardInput::getRTTIStatic();
-  }
+  REGOTH_DEFINE_RTTI(CharacterKeyboardInput)
 }  // namespace REGoth
