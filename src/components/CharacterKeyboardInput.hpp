@@ -36,7 +36,7 @@ namespace REGoth
     HCharacterAI mCharacterAI;
 
   public:
-    REGOTH_DECLARE_RTTI(Character);
+    REGOTH_DECLARE_RTTI(CharacterKeyboardInput);
 
   protected:
     CharacterKeyboardInput() = default;  // For RTTI

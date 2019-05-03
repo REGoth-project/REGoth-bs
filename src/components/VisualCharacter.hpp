@@ -75,7 +75,7 @@ namespace REGoth
     BodyState mBodyState;
 
   public:
-    REGOTH_DECLARE_RTTI(Character);
+    REGOTH_DECLARE_RTTI(VisualCharacter);
 
   protected:
     VisualCharacter() = default; // For RTTI
