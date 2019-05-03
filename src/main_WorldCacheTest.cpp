@@ -34,8 +34,6 @@ public:
     const bs::String world = "OLDWORLD.ZEN";
     const bs::String saveGame = "MySafeGame";
 
-    bs::Timer timer;
-
     if (!bs::FileSystem::exists(BsZenLib::GothicPathToCachedWorld(saveGame)))
     {
       bs::gDebug().logDebug("[REGothWorldCacheTest] Importing and caching ZEN: " + world);
