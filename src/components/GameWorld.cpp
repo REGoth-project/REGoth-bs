@@ -63,6 +63,8 @@ namespace REGoth
   HItem GameWorld::insertItem(const bs::String& instance, const bs::Transform& transform)
   {
     bs::HSceneObject itemSO = bs::SceneObject::create(instance);
+    itemSO->setParent(SO());
+
     itemSO->setPosition(transform.pos());
     itemSO->setRotation(transform.rot());
 
