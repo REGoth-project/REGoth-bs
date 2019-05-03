@@ -9,7 +9,12 @@ namespace REGoth
       : public bs::RTTIType<VisualCharacter, VisualSkeletalAnimation, RTTI_VisualCharacter>
   {
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+    BS_RTTI_MEMBER_PLAIN_NAMED(headVisual, mBodyState.headVisual, 0)
+    BS_RTTI_MEMBER_PLAIN_NAMED(bodyVisual, mBodyState.bodyVisual, 1)
+    BS_RTTI_MEMBER_PLAIN_NAMED(headTextureIdx, mBodyState.headTextureIdx, 2)
+    BS_RTTI_MEMBER_PLAIN_NAMED(teethTextureIdx, mBodyState.teethTextureIdx, 3)
+    BS_RTTI_MEMBER_PLAIN_NAMED(bodySkinColorIdx, mBodyState.bodySkinColorIdx, 4)
+    BS_RTTI_MEMBER_PLAIN_NAMED(bodyTextureIdx, mBodyState.bodyTextureIdx, 5)
     BS_END_RTTI_MEMBERS
 
   public:

@@ -9,7 +9,7 @@ namespace REGoth
     : public bs::RTTIType<CharacterKeyboardInput, bs::Component, RTTI_CharacterKeyboardInput>
   {
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+    BS_RTTI_MEMBER_REFL(mCharacterAI, 0)
     BS_END_RTTI_MEMBERS
 
     public:

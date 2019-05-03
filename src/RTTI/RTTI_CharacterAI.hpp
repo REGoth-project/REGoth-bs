@@ -9,7 +9,8 @@ namespace REGoth
     : public bs::RTTIType<CharacterAI, bs::Component, RTTI_CharacterAI>
   {
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+    BS_RTTI_MEMBER_REFL(mVisual, 0)
+    BS_RTTI_MEMBER_REFL(mCharacterController, 1)
     BS_END_RTTI_MEMBERS
 
     public:

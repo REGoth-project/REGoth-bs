@@ -73,8 +73,10 @@ namespace REGoth
         //                    &RTTI_ScriptClassTemplates::setSizeClassNames);  //
       }
 
-      void onSerializationStarted(ScriptClassTemplates* obj)
+      void onSerializationStarted(bs::IReflectable* _obj, bs::SerializationContext* context) override
       {
+        auto obj = static_cast<ScriptClassTemplates*>(_obj);
+
         for (const auto& v : obj->mClassTemplates)
         {
           mClassNames.push_back(v.first);
@@ -82,8 +84,10 @@ namespace REGoth
         }
       }
 
-      void onDeserializationEnded(ScriptClassTemplates* obj)
+      void onDeserializationEnded(bs::IReflectable* _obj, bs::SerializationContext* context) override
       {
+        auto obj = static_cast<ScriptClassTemplates*>(_obj);
+
         for (bs::UINT32 i = 0; i < (bs::UINT32)mClassNames.size(); i++)
         {
           obj->mClassTemplates[mClassNames[i]] = mTemplates[i];

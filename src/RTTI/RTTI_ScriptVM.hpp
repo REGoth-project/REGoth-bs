@@ -12,7 +12,8 @@ namespace REGoth
       BS_BEGIN_RTTI_MEMBERS
       BS_RTTI_MEMBER_REFL(mScriptSymbols, 1)
       BS_RTTI_MEMBER_REFL(mScriptObjects, 2)
-      // BS_RTTI_MEMBER_REFL(mClassTemplates, 3) // Commented out: Can re-create after deserialization
+      // BS_RTTI_MEMBER_REFL(mClassTemplates, 3) // Commented out: Can re-create after
+      // deserialization
       BS_RTTI_MEMBER_REFL(mScriptObjectMapping, 4)
       BS_END_RTTI_MEMBERS
 
@@ -21,8 +22,10 @@ namespace REGoth
       {
       }
 
-      void onDeserializationEnded(ScriptVM* obj)
+      void onDeserializationEnded(bs::IReflectable* _obj, bs::SerializationContext* context) override
       {
+        auto obj = static_cast<ScriptVM*>(_obj);
+
         obj->mClassTemplates.createClassTemplates(obj->mScriptSymbols);
       }
 

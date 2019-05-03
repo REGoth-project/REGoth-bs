@@ -74,8 +74,10 @@ namespace REGoth
                            &RTTI_ScriptObjectStorage::setSizeObjectHandles);  //
       }
 
-      void onSerializationStarted(ScriptObjectStorage* obj)
+      void onSerializationStarted(bs::IReflectable* _obj, bs::SerializationContext* context) override
       {
+        auto obj = static_cast<ScriptObjectStorage*>(_obj);
+
         for (const auto& v : obj->mObjects)
         {
           mObjectHandles.push_back(v.first);
@@ -83,8 +85,10 @@ namespace REGoth
         }
       }
 
-      void onDeserializationEnded(ScriptObjectStorage* obj)
+      void onDeserializationEnded(bs::IReflectable* _obj, bs::SerializationContext* context) override
       {
+        auto obj = static_cast<ScriptObjectStorage*>(_obj);
+
         for (bs::UINT32 i = 0; i < (bs::UINT32)mObjectHandles.size(); i++)
         {
           obj->mObjects[mObjectHandles[i]] = mObjects[i];

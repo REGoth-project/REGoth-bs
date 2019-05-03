@@ -72,8 +72,10 @@ namespace REGoth
                            &RTTI_ScriptObjectMapping::setSizeScriptHandles);  //
       }
 
-      void onSerializationStarted(ScriptObjectMapping* obj)
+      void onSerializationStarted(bs::IReflectable* _obj, bs::SerializationContext* context) override
       {
+        auto obj = static_cast<ScriptObjectMapping*>(_obj);
+
         for (const auto& v : obj->mScriptToSceneObjectMapping)
         {
           mScriptHandles.push_back(v.first);
@@ -81,8 +83,10 @@ namespace REGoth
         }
       }
 
-      void onDeserializationEnded(ScriptObjectMapping* obj)
+      void onDeserializationEnded(bs::IReflectable* _obj, bs::SerializationContext* context) override
       {
+        auto obj = static_cast<ScriptObjectMapping*>(_obj);
+
         for (bs::UINT32 i = 0; i < (bs::UINT32)mScriptHandles.size(); i++)
         {
           obj->mScriptToSceneObjectMapping[mScriptHandles[i]] = mObjects[i];
