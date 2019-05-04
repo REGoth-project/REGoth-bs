@@ -10,12 +10,8 @@ namespace REGoth
   {
     setName("CharacterKeyboardInput");
 
-    mMoveForward = bs::VirtualButton("Forward");
-    mMoveBack    = bs::VirtualButton("Back");
-    mMoveLeft    = bs::VirtualButton("Left");
-    mMoveRight   = bs::VirtualButton("Right");
-    mFastMove    = bs::VirtualButton("FastMove");
-
+    // Inside constructor so this doesn't run after deserialization where
+    // we already have the reference
     mCharacterAI = SO()->getComponent<CharacterAI>();
 
     if (mCharacterAI.isDestroyed())
@@ -28,6 +24,17 @@ namespace REGoth
 
   CharacterKeyboardInput::~CharacterKeyboardInput()
   {
+  }
+
+  void CharacterKeyboardInput::onInitialized()
+  {
+    bs::Component::onInitialized();
+
+    mMoveForward = bs::VirtualButton("Forward");
+    mMoveBack    = bs::VirtualButton("Back");
+    mMoveLeft    = bs::VirtualButton("Left");
+    mMoveRight   = bs::VirtualButton("Right");
+    mFastMove    = bs::VirtualButton("FastMove");
   }
 
   void CharacterKeyboardInput::fixedUpdate()
