@@ -33,5 +33,11 @@ namespace REGoth
      * Script object backing this item
      */
     Scripting::ScriptObjectHandle mScriptObject;
+
+  public:
+    REGOTH_DECLARE_RTTI(Item);
+
+  protected:
+    Item() = default; // For RTTI
   };
 }  // namespace REGoth

@@ -28,11 +28,11 @@ namespace REGoth
         switch (sym.type)
         {
           case SymbolType::Int:
-            return bs::toString(symbols.getSymbol<SymbolInt>(index).ints.values[arrayindex]);
+            return bs::toString(symbols.getSymbol<SymbolInt>(index).ints[arrayindex]);
           case SymbolType::Float:
-            return bs::toString(symbols.getSymbol<SymbolFloat>(index).floats.values[arrayindex]);
+            return bs::toString(symbols.getSymbol<SymbolFloat>(index).floats[arrayindex]);
           case SymbolType::String:
-            return "'" + symbols.getSymbol<SymbolString>(index).strings.values[arrayindex] + "'";
+            return "'" + symbols.getSymbol<SymbolString>(index).strings[arrayindex] + "'";
         default:
           return bs::String("[-]");
         }

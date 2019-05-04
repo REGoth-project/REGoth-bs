@@ -1,5 +1,6 @@
 #include "ScriptVM.hpp"
 #include "ScriptSymbolQueries.hpp"
+#include <RTTI/RTTI_ScriptVM.hpp>
 
 namespace REGoth
 {
@@ -27,5 +28,6 @@ namespace REGoth
       return obj.handle;
     }
 
+    REGOTH_DEFINE_RTTI(ScriptVM)
   }  // namespace Scripting
 }  // namespace REGoth

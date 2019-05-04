@@ -440,14 +440,6 @@ namespace REGoth
     }
   }
 
-  bs::RTTITypeBase* VisualSkeletalAnimation::getRTTIStatic()
-  {
-    return RTTI_VisualSkeletalAnimation::instance();
-  }
-
-  bs::RTTITypeBase* VisualSkeletalAnimation::getRTTI() const
-  {
-    return VisualSkeletalAnimation::getRTTIStatic();
-  }
+  REGOTH_DEFINE_RTTI(VisualSkeletalAnimation)
 
 }  // namespace REGoth

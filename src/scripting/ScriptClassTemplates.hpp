@@ -1,5 +1,6 @@
 #pragma once
 #include <BsPrerequisites.h>
+#include <RTTI/RTTIUtil.hpp>
 #include <scripting/ScriptSymbolStorage.hpp>
 
 namespace REGoth
@@ -39,9 +40,11 @@ namespace REGoth
      * will be then used as a template: When someone wants to instanciate a class
      * the template is copied to the new script object.
      */
-    class ScriptClassTemplates
+    class ScriptClassTemplates : public bs::IReflectable
     {
     public:
+      ScriptClassTemplates();
+
       /**
        * Goes through all classes and gathers their member variables to
        * create all class templates.
@@ -92,6 +95,9 @@ namespace REGoth
        * default values.
        */
       bs::Map<bs::String, ScriptObject> mClassTemplates;
+
+    public:
+      REGOTH_DECLARE_RTTI(ScriptClassTemplates)
     };
   }  // namespace Scripting
 }  // namespace REGoth

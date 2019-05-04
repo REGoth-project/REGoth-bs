@@ -27,7 +27,7 @@ namespace REGoth
   static void importWaynet(bs::HSceneObject sceneRoot, const OriginalZen& zen);
   static void walkVobTree(bs::HSceneObject bsfParent, const ZenLoad::zCVobData& zenParent);
 
-  bs::HSceneObject World::constructFromZEN(const bs::String& zenFile)
+  bs::HSceneObject Internals::constructFromZEN(bs::HSceneObject root, const bs::String& zenFile)
   {
     OriginalZen zen;
 
@@ -40,14 +40,15 @@ namespace REGoth
     }
 
     bs::HSceneObject worldMesh = importWorldMesh(zen);
+    worldMesh->setParent(root);
 
-    importVobs(worldMesh, zen);
-    importWaynet(worldMesh, zen);
+    importVobs(root, zen);
+    importWaynet(root, zen);
 
     return worldMesh;
   }
 
-  bs::HSceneObject World::loadWorldMeshFromZEN(const bs::String& zenFile)
+  bs::HSceneObject Internals::loadWorldMeshFromZEN(const bs::String& zenFile)
   {
     OriginalZen zen;
 
@@ -74,12 +75,10 @@ namespace REGoth
   {
     for (const auto& v : zenParent.childVobs)
     {
-      bs::HSceneObject so = World::importSingleVob(v);
+      bs::HSceneObject so = Internals::importSingleVob(v, bsfParent);
 
       if (so)
       {
-        so->setParent(bsfParent);
-
         walkVobTree(so, v);
       }
     }

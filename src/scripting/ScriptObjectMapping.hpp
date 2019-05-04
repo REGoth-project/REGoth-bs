@@ -1,5 +1,6 @@
 #pragma once
-#include "ScriptObjects.hpp"
+#include "ScriptObject.hpp"
+#include <RTTI/RTTIUtil.hpp>
 #include <BsPrerequisites.h>
 
 namespace REGoth
@@ -10,7 +11,7 @@ namespace REGoth
      * Some script objects directly belong to a scene object. This is where the
      * mapping between them is stored.
      */
-    class ScriptObjectMapping
+    class ScriptObjectMapping : public bs::IReflectable
     {
     public:
       ScriptObjectMapping() = default;
@@ -58,7 +59,9 @@ namespace REGoth
 
     private:
       bs::Map<ScriptObjectHandle, bs::HSceneObject> mScriptToSceneObjectMapping;
-      bs::Map<bs::HSceneObject, ScriptObjectHandle> mSceneToScriptObjectMapping;
+
+    public:
+      REGOTH_DECLARE_RTTI(ScriptObjectMapping)
     };
   }  // namespace Scripting
 }  // namespace REGoth

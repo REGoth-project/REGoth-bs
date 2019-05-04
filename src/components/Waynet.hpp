@@ -1,6 +1,7 @@
 #pragma once
 #include <BsPrerequisites.h>
 #include <Scene/BsComponent.h>
+#include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
 {
@@ -72,5 +73,11 @@ namespace REGoth
 
   private:
     bs::Vector<HWaypoint> mWaypoints;
+
+  public:
+    REGOTH_DECLARE_RTTI(Waynet)
+
+  protected:
+    Waynet() = default; // For RTTI
   };
 }  // namespace REGoth

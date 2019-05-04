@@ -146,6 +146,12 @@ namespace REGoth
       bs::SPtr<Daedalus::DATFile> mDatFile;
 
       bs::Map<SymbolIndex, externalCallback> mExternals;
+
+    public:
+      REGOTH_DECLARE_RTTI(DaedalusVM);
+
+    public: // FIXME: RTTI protected
+      DaedalusVM() = default; // For RTTI
     };
   }  // namespace Scripting
 }  // namespace REGoth

@@ -1,4 +1,5 @@
-#include "ScriptObjects.hpp"
+#include "ScriptObject.hpp"
+#include <RTTI/RTTI_ScriptObject.hpp>
 
 namespace REGoth
 {
@@ -10,7 +11,7 @@ namespace REGoth
 
       for (const auto& ints : object.ints)
       {
-        const auto& values = ints.second.values;
+        const auto& values = ints.second;
 
         bs::String line;
         for (const auto& v : values)
@@ -23,7 +24,7 @@ namespace REGoth
 
       for (const auto& floats : object.floats)
       {
-        const auto& values = floats.second.values;
+        const auto& values = floats.second;
 
         bs::String line;
         for (const auto& v : values)
@@ -37,7 +38,7 @@ namespace REGoth
 
       for (const auto& strings : object.strings)
       {
-        const auto& values = strings.second.values;
+        const auto& values = strings.second;
 
         bs::String line;
         for (const auto& v : values)
@@ -59,6 +60,8 @@ namespace REGoth
 
       bs::gDebug().logDebug("");
     }
+
+    REGOTH_DEFINE_RTTI(ScriptObject)
 
   }  // namespace Scripting
 }  // namespace REGoth

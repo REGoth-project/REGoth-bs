@@ -1,4 +1,5 @@
 #include "Waypoint.hpp"
+#include <RTTI/RTTI_Waypoint.hpp>
 
 namespace REGoth
 {
@@ -12,4 +13,5 @@ namespace REGoth
     mPaths.push_back(waypoint);
   }
 
+  REGOTH_DEFINE_RTTI(Waypoint)
 }  // namespace REGoth

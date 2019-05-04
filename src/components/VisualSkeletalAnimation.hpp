@@ -5,6 +5,7 @@
 
 #include <BsPrerequisites.h>
 #include <BsZenLib/ZenResources.hpp>
+#include <RTTI/RTTIUtil.hpp>
 #include <Scene/BsComponent.h>
 
 namespace REGoth
@@ -253,17 +254,11 @@ namespace REGoth
     bs::HAnimationClip mRootMotionLastClip; /**< Last clip we got the root motion from */
     float mRootMotionLastTime = 0.0f; /**< Last time the animation was queried for root motion */
 
-    /************************************************************************/
-    /* 								RTTI */
-    /************************************************************************/
   public:
-    friend RTTI_VisualSkeletalAnimation;
-    static bs::RTTITypeBase* getRTTIStatic();
-    bs::RTTITypeBase* getRTTI() const override;
+    REGOTH_DECLARE_RTTI(VisualSkeletalAnimation)
 
-    // protected:
-  public:  // FIXME: Should be protected, it is only used by RRIT but `friend` doesn't seem to work?!
-    VisualSkeletalAnimation() = default;  // Serialization only
+  protected:
+    VisualSkeletalAnimation() = default; // For RTTI
   };
 
   using HVisualSkeletalAnimation = bs::GameObjectHandle<VisualSkeletalAnimation>;

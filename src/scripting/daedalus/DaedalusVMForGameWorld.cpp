@@ -1,22 +1,25 @@
-#include "DaedalusVMWithExternals.hpp"
+#include "DaedalusVMForGameWorld.hpp"
 #include "DaedalusClassVarResolver.hpp"
+#include <RTTI/RTTI_DaedalusVMForGameWorld.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
+#include <components/GameWorld.hpp>
 #include <components/VisualCharacter.hpp>
-#include <world/GameWorld.hpp>
 
 namespace REGoth
 {
   namespace Scripting
   {
-    DaedalusVMWithExternals::DaedalusVMWithExternals(const Daedalus::DATFile& datFile)
+    DaedalusVMForGameWorld::DaedalusVMForGameWorld(HGameWorld gameWorld,
+                                                   const Daedalus::DATFile& datFile)
         : DaedalusVM(datFile)
+        , mWorld(gameWorld)
     {
     }
 
-    ScriptObjectHandle DaedalusVMWithExternals::instanciateClass(const bs::String& className,
-                                                                 const bs::String& instanceName,
-                                                                 bs::HSceneObject mappedSceneObject)
+    ScriptObjectHandle DaedalusVMForGameWorld::instanciateClass(const bs::String& className,
+                                                                const bs::String& instanceName,
+                                                                bs::HSceneObject mappedSceneObject)
     {
       // To instanciate a class the following has to happen:
       //
@@ -63,27 +66,32 @@ namespace REGoth
       return obj;
     }
 
-    void DaedalusVMWithExternals::setHero(ScriptObjectHandle hero)
+    void DaedalusVMForGameWorld::setHero(ScriptObjectHandle hero)
     {
       setInstance("HERO", hero);
     }
 
-    void DaedalusVMWithExternals::setInstance(const bs::String& instance,
-                                              ScriptObjectHandle scriptObject)
+    ScriptObjectHandle DaedalusVMForGameWorld::getHero()
+    {
+      return getInstance("HERO");
+    }
+
+    void DaedalusVMForGameWorld::setInstance(const bs::String& instance,
+                                             ScriptObjectHandle scriptObject)
     {
       SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instance);
 
       symbol.instance = scriptObject;
     }
 
-    ScriptObjectHandle DaedalusVMWithExternals::getInstance(const bs::String& instance) const
+    ScriptObjectHandle DaedalusVMForGameWorld::getInstance(const bs::String& instance) const
     {
       const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instance);
 
       return symbol.instance;
     }
 
-    HCharacter DaedalusVMWithExternals::popCharacterInstance()
+    HCharacter DaedalusVMForGameWorld::popCharacterInstance()
     {
       ScriptObjectHandle scriptObject = popInstanceScriptObject();
 
@@ -101,17 +109,23 @@ namespace REGoth
       return character;
     }
 
-    void DaedalusVMWithExternals::initializeWorld(const bs::String& worldName)
+    void DaedalusVMForGameWorld::initializeWorld(const bs::String& worldName)
     {
+      // Some scripts already refer to the hero, so make sure that has been set
+      if (getInstance("HERO") == SCRIPT_OBJECT_HANDLE_INVALID)
+      {
+        REGOTH_THROW(InvalidStateException, "Hero-instance must be set to call world init scripts!");
+      }
+
       // FIXME: Do STARTUP_* only on first load?
       executeScriptFunction("STARTUP_" + worldName);
 
       executeScriptFunction("INIT_" + worldName);
     }
 
-    void DaedalusVMWithExternals::registerAllExternals()
+    void DaedalusVMForGameWorld::registerAllExternals()
     {
-      using This = DaedalusVMWithExternals;
+      using This = DaedalusVMForGameWorld;
 
       registerExternal("PRINT", (externalCallback)&This::external_Print);
       registerExternal("HLP_RANDOM", (externalCallback)&This::external_HLP_Random);
@@ -129,60 +143,60 @@ namespace REGoth
       registerExternal("MDL_SETVISUALBODY", (externalCallback)&This::external_MDL_SetVisualBody);
     }
 
-    void DaedalusVMWithExternals::external_Print()
+    void DaedalusVMForGameWorld::external_Print()
     {
-      print(popStringValue());
+      bs::gDebug().logDebug("[ScriptVMInterface] [Print] " + popStringValue());
     }
 
-    void DaedalusVMWithExternals::external_HLP_Random()
+    void DaedalusVMForGameWorld::external_HLP_Random()
     {
-      mStack.pushInt(HLP_Random(popIntValue()));
+      mStack.pushInt(rand() % popIntValue());
     }
 
-    void DaedalusVMWithExternals::external_HLP_GetNpc()
+    void DaedalusVMForGameWorld::external_HLP_GetNpc()
     {
       bs::INT32 symbolIndex = popIntValue();
 
       mStack.pushInstance((SymbolIndex)symbolIndex);
     }
 
-    void DaedalusVMWithExternals::external_IntToString()
+    void DaedalusVMForGameWorld::external_IntToString()
     {
-      mStack.pushString(IntToString(popIntValue()));
+      mStack.pushString(bs::toString(popIntValue()));
     }
 
-    void DaedalusVMWithExternals::external_ConcatStrings()
+    void DaedalusVMForGameWorld::external_ConcatStrings()
     {
       bs::String b = popStringValue();
       bs::String a = popStringValue();
 
-      mStack.pushString(ConcatStrings(a, b));
+      mStack.pushString(a + b);
     }
 
-    void DaedalusVMWithExternals::external_WLD_InsertItem()
+    void DaedalusVMForGameWorld::external_WLD_InsertItem()
     {
       bs::String spawnpoint = popStringValue();
       SymbolIndex instance  = popIntValue();
 
-      gWorld().insertItem(mScriptSymbols.getSymbolName(instance), spawnpoint);
+      mWorld->insertItem(mScriptSymbols.getSymbolName(instance), spawnpoint);
     }
 
-    void DaedalusVMWithExternals::external_WLD_InsertNpc()
+    void DaedalusVMForGameWorld::external_WLD_InsertNpc()
     {
       bs::String waypoint  = popStringValue();
       SymbolIndex instance = popIntValue();
 
-      gWorld().insertCharacter(mScriptSymbols.getSymbolName(instance), waypoint);
+      mWorld->insertCharacter(mScriptSymbols.getSymbolName(instance), waypoint);
     }
 
-    void DaedalusVMWithExternals::external_NPC_IsPlayer()
+    void DaedalusVMForGameWorld::external_NPC_IsPlayer()
     {
       HCharacter character = popCharacterInstance();
 
       mStack.pushInt(character->isPlayer() ? 1 : 0);
     }
 
-    void DaedalusVMWithExternals::external_NPC_SetTalentSkill()
+    void DaedalusVMForGameWorld::external_NPC_SetTalentSkill()
     {
       bs::INT32 skill      = popIntValue();
       bs::INT32 talent     = popIntValue();
@@ -191,14 +205,14 @@ namespace REGoth
       bs::gDebug().logWarning("[External] Using external stub: NPC_SetTalentSkill");
     }
 
-    void DaedalusVMWithExternals::external_NPC_EquipItem()
+    void DaedalusVMForGameWorld::external_NPC_EquipItem()
     {
       bs::String instance  = popStringValue();
       HCharacter character = popCharacterInstance();
 
       character->equipItem(instance);
     }
-    void DaedalusVMWithExternals::external_NPC_CreateInventoryItems()
+    void DaedalusVMForGameWorld::external_NPC_CreateInventoryItems()
     {
       bs::INT32 num        = popIntValue();
       bs::String instance  = popStringValue();
@@ -207,7 +221,7 @@ namespace REGoth
       character->createInventoryItem(instance, num);
     }
 
-    void DaedalusVMWithExternals::external_NPC_CreateInventoryItem()
+    void DaedalusVMForGameWorld::external_NPC_CreateInventoryItem()
     {
       bs::String instance  = popStringValue();
       HCharacter character = popCharacterInstance();
@@ -215,7 +229,7 @@ namespace REGoth
       character->createInventoryItem(instance, 1);
     }
 
-    void DaedalusVMWithExternals::external_MDL_SetVisual()
+    void DaedalusVMForGameWorld::external_MDL_SetVisual()
     {
       bs::String visual    = popStringValue();
       HCharacter character = popCharacterInstance();
@@ -235,7 +249,7 @@ namespace REGoth
       characterVisual->setVisual(visual);
     }
 
-    void DaedalusVMWithExternals::external_MDL_SetVisualBody()
+    void DaedalusVMForGameWorld::external_MDL_SetVisualBody()
     {
       bs::INT32 armorInstance = popIntValue();
 
@@ -243,9 +257,9 @@ namespace REGoth
       bs::INT32 headTexIndex  = popIntValue();
       bs::String headMesh     = popStringValue();
 
-      bs::INT32 bodyTexColor  = popIntValue();
-      bs::INT32 bodyTexIndex  = popIntValue();
-      bs::String bodyMesh     = popStringValue();
+      bs::INT32 bodyTexColor = popIntValue();
+      bs::INT32 bodyTexIndex = popIntValue();
+      bs::String bodyMesh    = popStringValue();
 
       HCharacter character = popCharacterInstance();
 
@@ -258,10 +272,12 @@ namespace REGoth
       characterVisual->setHeadMesh(headMesh);
     }
 
-    void DaedalusVMWithExternals::script_PrintPlus(const bs::String& text)
+    void DaedalusVMForGameWorld::script_PrintPlus(const bs::String& text)
     {
       mStack.pushString(text);
       executeScriptFunction("PrintPlus");
     }
+
+    REGOTH_DEFINE_RTTI(DaedalusVMForGameWorld)
   }  // namespace Scripting
 }  // namespace REGoth

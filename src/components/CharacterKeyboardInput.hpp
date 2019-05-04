@@ -1,6 +1,7 @@
 #pragma once
 #include <BsPrerequisites.h>
 #include <Input/BsVirtualInput.h>
+#include <RTTI/RTTIUtil.hpp>
 #include <Scene/BsComponent.h>
 
 namespace REGoth
@@ -34,16 +35,10 @@ namespace REGoth
     // Handle to the CharacterAI component attached to the scene object
     HCharacterAI mCharacterAI;
 
-    /************************************************************************/
-    /* RTTI                                                                 */
-    /************************************************************************/
   public:
-    friend class RTTI_CharacterKeyboardInput;
-    static bs::RTTITypeBase* getRTTIStatic();
-    bs::RTTITypeBase* getRTTI() const override;
+    REGOTH_DECLARE_RTTI(CharacterKeyboardInput);
 
-    // protected:
-  public:  // FIXME: Should be protected, it is only used by RTTI but friend doesn't seem to work?!
-    CharacterKeyboardInput() = default;  // Serialization only
+  protected:
+    CharacterKeyboardInput() = default;  // For RTTI
   };
 }  // namespace REGoth

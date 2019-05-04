@@ -1,7 +1,8 @@
 #include "VisualMorphMesh.hpp"
-#include <BsZenLib/ImportPath.hpp>
 #include <BsZenLib/ImportMorphMesh.hpp>
+#include <BsZenLib/ImportPath.hpp>
 #include <Components/BsCRenderable.h>
+#include <RTTI/RTTI_VisualMorphMesh.hpp>
 #include <Scene/BsSceneObject.h>
 #include <original-content/VirtualFileSystem.hpp>
 
@@ -52,5 +53,7 @@ namespace REGoth
   {
     return SO()->getComponent<bs::CRenderable>() != nullptr;
   }
+
+  REGOTH_DEFINE_RTTI(VisualMorphMesh)
 
 }  // namespace REGoth

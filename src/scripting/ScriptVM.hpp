@@ -1,10 +1,12 @@
 #pragma once
 #include "ScriptClassTemplates.hpp"
 #include "ScriptObjectMapping.hpp"
-#include "ScriptObjects.hpp"
+#include "ScriptObjectStorage.hpp"
 #include "ScriptSymbolStorage.hpp"
 #include "ScriptSymbols.hpp"
 #include <BsPrerequisites.h>
+#include <RTTI/RTTIUtil.hpp>
+#include <Reflection/BsIReflectable.h>
 
 namespace REGoth
 {
@@ -17,7 +19,7 @@ namespace REGoth
      * game, to *maybe* get rid of Daedalus in the feature and to keep the software
      * clean of any scripting nonsense.
      */
-    class ScriptVM
+    class ScriptVM : public bs::IReflectable
     {
     public:
       ScriptVM()          = default;
@@ -60,6 +62,7 @@ namespace REGoth
        * Runs the init-scripts for the given world.
        *
        * Throws, if the requested world has no init script.
+       * Throws, if no hero character is in the world yet.
        *
        * @param  worldName  The world to init, e.g. `NEWWORLD`.
        */
@@ -69,6 +72,11 @@ namespace REGoth
        * Set the scipt object of the `hero`. This will be most likely the player.
        */
       virtual void setHero(ScriptObjectHandle hero) = 0;
+
+      /**
+       * @return Script object currently set as `hero`.
+       */
+      virtual ScriptObjectHandle getHero() = 0;
 
       /**
        * Access to the script object storage
@@ -98,6 +106,9 @@ namespace REGoth
       ScriptObjectStorage mScriptObjects;
       ScriptClassTemplates mClassTemplates;
       ScriptObjectMapping mScriptObjectMapping;
+
+    public:
+      REGOTH_DECLARE_RTTI(ScriptVM);
     };
   }  // namespace Scripting
 }  // namespace REGoth

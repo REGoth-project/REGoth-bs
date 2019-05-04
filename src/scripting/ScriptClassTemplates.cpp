@@ -1,11 +1,16 @@
 #include "ScriptClassTemplates.hpp"
 #include "ScriptSymbolQueries.hpp"
+#include <RTTI/RTTI_ScriptClassTemplates.hpp>
 #include <exception/Throw.hpp>
 
 namespace REGoth
 {
   namespace Scripting
   {
+    ScriptClassTemplates::ScriptClassTemplates()
+    {
+    }
+
     void ScriptClassTemplates::createClassTemplates(const ScriptSymbolStorage& scriptSymbols)
     {
       auto classes = Queries::findAllClasses(scriptSymbols);
@@ -36,21 +41,21 @@ namespace REGoth
 
         if (memberSymbol.type == SymbolType::Int)
         {
-          auto num = ((SymbolInt&)memberSymbol).ints.values.size();
+          auto num = ((SymbolInt&)memberSymbol).ints.size();
 
-          obj.ints[name].values.resize(num);
+          obj.ints[name].resize(num);
         }
         else if (memberSymbol.type == SymbolType::Float)
         {
-          auto num = ((SymbolFloat&)memberSymbol).floats.values.size();
+          auto num = ((SymbolFloat&)memberSymbol).floats.size();
 
-          obj.floats[name].values.resize(num);
+          obj.floats[name].resize(num);
         }
         else if (memberSymbol.type == SymbolType::String)
         {
-          auto num = ((SymbolString&)memberSymbol).strings.values.size();
+          auto num = ((SymbolString&)memberSymbol).strings.size();
 
-          obj.strings[name].values.resize(num);
+          obj.strings[name].resize(num);
         }
         else if (memberSymbol.type == SymbolType::ScriptFunction)
         {
@@ -87,5 +92,6 @@ namespace REGoth
       return it->second;
     }
 
+    REGOTH_DEFINE_RTTI(ScriptClassTemplates)
   }  // namespace Scripting
 }  // namespace REGoth

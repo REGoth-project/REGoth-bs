@@ -1,6 +1,7 @@
 #pragma once
 #include "ScriptBackedBy.hpp"
 #include <BsPrerequisites.h>
+#include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
 {
@@ -105,17 +106,11 @@ namespace REGoth
     // Direction the character is currently turning in
     TurnDirection mTurnDirection = TurnDirection::None;
 
-    /************************************************************************/
-    /* RTTI                                                                 */
-    /************************************************************************/
   public:
-    friend class RTTI_CharacterKeyboardInput;
-    static bs::RTTITypeBase* getRTTIStatic();
-    bs::RTTITypeBase* getRTTI() const override;
+    REGOTH_DECLARE_RTTI(CharacterAI);
 
-    // protected:
-  public:  // FIXME: Should be protected, it is only used by RTTI but friend doesn't seem to work?!
-    CharacterAI() = default;  // Serialization only
+  protected:
+    CharacterAI() = default;  // For RTTI
   };
 
   using HCharacterAI = bs::GameObjectHandle<CharacterAI>;

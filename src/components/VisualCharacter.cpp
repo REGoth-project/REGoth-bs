@@ -100,14 +100,5 @@ namespace REGoth
     return {"S_RUN", "S_FISTRUN"};
   }
 
-  bs::RTTITypeBase* VisualCharacter::getRTTIStatic()
-  {
-    return RTTI_VisualCharacter::instance();
-  }
-
-  bs::RTTITypeBase* VisualCharacter::getRTTI() const
-  {
-    return VisualCharacter::getRTTIStatic();
-  }
-
+  REGOTH_DEFINE_RTTI(VisualCharacter)
 }  // namespace REGoth

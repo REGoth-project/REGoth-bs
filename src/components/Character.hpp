@@ -290,16 +290,10 @@ namespace REGoth
 
     bs::INT32 GetStateTime();
 
-    /************************************************************************/
-    /* 								RTTI */
-    /************************************************************************/
   public:
-    friend class RTTI_Character;
-    static bs::RTTITypeBase* getRTTIStatic();
-    bs::RTTITypeBase* getRTTI() const override;
+    REGOTH_DECLARE_RTTI(Character);
 
-    // protected:
-  public:  // FIXME: Should be protected, it is only used by RRIT but `friend` doesn't seem to work?!
-    Character() = default;  // Serialization only
+  protected:
+    Character() = default;  // For RTTI
   };
 }  // namespace REGoth

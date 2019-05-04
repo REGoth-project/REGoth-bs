@@ -7,7 +7,7 @@
 
 namespace REGoth
 {
-  namespace World
+  namespace Internals
   {
     /**
      * This function will load the given zenFile from the virtual file system
@@ -17,7 +17,7 @@ namespace REGoth
      *
      * @return Root of the created scene.
      */
-    bs::HSceneObject constructFromZEN(const bs::String& zenFile);
+    bs::HSceneObject constructFromZEN(bs::HSceneObject root, const bs::String& zenFile);
 
     /**
      * Will load the given ZEN, but only add its world mesh to the scene.

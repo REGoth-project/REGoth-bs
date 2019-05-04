@@ -1,6 +1,7 @@
 #include "ScriptBackedBy.hpp"
-#include <scripting/ScriptVMInterface.hpp>
 #include <RTTI/RTTI_ScriptBackedBy.hpp>
+#include <components/GameWorld.hpp>
+#include <scripting/ScriptVMForGameWorld.hpp>
 
 namespace REGoth
 {
@@ -8,7 +9,7 @@ namespace REGoth
                                  const bs::String& instance)
       : mScriptClassName(className)
       , mScriptInstance(instance)
-      , bs::Component(parent)
+      , NeedsGameWorld(parent)
   {
     setName("ScriptBackedBy");
   }
@@ -19,37 +20,42 @@ namespace REGoth
 
   void ScriptBackedBy::onInitialized()
   {
-    instanciateScriptObject(mScriptClassName, mScriptInstance);
+    NeedsGameWorld::onInitialized();
+
+    // When loading a saved instance this will have been already set and we
+    // already have a valid handle. Only create a new instance on a really new
+    // object.
+    if (!hasInstantiatedScriptObject())
+    {
+      instantiateScriptObject(mScriptClassName, mScriptInstance);
+    }
   }
 
   void ScriptBackedBy::onDestroyed()
   {
-    if (gGameScript().scriptObjects().isValid(mScriptObject))
+    if (gameWorld()->scriptVM().scriptObjects().isValid(mScriptObject))
     {
-      gGameScript().mapping().unmap(mScriptObject, SO());
-      gGameScript().scriptObjects().destroy(mScriptObject);
+      gameWorld()->scriptVM().mapping().unmap(mScriptObject, SO());
+      gameWorld()->scriptVM().scriptObjects().destroy(mScriptObject);
     }
   }
 
-  void ScriptBackedBy::instanciateScriptObject(const bs::String& className,
+  void ScriptBackedBy::instantiateScriptObject(const bs::String& className,
                                                const bs::String& instance)
   {
-    mScriptObject = gGameScript().instanciateClass(className, instance, SO());
+    mScriptObject = gameWorld()->scriptVM().instanciateClass(className, instance, SO());
+  }
+
+  bool ScriptBackedBy::hasInstantiatedScriptObject() const
+  {
+    return mScriptObject != Scripting::SCRIPT_OBJECT_HANDLE_INVALID;
   }
 
   Scripting::ScriptObject& ScriptBackedBy::scriptObjectData()
   {
     // Will throw if the handle is invalid
-    return gGameScript().scriptObjects().get(mScriptObject);
+    return gameWorld()->scriptVM().scriptObjects().get(mScriptObject);
   }
 
-  bs::RTTITypeBase* ScriptBackedBy::getRTTIStatic()
-  {
-    return RTTI_ScriptBackedBy::instance();
-  }
-
-  bs::RTTITypeBase* ScriptBackedBy::getRTTI() const
-  {
-    return ScriptBackedBy::getRTTIStatic();
-  }
+  REGOTH_DEFINE_RTTI(ScriptBackedBy)
 }  // namespace REGoth

@@ -1,9 +1,6 @@
 #pragma once
 
-#include "RTTI_TypeIDs.hpp"
-#include <BsCorePrerequisites.h>
-#include <Private/RTTI/BsGameObjectRTTI.h>  // Says private, but bs:f uses this too in their RTTIs
-#include <Reflection/BsRTTIType.h>
+#include "RTTIUtil.hpp"
 #include <components/CharacterAI.hpp>
 
 namespace REGoth
@@ -12,7 +9,8 @@ namespace REGoth
     : public bs::RTTIType<CharacterAI, bs::Component, RTTI_CharacterAI>
   {
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+    BS_RTTI_MEMBER_REFL(mVisual, 0)
+    BS_RTTI_MEMBER_REFL(mCharacterController, 1)
     BS_END_RTTI_MEMBERS
 
     public:
@@ -20,21 +18,7 @@ namespace REGoth
     {
     }
 
-    bs::SPtr<bs::IReflectable> newRTTIObject() override
-    {
-      return bs::GameObjectRTTI::createGameObject<CharacterAI>();
-    }
-
-    const bs::String& getRTTIName() override
-    {
-      static bs::String name = "CharacterAI";
-      return name;
-    }
-
-    bs::UINT32 getRTTIId() override
-    {
-      return TID_REGOTH_CharacterAI;
-    }
+    REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT(CharacterAI)
   };
 
 }  // namespace REGoth

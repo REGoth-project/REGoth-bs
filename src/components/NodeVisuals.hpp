@@ -1,6 +1,7 @@
 #pragma once
 #include <BsPrerequisites.h>
 #include <BsZenLib/ZenResources.hpp>
+#include <RTTI/RTTIUtil.hpp>
 #include <Scene/BsComponent.h>
 
 namespace REGoth
@@ -59,6 +60,12 @@ namespace REGoth
      * @return The current skeleton used by the scene objects renderable component.
      */
     bs::SPtr<bs::Skeleton> getSkeleton() const;
+
+  public:
+    REGOTH_DECLARE_RTTI(NodeVisuals)
+
+  protected:
+    NodeVisuals() = default; // For RTTI
   };
 
   using HNodeVisuals = bs::GameObjectHandle<NodeVisuals>;

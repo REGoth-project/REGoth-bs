@@ -1,4 +1,5 @@
 #include "ScriptObjectMapping.hpp"
+#include <RTTI/RTTI_ScriptObjectMapping.hpp>
 
 namespace REGoth
 {
@@ -52,5 +53,7 @@ namespace REGoth
 
       mScriptToSceneObjectMapping[scriptObject] = sceneObject;
     }
+
+    REGOTH_DEFINE_RTTI(ScriptObjectMapping)
   }  // namespace Scripting
 }  // namespace REGoth
