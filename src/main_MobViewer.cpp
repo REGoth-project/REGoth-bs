@@ -3,7 +3,7 @@
 #include <BsZenLib/ImportSkeletalMesh.hpp>
 #include <Components/BsCCamera.h>
 #include <Scene/BsSceneObject.h>
-#include <components/VisualCharacter.hpp>
+#include <components/VisualInteractiveObject.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
 class REGothMobViewer : public REGoth::REGothEngine
@@ -27,7 +27,7 @@ public:
 
     bs::HSceneObject mobSO = bs::SceneObject::create("Mob");
 
-    HVisualCharacter mobVis = mobSO->addComponent<VisualCharacter>();
+    HVisualInteractiveObject mobVis = mobSO->addComponent<VisualInteractiveObject>();
 
     // auto mds = BsZenLib::ImportAndCacheMDS("CHESTBIG_OCCHESTMEDIUM.MDS",
     //                                        gVirtualFileSystem().getFileIndex());
@@ -38,7 +38,6 @@ public:
     // }
 
     mobVis->setVisual("CHESTBIG_OCCHESTMEDIUM.MDS");
-    mobVis->setBodyMesh("CHEST");
 
     mMainCamera->SO()->setPosition(bs::Vector3(1, 0, 0));
     mMainCamera->SO()->lookAt(bs::Vector3(0, 0, 0));
