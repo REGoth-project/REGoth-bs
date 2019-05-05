@@ -1,9 +1,12 @@
 #include "ConstructFromZEN.hpp"
 #include "ImportSingleVob.hpp"
+#include <BsZenLib/ImportPath.hpp>
 #include <BsZenLib/ImportStaticMesh.hpp>
+#include <BsZenLib/ResourceManifest.hpp>
 #include <BsZenLib/ZenResources.hpp>
 #include <Components/BsCMeshCollider.h>
 #include <Physics/BsPhysicsMesh.h>
+#include <Resources/BsResources.h>
 #include <Scene/BsSceneObject.h>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
@@ -152,6 +155,11 @@ namespace REGoth
     {
       bs::HPhysicsMesh physicsMesh =
           bs::PhysicsMesh::create(mesh->getMesh()->getCachedData(), bs::PhysicsMeshType::Triangle);
+
+      bs::Path physicsMeshPath = BsZenLib::GothicPathToCachedStaticMesh(meshFileName + ".physics");
+
+      BsZenLib::AddToResourceManifest(physicsMesh, physicsMeshPath);
+      bs::gResources().save(physicsMesh, physicsMeshPath, true);
 
       bs::HMeshCollider collider = meshSO->addComponent<bs::CMeshCollider>();
       collider->setMesh(physicsMesh);

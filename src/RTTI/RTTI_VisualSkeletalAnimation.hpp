@@ -26,6 +26,17 @@ namespace REGoth
     {
     }
 
+    void onDeserializationEnded(bs::IReflectable* _obj, bs::SerializationContext* context) override
+    {
+      auto obj = static_cast<VisualSkeletalAnimation*>(_obj);
+
+      // Might have saved an empty visual, which is indeed okay to do
+      if (obj->mModelScript)
+      {
+        obj->createAnimationMap();
+      }
+    }
+
     REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT(VisualSkeletalAnimation)
   };
 

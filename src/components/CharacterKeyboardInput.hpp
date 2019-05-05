@@ -19,8 +19,12 @@ namespace REGoth
     CharacterKeyboardInput(const bs::HSceneObject& parent);
     virtual ~CharacterKeyboardInput();
 
+
+  protected:
+
     /** Triggered once per frame. Allows the component to handle input and move. */
     void fixedUpdate() override;
+    void onInitialized() override;
 
   private:
     /**
