@@ -22,6 +22,24 @@ namespace REGoth
                                                                 const bs::String& instanceName,
                                                                 bs::HSceneObject mappedSceneObject)
     {
+      SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instanceName);
+
+      return instanciateClass(className, symbol, mappedSceneObject);
+    }
+
+    ScriptObjectHandle DaedalusVMForGameWorld::instanciateClass(const bs::String& className,
+                                                                SymbolIndex instanceSymbolIndex,
+                                                                bs::HSceneObject mappedSceneObject)
+    {
+      SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instanceSymbolIndex);
+
+      return instanciateClass(className, symbol, mappedSceneObject);
+    }
+
+    ScriptObjectHandle DaedalusVMForGameWorld::instanciateClass(const bs::String& className,
+                                                                SymbolInstance& instance,
+                                                                bs::HSceneObject mappedSceneObject)
+    {
       // To instanciate a class the following has to happen:
       //
       //  1. Create a blank object of that class,
@@ -43,12 +61,15 @@ namespace REGoth
       // to also map the objects *before* executing the constructor.
 
       ScriptObjectHandle obj = instanciateBlankObjectOfClass(className);
-      SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instanceName);
 
-      // Constructor might call an external and refer to the scene object, so map before doing
-      // anything.
-      mapping().map(obj, mappedSceneObject);
-      symbol.instance = obj;
+      if (mappedSceneObject)
+      {
+        // Constructor might call an external and refer to the scene object, so map before doing
+        // anything.
+        mapping().map(obj, mappedSceneObject);
+      }
+
+      instance.instance = obj;
 
       ScriptObjectHandle oldCurrentInstance = mClassVarResolver->getCurrentInstance();
       ScriptObjectHandle oldSelf            = getInstance("SELF");
@@ -56,7 +77,7 @@ namespace REGoth
       setInstance("SELF", obj);
       mClassVarResolver->setCurrentInstance(obj);
 
-      executeScriptFunction(symbol.constructorAddress);
+      executeScriptFunction(instance.constructorAddress);
 
       mClassVarResolver->setCurrentInstance(oldCurrentInstance);
       setInstance("SELF", oldSelf);
@@ -88,6 +109,13 @@ namespace REGoth
     ScriptObjectHandle DaedalusVMForGameWorld::getInstance(const bs::String& instance) const
     {
       const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instance);
+
+      return symbol.instance;
+    }
+
+    ScriptObjectHandle DaedalusVMForGameWorld::getInstance(SymbolIndex symbolIndex) const
+    {
+      const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(symbolIndex);
 
       return symbol.instance;
     }
