@@ -204,10 +204,8 @@ namespace REGoth
   {
     using namespace bs;
 
-    // We do manual looping
-    // mSubAnimation->setWrapMode(AnimWrapMode::Clamp);
-    // FIXME: Animation Events are broken for clamped animations (in bsf)
-    mSubAnimation->setWrapMode(AnimWrapMode::Loop);
+    // We do manual looping by using Animation Events with an event on the last frame
+    mSubAnimation->setWrapMode(AnimWrapMode::Clamp);
 
     // Subscribe to animation events
     mSubAnimation->onEventTriggered.connect([this](auto clip, auto string) {
@@ -322,7 +320,7 @@ namespace REGoth
 
       clip = findAnimationClip(transition);
     }
-    else
+    else /* no transition needed */
     {
       clip = findAnimationClip(state);
     }
