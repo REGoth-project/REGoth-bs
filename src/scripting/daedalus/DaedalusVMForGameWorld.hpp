@@ -70,6 +70,9 @@ namespace REGoth
       void external_ConcatStrings();
       void external_WLD_InsertItem();
       void external_WLD_InsertNpc();
+      void external_WLD_GetDay();
+      void external_WLD_IsTime();
+      void external_WLD_SetTime();
       void external_NPC_IsPlayer();
       void external_NPC_SetTalentSkill();
       void external_NPC_EquipItem();

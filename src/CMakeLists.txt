@@ -51,6 +51,8 @@ add_library(REGothEngine
   components/Waynet.cpp
   components/CharacterKeyboardInput.hpp
   components/CharacterKeyboardInput.cpp
+  components/GameClock.hpp
+  components/GameClock.cpp
   exception/Throw.hpp
   animation/StateNaming.hpp
   animation/StateNaming.cpp
@@ -115,6 +117,7 @@ add_library(REGothEngine
   RTTI/RTTI_NodeVisuals.hpp
   RTTI/RTTI_Waynet.hpp
   RTTI/RTTI_Waypoint.hpp
+  RTTI/RTTI_GameClock.hpp
   )
 
 target_link_libraries(REGothEngine PUBLIC bsf BsZenLib)

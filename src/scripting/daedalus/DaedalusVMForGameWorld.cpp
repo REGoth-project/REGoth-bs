@@ -5,6 +5,7 @@
 #include <components/Character.hpp>
 #include <components/GameWorld.hpp>
 #include <components/VisualCharacter.hpp>
+#include <components/GameClock.hpp>
 
 namespace REGoth
 {
@@ -141,6 +142,9 @@ namespace REGoth
       registerExternal("CREATEINVITEM", (externalCallback)&This::external_NPC_CreateInventoryItem);
       registerExternal("MDL_SETVISUAL", (externalCallback)&This::external_MDL_SetVisual);
       registerExternal("MDL_SETVISUALBODY", (externalCallback)&This::external_MDL_SetVisualBody);
+      registerExternal("WLD_GETDAY", (externalCallback)&This::external_WLD_GetDay);
+      registerExternal("WLD_ISTIME", (externalCallback)&This::external_WLD_IsTime);
+      registerExternal("WLD_SETTIME", (externalCallback)&This::external_WLD_SetTime);
     }
 
     void DaedalusVMForGameWorld::external_Print()
@@ -187,6 +191,33 @@ namespace REGoth
       SymbolIndex instance = popIntValue();
 
       mWorld->insertCharacter(mScriptSymbols.getSymbolName(instance), waypoint);
+    }
+
+    void DaedalusVMForGameWorld::external_WLD_GetDay()
+    {
+      bs::INT32 day = mWorld->gameclock()->getDay();
+
+      mStack.pushInt(day);
+    }
+
+    void DaedalusVMForGameWorld::external_WLD_IsTime()
+    {
+      bs::INT32 min2  = popIntValue();
+      bs::INT32 hour2 = popIntValue();
+      bs::INT32 min1  = popIntValue();
+      bs::INT32 hour1 = popIntValue();
+
+      bool test = mWorld->gameclock()->isTime(hour1, min1, hour2, min2);
+
+      mStack.pushInt(test ? 1 : 0);
+    }
+
+    void DaedalusVMForGameWorld::external_WLD_SetTime()
+    {
+      bs::INT32 min  = popIntValue();
+      bs::INT32 hour = popIntValue();
+
+      mWorld->gameclock()->setTime(hour, min);
     }
 
     void DaedalusVMForGameWorld::external_NPC_IsPlayer()
