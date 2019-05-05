@@ -26,6 +26,13 @@ namespace REGoth
     {
     }
 
+    void onDeserializationEnded(bs::IReflectable* _obj, bs::SerializationContext* context) override
+    {
+      auto obj = static_cast<VisualSkeletalAnimation*>(_obj);
+
+      obj->createAnimationMap();
+    }
+
     REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT(VisualSkeletalAnimation)
   };
 

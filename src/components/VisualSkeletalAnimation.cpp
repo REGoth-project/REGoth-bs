@@ -53,10 +53,14 @@ namespace REGoth
     deleteObjectSubtree();
     mModelScript = modelScript;
 
+    createAnimationMap();
+  }
+
+  void VisualSkeletalAnimation::createAnimationMap()
+  {
     for (bs::HAnimationClip clip : mModelScript->getAnimationClips())
     {
       mAnimationClips[clip->getName()] = clip;
-      // bs::gDebug().logDebug(clip->getName());
     }
   }
 
@@ -298,7 +302,13 @@ namespace REGoth
   {
     bs::HAnimationClip clip;
 
-    if (Animation::isTransitionNeeded(state))
+    throwIfNotReadyForRendering();
+
+    if (!mSubAnimation->isPlaying())
+    {
+      clip = findAnimationClip(state);
+    }
+    else if (Animation::isTransitionNeeded(state))
     {
       bs::String from = getStateFromPlayingAnimation();
       bs::String to   = Animation::getStateName(state);

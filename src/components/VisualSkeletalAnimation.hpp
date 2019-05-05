@@ -197,6 +197,12 @@ namespace REGoth
     void throwIfNotReadyForRendering() const;
 
   private:
+
+    /**
+     * Fills mAnimationClips.
+     */
+    void createAnimationMap();
+
     /**
      * @return Whether the given mesh is registered inside the currently set model script
      */
