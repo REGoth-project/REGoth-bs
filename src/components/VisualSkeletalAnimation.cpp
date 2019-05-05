@@ -25,6 +25,17 @@ namespace REGoth
     setName("VisualSkeletalAnimation");
   }
 
+  void VisualSkeletalAnimation::onInitialized()
+  {
+    bs::Component::onInitialized();
+
+    // If this is called after deserialization, we need register the event-callback in here
+    if (mSubRenderable)
+    {
+      setupAnimationComponent();
+    }
+  }
+
   void VisualSkeletalAnimation::throwIfNotReadyForRendering() const
   {
     if (!mModelScript)

@@ -155,6 +155,9 @@ namespace REGoth
     bool isPlayingAnimationInterruptable() const;
 
   protected:
+
+    void onInitialized() override;
+
     /**
      * @return A list of animations to try playing after initialization or
      *         if no animation is playing.
