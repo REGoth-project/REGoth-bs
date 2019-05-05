@@ -33,7 +33,7 @@ namespace REGoth
      * Throws if the body mesh is not listed inside the model script.
      *
      * @param  bodyMesh  Name of the body mesh to use, e.g. `HUM_BODY_NAKED0`. The
-     *                   file extension must be omitted.
+     *                   file extension can be omitted.
      */
     void setBodyMesh(const bs::String& bodyMesh);
 

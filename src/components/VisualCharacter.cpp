@@ -28,6 +28,7 @@ namespace REGoth
   {
     setName("VisualCharacter");
   }
+
   void VisualCharacter::setBodyMesh(const bs::String& bodyMesh)
   {
     if (!modelScript())
@@ -35,7 +36,9 @@ namespace REGoth
       REGOTH_THROW(InvalidStateException, "No model script set! Has setVisual() been called?");
     }
 
-    BsZenLib::Res::HMeshWithMaterials hmesh = modelScript()->getMeshByName(bodyMesh);
+    // Those sometimes come with file extension.
+    bs::String bodyMeshNoExt = bodyMesh.substr(0, bodyMesh.find_last_of('.'));
+    BsZenLib::Res::HMeshWithMaterials hmesh = modelScript()->getMeshByName(bodyMeshNoExt);
 
     if (hmesh)
     {
@@ -43,7 +46,7 @@ namespace REGoth
     }
     else if (modelScript()->getMeshes().empty())
     {
-      REGOTH_THROW(InvalidParametersException, "Did not find body mesh " + bodyMesh +
+      REGOTH_THROW(InvalidParametersException, "Did not find body mesh " + bodyMeshNoExt +
                                                    " in model script '" + modelScript()->getName() +
                                                    "' and it seems to be empty otherwise!");
     }
@@ -52,7 +55,7 @@ namespace REGoth
       bs::gDebug().logWarning(bs::StringUtil::format(
           "[VisualCharacter] Did not find body mesh {0}  in model script "
           "'{1}'', defaulting to first one: {2}",
-          bodyMesh, modelScript()->getName(), modelScript()->getMeshes()[0]->getName()));
+          bodyMeshNoExt, modelScript()->getName(), modelScript()->getMeshes()[0]->getName()));
 
       setMesh(modelScript()->getMeshes()[0]);
     }
