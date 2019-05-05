@@ -30,7 +30,11 @@ namespace REGoth
     {
       auto obj = static_cast<VisualSkeletalAnimation*>(_obj);
 
-      obj->createAnimationMap();
+      // Might have saved an empty visual, which is indeed okay to do
+      if (obj->mModelScript)
+      {
+        obj->createAnimationMap();
+      }
     }
 
     REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT(VisualSkeletalAnimation)

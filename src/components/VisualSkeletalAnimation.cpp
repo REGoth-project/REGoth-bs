@@ -58,6 +58,11 @@ namespace REGoth
 
   void VisualSkeletalAnimation::createAnimationMap()
   {
+    if (!mModelScript)
+    {
+      REGOTH_THROW(InvalidStateException, "No model script set!");
+    }
+
     for (bs::HAnimationClip clip : mModelScript->getAnimationClips())
     {
       mAnimationClips[clip->getName()] = clip;
