@@ -209,6 +209,25 @@ namespace REGoth
     bool isMeshRegisteredInModelScript(BsZenLib::Res::HMeshWithMaterials mesh);
 
     /**
+     * Finds the correct animation to play now which will get the visual from the
+     * state it is currently in into the given target state.
+     *
+     * For example, given the visual is currently in state `S_RUN` and is requested
+     * to got to state `S_RUNL`, then this method will return `T_RUN_2_RUNL`.
+     *
+     * If there is no valid transition animation for going into the requested target
+     * state, an empty string is returned. This means it's impossible for the visual
+     * right now to go to that state, e.g. because it's falling and needs to land first.
+     *
+     * Some animations do not need any transitions, or maybe no animation is currently
+     * being played, for which the target states animation name is returned.
+     *
+     * @return Name of the animation to play to reach the given state. Empty string
+     *         if the transition is not possible.
+     */
+    bs::String findAnimationToTransitionToState(const bs::String& state);
+
+    /**
      * Deletes all sub objects created by this component (ie. for rendering)
      */
     void deleteObjectSubtree();
