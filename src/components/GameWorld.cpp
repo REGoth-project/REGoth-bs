@@ -139,6 +139,8 @@ namespace REGoth
     transform.move(
         bs::Vector3(0, 0.5f, 0));  // FIXME: Can we move the center to the feet somehow instead?
 
+    bs::gDebug().logDebug("[GameWorld] Insert Character " + instance + " at " + spawnPoint);
+
     return insertCharacter(instance, transform);
   }
 
