@@ -1,6 +1,5 @@
 #include "BsCameraZoomer.h"
 #include "BsFPSCamera.h"
-#include <components/GameWorld.hpp>
 #include "BsFPSWalker.h"
 #include "BsObjectRotator.h"
 #include "REGothEngine.hpp"
@@ -20,105 +19,11 @@
 #include <Math/BsVector3.h>
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
+#include <components/GameWorld.hpp>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
 #include <daedalus/DATFile.h>
 #include <original-content/VirtualFileSystem.hpp>
-
-class SimpleCharacterController : public bs::Component
-{
-public:
-  SimpleCharacterController(const bs::HSceneObject& parent, REGoth::HVisualCharacter visual)
-      : Component(parent)
-  {
-    setName("SimpleCharacterController");
-
-    mVisual = visual;
-
-    playAnimationIfFound("S_RUN");
-  }
-
-  /** Triggered once per frame. Allows the component to handle input and move. */
-  void fixedUpdate() override
-  {
-    using namespace bs;
-
-    mGoingForward      = gVirtualInput().isButtonHeld(VirtualButton("Forward"));
-    mGoingBack         = gVirtualInput().isButtonHeld(VirtualButton("Back"));
-    mGoingLeft         = gVirtualInput().isButtonHeld(VirtualButton("Left"));
-    mGoingRight        = gVirtualInput().isButtonHeld(VirtualButton("Right"));
-    mToggleMeleeWeapon = gVirtualInput().isButtonHeld(VirtualButton("ToggleMeleeWeapon"));
-
-    DebugDraw::instance().clear();
-    DebugDraw::instance().drawWireCube(SO()->getTransform().getPosition(),
-                                       Vector3(0.5f, 0.5f, 0.5f));
-
-    bs::String state = REGoth::Animation::getStateName(mVisual->getPlayingAnimationName());
-
-    static String s_lastFrameAnim;
-
-    if (s_lastFrameAnim != mVisual->getPlayingAnimationName())
-    {
-      gDebug().logDebug("[Anim] " + mVisual->getPlayingAnimationName());
-      s_lastFrameAnim = mVisual->getPlayingAnimationName();
-    }
-
-    if (mVisual->getPlayingAnimationName().empty() || mToggleMeleeWeapon)
-    {
-      // Some animations have an empty `nextAnim`-field. Fall back to default
-      // animation in that case
-      playAnimationIfFound("S_RUN");  // FIXME: Respect weapon mode
-    }
-    else if (state.empty() || !mVisual->isPlayingAnimationInterruptable())
-    {
-      // Do nothing and wait for the current animation to finish
-      // After it is done, we should be in a valid state again.
-    }
-    else if (mGoingForward)
-    {
-      mVisual->tryPlayTransitionAnimationTo("S_RUNL");
-    }
-    else if (mGoingBack)
-    {
-      mVisual->tryPlayTransitionAnimationTo("T_JUMPB");
-    }
-    // else if (mGoingLeft)
-    // {
-    //   mVisual->tryPlayTransitionAnimationTo("T_RUNSTRAFER");
-    // }
-    else
-    {
-      mVisual->tryPlayTransitionAnimationTo("S_RUN");
-    }
-  }
-
-  void playAnimationIfFound(const bs::String& name)
-  {
-    bs::HAnimationClip clip = mVisual->findAnimationClip(name);
-
-    if (clip)
-    {
-      if (!mVisual->isAnimationPlaying(clip))
-      {
-        mVisual->playAnimation(clip);
-      }
-    }
-    else
-    {
-      bs::gDebug().logWarning("[SimpleCharacterController] Failed to find animation: " + name);
-    }
-  }
-
-private:
-  REGoth::HVisualCharacter mVisual;
-
-  // Keystates, valid during fixedUpdate()
-  bool mGoingForward;
-  bool mGoingBack;
-  bool mGoingLeft;
-  bool mGoingRight;
-  bool mToggleMeleeWeapon;
-};
 
 class REGothCharacterViewer : public REGoth::REGothEngine
 {
@@ -156,35 +61,51 @@ public:
 
     HGameWorld world = GameWorld::createEmpty();
 
-    // Add some waypoint
-    bs::String wpName = "SOMEPLACE";
+    HSceneObject playerSO = SceneObject::create("Player");
+
+    bs::HRenderable renderable = playerSO->addComponent<bs::CRenderable>();
+    // REGoth::HVisualCharacter playerVisual = playerSO->addComponent<REGoth::VisualCharacter>();
+    playerSO->addComponent<bs::ObjectRotator>();
+
+    // Load a model and its animations
+    BsZenLib::Res::HModelScriptFile model;
+
+    const String file   = "HUMANS.MDS";
+    const String visual = "HUM_BODY_NAKED0.ASC";
+
+    if (BsZenLib::HasCachedMDS(file))
     {
-      bs::HSceneObject wpSO = bs::SceneObject::create(wpName);
-
-      wpSO->setParent(world->waynet()->SO());
-      wpSO->setPosition(bs::Vector3(0, 0, 0));
-
-      HWaypoint wp = wpSO->addComponent<Waypoint>();
-      world->waynet()->addWaypoint(wp);
+      model = BsZenLib::LoadCachedMDS(file);
+    }
+    else
+    {
+      model = BsZenLib::ImportAndCacheMDS(file, REGoth::gVirtualFileSystem().getFileIndex());
     }
 
-    HCharacter character = world->insertCharacter("PC_HERO", wpName);
+    if (!model || model->getMeshes().empty())
+    {
+    }
 
-    HVisualCharacter playerVisual = character->SO()->getComponent<VisualCharacter>();
-    character->SO()->addComponent<SimpleCharacterController>(playerVisual);
-    character->SO()->addComponent<bs::ObjectRotator>();
+    for (const auto& h : model->getMeshes())
+    {
+      // gDebug().logDebug(h->getName());
+    }
 
     // playerVisual->setModelScript(model);
-    // playerVisual->setMesh(model->getMeshes()[0]);
+    // playerVisual->setMesh(model->getMeshes()[2]);
     // playerVisual->setHeadMesh("HUM_HEAD_PONY.MMB");
+    // playerVisual->playAnimation({});
 
-    Sphere bounds = playerVisual->getBounds().getSphere();
+    renderable->setMesh(model->getMeshes()[2]->getMesh());
+    renderable->setMaterials(model->getMeshes()[2]->getMaterials());
 
-    Vector3 cameraDirection = Vector3(1, 0, 0);
+    Sphere bounds = renderable->getBounds().getSphere();
+
+    Vector3 cameraDirection = Vector3(-1, 0, 0);
     cameraDirection.normalize();
 
     auto cameraOffset = cameraDirection * bounds.getRadius() * 1.7f;
-    mMainCamera->SO()->setPosition(bounds.getCenter() + cameraOffset);
+    mMainCamera->SO()->setPosition(cameraOffset);
     mMainCamera->SO()->lookAt(Vector3(0, 0, 0));
   }
 
