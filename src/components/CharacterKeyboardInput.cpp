@@ -45,6 +45,9 @@ namespace REGoth
     bool goingRight   = bs::gVirtualInput().isButtonHeld(mMoveRight);
     bool fastMove     = bs::gVirtualInput().isButtonHeld(mFastMove);
 
+    // Always keep the user controllers physics active
+    mCharacterAI->activatePhysics();
+
     if (goingForward)
     {
       mCharacterAI->goForward();

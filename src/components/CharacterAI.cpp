@@ -38,6 +38,16 @@ namespace REGoth
     }
   }
 
+  void CharacterAI::deactivatePhysics()
+  {
+    mIsPhysicsActive = false;
+  }
+
+  void CharacterAI::activatePhysics()
+  {
+    mIsPhysicsActive = true;
+  }
+
   bool CharacterAI::goForward()
   {
     if (!isStateSwitchAllowed()) return false;
@@ -76,6 +86,7 @@ namespace REGoth
 
     mTurnDirection = TurnDirection::Left;
 
+    // return mVisual->tryPlayTransitionAnimationTo("T_RUNTURNL");
     return true;
   }
 
@@ -85,6 +96,7 @@ namespace REGoth
 
     mTurnDirection = TurnDirection::Right;
 
+    // return mVisual->tryPlayTransitionAnimationTo("T_RUNTURNR");
     return true;
   }
 
@@ -97,6 +109,11 @@ namespace REGoth
 
   bool CharacterAI::stopTurning()
   {
+    // if (mTurnDirection != TurnDirection::None)
+    // {
+    //   mVisual->playAnimation(mVisual->findAnimationClip("S_RUN"));
+    // }
+
     mTurnDirection = TurnDirection::None;
 
     return true;
@@ -127,6 +144,12 @@ namespace REGoth
 
   void CharacterAI::fixedUpdate()
   {
+    if (!mIsPhysicsActive)
+    {
+      // Skip all movement and physics calculations to save processing time.
+      return;
+    }
+
     if (isTurningAllowed())
     {
       handleTurning();
