@@ -292,6 +292,24 @@ namespace REGoth
       bs::INT32 bodyTexIndex = popIntValue();
       bs::String bodyMesh    = popStringValue();
 
+      // If an armor is set here, we need to replace the body mesh from the input parameters with the
+      // visual settings from inside the armor instance
+      if (armorInstance != -1)
+      {
+        // TODO: Original Gothic adds the Armor straight to the inventory. We just create a
+        // temporary instance to extract the visual information from it
+        ScriptObjectHandle armorSObj = getInstance(armorInstance);
+
+        if (!armorSObj)
+        {
+          armorSObj = instanciateClass("C_ITEM", armorInstance, {});
+        }
+
+        ScriptObject& armor = mScriptObjects.get(armorSObj);
+
+        bodyMesh = armor.stringValue("VISUAL_CHANGE");
+      }
+
       HCharacter character = popCharacterInstance();
 
       HVisualCharacter characterVisual = character->SO()->getComponent<VisualCharacter>();
