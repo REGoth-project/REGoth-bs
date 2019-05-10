@@ -26,8 +26,7 @@ REGothEngine::~REGothEngine()
   shutdown();
 }
 
-void REGothEngine::loadGamePackages(const bs::Path& executablePath,
-                                            const bs::Path& gameDirectory)
+void REGothEngine::loadGamePackages(const bs::Path& executablePath, const bs::Path& gameDirectory)
 {
   OriginalGameFiles files = OriginalGameFiles(gameDirectory);
 
@@ -153,6 +152,10 @@ void REGothEngine::setupMainCamera()
   rs->enableFXAA                     = false;
   rs->enableHDR                      = false;
   rs->enableTonemapping              = false;
+  rs->enableAutoExposure             = false;
+  rs->enableSkybox                   = false;
+  rs->exposureScale                  = 1.0f;
+  rs->gamma                          = 1.5f;
   rs->cullDistance                   = 100.0f;
 
   sceneCamera->setRenderSettings(rs);
