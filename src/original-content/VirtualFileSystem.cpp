@@ -89,9 +89,35 @@ bs::Vector<bs::String> VirtualFileSystem::listAllFiles()
   for (size_t i = 0; i < allStl.size(); i++)
   {
     all[i] = allStl[i].c_str();
+
+    // Internal file index will return the files in the casing they were stored in.
+    // To be consistent, convert them all to uppercase here.
+    bs::StringUtil::toUpperCase(all[i]);
   }
 
   return all;
+}
+
+bs::Vector<bs::String> REGoth::VirtualFileSystem::listByExtension(const bs::String& ext)
+{
+  bs::Vector<bs::String> all = listAllFiles();
+
+  enum
+  {
+    RespectCase = false,
+    LowerCase  = true,
+  };
+
+  bs::Vector<bs::String> result;
+  for(const auto& f : all)
+  {
+    if (bs::StringUtil::endsWith(f, ext, RespectCase))
+    {
+      result.push_back(f);
+    }
+  }
+
+  return result;
 }
 
 bs::Vector<bs::UINT8> VirtualFileSystem::readFile(const bs::String& file) const
