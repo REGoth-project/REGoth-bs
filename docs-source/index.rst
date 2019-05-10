@@ -14,6 +14,7 @@ Welcome to REGoth's documentation!
    content/setting-up-app
    content/world
    content/waynet
+   content/characters
    content/case-study-object-kinds
    content/case-study-scene-structure
    content/case-study-character-statemachine
