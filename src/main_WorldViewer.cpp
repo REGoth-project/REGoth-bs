@@ -1,5 +1,6 @@
 #include "BsFPSCamera.h"
-#include "REGothEngine.hpp"
+#include <components/ThirdPersonCamera.hpp>
+#include <REGothEngine.hpp>
 #include <Components/BsCCamera.h>
 #include <Scene/BsPrefab.h>
 #include <Scene/BsSceneObject.h>
@@ -15,32 +16,32 @@ class REGothWorldViewer : public REGoth::REGothEngine
 public:
   void loadModPackages(const REGoth::OriginalGameFiles& files) override
   {
-    using namespace REGoth;
+    // using namespace REGoth;
 
-    for (auto p : files.allModPackages())
-    {
-      bs::gDebug().logDebug("[WorldViewer] Loading Mod: " + p.toString());
-      gVirtualFileSystem().loadPackage(p);
-    }
+    // for (auto p : files.allModPackages())
+    // {
+    //   bs::gDebug().logDebug("[WorldViewer] Loading Mod: " + p.toString());
+    //   gVirtualFileSystem().loadPackage(p);
+    // }
 
-    for (auto zen : gVirtualFileSystem().listByExtension(".ZEN"))
-    {
-      bs::gDebug().logDebug("[WorldViewer] Found ZEN: " + zen);
-    }
+    // for (auto zen : gVirtualFileSystem().listByExtension(".ZEN"))
+    // {
+    //   bs::gDebug().logDebug("[WorldViewer] Found ZEN: " + zen);
+    // }
   }
 
   void setupMainCamera() override
   {
     REGoth::REGothEngine::setupMainCamera();
 
-    // mFPSCamera = mMainCamera->SO()->addComponent<bs::FPSCamera>();
+    mThirdPersonCamera = mMainCamera->SO()->addComponent<REGoth::ThirdPersonCamera>();
   }
 
   void setupScene() override
   {
     using namespace REGoth;
 
-    const bs::String WORLD    = "ANFANG.ZEN";
+    const bs::String WORLD    = "ADDONWORLD.ZEN";
     const bs::String SAVEGAME = "WorldViewer-" + WORLD;
 
     bs::HPrefab worldPrefab = GameWorld::load(SAVEGAME);
@@ -74,13 +75,11 @@ public:
 
     HCharacter hero = heroSO->getComponent<Character>();
 
-    mMainCamera->SO()->setPosition(bs::Vector3(2, 0.5f, 0));
-    mMainCamera->SO()->lookAt(bs::Vector3(bs::BsZero));
-    mMainCamera->SO()->setParent(hero->SO(), false);
+    mThirdPersonCamera->follow(hero);
   }
 
 protected:
-  bs::HFPSCamera mFPSCamera;
+  REGoth::HThirdPersonCamera mThirdPersonCamera;
 };
 
 int main(int argc, char** argv)
