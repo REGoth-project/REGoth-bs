@@ -26,7 +26,7 @@ REGothEngine::~REGothEngine()
   shutdown();
 }
 
-void REGothEngine::loadOriginalGamePackages(const bs::Path& executablePath,
+void REGothEngine::loadGamePackages(const bs::Path& executablePath,
                                             const bs::Path& gameDirectory)
 {
   OriginalGameFiles files = OriginalGameFiles(gameDirectory);
@@ -42,9 +42,16 @@ void REGothEngine::loadOriginalGamePackages(const bs::Path& executablePath,
   }
 
   gVirtualFileSystem().mountDirectory(files.vdfsFileEntryPoint());
+
+  loadModPackages(files);
 }
 
-void REGoth::REGothEngine::saveCachedResourceManifests()
+void REGothEngine::loadModPackages(const OriginalGameFiles& files)
+{
+  // Don't load mod-files by defaults
+}
+
+void REGothEngine::saveCachedResourceManifests()
 {
   bs::gDebug().logDebug("[REGothEngine] Saving resource manifests:");
 
@@ -222,7 +229,7 @@ int ::REGoth::main(REGothEngine& regoth, int argc, char** argv)
   regoth.findEngineContent(engineExecutablePath);
 
   bs::gDebug().logDebug("[Main] Loading original game packages");
-  regoth.loadOriginalGamePackages(engineExecutablePath, gameDirectory);
+  regoth.loadGamePackages(engineExecutablePath, gameDirectory);
 
   if (!regoth.hasFoundGameFiles())
   {

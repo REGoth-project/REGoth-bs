@@ -8,6 +8,7 @@
 namespace REGoth
 {
   class EngineContent;
+  class OriginalGameFiles;
 
   /**
    * This is the REGoth-Core-Class, which initializes the engine, sets the
@@ -36,12 +37,27 @@ namespace REGoth
     virtual ~REGothEngine();
 
     /**
-     * Load VDFS packages from the original game.
+     * Load VDFS packages from the original game. Will load data in the following order:
+     *
+     *  1. Data/ (*.vdf)
+     *  2. _world/ (Recursive)
+     *  3. Data/modvdf/ (*.modvdf, recursive)
      *
      * @param  executablePath  Path to the currently running executable (argv[0])
      * @param  gameDirectory   Location where Gothics game files can be found.
      */
-    void loadOriginalGamePackages(const bs::Path& executablePath, const bs::Path& gameDirectory);
+    void loadGamePackages(const bs::Path& executablePath, const bs::Path& gameDirectory);
+
+    /**
+     * Called by loadOriginalGamePackages(). Can be overriden by the user to load specific
+     * MOD-packages.
+     *
+     * To load a MOD-package, use `gVirtualFileSystem().loadPackage(p)`.
+     *
+     * @param  files  Reference to OriginalGameFiles-object, which has some utility methods to
+     *                access files in the original game directory.
+     */
+    virtual void loadModPackages(const OriginalGameFiles& files);
 
     /**
      * When called after loadOriginalGamePackages(), this will check whether Gothics game files were
@@ -104,7 +120,6 @@ namespace REGoth
     void shutdown();
 
   protected:
-
     /**
      * Main camera this engines renders with
      */

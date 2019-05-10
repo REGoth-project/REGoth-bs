@@ -55,7 +55,7 @@ int main(int argc, char** argv)
   gDebug().logDebug("[Main]  - Startup ZEN:       " + zenFile);
 
   gDebug().logDebug("[Main] Loading original game packages");
-  regoth.loadOriginalGamePackages(engineExecutablePath, gameDirectory);
+  regoth.loadGamePackages(engineExecutablePath, gameDirectory);
 
   if (!regoth.hasFoundGameFiles())
   {
