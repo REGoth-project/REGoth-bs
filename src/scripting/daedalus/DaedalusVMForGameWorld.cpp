@@ -146,6 +146,10 @@ namespace REGoth
         REGOTH_THROW(InvalidStateException, "Hero-instance must be set to call world init scripts!");
       }
 
+      // Some G1-Scripts refer to SELF during init while doing debug-output.
+      // I can only assume they mean the hero.
+      setInstance("SELF", getInstance("HERO"));
+
       // FIXME: Do STARTUP_* only on first load?
       executeScriptFunction("STARTUP_" + worldName);
 
