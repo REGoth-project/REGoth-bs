@@ -7,10 +7,28 @@
 #include <components/CharacterKeyboardInput.hpp>
 #include <components/GameWorld.hpp>
 #include <exception/Throw.hpp>
+#include <original-content/OriginalGameFiles.hpp>
+#include <original-content/VirtualFileSystem.hpp>
 
 class REGothWorldViewer : public REGoth::REGothEngine
 {
 public:
+  void loadModPackages(const REGoth::OriginalGameFiles& files) override
+  {
+    using namespace REGoth;
+
+    for (auto p : files.allModPackages())
+    {
+      bs::gDebug().logDebug("[WorldViewer] Loading Mod: " + p.toString());
+      gVirtualFileSystem().loadPackage(p);
+    }
+
+    for (auto zen : gVirtualFileSystem().listByExtension(".ZEN"))
+    {
+      bs::gDebug().logDebug("[WorldViewer] Found ZEN: " + zen);
+    }
+  }
+
   void setupMainCamera() override
   {
     REGoth::REGothEngine::setupMainCamera();
@@ -22,7 +40,7 @@ public:
   {
     using namespace REGoth;
 
-    const bs::String WORLD    = "ADDONWORLD.ZEN";
+    const bs::String WORLD    = "ANFANG.ZEN";
     const bs::String SAVEGAME = "WorldViewer-" + WORLD;
 
     bs::HPrefab worldPrefab = GameWorld::load(SAVEGAME);

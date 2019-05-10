@@ -53,6 +53,8 @@ add_library(REGothEngine
   components/CharacterKeyboardInput.cpp
   components/GameClock.hpp
   components/GameClock.cpp
+  components/ThirdPersonCamera.hpp
+  components/ThirdPersonCamera.cpp
   exception/Throw.hpp
   animation/StateNaming.hpp
   animation/StateNaming.cpp
