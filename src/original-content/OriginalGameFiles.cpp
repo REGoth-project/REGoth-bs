@@ -5,7 +5,7 @@
 namespace REGoth
 {
   OriginalGameFiles::OriginalGameFiles(const bs::Path& root)
-    : mRoot(root)
+      : mRoot(root)
   {
     if (vdfsFileEntryPoint() == bs::Path::BLANK)
     {
@@ -50,6 +50,11 @@ namespace REGoth
     return findCaseSensitivePathOf("data/");
   }
 
+  bs::Path OriginalGameFiles::modDirectory() const
+  {
+    return findCaseSensitivePathOf("data/modvdf/");
+  }
+
   bs::Path OriginalGameFiles::vdfsFileEntryPoint() const
   {
     return findCaseSensitivePathOf("_work/data/");
@@ -58,6 +63,11 @@ namespace REGoth
   bs::Vector<bs::Path> OriginalGameFiles::allVdfsPackages() const
   {
     return filterFilesInDirectoryByExt(dataDirectory(), ".vdf");
+  }
+
+  bs::Vector<bs::Path> OriginalGameFiles::allModPackages() const
+  {
+    return filterFilesInDirectoryByExtRecursive(modDirectory(), ".mod");
   }
 
   bs::Path OriginalGameFiles::findCaseSensitivePathOf(const bs::Path& path) const
@@ -123,7 +133,7 @@ namespace REGoth
     bs::Vector<bs::Path> files;
     bs::Vector<bs::Path> dirs;
 
-    bs::FileSystem::getChildren(dataDirectory(), files, dirs);
+    bs::FileSystem::getChildren(path, files, dirs);
 
     enum
     {
@@ -138,6 +148,26 @@ namespace REGoth
       {
         matching.push_back(p);
       }
+    }
+
+    return matching;
+  }
+
+  bs::Vector<bs::Path> OriginalGameFiles::filterFilesInDirectoryByExtRecursive(
+      const bs::Path& path, const bs::String& ext) const
+  {
+    bs::Vector<bs::Path> files;
+    bs::Vector<bs::Path> dirs;
+
+    bs::FileSystem::getChildren(path, files, dirs);
+
+    bs::Vector<bs::Path> matching = filterFilesInDirectoryByExt(path, ext);
+
+    for (const bs::Path& p : dirs)
+    {
+      bs::Vector<bs::Path> matchingSubdir = filterFilesInDirectoryByExtRecursive(p, ext);
+
+      matching.insert(matching.end(), matchingSubdir.begin(), matchingSubdir.end());
     }
 
     return matching;
