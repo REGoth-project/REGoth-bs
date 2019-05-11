@@ -40,7 +40,7 @@ void REGothEngine::loadGamePackages(const bs::Path& executablePath, const bs::Pa
     gVirtualFileSystem().loadPackage(p);
   }
 
-  // gVirtualFileSystem().mountDirectory(files.vdfsFileEntryPoint());
+  gVirtualFileSystem().mountDirectory(files.vdfsFileEntryPoint());
 
   loadModPackages(files);
 }
