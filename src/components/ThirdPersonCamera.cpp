@@ -23,6 +23,14 @@ namespace REGoth
     SO()->setPosition(characterPosition());
   }
 
+  void ThirdPersonCamera::modifyDistance(float delta)
+  {
+    mDistanceToAimFor += delta;
+
+    // FIXME: Make min and max distance configurable
+    mDistanceToAimFor = bs::Math::clamp(mDistanceToAimFor, 1.4f, 6.0f);
+  }
+
   float ThirdPersonCamera::distanceToCharacter() const
   {
     throwIfFollowedCharacterIsNotValid();

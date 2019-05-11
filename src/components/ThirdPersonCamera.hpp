@@ -48,7 +48,8 @@ namespace REGoth
      * camera using the mousewheel, for example.
      *
      * There is no direct setter for this distance, as the distance has to adapt to
-     * certain situations during gameplay.
+     * certain situations during gameplay. Also note that the resulting new camera distance
+     * will be clamped to the min/max range currently configured.
      *
      * @param  delta  Positive values will move the camera further away from the target,
      *                Negative values will move it closer.
