@@ -103,7 +103,8 @@ namespace REGoth
     /**
      * Returns a list of files with the given file extension.
      *
-     * @param  ext  UPPERCASE file extension to look for, with leading dot. E.g. `.3DS`.
+     * @param  ext  File extension to look for, with leading dot. E.g. `.3DS`,
+     *              case insensitive.
      *
      * @return Names of all files with the given file extension, all UPPERCASE.
      */
