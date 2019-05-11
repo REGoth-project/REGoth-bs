@@ -104,7 +104,11 @@ namespace REGoth
 
     characterSO->addComponent<VisualCharacter>();
 
-    characterSO->addComponent<bs::CCharacterController>();
+    auto controller = characterSO->addComponent<bs::CCharacterController>();
+
+    // FIXME: Assign the radius and height set via the visuals bounding box
+    controller->setRadius(0.35f);
+    controller->setHeight(0.5f);
 
     auto ai = characterSO->addComponent<CharacterAI>();
 
