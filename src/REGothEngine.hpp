@@ -41,7 +41,7 @@ namespace REGoth
      *
      *  1. Data/ (*.vdf)
      *  2. _world/ (Recursive)
-     *  3. Data/modvdf/ (*.modvdf, recursive)
+     *  3. Data/modvdf/ (*.mod, recursive)
      *
      * @param  executablePath  Path to the currently running executable (argv[0])
      * @param  gameDirectory   Location where Gothics game files can be found.
