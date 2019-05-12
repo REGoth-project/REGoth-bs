@@ -22,7 +22,7 @@ namespace REGoth
     bs::Vector<bs::String> listPossibleDefaultAnimations() const override;
 
   public:
-    REGOTH_DECLARE_RTTI(Character);
+    REGOTH_DECLARE_RTTI(VisualInteractiveObject);
 
   protected:
     VisualInteractiveObject() = default; // For RTTI
