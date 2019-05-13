@@ -1,11 +1,12 @@
 #include "DaedalusVMForGameWorld.hpp"
+#include <components/CharacterEventQueue.hpp>
 #include "DaedalusClassVarResolver.hpp"
 #include <RTTI/RTTI_DaedalusVMForGameWorld.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
+#include <components/GameClock.hpp>
 #include <components/GameWorld.hpp>
 #include <components/VisualCharacter.hpp>
-#include <components/GameClock.hpp>
 
 namespace REGoth
 {
@@ -351,6 +352,16 @@ namespace REGoth
 
       bs::StringUtil::toUpperCase(headMesh);
       characterVisual->setHeadMesh(headMesh);
+    }
+
+    void DaedalusVMForGameWorld::external_AI_GotoWaypoint()
+    {
+      bs::String waypoint = popStringValue();
+      HCharacter self = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushGotoObject(mWorld->SO()->findChild(waypoint));
     }
 
     void DaedalusVMForGameWorld::script_PrintPlus(const bs::String& text)

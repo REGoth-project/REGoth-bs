@@ -87,6 +87,7 @@ namespace REGoth
       void external_NPC_CreateInventoryItem();
       void external_MDL_SetVisual();
       void external_MDL_SetVisualBody();
+      void external_AI_GotoWaypoint();
 
       void registerAllExternals() override;
 
