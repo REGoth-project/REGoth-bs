@@ -44,5 +44,6 @@ namespace REGoth
     TID_REGOTH_ScriptObjectMapping          = 600036,
     TID_REGOTH_GameClock                    = 600037,
     TID_REGOTH_ThirdPersonCamera            = 600038,
+    TID_REGOTH_EventQueue                   = 600039,
   };
 }  // namespace REGoth

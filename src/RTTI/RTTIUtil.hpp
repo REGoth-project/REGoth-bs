@@ -17,6 +17,7 @@
 #include <BsCorePrerequisites.h>
 #include <Reflection/BsRTTIType.h>
 #include <Scene/BsSceneObject.h>
+#include <exception/Throw.hpp>
 
 /**
  * For use in the actual components header. Declares the functions for accessing

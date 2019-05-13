@@ -55,6 +55,10 @@ add_library(REGothEngine
   components/GameClock.cpp
   components/ThirdPersonCamera.hpp
   components/ThirdPersonCamera.cpp
+  components/EventQueue.hpp
+  components/EventQueue.cpp
+  AI/EventMessage.hpp
+  AI/EventMessage.cpp
   exception/Throw.hpp
   animation/StateNaming.hpp
   animation/StateNaming.cpp
