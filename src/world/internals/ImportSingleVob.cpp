@@ -1,6 +1,15 @@
 #include "ImportSingleVob.hpp"
+#include <BsZenLib/ImportPath.hpp>
+#include <BsZenLib/ResourceManifest.hpp>
+#include <BsZenLib/ZenResources.hpp>
 #include <Components/BsCLight.h>
+#include <Components/BsCMeshCollider.h>
+#include <Components/BsCRenderable.h>
+#include <FileSystem/BsFileSystem.h>
 #include <Math/BsMatrix4.h>
+#include <Mesh/BsMesh.h>
+#include <Physics/BsPhysicsMesh.h>
+#include <Resources/BsResources.h>
 #include <Scene/BsSceneObject.h>
 #include <components/Item.hpp>
 #include <components/Visual.hpp>
@@ -38,6 +47,7 @@ namespace REGoth
   static bs::HSceneObject import_oCMobBed(const ZenLoad::zCVobData& vob, bs::HSceneObject parentSO);
   static bs::HSceneObject import_oCMobDoor(const ZenLoad::zCVobData& vob, bs::HSceneObject parentSO);
   static void addVisualTo(bs::HSceneObject sceneObject, const bs::String& visualName);
+  static void addCollisionTo(bs::HSceneObject sceneObject);
 
   bs::HSceneObject Internals::importSingleVob(const ZenLoad::zCVobData& vob,
                                               bs::HSceneObject parentSO)
@@ -119,6 +129,12 @@ namespace REGoth
     if (!vob.visual.empty())
     {
       addVisualTo(so, vob.visual.c_str());
+    }
+
+    // cdDyn seems to be the general "this is supposed to collide with stuff"-flag.
+    if (vob.cdDyn)
+    {
+      addCollisionTo(so);
     }
 
     return so;
@@ -258,6 +274,48 @@ namespace REGoth
     {
       bs::gDebug().logWarning("[ImportSingleVob] Unsupported visual: " + visualName);
     }
+  }
+
+  /**
+   * Adds a triangle physics mesh to the given scene object. Only works if the
+   * scene object has a renderable with a mesh set. The mesh must also have
+   * CPU-caching enabled, so we get access to the mesh data.
+   */
+  static void addCollisionTo(bs::HSceneObject sceneObject)
+  {
+    bs::HRenderable renderable = sceneObject->getComponent<bs::CRenderable>();
+
+    if (!renderable) return;
+
+    auto mesh = renderable->getMesh();
+
+    if (!mesh) return;
+
+    auto meshData = mesh->getCachedData();
+
+    if (!meshData) return;
+
+    bs::Path physicsMeshPath = BsZenLib::GothicPathToCachedStaticMesh(mesh->getName() + ".physics");
+
+    bs::HPhysicsMesh physicsMesh;
+    if (bs::FileSystem::exists(physicsMeshPath))
+    {
+      physicsMesh = bs::gResources().load<bs::PhysicsMesh>(physicsMeshPath);
+    }
+    else
+    {
+      bs::gDebug().logDebug("[ImportSingleVob] Caching physics mesh for " + mesh->getName());
+
+      physicsMesh = bs::PhysicsMesh::create(meshData, bs::PhysicsMeshType::Triangle);
+
+      BsZenLib::AddToResourceManifest(physicsMesh, physicsMeshPath);
+      bs::gResources().save(physicsMesh, physicsMeshPath, true);
+    }
+
+    if (!physicsMesh) return;
+
+    bs::HMeshCollider collider = sceneObject->addComponent<bs::CMeshCollider>();
+    collider->setMesh(physicsMesh);
   }
 
 }  // namespace REGoth
