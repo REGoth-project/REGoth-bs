@@ -86,7 +86,6 @@ namespace REGoth
 
     mTurnDirection = TurnDirection::Left;
 
-    // return mVisual->tryPlayTransitionAnimationTo("T_RUNTURNL");
     return true;
   }
 
@@ -95,8 +94,6 @@ namespace REGoth
     if (!isTurningAllowed()) return false;
 
     mTurnDirection = TurnDirection::Right;
-
-    // return mVisual->tryPlayTransitionAnimationTo("T_RUNTURNR");
     return true;
   }
 
@@ -109,11 +106,6 @@ namespace REGoth
 
   bool CharacterAI::stopTurning()
   {
-    // if (mTurnDirection != TurnDirection::None)
-    // {
-    //   mVisual->playAnimation(mVisual->findAnimationClip("S_RUN"));
-    // }
-
     mTurnDirection = TurnDirection::None;
 
     return true;
