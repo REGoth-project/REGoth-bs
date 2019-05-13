@@ -57,6 +57,8 @@ add_library(REGothEngine
   components/ThirdPersonCamera.cpp
   components/EventQueue.hpp
   components/EventQueue.cpp
+  components/CharacterEventQueue.hpp
+  components/CharacterEventQueue.cpp
   AI/EventMessage.hpp
   AI/EventMessage.cpp
   exception/Throw.hpp

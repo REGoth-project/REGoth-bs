@@ -45,5 +45,6 @@ namespace REGoth
     TID_REGOTH_GameClock                    = 600037,
     TID_REGOTH_ThirdPersonCamera            = 600038,
     TID_REGOTH_EventQueue                   = 600039,
+    TID_REGOTH_CharacterEventQueue          = 600040,
   };
 }  // namespace REGoth
