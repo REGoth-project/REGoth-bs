@@ -154,7 +154,7 @@ namespace REGoth
      * Don't forget to flag the message as "done" when the action was executed
      * completely, e.g. when the animation is done.
      */
-    virtual void onExecuteEventAction(SharedEMessage message) = 0;
+    virtual void onExecuteEventAction(SharedEMessage message, bs::HSceneObject sender) = 0;
 
     /**
      * Cyclic update

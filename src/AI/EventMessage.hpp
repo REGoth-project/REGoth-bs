@@ -128,12 +128,6 @@ namespace REGoth
       virtual ~NpcMessage()
       {
       }
-
-      /**
-       * Name of the object this message targets. This could be the attack target or a waypoint
-       * to go to.
-       */
-      bs::String targetObjectName;
     };
 
     struct DamageMessage : public NpcMessage
@@ -227,8 +221,6 @@ namespace REGoth
       MovementMessage()
       {
         messageType = EventMessageType::Movement;
-        walkMode    = WalkMode::Run;
-        targetMode  = 0;
       }
 
       /**
@@ -250,12 +242,12 @@ namespace REGoth
       /**
        * How we should go to our position
        */
-      WalkMode walkMode;
+      WalkMode walkMode = WalkMode::Run;
 
       /**
        * General purpose mode
        */
-      int targetMode;
+      int targetMode = 0;
     };
 
     struct AttackMessage : public NpcMessage

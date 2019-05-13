@@ -127,7 +127,7 @@ namespace REGoth
     auto character = characterSO->addComponent<Character>(instance);
 
     // Must be added after the Character and CharacterAI components
-    characterSO->addComponent<CharacterEventQueue>();
+    characterSO->addComponent<CharacterEventQueue>(bs::static_object_cast<GameWorld>(getHandle()));
 
     return character;
   }

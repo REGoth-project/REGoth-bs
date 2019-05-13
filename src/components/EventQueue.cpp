@@ -32,7 +32,7 @@ namespace REGoth
 
   void EventQueue::sendMessageToHost(SharedEMessage message, bs::HSceneObject sender)
   {
-    onExecuteEventAction(message);
+    onExecuteEventAction(message, sender);
 
     message->isFirstRun = false;
   }
