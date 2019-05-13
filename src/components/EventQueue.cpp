@@ -37,6 +37,11 @@ namespace REGoth
     message->isFirstRun = false;
   }
 
+  void EventQueue::fixedUpdate()
+  {
+    processMessageQueue();
+  }
+
   void EventQueue::processMessageQueue()
   {
     // Not using iterators here, because a message might get pushed inside a callback, which

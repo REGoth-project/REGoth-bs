@@ -56,13 +56,10 @@ namespace REGoth
         inUse          = false;
         isOverlay      = false;
       }
+
       virtual ~EventMessage()
       {
       }
-      /**
-       * Export as JSON-String
-       */
-      virtual bs::String exportPart();
 
       /**
        * Type of class this can be casted to
@@ -154,11 +151,6 @@ namespace REGoth
         messageType = EventMessageType::Damage;
       }
 
-      /**
-       * Export as JSON-String
-       */
-      bs::String exportPart() override;
-
       // TODO: Implement DamageDescriptor!
     };
 
@@ -187,11 +179,6 @@ namespace REGoth
       {
         messageType = EventMessageType::Weapon;
       }
-
-      /**
-       * Export as JSON-String
-       */
-      bs::String exportPart() override;
 
       /**
        * Type of weapon to go to
@@ -243,11 +230,6 @@ namespace REGoth
         walkMode    = WalkMode::Run;
         targetMode  = 0;
       }
-
-      /**
-       * Export as JSON-String
-       */
-      bs::String exportPart() override;
 
       /**
        * Route the NPC has to go if this is a ST_GoRoute.
@@ -303,11 +285,6 @@ namespace REGoth
       }
 
       /**
-       * Export as JSON-String
-       */
-      bs::String exportPart() override;
-
-      /**
        * How far we are in our combo
        */
       int combo;
@@ -343,11 +320,6 @@ namespace REGoth
         messageType = EventMessageType::UseItem;
       }
 
-      /**
-       * Export as JSON-String
-       */
-      bs::String exportPart() override;
-
       // TODO: We have no actual object for these right now, as they are explicitly in the
       // inventory.
       // TODO: Use the itemhandle here or something
@@ -371,11 +343,6 @@ namespace REGoth
         isPrgState     = false;
         isRoutineState = false;
       }
-
-      /**
-       * Export as JSON-String
-       */
-      bs::String exportPart() override;
 
       /**
        * Symbol to the Setupfunction for this state (ZS_...)
@@ -447,11 +414,6 @@ namespace REGoth
         pickupAniY  = 0.0f;
         targetState = 0;
       }
-
-      /**
-       * Export as JSON-String
-       */
-      bs::String exportPart() override;
 
       /**
        * Symbol of the item to use. If no item with this symbol can be found in the inventory,
@@ -555,11 +517,6 @@ namespace REGoth
       }
 
       /**
-       * Export as JSON-String
-       */
-      bs::String exportPart() override;
-
-      /**
        * Text to be displayed in the subtitle box
        */
       bs::String text;
@@ -636,11 +593,6 @@ namespace REGoth
         messageType = EventMessageType::Magic;
       }
 
-      /**
-       * Export as JSON-String
-       */
-      bs::String exportPart() override;
-
       // TODO: Implement
     };
 
@@ -662,11 +614,6 @@ namespace REGoth
         stateFrom   = 0;
         stateTo     = 0;
       }
-
-      /**
-       * Export as JSON-String
-       */
-      bs::String exportPart() override;
 
       /** NPC this message is from */
       bs::HSceneObject npc;
