@@ -120,6 +120,9 @@ namespace REGoth
       bool canDirectlyMovetoLocation(const bs::Vector3& from, const bs::Vector3& to) const;
 
       /**
+       * @param  floorposition  Position on the floor. The length from that position to the
+       *                        ceiling is returned.
+       *
        * @return height of the ceiling at the given position
        */
       float findCeilingHeightAtPosition(const bs::Vector3& floorposition) const;

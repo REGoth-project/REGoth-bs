@@ -61,6 +61,8 @@ add_library(REGothEngine
   components/CharacterEventQueue.cpp
   AI/EventMessage.hpp
   AI/EventMessage.cpp
+  AI/Pathfinder.hpp
+  AI/Pathfinder.cpp
   exception/Throw.hpp
   animation/StateNaming.hpp
   animation/StateNaming.cpp

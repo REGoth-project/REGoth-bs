@@ -1,4 +1,5 @@
 #include "Pathfinder.hpp"
+#include <Math/BsRay.h>
 #include <Scene/BsSceneManager.h>
 #include <Math/BsVector2.h>
 #include <Physics/BsPhysics.h>
@@ -67,16 +68,19 @@ namespace REGoth
       return report;
     }
 
-    float Pathfinder::findCeilingHeightAtPosition(const bs::Vector3& position) const
+    float Pathfinder::findCeilingHeightAtPosition(const bs::Vector3& floorposition) const
     {
       return std::numeric_limits<float>::max();
-      // TODO: Reimplement using bsf
-      // bs::Vector3 worldTop      = bs::Vector3(position.x, FLT_MAX, position.y);
-      // Physics::RayTestResult hit = m_World.getPhysicsSystem().raytrace(position, worldTop);
 
-      // if (!hit.hasHit) return FLT_MAX;
+      bs::PhysicsQueryHit hit;
 
-      // return (position - hit.hitPosition).length();
+      const bs::Vector3 up = bs::Vector3::UNIT_Y;
+      if(!physicsScene().rayCast(floorposition, up, hit))
+      {
+        return std::numeric_limits<float>::max();
+      }
+
+      return hit.distance;
     }
 
     float Pathfinder::calculateSlopeFromNormal(const bs::Vector3& normal) const
@@ -273,12 +277,23 @@ namespace REGoth
     {
       if (isTargetReachedByPosition(from, to)) return true;
 
-      return false;
-      // TODO: Implement using bsf
-      // Physics::RayTestResult hit = m_World.getPhysicsSystem().raytrace(from, to);
+      bs::PhysicsQueryHit hit;
 
-      // return !hit.hasHit;  // FIXME: This breaks when the creature should go down a slope but is
-      //                      // standing on the top of it right now
+      // FIXME: This breaks when the creature should go down a slope but is
+      // standing on the top of it right now
+
+      bs::Vector3 dir = to - from;
+      float distance = dir.length();
+
+      dir /= distance;
+
+      if (!physicsScene().rayCast(from, dir, hit))
+      {
+        return true;
+      }
+
+      // It's okay if the hit is furhter back than our target point
+      return hit.distance > distance;
     }
 
     void Pathfinder::debugDrawRoute(const bs::Vector3& positionNow)
