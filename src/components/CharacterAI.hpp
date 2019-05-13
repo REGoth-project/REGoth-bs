@@ -75,6 +75,36 @@ namespace REGoth
      */
     bool isTurningAllowed();
 
+    /**
+     * Lets the character face into the direction of the given position instantly.
+     *
+     * Does not play any animations, just rotates the object accordingly.
+     */
+    void instantTurnToPosition(const bs::Vector3& position);
+
+    /**
+     * Will let the character move to the given postion.
+     *
+     * This will not do any obstruction checks and just walk the character there
+     * in a straight line.
+     *
+     * @param  position  Position to go to.
+     *
+     * @return True, if the character reached the destination,
+     *         False, while the character is still going.
+     */
+    bool gotoPositionStraight(const bs::Vector3& position);
+
+    /**
+     * Checks whether the character is at the given postiion.
+     *
+     * The check includes some leeway in all directions.
+     *
+     * @return True, if the character is currently at the given position
+     *         False, if the character is NOT at the given position
+     */
+    bool isAtPosition(const bs::Vector3& position);
+
     // Component -----------------------------------------------------------------------------------
 
     void fixedUpdate() override;

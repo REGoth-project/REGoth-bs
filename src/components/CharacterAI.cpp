@@ -134,6 +134,31 @@ namespace REGoth
     return true;
   }
 
+  void CharacterAI::instantTurnToPosition(const bs::Vector3& position)
+  {
+    bs::Vector3 positionSameHeight = position;
+
+    // Characters should stay upright (at least most of them),
+    // thus modify the position as if it were straight ahead.
+    positionSameHeight.y = SO()->getTransform().pos().y;
+
+    SO()->lookAt(positionSameHeight);
+  }
+
+  bool CharacterAI::gotoPositionStraight(const bs::Vector3& position)
+  {
+    instantTurnToPosition(position);
+
+    goForward();
+
+    return isAtPosition(position);
+  }
+
+  bool CharacterAI::isAtPosition(const bs::Vector3& position)
+  {
+    return (SO()->getTransform().pos() - position).length() < 0.5f;
+  }
+
   void CharacterAI::fixedUpdate()
   {
     if (!mIsPhysicsActive)
