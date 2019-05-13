@@ -46,7 +46,12 @@ namespace REGoth
     if (!mZenFile.empty())
     {
       // Import the ZEN and add all scene objects as children to this SO.
-      Internals::constructFromZEN(SO(), mZenFile);
+      bs::HSceneObject so = Internals::constructFromZEN(SO(), mZenFile);
+
+      if (!so)
+      {
+        REGOTH_THROW(InvalidParametersException, "Failed to import ZEN-file: " + mZenFile);
+      }
 
       findWaynet();
     }
