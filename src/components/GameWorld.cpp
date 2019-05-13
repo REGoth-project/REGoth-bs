@@ -6,10 +6,11 @@
 #include <Scene/BsPrefab.h>
 #include <components/Character.hpp>
 #include <components/CharacterAI.hpp>
+#include <components/CharacterEventQueue.hpp>
+#include <components/GameClock.hpp>
 #include <components/Item.hpp>
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
-#include <components/GameClock.hpp>
 #include <daedalus/DATFile.h>
 #include <exception/Throw.hpp>
 #include <original-content/VirtualFileSystem.hpp>
@@ -123,7 +124,12 @@ namespace REGoth
     // The character-controller will be enabled by the AI or user input.
     ai->deactivatePhysics();
 
-    return characterSO->addComponent<Character>(instance);
+    auto character = characterSO->addComponent<Character>(instance);
+
+    // Must be added after the Character and CharacterAI components
+    characterSO->addComponent<CharacterEventQueue>();
+
+    return character;
   }
 
   HCharacter GameWorld::insertCharacter(const bs::String& instance, const bs::String& spawnPoint)
