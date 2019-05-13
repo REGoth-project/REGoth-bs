@@ -15,6 +15,7 @@ Welcome to REGoth's documentation!
    content/world
    content/waynet
    content/characters
+   content/create-component
    content/case-study-object-kinds
    content/case-study-scene-structure
    content/case-study-character-statemachine
