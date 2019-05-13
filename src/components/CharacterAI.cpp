@@ -149,10 +149,10 @@ namespace REGoth
 
     bs::Vector3 rootMotion = mVisual->resolveFrameRootMotion();
 
-    // FIXME: Find out why the root motion is rotated 90 degrees?
-    bs::Vector3 rootMotionFixed(-rootMotion.z, rootMotion.y, rootMotion.x);
+    bs::Vector3 rootMotionRotated = SO()->getTransform().getRotation().rotate(rootMotion);
 
-    bs::Vector3 rootMotionRotated = SO()->getTransform().getRotation().rotate(rootMotionFixed);
+    // For some reason this is inverted
+    rootMotionRotated *= -1.0;
 
     // No need to multiply rootMotion by the frame delta since it is the actual movement since
     // last time we queried it.

@@ -190,6 +190,13 @@ namespace REGoth
   {
     bs::HSceneObject renderSO = createAndRegisterSubObject("Renderable");
 
+    // For some weird reason, the rotations don't match with the root motion.
+    // Work around that here...
+    bs::Quaternion rotate90Y = bs::Quaternion(bs::Radian(0),               // .
+                                              bs::Radian(bs::Degree(-90)),  // .
+                                              bs::Radian(0));
+    renderSO->getParent()->rotate(rotate90Y);
+
     mSubRenderable  = renderSO->addComponent<bs::CRenderable>();
     mSubAnimation   = renderSO->addComponent<bs::CAnimation>();
     mSubNodeVisuals = renderSO->addComponent<NodeVisuals>();
@@ -197,15 +204,22 @@ namespace REGoth
 
   bs::HSceneObject VisualSkeletalAnimation::createAndRegisterSubObject(const bs::String& name)
   {
+    // Need to create that weird sub-sub-object setup here since it seems that you can't
+    // rotate objects which have an animation component, but only their parents.
+    // We need to fix the weird rotation-bug however, so we put one more sub-object we
+    // can rotate in between.
     bs::HSceneObject subSO = bs::SceneObject::create(name);
+    bs::HSceneObject subsubSO = bs::SceneObject::create(name);
 
     bool dontKeepWorldTransform = false;
 
     subSO->setParent(SO(), dontKeepWorldTransform);
+    subsubSO->setParent(subSO, dontKeepWorldTransform);
 
     mSubObjects.push_back(subSO);
+    mSubObjects.push_back(subsubSO);
 
-    return subSO;
+    return subsubSO;
   }
 
   void VisualSkeletalAnimation::setupRenderableComponent()

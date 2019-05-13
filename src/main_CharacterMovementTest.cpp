@@ -1,6 +1,6 @@
 #include "BsFPSCamera.h"
-#include <BsZenLib/ImportMaterial.hpp>
 #include "REGothEngine.hpp"
+#include <BsZenLib/ImportMaterial.hpp>
 #include <BsZenLib/ImportTexture.hpp>
 #include <Components/BsCCamera.h>
 #include <Components/BsCPlaneCollider.h>
@@ -10,13 +10,14 @@
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
 #include <components/CharacterKeyboardInput.hpp>
+#include <components/GameWorld.hpp>
 #include <components/Item.hpp>
+#include <components/ThirdPersonCamera.hpp>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
 #include <daedalus/DATFile.h>
 #include <exception/Throw.hpp>
 #include <original-content/VirtualFileSystem.hpp>
-#include <components/GameWorld.hpp>
 
 class REGothCharacterMovementTester : public REGoth::REGothEngine
 {
@@ -28,9 +29,11 @@ public:
     auto rs = mMainCamera->getRenderSettings();
 
     rs->enableIndirectLighting = false;
-    rs->enableShadows = true;
+    rs->enableShadows          = true;
 
     mMainCamera->setRenderSettings(rs);
+
+    mThirdPersonCamera = mMainCamera->SO()->addComponent<REGoth::ThirdPersonCamera>();
   }
 
   void setupScene() override
@@ -43,7 +46,7 @@ public:
                                                         REGoth::gVirtualFileSystem().getFileIndex());
 
     // bs::HShader shader = bs::gBuiltinResources().getBuiltinShader(bs::BuiltinShader::Standard);
-    bs::HShader shader = BsZenLib::GetShaderOfKind(BsZenLib::ShaderKind::Opaque);
+    bs::HShader shader          = BsZenLib::GetShaderOfKind(BsZenLib::ShaderKind::Opaque);
     bs::HMaterial planeMaterial = bs::Material::create(shader);
     planeMaterial->setTexture("gAlbedoTex", floorTexture);
 
@@ -76,10 +79,10 @@ public:
     REGoth::HCharacter character = world->insertCharacter("PC_HERO", wpName);
     character->SO()->addComponent<REGoth::CharacterKeyboardInput>();
 
-    mMainCamera->SO()->setPosition(bs::Vector3(2, 0.5f, 0));
-    mMainCamera->SO()->lookAt(bs::Vector3(bs::BsZero));
-    mMainCamera->SO()->setParent(character->SO(), false);
+    mThirdPersonCamera->follow(character);
   }
+
+  REGoth::HThirdPersonCamera mThirdPersonCamera;
 
 protected:
 };
