@@ -32,11 +32,11 @@ public:
     {
       world = GameWorld::importZEN(WORLD);
 
-      HCharacter hero = world->insertCharacter("PC_HERO", "STARTPOINT");
+      HCharacter hero = world->insertCharacter("PC_HERO", "START_DRAGONISLAND");
       hero->useAsHero();
       hero->SO()->addComponent<CharacterKeyboardInput>();
 
-      // world->runInitScripts();
+      world->runInitScripts();
 
       world->save(SAVEGAME);
     }

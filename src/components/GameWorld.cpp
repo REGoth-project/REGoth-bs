@@ -103,8 +103,16 @@ namespace REGoth
     characterSO->setRotation(transform.rot());
 
     characterSO->addComponent<VisualCharacter>();
+
     characterSO->addComponent<bs::CCharacterController>();
-    characterSO->addComponent<CharacterAI>();
+
+    auto ai = characterSO->addComponent<CharacterAI>();
+
+    // All script-inserted characters will be disabled right after inserting them so they
+    // don't cause the game to slow down. If they are all active, physics will be calculated
+    // even for those out of reach which takes a huge hit on performance.
+    // The character-controller will be enabled by the AI or user input.
+    ai->deactivatePhysics();
 
     return characterSO->addComponent<Character>(instance);
   }
@@ -130,6 +138,8 @@ namespace REGoth
 
     transform.move(
         bs::Vector3(0, 0.5f, 0));  // FIXME: Can we move the center to the feet somehow instead?
+
+    bs::gDebug().logDebug("[GameWorld] Insert Character " + instance + " at " + spawnPoint);
 
     return insertCharacter(instance, transform);
   }
@@ -196,8 +206,7 @@ namespace REGoth
   {
     auto scriptObject = mScriptVM->getHero();
 
-    if (scriptObject == Scripting::SCRIPT_OBJECT_HANDLE_INVALID)
-      return {};
+    if (scriptObject == Scripting::SCRIPT_OBJECT_HANDLE_INVALID) return {};
 
     bs::HSceneObject heroSO = mScriptVM->mapping().getMappedSceneObject(scriptObject);
 

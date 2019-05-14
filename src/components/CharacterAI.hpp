@@ -18,6 +18,21 @@ namespace REGoth
     CharacterAI(const bs::HSceneObject& parent);
 
     /**
+     * Puts the characters physics to sleep which saves processing time.
+     *
+     * During physics sleep, no movement is being calculated and applied to the
+     * Character-Controller. To enable physics again, see activatePhysics().
+     */
+    void deactivatePhysics();
+
+    /**
+     * Re-enables physics on this character.
+     *
+     * See deactivatePhysics() for more information.
+     */
+    void activatePhysics();
+
+    /**
      * Virtual input to the character. Calling these functions is equivalent to
      * holding down a button on the keyboard. If `goForward` is called, the Character
      * will try to move forward for as long as no other movement-function is called.
@@ -105,6 +120,9 @@ namespace REGoth
 
     // Direction the character is currently turning in
     TurnDirection mTurnDirection = TurnDirection::None;
+
+    // Whether Physics is being processed for this character
+    bool mIsPhysicsActive = true;
 
   public:
     REGOTH_DECLARE_RTTI(CharacterAI);

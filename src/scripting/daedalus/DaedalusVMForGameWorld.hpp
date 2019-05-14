@@ -25,6 +25,12 @@ namespace REGoth
       ScriptObjectHandle instanciateClass(const bs::String& className,
                                           const bs::String& instanceName,
                                           bs::HSceneObject mappedSceneObject) override;
+      ScriptObjectHandle instanciateClass(const bs::String& className,
+                                          SymbolIndex instanceSymbolIndex,
+                                          bs::HSceneObject mappedSceneObject);
+      ScriptObjectHandle instanciateClass(const bs::String& className,
+                                          SymbolInstance& instance,
+                                          bs::HSceneObject mappedSceneObject);
 
       void initializeWorld(const bs::String& worldName) override;
       void setHero(ScriptObjectHandle hero) override;
@@ -60,6 +66,7 @@ namespace REGoth
        * @return Handle the instance was set to. Might be invalid!
        */
       ScriptObjectHandle getInstance(const bs::String& instance) const;
+      ScriptObjectHandle getInstance(SymbolIndex symbolIndex) const;
 
       void script_PrintPlus(const bs::String& text);
 
@@ -84,7 +91,6 @@ namespace REGoth
       void registerAllExternals() override;
 
     protected:
-
       /**
        * Handle to the game world this is used in
        */
@@ -93,7 +99,7 @@ namespace REGoth
     public:
       REGOTH_DECLARE_RTTI(DaedalusVMForGameWorld);
 
-    public:                              // FIXME: RTTI protected
+    public:                                // FIXME: RTTI protected
       DaedalusVMForGameWorld() = default;  // For RTTI
     };
   }  // namespace Scripting

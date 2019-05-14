@@ -38,6 +38,16 @@ namespace REGoth
     }
   }
 
+  void CharacterAI::deactivatePhysics()
+  {
+    mIsPhysicsActive = false;
+  }
+
+  void CharacterAI::activatePhysics()
+  {
+    mIsPhysicsActive = true;
+  }
+
   bool CharacterAI::goForward()
   {
     if (!isStateSwitchAllowed()) return false;
@@ -84,7 +94,6 @@ namespace REGoth
     if (!isTurningAllowed()) return false;
 
     mTurnDirection = TurnDirection::Right;
-
     return true;
   }
 
@@ -127,6 +136,12 @@ namespace REGoth
 
   void CharacterAI::fixedUpdate()
   {
+    if (!mIsPhysicsActive)
+    {
+      // Skip all movement and physics calculations to save processing time.
+      return;
+    }
+
     if (isTurningAllowed())
     {
       handleTurning();
