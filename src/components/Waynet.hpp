@@ -54,6 +54,26 @@ namespace REGoth
     HWaypoint findWaypoint(const bs::String& name);
 
     /**
+     * Searches the closest waypoint to the given position.
+     *
+     * Does not check whether the waypoint is obstructed by anything and
+     * ignores all waypoint connections.
+     *
+     * @param  position  Position to search around.
+     *
+     * @return Closest Waypoint to the given position. Should only be empty
+     *         if no waypoint exists at all.
+     */
+    HWaypoint findClosestWaypointTo(const bs::Vector3& position);
+
+    /**
+     * Finds a way between two waypoints in the given waypoint instance
+     *
+     * @return List of all waypoints that need to be visited. Will be empty if none was found.
+     */
+    bs::Vector<HWaypoint> findWay(HWaypoint from, HWaypoint to);
+
+    /**
      * Registers the given waypoint in the waynet.
      */
     void addWaypoint(HWaypoint waypoint);
@@ -72,7 +92,28 @@ namespace REGoth
     void debugDraw(const REGoth::HAnchoredTextLabels& textLabels);
 
   private:
+
+    /**
+     * Fills mWaypointPositions with the positions from all registered waypoints.
+     *
+     * Will drop anything already in the vector and thus can be called multiple times.
+     */
+    void populateWaypointPositionCache();
+
+    /**
+     * @return Whether mWaypointPositions has been filled with data.
+     *
+     * @note To fill it, use populateWaypointPositionCache().
+     */
+    bool hasCachedWaypointPositions() const;
+
     bs::Vector<HWaypoint> mWaypoints;
+
+    /**
+     * Cached positions for faster access during searches.
+     * Waypoints are supposed to be static, so it's okay to cache these.
+     */
+    bs::Vector<bs::Vector3> mWaypointPositions;
 
   public:
     REGOTH_DECLARE_RTTI(Waynet)
