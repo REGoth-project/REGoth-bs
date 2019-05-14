@@ -1,6 +1,7 @@
 #pragma once
 #include <BsCorePrerequisites.h>
 #include <Math/BsVector3.h>
+#include <RTTI/RTTIUtil.hpp>
 
 namespace bs
 {
@@ -20,7 +21,7 @@ namespace REGoth
      * Wrapper around the waynet. Can find paths to certain locations and
      * give instructions onto how to get there from a given point.
      */
-    class Pathfinder
+    class Pathfinder : public bs::IReflectable
     {
     public:
       /**
@@ -89,8 +90,7 @@ namespace REGoth
       /**
        * @return Whether the Pathfinder thinks the given targetposition has been reached
        */
-      static bool isTargetReachedByPosition(const bs::Vector3& position,
-                                            const bs::Vector3& target);
+      static bool isTargetReachedByPosition(const bs::Vector3& position, const bs::Vector3& target);
 
     private:
       struct MovementReport
@@ -213,6 +213,12 @@ namespace REGoth
       Route mActiveRoute;
 
       HWaynet mWaynet;
+
+    public:
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(Pathfinder);
+
+    protected:
+      Pathfinder() = default;  // For RTTI
     };
   }  // namespace AI
-}  // namespace Logic
+}  // namespace REGoth

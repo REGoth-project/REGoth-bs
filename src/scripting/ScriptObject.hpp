@@ -112,7 +112,7 @@ namespace REGoth
       }
 
     public:
-      REGOTH_DECLARE_RTTI(ScriptObject);
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(ScriptObject);
     };
 
     /**

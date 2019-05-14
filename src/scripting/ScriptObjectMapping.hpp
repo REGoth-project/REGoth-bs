@@ -61,7 +61,7 @@ namespace REGoth
       bs::Map<ScriptObjectHandle, bs::HSceneObject> mScriptToSceneObjectMapping;
 
     public:
-      REGOTH_DECLARE_RTTI(ScriptObjectMapping)
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(ScriptObjectMapping)
     };
   }  // namespace Scripting
 }  // namespace REGoth

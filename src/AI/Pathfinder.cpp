@@ -1,11 +1,12 @@
 #include "Pathfinder.hpp"
-#include <components/Waypoint.hpp>
 #include <Math/BsRay.h>
 #include <Math/BsVector2.h>
 #include <Physics/BsPhysics.h>
+#include <RTTI/RTTI_Pathfinder.hpp>
 #include <Scene/BsSceneManager.h>
 #include <components/GameWorld.hpp>
 #include <components/Waynet.hpp>
+#include <components/Waypoint.hpp>
 
 static const float MAX_SIDE_DIFFERENCE_TO_REACH_POSITION     = 0.5f;  // Meters
 static const float MAX_HEIGHT_DIFFERENCE_TO_REACH_POSITION   = 2.0f;  // Meters
@@ -425,5 +426,7 @@ namespace REGoth
 
       return *p;
     }
+
+    REGOTH_DEFINE_RTTI(Pathfinder)
   }  // namespace AI
 }  // namespace REGoth

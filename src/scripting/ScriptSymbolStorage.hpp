@@ -260,7 +260,7 @@ namespace REGoth
       bs::Map<bs::String, SymbolIndex> mSymbolsByName;
 
     public:
-      REGOTH_DECLARE_RTTI(ScriptSymbolStorage)
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(ScriptSymbolStorage)
     };
   }  // namespace Scripting
 }  // namespace REGoth

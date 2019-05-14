@@ -98,9 +98,9 @@ namespace REGoth
       HGameWorld mWorld;
 
     public:
-      REGOTH_DECLARE_RTTI(DaedalusVMForGameWorld);
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(DaedalusVMForGameWorld);
 
-    public:                                // FIXME: RTTI protected
+    protected:
       DaedalusVMForGameWorld() = default;  // For RTTI
     };
   }  // namespace Scripting

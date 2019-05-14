@@ -66,7 +66,7 @@ namespace REGoth
       ScriptObjectHandle mNextHandle = 1;
 
     public:
-      REGOTH_DECLARE_RTTI(ScriptObjectStorage)
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(ScriptObjectStorage)
     };
   }
 }
