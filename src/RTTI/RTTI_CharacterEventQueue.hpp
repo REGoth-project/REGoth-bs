@@ -7,7 +7,10 @@ namespace REGoth
       : public bs::RTTIType<CharacterEventQueue, EventQueue, RTTI_CharacterEventQueue>
   {
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+    BS_RTTI_MEMBER_REFL(mCharacter, 0)
+    BS_RTTI_MEMBER_REFL(mCharacterAI, 1)
+    BS_RTTI_MEMBER_REFL(mWorld, 2)
+    BS_RTTI_MEMBER_REFLPTR(mPathfinder, 3)
     BS_END_RTTI_MEMBERS
 
   public:

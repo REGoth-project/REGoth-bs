@@ -17,6 +17,11 @@ namespace REGoth
   class CharacterEventQueue;
   using HCharacterEventQueue = bs::GameObjectHandle<CharacterEventQueue>;
 
+  namespace AI
+  {
+    class Pathfinder;
+  }
+
   /**
    * Implmementaion of the EventQueue for Character-related messages.
    *
@@ -96,12 +101,12 @@ namespace REGoth
     HCharacter mCharacter;
     HCharacterAI mCharacterAI;
     HGameWorld mWorld;
-    AI::Pathfinder mPathfinder;
+    bs::SPtr<AI::Pathfinder> mPathfinder;
 
   public:
     REGOTH_DECLARE_RTTI(CharacterEventQueue)
 
   protected:
-    CharacterEventQueue();  // For RTTI
+    CharacterEventQueue() = default;  // For RTTI
   };
 }  // namespace REGoth

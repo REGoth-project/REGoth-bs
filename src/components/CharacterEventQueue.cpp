@@ -13,7 +13,7 @@ namespace REGoth
   CharacterEventQueue::CharacterEventQueue(const bs::HSceneObject& parent, HGameWorld world)
       : EventQueue(parent)
       , mWorld(world)
-      , mPathfinder(world->waynet())
+      , mPathfinder(bs::bs_shared_ptr_new<AI::Pathfinder>(world->waynet()))
   {
     setName("CharacterEventQueue");
 
@@ -31,23 +31,18 @@ namespace REGoth
     }
   }
 
-  CharacterEventQueue::CharacterEventQueue() : mPathfinder({})
-  {
-    // mPathfinder must be initialized later with a proper world.
-  }
-
   CharacterEventQueue::~CharacterEventQueue()
   {
   }
 
   void CharacterEventQueue::startRouteToPosition(const bs::Vector3& target)
   {
-    mPathfinder.startNewRouteTo(positionNow(), target);
+    mPathfinder->startNewRouteTo(positionNow(), target);
   }
 
   void CharacterEventQueue::startRouteToObject(bs::HSceneObject target)
   {
-    mPathfinder.startNewRouteTo(positionNow(), target);
+    mPathfinder->startNewRouteTo(positionNow(), target);
   }
 
   const bs::Vector3& CharacterEventQueue::positionNow() const
@@ -58,9 +53,9 @@ namespace REGoth
   void CharacterEventQueue::travelActiveRoute()
   {
     bs::Vector3 pos                  = positionNow();
-    AI::Pathfinder::Instruction inst = mPathfinder.updateToNextInstructionToTarget(pos);
+    AI::Pathfinder::Instruction inst = mPathfinder->updateToNextInstructionToTarget(pos);
 
-    if (!mPathfinder.isTargetReachedByPosition(pos, inst.targetPosition))
+    if (!mPathfinder->isTargetReachedByPosition(pos, inst.targetPosition))
     {
       // TODO: Might want to smoothly turn instead
       mCharacterAI->instantTurnToPosition(inst.targetPosition);
@@ -177,7 +172,7 @@ namespace REGoth
           startRouteToObject(message.targetObject);
         }
 
-        if (!mPathfinder.hasActiveRouteBeenCompleted(positionNow()))
+        if (!mPathfinder->hasActiveRouteBeenCompleted(positionNow()))
         {
           travelActiveRoute();
         }
@@ -195,7 +190,7 @@ namespace REGoth
           startRouteToPosition(message.targetPosition);
         }
 
-        if (!mPathfinder.hasActiveRouteBeenCompleted(positionNow()))
+        if (!mPathfinder->hasActiveRouteBeenCompleted(positionNow()))
         {
           travelActiveRoute();
         }

@@ -11,6 +11,7 @@ namespace REGoth
 
     BS_BEGIN_RTTI_MEMBERS
     BS_RTTI_MEMBER_REFL_ARRAY(mPaths, 0)
+    BS_RTTI_MEMBER_PLAIN(mIndex, 1)
     BS_END_RTTI_MEMBERS
 
   public:
