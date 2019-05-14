@@ -5,15 +5,15 @@
 
 namespace REGoth
 {
-  class RTTI_CharacterAI
-    : public bs::RTTIType<CharacterAI, bs::Component, RTTI_CharacterAI>
+  class RTTI_CharacterAI : public bs::RTTIType<CharacterAI, bs::Component, RTTI_CharacterAI>
   {
     BS_BEGIN_RTTI_MEMBERS
     BS_RTTI_MEMBER_REFL(mVisual, 0)
     BS_RTTI_MEMBER_REFL(mCharacterController, 1)
+    BS_RTTI_MEMBER_PLAIN(mIsPhysicsActive, 2)
     BS_END_RTTI_MEMBERS
 
-    public:
+  public:
     RTTI_CharacterAI()
     {
     }
