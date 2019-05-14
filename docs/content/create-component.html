@@ -237,28 +237,24 @@ and templates to use.</p>
 <h2>RTTI File<a class="headerlink" href="#rtti-file" title="Permalink to this headline">¶</a></h2>
 <p>Use the following template for <code class="docutils literal notranslate"><span class="pre">RTTI_NewThing.hpp</span></code>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;RTTIUtil.hpp&quot;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;components/MyThing.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;components/NewThing.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">REGoth</span>
 <span class="p">{</span>
-  <span class="k">namespace</span> <span class="n">Scripting</span>
+  <span class="k">class</span> <span class="nc">RTTI_NewThing</span>
+      <span class="o">:</span> <span class="k">public</span> <span class="n">bs</span><span class="o">::</span><span class="n">RTTIType</span><span class="o">&lt;</span><span class="n">NewThing</span><span class="p">,</span> <span class="n">bs</span><span class="o">::</span><span class="n">Component</span><span class="p">,</span> <span class="n">RTTI_NewThing</span><span class="o">&gt;</span>
   <span class="p">{</span>
-    <span class="k">class</span> <span class="nc">RTTI_MyThing</span>
-        <span class="o">:</span> <span class="k">public</span> <span class="n">bs</span><span class="o">::</span><span class="n">RTTIType</span><span class="o">&lt;</span><span class="n">MyThing</span><span class="p">,</span> <span class="n">bs</span><span class="o">::</span><span class="n">Component</span><span class="p">,</span> <span class="n">RTTI_MyThing</span><span class="o">&gt;</span>
+    <span class="n">BS_BEGIN_RTTI_MEMBERS</span>
+    <span class="c1">// TODO: Fill RTTI Members</span>
+    <span class="n">BS_END_RTTI_MEMBERS</span>
+
+  <span class="k">public</span><span class="o">:</span>
+    <span class="n">RTTI_NewThing</span><span class="p">()</span>
     <span class="p">{</span>
-      <span class="n">BS_BEGIN_RTTI_MEMBERS</span>
-      <span class="c1">// TODO: Fill RTTI Members</span>
-      <span class="n">BS_END_RTTI_MEMBERS</span>
+    <span class="p">}</span>
 
-    <span class="k">public</span><span class="o">:</span>
-      <span class="n">RTTI_MyThing</span><span class="p">()</span>
-      <span class="p">{</span>
-      <span class="p">}</span>
-
-      <span class="n">REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT</span><span class="p">(</span><span class="n">MyThing</span><span class="p">)</span>
-    <span class="p">};</span>
-  <span class="p">}</span>  <span class="c1">// namespace Scripting</span>
-
+    <span class="n">REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT</span><span class="p">(</span><span class="n">NewThing</span><span class="p">)</span>
+  <span class="p">};</span>
 <span class="p">}</span>  <span class="c1">// namespace REGoth</span>
 </pre></div>
 </div>
@@ -274,10 +270,14 @@ and templates to use.</p>
 
   <span class="n">TID_REGOTH_ScriptObjectMapping</span>          <span class="o">=</span> <span class="mi">600036</span><span class="p">,</span>
   <span class="n">TID_REGOTH_GameClock</span>                    <span class="o">=</span> <span class="mi">600037</span><span class="p">,</span>
-  <span class="n">TID_REGOTH_MyThing</span>                      <span class="o">=</span> <span class="mi">600038</span><span class="p">,</span>
-<span class="p">};</span>
 </pre></div>
 </div>
+<dl class="docutils">
+<dt>&lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream</dt>
+<dd>TID_REGOTH_MyThing                      = 600038,</dd>
+</dl>
+<blockquote>
+<div>};</div></blockquote>
 </div>
 <div class="section" id="cmake">
 <h2>CMake<a class="headerlink" href="#cmake" title="Permalink to this headline">¶</a></h2>

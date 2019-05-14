@@ -87,28 +87,24 @@ Use the following template for ``RTTI_NewThing.hpp``:
 .. code-block:: cpp
 
    #include "RTTIUtil.hpp"
-   #include <components/MyThing.hpp>
+   #include <components/NewThing.hpp>
    
    namespace REGoth
    {
-     namespace Scripting
+     class RTTI_NewThing
+         : public bs::RTTIType<NewThing, bs::Component, RTTI_NewThing>
      {
-       class RTTI_MyThing
-           : public bs::RTTIType<MyThing, bs::Component, RTTI_MyThing>
+       BS_BEGIN_RTTI_MEMBERS
+       // TODO: Fill RTTI Members
+       BS_END_RTTI_MEMBERS
+ 
+     public:
+       RTTI_NewThing()
        {
-         BS_BEGIN_RTTI_MEMBERS
-         // TODO: Fill RTTI Members
-         BS_END_RTTI_MEMBERS
-   
-       public:
-         RTTI_MyThing()
-         {
-         }
-   
-         REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT(MyThing)
-       };
-     }  // namespace Scripting
-   
+       }
+ 
+       REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT(NewThing)
+     };
    }  // namespace REGoth
 
 
@@ -128,7 +124,11 @@ As a last step, add the RTTI-Types ID to ``src/RTTI/RTTI_TypeIDs.hpp``:
 
      TID_REGOTH_ScriptObjectMapping          = 600036,
      TID_REGOTH_GameClock                    = 600037,
+<<<<<<< Updated upstream
      TID_REGOTH_MyThing                      = 600038,
+=======
+     TID_REGOTH_NewThing                     = 600038,
+>>>>>>> Stashed changes
    };
 
 CMake
