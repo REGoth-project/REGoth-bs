@@ -176,6 +176,13 @@ namespace REGoth
 
   static bs::HSceneObject import_oCItem(const ZenLoad::zCVobData& vob, bs::HSceneObject parentSO)
   {
+    if (vob.oCItem.instanceName.empty())
+    {
+      bs::gDebug().logWarning("[ImportSingleVob] Item with empty script instance: " +
+                              bs::String(vob.vobName.c_str()));
+      return {};
+    }
+
     bs::HSceneObject so = import_zCVob(vob, parentSO);
 
     so->addComponent<Item>(vob.oCItem.instanceName.c_str());

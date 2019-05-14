@@ -1,5 +1,6 @@
 #include "BsFPSCamera.h"
-#include "REGothEngine.hpp"
+#include <components/ThirdPersonCamera.hpp>
+#include <REGothEngine.hpp>
 #include <Components/BsCCamera.h>
 #include <Scene/BsPrefab.h>
 #include <Scene/BsSceneObject.h>
@@ -7,15 +8,33 @@
 #include <components/CharacterKeyboardInput.hpp>
 #include <components/GameWorld.hpp>
 #include <exception/Throw.hpp>
+#include <original-content/OriginalGameFiles.hpp>
+#include <original-content/VirtualFileSystem.hpp>
 
 class REGothWorldViewer : public REGoth::REGothEngine
 {
 public:
+  void loadModPackages(const REGoth::OriginalGameFiles& files) override
+  {
+    // using namespace REGoth;
+
+    // for (auto p : files.allModPackages())
+    // {
+    //   bs::gDebug().logDebug("[WorldViewer] Loading Mod: " + p.toString());
+    //   gVirtualFileSystem().loadPackage(p);
+    // }
+
+    // for (auto zen : gVirtualFileSystem().listByExtension(".ZEN"))
+    // {
+    //   bs::gDebug().logDebug("[WorldViewer] Found ZEN: " + zen);
+    // }
+  }
+
   void setupMainCamera() override
   {
     REGoth::REGothEngine::setupMainCamera();
 
-    // mFPSCamera = mMainCamera->SO()->addComponent<bs::FPSCamera>();
+    mThirdPersonCamera = mMainCamera->SO()->addComponent<REGoth::ThirdPersonCamera>();
   }
 
   void setupScene() override
@@ -56,13 +75,11 @@ public:
 
     HCharacter hero = heroSO->getComponent<Character>();
 
-    mMainCamera->SO()->setPosition(bs::Vector3(2, 0.5f, 0));
-    mMainCamera->SO()->lookAt(bs::Vector3(bs::BsZero));
-    mMainCamera->SO()->setParent(hero->SO(), false);
+    mThirdPersonCamera->follow(hero);
   }
 
 protected:
-  bs::HFPSCamera mFPSCamera;
+  REGoth::HThirdPersonCamera mThirdPersonCamera;
 };
 
 int main(int argc, char** argv)

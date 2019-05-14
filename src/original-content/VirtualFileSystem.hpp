@@ -96,9 +96,19 @@ namespace REGoth
      * This will go through all packages and assemble a list containing all
      * known files names which one could read using readFile().
      *
-     * @return Names of all files known to the index.
+     * @return Names of all files known to the index, all UPPERCASE.
      */
     bs::Vector<bs::String> listAllFiles();
+
+    /**
+     * Returns a list of files with the given file extension.
+     *
+     * @param  ext  File extension to look for, with leading dot. E.g. `.3DS`,
+     *              case insensitive.
+     *
+     * @return Names of all files with the given file extension, all UPPERCASE.
+     */
+    bs::Vector<bs::String> listByExtension(const bs::String& ext);
 
 
     /**

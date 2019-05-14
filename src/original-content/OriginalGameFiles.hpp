@@ -33,9 +33,16 @@ namespace REGoth
     OriginalGameFiles(const bs::Path& root);
 
     /**
-     * @return List of all .vdf-packages found in the `Data`-directory.
+     * @return List of all .vdf-packages found in the `Data`-directory. With their
+     *         full paths. This does NOT do a recursive search.
      */
     bs::Vector<bs::Path> allVdfsPackages() const;
+
+    /**
+     * @return List of all .mod-Packages found in the `Data/Modvdf`-directory. With their
+     *         full paths. This does a recursive search.
+     */
+    bs::Vector<bs::Path> allModPackages() const;
 
     /**
      * @return Actual path to the GOTHIC.DAT file
@@ -52,7 +59,11 @@ namespace REGoth
     /**
      * Outputs all files found in the given directory which match the given extension.
      *
-     * The comparison is done case-insensitive.
+     * The comparison is done case-insensitive. Only the given directory is searched,
+     * subfolders are ignored.
+     *
+     * @see    See filterFilesInDirectoryByExtRecursive() for a recursive variant of
+     *         this method.
      *
      * @param  path  Path to the directory to search.
      * @param  ext   Extension to search for (with .), e.g. `.vdf`
@@ -63,9 +74,32 @@ namespace REGoth
                                                      const bs::String& ext) const;
 
     /**
+     * Outputs all files found in the given directory and all its subdirectories,
+     * which match the given extension.
+     *
+     * The comparison is done case-insensitive.
+     *
+     * @see    See filterFilesInDirectoryByExt() for a non-recursive variant of this
+     *         method.
+     *
+     * @param  path  Path to the directory to begin searching.
+     * @param  ext   Extension to search for (with .), e.g. `.vdf`
+     *
+     * @return List of all files in the given directory and its subdirectories
+     *         with the given extension.
+     */
+    bs::Vector<bs::Path> filterFilesInDirectoryByExtRecursive(const bs::Path& path,
+                                                              const bs::String& ext) const;
+
+    /**
      * @return Actual path to the data-directory
      */
     bs::Path dataDirectory() const;
+
+    /**
+     * @return Actual path to the data/modvdf-directory
+     */
+    bs::Path modDirectory() const;
 
     /**
      * Given a case-insensitive path, this tries to find the real, case-sensitive path.
@@ -76,6 +110,8 @@ namespace REGoth
      * If the file wasn't found, an empty path is returned.
      *
      * @param  path  Case-insensitive path to look at relative to the game root.
+     *               Should have a trailing "/" if the path is pointing to a directory!
+     *
      * @return First file that matched the case insensitive path.
      */
     bs::Path findCaseSensitivePathOf(const bs::Path& path) const;
