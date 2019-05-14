@@ -13,6 +13,7 @@ namespace REGoth
   CharacterEventQueue::CharacterEventQueue(const bs::HSceneObject& parent, HGameWorld world)
       : EventQueue(parent)
       , mWorld(world)
+      , mPathfinder(world->waynet())
   {
     setName("CharacterEventQueue");
 
@@ -30,8 +31,42 @@ namespace REGoth
     }
   }
 
+  CharacterEventQueue::CharacterEventQueue() : mPathfinder({})
+  {
+    // mPathfinder must be initialized later with a proper world.
+  }
+
   CharacterEventQueue::~CharacterEventQueue()
   {
+  }
+
+  void CharacterEventQueue::startRouteToPosition(const bs::Vector3& target)
+  {
+    mPathfinder.startNewRouteTo(positionNow(), target);
+  }
+
+  void CharacterEventQueue::startRouteToObject(bs::HSceneObject target)
+  {
+    mPathfinder.startNewRouteTo(positionNow(), target);
+  }
+
+  const bs::Vector3& CharacterEventQueue::positionNow() const
+  {
+    return SO()->getTransform().pos();
+  }
+
+  void CharacterEventQueue::travelActiveRoute()
+  {
+    bs::Vector3 pos                  = positionNow();
+    AI::Pathfinder::Instruction inst = mPathfinder.updateToNextInstructionToTarget(pos);
+
+    if (!mPathfinder.isTargetReachedByPosition(pos, inst.targetPosition))
+    {
+      // TODO: Might want to smoothly turn instead
+      mCharacterAI->instantTurnToPosition(inst.targetPosition);
+    }
+
+    mCharacterAI->goForward();
   }
 
   void CharacterEventQueue::onExecuteEventAction(SharedEMessage message, bs::HSceneObject sender)
@@ -137,13 +172,39 @@ namespace REGoth
     switch ((AI::MovementMessage::MovementSubType)message.subType)
     {
       case AI::MovementMessage::ST_GotoObject:
-        mCharacterAI->gotoPositionStraight(message.targetObject->getTransform().pos());
-        isDone = mCharacterAI->isAtPosition(message.targetObject->getTransform().pos());
+        if (message.isFirstRun)
+        {
+          startRouteToObject(message.targetObject);
+        }
+
+        if (!mPathfinder.hasActiveRouteBeenCompleted(positionNow()))
+        {
+          travelActiveRoute();
+        }
+        else
+        {
+          mCharacterAI->stopMoving();
+
+          isDone = true;
+        }
         break;
 
       case AI::MovementMessage::ST_GotoPos:
-        mCharacterAI->gotoPositionStraight(message.targetPosition);
-        isDone = mCharacterAI->isAtPosition(message.targetPosition);
+        if (message.isFirstRun)
+        {
+          startRouteToPosition(message.targetPosition);
+        }
+
+        if (!mPathfinder.hasActiveRouteBeenCompleted(positionNow()))
+        {
+          travelActiveRoute();
+        }
+        else
+        {
+          mCharacterAI->stopMoving();
+
+          isDone = true;
+        }
         break;
 
       default:

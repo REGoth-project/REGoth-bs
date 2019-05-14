@@ -1,6 +1,7 @@
 #pragma once
 #include "EventQueue.hpp"
 #include <RTTI/RTTIUtil.hpp>
+#include <AI/Pathfinder.hpp>
 
 namespace REGoth
 {
@@ -40,6 +41,27 @@ namespace REGoth
     SharedEMessage pushGotoObject(bs::HSceneObject object);
 
   protected:
+
+    /**
+     * Uses the Pathfinder to start a new route to the given location.
+     */
+    void startRouteToPosition(const bs::Vector3& target);
+
+    /**
+     * Uses the Pathfinder to start a new route to the given object.
+     */
+    void startRouteToObject(bs::HSceneObject target);
+
+    /**
+     * Lets the Character move along the currently active route in the Pathfinder.
+     */
+    void travelActiveRoute();
+
+    /**
+     * @return The scene objects position
+     */
+    const bs::Vector3& positionNow() const;
+
     /**
      * Called cyclically for the first message in the queue. Override this
      * in the more specialized classes to handle messages meant for characters
@@ -74,11 +96,12 @@ namespace REGoth
     HCharacter mCharacter;
     HCharacterAI mCharacterAI;
     HGameWorld mWorld;
+    AI::Pathfinder mPathfinder;
 
   public:
     REGOTH_DECLARE_RTTI(CharacterEventQueue)
 
   protected:
-    CharacterEventQueue() = default;  // For RTTI
+    CharacterEventQueue();  // For RTTI
   };
 }  // namespace REGoth
