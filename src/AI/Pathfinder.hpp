@@ -8,8 +8,8 @@ namespace bs
 }
 namespace REGoth
 {
-  class GameWorld;
-  using HGameWorld = bs::GameObjectHandle<GameWorld>;
+  class Waynet;
+  using HWaynet = bs::GameObjectHandle<Waynet>;
 
   class Waypoint;
   using HWaypoint = bs::GameObjectHandle<Waypoint>;
@@ -55,7 +55,7 @@ namespace REGoth
         bs::Vector3 targetEntityPositionOnStart;
       };
 
-      Pathfinder(HGameWorld world);
+      Pathfinder(HWaynet waynet);
       virtual ~Pathfinder();
 
       void startNewRouteTo(const bs::Vector3& positionNow, const bs::Vector3& target);
@@ -212,7 +212,7 @@ namespace REGoth
        */
       Route mActiveRoute;
 
-      HGameWorld mWorld;
+      HWaynet mWaynet;
     };
   }  // namespace AI
 }  // namespace Logic

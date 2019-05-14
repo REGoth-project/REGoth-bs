@@ -1,9 +1,11 @@
 #include "Pathfinder.hpp"
+#include <components/Waypoint.hpp>
 #include <Math/BsRay.h>
-#include <Scene/BsSceneManager.h>
 #include <Math/BsVector2.h>
 #include <Physics/BsPhysics.h>
+#include <Scene/BsSceneManager.h>
 #include <components/GameWorld.hpp>
+#include <components/Waynet.hpp>
 
 static const float MAX_SIDE_DIFFERENCE_TO_REACH_POSITION     = 0.5f;  // Meters
 static const float MAX_HEIGHT_DIFFERENCE_TO_REACH_POSITION   = 2.0f;  // Meters
@@ -14,8 +16,8 @@ namespace REGoth
 {
   namespace AI
   {
-    Pathfinder::Pathfinder(HGameWorld world)
-        : mWorld(world)
+    Pathfinder::Pathfinder(HWaynet waynet)
+        : mWaynet(waynet)
     {
     }
 
@@ -75,7 +77,7 @@ namespace REGoth
       bs::PhysicsQueryHit hit;
 
       const bs::Vector3 up = bs::Vector3::UNIT_Y;
-      if(!physicsScene().rayCast(floorposition, up, hit))
+      if (!physicsScene().rayCast(floorposition, up, hit))
       {
         return std::numeric_limits<float>::max();
       }
@@ -90,11 +92,8 @@ namespace REGoth
 
     HWaypoint Pathfinder::findNextVisibleWaypoint(const bs::Vector3& from) const
     {
-      return {};
-
-      // TODO: Reimplement using bsf
-      // // TODO: Check for obstructions
-      // return World::Waynet::findNearestWaypointTo(m_World.getWaynet(), from);
+      // TODO: Check for obstructions
+      return mWaynet->findClosestWaypointTo(from);
     }
 
     bool Pathfinder::hasActiveRouteBeenCompleted(const bs::Vector3& positionNow) const
@@ -237,20 +236,17 @@ namespace REGoth
         return;
       }
 
-      // TODO: Implement using bsf
-      // HWaypoint nearestWpToTarget =
-      //     Waynet::findNearestWaypointTo(m_World.getWaynet(), position);
-      // HWaypoint nearestWpToStart =
-      //     Waynet::findNearestWaypointTo(m_World.getWaynet(), positionNow);
+      HWaypoint nearestWpToTarget = mWaynet->findClosestWaypointTo(position);
+      HWaypoint nearestWpToStart  = mWaynet->findClosestWaypointTo(positionNow);
 
-      // std::vector<Waynet::WaypointIndex> path =
-      //     Waynet::findWay(m_World.getWaynet(), nearestWpToStart, nearestWpToTarget);
+      bs::Vector<HWaypoint> path = mWaynet->findWay(nearestWpToStart, nearestWpToTarget);
 
-      // for (Waynet::WaypointIndex i : path)
-      // {
-      //   const bs::Vector3 wpPosition = m_World.getWaynet().waypoints[i].position;
-      //   mActiveRoute.positionsToGo.push_back(wpPosition);
-      // }
+      for (auto wp : path)
+      {
+        const bs::Vector3& wpPosition = wp->SO()->getTransform().pos();
+
+        mActiveRoute.positionsToGo.push_back(wpPosition);
+      }
 
       bool isDestinationOffWaynet = false;
 
@@ -283,7 +279,7 @@ namespace REGoth
       // standing on the top of it right now
 
       bs::Vector3 dir = to - from;
-      float distance = dir.length();
+      float distance  = dir.length();
 
       dir /= distance;
 
