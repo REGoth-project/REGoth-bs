@@ -5,8 +5,10 @@ namespace REGoth
 {
   class RTTI_EventQueue : public bs::RTTIType<EventQueue, bs::Component, RTTI_EventQueue>
   {
+    using UINT32 = bs::UINT32;
+
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+    BS_RTTI_MEMBER_REFLPTR_ARRAY(mEventQueue, 0)
     BS_END_RTTI_MEMBERS
 
   public:

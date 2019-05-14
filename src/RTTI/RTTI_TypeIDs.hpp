@@ -47,5 +47,17 @@ namespace REGoth
     TID_REGOTH_EventQueue                   = 600039,
     TID_REGOTH_CharacterEventQueue          = 600040,
     TID_REGOTH_Pathfinder                   = 600041,
+    TID_REGOTH_EventMessage                 = 600042,
+    TID_REGOTH_NpcMessage                   = 600043,
+    TID_REGOTH_DamageMessage                = 600044,
+    TID_REGOTH_WeaponMessage                = 600045,
+    TID_REGOTH_MovementMessage              = 600046,
+    TID_REGOTH_AttackMessage                = 600047,
+    TID_REGOTH_StateMessage                 = 600048,
+    TID_REGOTH_ManipulateMessage            = 600049,
+    TID_REGOTH_ConversationMessage          = 600050,
+    TID_REGOTH_MagicMessage                 = 600051,
+    TID_REGOTH_MobMessage                   = 600052,
+    TID_REGOTH_UseItemMessage               = 600053,
   };
 }  // namespace REGoth

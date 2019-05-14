@@ -1,7 +1,9 @@
 #pragma once
 
+#include <RTTI/RTTIUtil.hpp>
 #include <BsCorePrerequisites.h>
 #include <Math/BsVector3.h>
+#include <scripting/ScriptTypes.hpp>
 
 namespace REGoth
 {
@@ -42,7 +44,7 @@ namespace REGoth
     /**
      * Basic event-message. Contains type.
      */
-    struct EventMessage// : bs::IReflectable // TODO: Implement RTTI
+    struct EventMessage : public bs::IReflectable
     {
       using SharedEMessage = std::shared_ptr<EventMessage>;
 
@@ -115,6 +117,8 @@ namespace REGoth
        * External callbacks to trigger if this message gets processed.
        */
       bs::Event<void(SharedEMessage)> onMessageDone;
+
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(EventMessage)
     };
 
     struct NpcMessage : public EventMessage
@@ -128,6 +132,8 @@ namespace REGoth
       virtual ~NpcMessage()
       {
       }
+
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(NpcMessage)
     };
 
     struct DamageMessage : public NpcMessage
@@ -146,6 +152,8 @@ namespace REGoth
       }
 
       // TODO: Implement DamageDescriptor!
+
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(DamageMessage)
     };
 
     struct WeaponMessage : public NpcMessage
@@ -181,12 +189,14 @@ namespace REGoth
       // EWeaponMode targetMode;
 
       // TODO: There is an animation-field here, find out what it does!
+
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(WeaponMessage)
     };
 
     struct MovementMessage : public NpcMessage
     {
       enum MovementSubType
-      { 
+      {
         ST_RobustTrace,
         ST_GotoPos,
         ST_GotoObject,
@@ -248,6 +258,8 @@ namespace REGoth
        * General purpose mode
        */
       int targetMode = 0;
+
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(MovementMessage)
     };
 
     struct AttackMessage : public NpcMessage
@@ -273,13 +285,13 @@ namespace REGoth
       {
         messageType    = EventMessageType::Attack;
         startFrame     = 0.0f;
-        animationIndex = static_cast<size_t>(-1);
+        animationIndex = -1;
       }
 
       /**
        * How far we are in our combo
        */
-      int combo;
+      bs::INT32 combo;
 
       /**
        * Object we are attacking
@@ -289,12 +301,14 @@ namespace REGoth
       /**
        * Animation to use when attacking, -1 if none.
        */
-      size_t animationIndex;
+      bs::INT32 animationIndex;
 
       /**
        * Frame to skip the animation to
        */
       float startFrame;
+
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(AttackMessage)
     };
 
     struct UseItemMessage : public NpcMessage
@@ -315,6 +329,8 @@ namespace REGoth
       // TODO: We have no actual object for these right now, as they are explicitly in the
       // inventory.
       // TODO: Use the itemhandle here or something
+
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(UseItemMessage)
     };
 
     struct StateMessage : public NpcMessage
@@ -339,7 +355,7 @@ namespace REGoth
       /**
        * Symbol to the Setupfunction for this state (ZS_...)
        */
-      size_t functionSymbol;
+      Scripting::SymbolIndex functionSymbol;
 
       /**
        * Whether the old state should be ended properly (true), or just interrupted (false)
@@ -371,6 +387,8 @@ namespace REGoth
        * Waypoint name to got to, in case the state needs that
        */
       bs::String wpname;
+
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(StateMessage)
     };
 
     class ManipulateMessage : public NpcMessage
@@ -438,12 +456,14 @@ namespace REGoth
       /**
        * State to go to when using the item
        */
-      int targetState;
+      bs::INT32 targetState;
 
       /**
        * Animation to play, for example on pickup
        */
       bs::String animation;
+
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(ManipulateMessage)
     };
 
     struct ConversationMessage : public NpcMessage
@@ -493,7 +513,6 @@ namespace REGoth
         messageType    = EventMessageType::Conversation;
         status         = Status::INIT;
         canceled       = false;
-        waitIdentifier = nullptr;
       }
 
       /**
@@ -531,18 +550,12 @@ namespace REGoth
       /**
        * Animation to play. -1 if none
        */
-      size_t animationIndex;
+      bs::INT32 animationIndex;
 
       /**
        * Animation name to be used. If empty, index will be checked.
        */
       bs::String animation;
-
-      /**
-       * SharedPointer to the message we are waiting for. Currently not used. Useful for debug
-       * purpose
-       */
-      SharedEMessage waitIdentifier;
 
       /**
        * Stores the state of the message, to handle multiple stages/states inside the
@@ -560,6 +573,8 @@ namespace REGoth
        */
       // FIXME: Reimplement that using a sound handle
       // Utils::Ticket<World::AudioWorld> soundTicket;
+
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(ConversationMessage)
     };
 
     struct MagicMessage : public NpcMessage
@@ -586,6 +601,8 @@ namespace REGoth
       }
 
       // TODO: Implement
+
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(MagicMessage)
     };
 
     struct MobMessage : public EventMessage
@@ -624,6 +641,8 @@ namespace REGoth
        * Whether to play an animation.
        */
       bool playAnimation;
+
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(MobMessage)
     };
-  }  // namespace EventMessages
-}  // namespace Logic
+  }  // namespace AI
+}  // namespace REGoth

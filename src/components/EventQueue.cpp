@@ -125,8 +125,7 @@ namespace REGoth
   {
     // Push a wait-message first
     AI::ConversationMessage wait;
-    wait.subType        = AI::ConversationMessage::ST_WaitTillEnd;
-    wait.waitIdentifier = other;
+    wait.subType = AI::ConversationMessage::ST_WaitTillEnd;
 
     // Let the EM wait for this talking-action to complete
     bs::SPtr<AI::ConversationMessage> queuedWait = onMessage(wait);
