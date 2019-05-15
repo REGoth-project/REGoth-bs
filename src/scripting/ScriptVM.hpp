@@ -121,6 +121,7 @@ namespace REGoth
       ScriptObjectMapping mScriptObjectMapping;
 
     public:
+      // Remember, this is abstract, so don't create an rttiCreateEmpty()
       REGOTH_DECLARE_RTTI(ScriptVM);
     };
   }  // namespace Scripting

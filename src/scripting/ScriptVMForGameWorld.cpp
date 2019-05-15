@@ -7,8 +7,8 @@ namespace REGoth
   namespace Scripting
   {
     ScriptVMForGameWorld::ScriptVMForGameWorld(HGameWorld gameWorld,
-                                               const Daedalus::DATFile& datFile)
-        : DaedalusVMForGameWorld(gameWorld, datFile)
+                                               const bs::Vector<bs::UINT8>& datFileData)
+        : DaedalusVMForGameWorld(gameWorld, datFileData)
     {
     }
 

@@ -23,7 +23,7 @@ namespace REGoth
     class DaedalusVMForGameWorld : public DaedalusVM
     {
     public:
-      DaedalusVMForGameWorld(HGameWorld gameWorld, const Daedalus::DATFile& datFile);
+      DaedalusVMForGameWorld(HGameWorld gameWorld, const bs::Vector<bs::UINT8>& datFileData);
 
       ScriptObjectHandle instanciateClass(const bs::String& className,
                                           const bs::String& instanceName,
@@ -91,9 +91,20 @@ namespace REGoth
        *
        * Throws if the instance on the stack is not a character.
        *
-       * @return Character from the stack.
+       * @return Character from the stack. Empty handle if the instance
+       *         wasn't referencing something.
        */
       HCharacter popCharacterInstance();
+
+      /**
+       * Does popInstance() and resolves the Item-component.
+       *
+       * Throws if the instance on the stack is not a item.
+       *
+       * @return Item from the stack. Empty handle if the instance
+       *         wasn't referencing something.
+       */
+      HItem popItemInstance();
 
       /**
        * Sets the given instance to the given script object.
@@ -137,6 +148,8 @@ namespace REGoth
       void external_Print();
       void external_HLP_Random();
       void external_HLP_GetNpc();
+      void external_HLP_IsValidNpc();
+      void external_HLP_IsValidItem();
       void external_IntToString();
       void external_ConcatStrings();
       void external_WLD_InsertItem();
@@ -152,6 +165,8 @@ namespace REGoth
       void external_MDL_SetVisual();
       void external_MDL_SetVisualBody();
       void external_AI_GotoWaypoint();
+      void external_TA_Min();
+      void external_NPC_ExchangeRoutine();
 
       void fillSymbolStorage() override;
       void registerAllExternals() override;

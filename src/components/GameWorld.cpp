@@ -102,6 +102,8 @@ namespace REGoth
 
   HCharacter GameWorld::insertCharacter(const bs::String& instance, const bs::Transform& transform)
   {
+    HGameWorld thisWorld = bs::static_object_cast<GameWorld>(getHandle());
+
     bs::HSceneObject characterSO = bs::SceneObject::create(instance);
     characterSO->setParent(SO());
 
@@ -122,12 +124,15 @@ namespace REGoth
     // don't cause the game to slow down. If they are all active, physics will be calculated
     // even for those out of reach which takes a huge hit on performance.
     // The character-controller will be enabled by the AI or user input.
-    ai->deactivatePhysics();
+    // ai->deactivatePhysics(); // Commented out for testing
 
     auto character = characterSO->addComponent<Character>(instance);
 
     // Must be added after the Character and CharacterAI components
-    characterSO->addComponent<CharacterEventQueue>(bs::static_object_cast<GameWorld>(getHandle()));
+    auto eventQueue = characterSO->addComponent<CharacterEventQueue>(thisWorld);
+
+    // If we don't init the routine now, the character won't have its default routine
+    eventQueue->reinitRoutine();
 
     return character;
   }
@@ -162,10 +167,9 @@ namespace REGoth
   void GameWorld::initScriptVM()
   {
     bs::Vector<bs::UINT8> data = gVirtualFileSystem().readFile("GOTHIC.DAT");
-    Daedalus::DATFile dat(data.data(), data.size());
 
     mScriptVM = bs::bs_shared_ptr_new<Scripting::ScriptVMForGameWorld>(
-        bs::static_object_cast<GameWorld>(getHandle()), dat);
+        bs::static_object_cast<GameWorld>(getHandle()), data);
 
     mScriptVM->initialize();
   }
@@ -219,7 +223,7 @@ namespace REGoth
 
   HCharacter GameWorld::hero() const
   {
-    auto scriptObject = mScriptVM->getHero();
+    auto scriptObject = mScriptVM->heroInstance();
 
     if (scriptObject == Scripting::SCRIPT_OBJECT_HANDLE_INVALID) return {};
 

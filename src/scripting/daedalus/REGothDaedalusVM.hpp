@@ -20,7 +20,7 @@ namespace REGoth
     class DaedalusVM : public ScriptVM
     {
     public:
-      DaedalusVM(const Daedalus::DATFile& datFile);
+      DaedalusVM(const bs::Vector<bs::UINT8>& datFileData);
 
     protected:
 
@@ -142,15 +142,19 @@ namespace REGoth
        */
       bs::INT32 mCallDepth = 0;
 
-      bs::SPtr<DATSymbolStorageLoader> mInternals;
       bs::SPtr<Daedalus::DATFile> mDatFile;
+
+      // The whole DAT-file, for serialization
+      bs::Vector<bs::UINT8> mDatFileData;
 
       bs::Map<SymbolIndex, externalCallback> mExternals;
 
     public:
+
+      // Remember, this is abstract, so don't create an rttiCreateEmpty()
       REGOTH_DECLARE_RTTI(DaedalusVM);
 
-    public: // FIXME: RTTI protected
+    protected:
       DaedalusVM() = default; // For RTTI
     };
   }  // namespace Scripting

@@ -10,12 +10,12 @@ namespace REGoth
 {
   namespace Scripting
   {
-    DaedalusVM::DaedalusVM(const Daedalus::DATFile& datFile)
+    DaedalusVM::DaedalusVM(const bs::Vector<bs::UINT8>& datFileData)
     {
-      // mInternals = bs::bs_shared_ptr_new<DATSymbolStorageLoader>(mScriptSymbols, datFile);
-      mDatFile = bs::bs_shared_ptr_new<Daedalus::DATFile>(datFile);
+      mDatFile = bs::bs_shared_ptr_new<Daedalus::DATFile>(datFileData.data(), datFileData.size());
       mClassVarResolver =
           bs::bs_shared_ptr_new<DaedalusClassVarResolver>(mScriptSymbols, mScriptObjects);
+      mDatFileData = datFileData;
     }
 
     void DaedalusVM::fillSymbolStorage()

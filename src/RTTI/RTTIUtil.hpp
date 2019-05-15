@@ -49,11 +49,17 @@
  * which cannot be default constructed by default. Should be used in favor
  * of the plain REGOTH_DECLARE_RTTI if used for IReflectables, except for
  * abstract classes.
- */
+ *
+ * @note rttiCreateEmpty() is private so sub-classes which forget to use this
+ * makro wont have access to the wrong rttiCreateEmpty().
+ **/
 #define REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(classname)           \
+public:                                                          \
   friend class RTTI_##classname;                                 \
   static bs::RTTITypeBase* getRTTIStatic();                      \
   decltype(classname::getRTTIStatic()) getRTTI() const override; \
+                                                                 \
+private:                                                         \
   static bs::SPtr<classname> rttiCreateEmpty()                   \
   {                                                              \
     return bs::bs_shared_ptr(new classname());                   \

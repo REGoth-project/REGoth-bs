@@ -238,9 +238,7 @@ namespace REGoth
 
         if (it == mFunctionsByAddress.end())
         {
-          using namespace bs;
-          BS_EXCEPT(InvalidStateException,
-                    "Address " + bs::toString(scriptAddress) + " was not registered!");
+          return SYMBOL_INDEX_INVALID;
         }
 
         return it->second;

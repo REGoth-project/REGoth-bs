@@ -14,8 +14,8 @@ namespace REGoth
   namespace Scripting
   {
     DaedalusVMForGameWorld::DaedalusVMForGameWorld(HGameWorld gameWorld,
-                                                   const Daedalus::DATFile& datFile)
-        : DaedalusVM(datFile)
+                                                   const bs::Vector<bs::UINT8>& datFileData)
+        : DaedalusVM(datFileData)
         , mWorld(gameWorld)
     {
     }
@@ -24,11 +24,11 @@ namespace REGoth
     {
       DaedalusVM::fillSymbolStorage();
 
-      mHeroSymbol   = getInstance("HERO");
-      mSelfSymbol   = getInstance("SELF");
-      mOtherSymbol  = getInstance("OTHER");
-      mVictimSymbol = getInstance("VICTIM");
-      mItemSymbol   = getInstance("ITEM");
+      mHeroSymbol   = scriptSymbols().findIndexBySymbolName("HERO");
+      mSelfSymbol   = scriptSymbols().findIndexBySymbolName("SELF");
+      mOtherSymbol  = scriptSymbols().findIndexBySymbolName("OTHER");
+      mVictimSymbol = scriptSymbols().findIndexBySymbolName("VICTIM");
+      mItemSymbol   = scriptSymbols().findIndexBySymbolName("ITEM");
     }
 
     ScriptObjectHandle DaedalusVMForGameWorld::instanciateClass(const bs::String& className,
@@ -110,7 +110,9 @@ namespace REGoth
     bool DaedalusVMForGameWorld::runStateLoopFunction(SymbolIndex function, HCharacter self)
     {
       self->useAsSelf();
-      executeScriptFunction(function);
+
+      const auto& functionSym = scriptSymbols().getSymbol<SymbolScriptFunction>(function);
+      executeScriptFunction(functionSym.address);
 
       return popIntValue() != 0;
     }
@@ -118,7 +120,9 @@ namespace REGoth
     void DaedalusVMForGameWorld::runFunctionOnSelf(SymbolIndex function, HCharacter self)
     {
       self->useAsSelf();
-      executeScriptFunction(function);
+
+      const auto& functionSym = scriptSymbols().getSymbol<SymbolScriptFunction>(function);
+      executeScriptFunction(functionSym.address);
     }
 
     void DaedalusVMForGameWorld::setHero(ScriptObjectHandle hero)
@@ -296,6 +300,11 @@ namespace REGoth
     {
       ScriptObjectHandle scriptObject = popInstanceScriptObject();
 
+      if (scriptObject == SCRIPT_OBJECT_HANDLE_INVALID)
+      {
+        return {};
+      }
+
       bs::HSceneObject characterSO = mapping().getMappedSceneObject(scriptObject);
 
       HCharacter character = characterSO->getComponent<Character>();
@@ -308,6 +317,29 @@ namespace REGoth
       }
 
       return character;
+    }
+
+    HItem DaedalusVMForGameWorld::popItemInstance()
+    {
+      ScriptObjectHandle scriptObject = popInstanceScriptObject();
+
+      if (scriptObject == SCRIPT_OBJECT_HANDLE_INVALID)
+      {
+        return {};
+      }
+
+      bs::HSceneObject itemSO = mapping().getMappedSceneObject(scriptObject);
+
+      HItem item = itemSO->getComponent<Item>();
+
+      if (!item)
+      {
+        REGOTH_THROW(InvalidParametersException,
+                     "Expected to find a item instance on the stack, but the scene object does "
+                     "not have a item-component!");
+      }
+
+      return item;
     }
 
     void DaedalusVMForGameWorld::initializeWorld(const bs::String& worldName)
@@ -335,6 +367,8 @@ namespace REGoth
       registerExternal("PRINT", (externalCallback)&This::external_Print);
       registerExternal("HLP_RANDOM", (externalCallback)&This::external_HLP_Random);
       registerExternal("HLP_GETNPC", (externalCallback)&This::external_HLP_GetNpc);
+      registerExternal("HLP_ISVALIDNPC", (externalCallback)&This::external_HLP_IsValidNpc);
+      registerExternal("HLP_ISVALIDITEM", (externalCallback)&This::external_HLP_IsValidItem);
       registerExternal("INTTOSTRING", (externalCallback)&This::external_IntToString);
       registerExternal("NPC_ISPLAYER", (externalCallback)&This::external_NPC_IsPlayer);
       registerExternal("WLD_INSERTNPC", (externalCallback)&This::external_WLD_InsertNpc);
@@ -349,6 +383,9 @@ namespace REGoth
       registerExternal("WLD_GETDAY", (externalCallback)&This::external_WLD_GetDay);
       registerExternal("WLD_ISTIME", (externalCallback)&This::external_WLD_IsTime);
       registerExternal("WLD_SETTIME", (externalCallback)&This::external_WLD_SetTime);
+      registerExternal("TA_MIN", (externalCallback)&This::external_TA_Min);
+      registerExternal("NPC_EXCHANGEROUTINE", (externalCallback)&This::external_NPC_ExchangeRoutine);
+      registerExternal("AI_GOTOWP", (externalCallback)&This::external_AI_GotoWaypoint);
     }
 
     void DaedalusVMForGameWorld::external_Print()
@@ -366,6 +403,20 @@ namespace REGoth
       bs::INT32 symbolIndex = popIntValue();
 
       mStack.pushInstance((SymbolIndex)symbolIndex);
+    }
+
+    void DaedalusVMForGameWorld::external_HLP_IsValidNpc()
+    {
+      HCharacter character = popCharacterInstance();
+
+      mStack.pushInt(!!character ? 1 : 0);
+    }
+
+    void DaedalusVMForGameWorld::external_HLP_IsValidItem()
+    {
+      HItem item = popItemInstance();
+
+      mStack.pushInt(!!item ? 1 : 0);
     }
 
     void DaedalusVMForGameWorld::external_IntToString()
@@ -530,9 +581,56 @@ namespace REGoth
       bs::String waypoint = popStringValue();
       HCharacter self     = popCharacterInstance();
 
+      bs::StringUtil::toUpperCase(waypoint);
+
       auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
 
       eventQueue->pushGotoObject(mWorld->SO()->findChild(waypoint));
+    }
+
+    void DaedalusVMForGameWorld::external_TA_Min()
+    {
+      bs::String waypoint = popStringValue();
+      SymbolIndex action  = popIntValue(); // This does not push onto the function stack for some reason
+      bs::INT32 stop_m    = popIntValue();
+      bs::INT32 stop_h    = popIntValue();
+      bs::INT32 start_m   = popIntValue();
+      bs::INT32 start_h   = popIntValue();
+      HCharacter self     = popCharacterInstance();
+
+      bs::StringUtil::toUpperCase(waypoint);
+
+      AI::ScriptState::RoutineTask task;
+      task.hoursStart     = start_h;
+      task.hoursEnd       = stop_h;
+
+      task.minutesStart   = start_m;
+      task.minutesEnd     = stop_m;
+
+      task.waypoint       = waypoint;
+
+      if (action != SYMBOL_INDEX_INVALID)
+      {
+        task.scriptFunction = scriptSymbols().getSymbolName(action);
+      }
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->insertRoutineTask(task);
+    }
+
+    void DaedalusVMForGameWorld::external_NPC_ExchangeRoutine()
+    {
+      bs::String routineName = popStringValue();
+      HCharacter self        = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      bs::StringUtil::toUpperCase(routineName);
+
+      self->setDailyRoutine(routineName);
+
+      eventQueue->reinitRoutine();
     }
 
     void DaedalusVMForGameWorld::script_PrintPlus(const bs::String& text)

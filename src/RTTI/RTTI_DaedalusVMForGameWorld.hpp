@@ -11,7 +11,12 @@ namespace REGoth
         : public bs::RTTIType<DaedalusVMForGameWorld, DaedalusVM, RTTI_DaedalusVMForGameWorld>
     {
       BS_BEGIN_RTTI_MEMBERS
-      // TODO: Fill RTTI Members
+      BS_RTTI_MEMBER_REFL(mWorld, 0)
+      BS_RTTI_MEMBER_PLAIN(mHeroSymbol, 1)
+      BS_RTTI_MEMBER_PLAIN(mSelfSymbol, 2)
+      BS_RTTI_MEMBER_PLAIN(mOtherSymbol, 3)
+      BS_RTTI_MEMBER_PLAIN(mVictimSymbol, 4)
+      BS_RTTI_MEMBER_PLAIN(mItemSymbol, 5)
       BS_END_RTTI_MEMBERS
 
     public:
