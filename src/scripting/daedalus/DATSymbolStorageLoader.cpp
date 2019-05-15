@@ -255,6 +255,8 @@ namespace REGoth
         fillBase(target, source);
 
         target.address = source.address;
+
+        mStorage.registerFunctionAddress(target.index);
       }
 
       void fill(SymbolPrototype& target, const Daedalus::PARSymbol& source)

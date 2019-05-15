@@ -98,6 +98,21 @@ namespace REGoth
         return it->second[arrayIndex];
       }
 
+      /**
+       * Save access to an int value. Throws if the value does not exist.
+       */
+      bs::UINT32& functionPointerValue(const bs::String& name)
+      {
+        auto it = functionPointers.find(name);
+
+        if (it == functionPointers.end())
+        {
+          throwVariableDoesNotExist(name, "Int");
+        }
+
+        return it->second;
+      }
+
       void throwVariableDoesNotExist(const bs::String& name, const bs::String& type)
       {
         REGOTH_THROW(InvalidParametersException, "ScriptObject of class " + className +
