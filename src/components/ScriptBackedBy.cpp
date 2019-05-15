@@ -51,10 +51,15 @@ namespace REGoth
     return mScriptObject != Scripting::SCRIPT_OBJECT_HANDLE_INVALID;
   }
 
-  Scripting::ScriptObject& ScriptBackedBy::scriptObjectData()
+  Scripting::ScriptObject& ScriptBackedBy::scriptObjectData() const
   {
     // Will throw if the handle is invalid
     return gameWorld()->scriptVM().scriptObjects().get(mScriptObject);
+  }
+
+  Scripting::ScriptVMForGameWorld& ScriptBackedBy::scriptVM() const
+  {
+    return gameWorld()->scriptVM();
   }
 
   REGOTH_DEFINE_RTTI(ScriptBackedBy)

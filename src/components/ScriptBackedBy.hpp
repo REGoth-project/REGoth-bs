@@ -9,6 +9,7 @@ namespace REGoth
 {
   namespace Scripting
   {
+    class ScriptVMForGameWorld;
     struct ScriptObject;
   }
 
@@ -58,12 +59,17 @@ namespace REGoth
      *
      * Throws if it does not exist.
      */
-    Scripting::ScriptObject& scriptObjectData();
+    Scripting::ScriptObject& scriptObjectData() const;
 
     /**
      * @return Handle of the script object backing this component.
      */
     Scripting::ScriptObjectHandle scriptObject() const { return mScriptObject; }
+
+    /**
+     * @return Access to the script VM
+     */
+    Scripting::ScriptVMForGameWorld& scriptVM() const;
 
     /**
      * @return Whether we already have instantiated a script object.
