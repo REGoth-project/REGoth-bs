@@ -3,10 +3,10 @@
 #include <RTTI/RTTI_DaedalusVMForGameWorld.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
-#include <components/Item.hpp>
 #include <components/CharacterEventQueue.hpp>
 #include <components/GameClock.hpp>
 #include <components/GameWorld.hpp>
+#include <components/Item.hpp>
 #include <components/VisualCharacter.hpp>
 
 namespace REGoth
@@ -24,9 +24,9 @@ namespace REGoth
     {
       DaedalusVM::fillSymbolStorage();
 
-      mHeroSymbol  = getInstance("HERO");
-      mSelfSymbol  = getInstance("SELF");
-      mOtherSymbol = getInstance("OTHER");
+      mHeroSymbol   = getInstance("HERO");
+      mSelfSymbol   = getInstance("SELF");
+      mOtherSymbol  = getInstance("OTHER");
       mVictimSymbol = getInstance("VICTIM");
       mItemSymbol   = getInstance("ITEM");
     }
@@ -101,6 +101,26 @@ namespace REGoth
       return obj;
     }
 
+    void DaedalusVMForGameWorld::runFunctionOnSelf(const bs::String& function, HCharacter self)
+    {
+      self->useAsSelf();
+      executeScriptFunction(function);
+    }
+
+    bool DaedalusVMForGameWorld::runStateLoopFunction(SymbolIndex function, HCharacter self)
+    {
+      self->useAsSelf();
+      executeScriptFunction(function);
+
+      return popIntValue() != 0;
+    }
+
+    void DaedalusVMForGameWorld::runFunctionOnSelf(SymbolIndex function, HCharacter self)
+    {
+      self->useAsSelf();
+      executeScriptFunction(function);
+    }
+
     void DaedalusVMForGameWorld::setHero(ScriptObjectHandle hero)
     {
       setInstance(mHeroSymbol, hero);
@@ -121,6 +141,11 @@ namespace REGoth
       return getInstanceCharacter(mVictimSymbol);
     }
 
+    void DaedalusVMForGameWorld::setVictim(ScriptObjectHandle victim)
+    {
+      setInstance(mVictimSymbol, victim);
+    }
+
     ScriptObjectHandle DaedalusVMForGameWorld::itemInstance() const
     {
       return getInstance(mItemSymbol);
@@ -129,6 +154,11 @@ namespace REGoth
     HItem DaedalusVMForGameWorld::item() const
     {
       return getInstanceItem(mItemSymbol);
+    }
+
+    void DaedalusVMForGameWorld::setItem(ScriptObjectHandle item)
+    {
+      setInstance(mItemSymbol, item);
     }
 
     ScriptObjectHandle DaedalusVMForGameWorld::otherInstance() const
@@ -141,6 +171,11 @@ namespace REGoth
       return getInstanceCharacter(mOtherSymbol);
     }
 
+    void DaedalusVMForGameWorld::setOther(ScriptObjectHandle other)
+    {
+      setInstance(mOtherSymbol, other);
+    }
+
     ScriptObjectHandle DaedalusVMForGameWorld::selfInstance() const
     {
       return getInstance(mSelfSymbol);
@@ -151,8 +186,12 @@ namespace REGoth
       return getInstanceCharacter(mSelfSymbol);
     }
 
-    void DaedalusVMForGameWorld::setInstance(SymbolIndex instance,
-                                             ScriptObjectHandle scriptObject)
+    void DaedalusVMForGameWorld::setSelf(ScriptObjectHandle self)
+    {
+      setInstance(mSelfSymbol, self);
+    }
+
+    void DaedalusVMForGameWorld::setInstance(SymbolIndex instance, ScriptObjectHandle scriptObject)
     {
       SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instance);
 

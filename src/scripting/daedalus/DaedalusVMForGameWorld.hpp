@@ -34,6 +34,24 @@ namespace REGoth
       ScriptObjectHandle instanciateClass(const bs::String& className, SymbolInstance& instance,
                                           bs::HSceneObject mappedSceneObject);
 
+      /**
+       * Runs a simple function without return type or parameters. But sets the
+       * global self to the given character.
+       *
+       * @param  function  Function to call, e.g. `B_SOMETHING`.
+       * @param  self      Character to set `self` to.
+       */
+      void runFunctionOnSelf(const bs::String& function, HCharacter self);
+      void runFunctionOnSelf(SymbolIndex function, HCharacter self);
+
+      /**
+       * Calls a function used during the LOOP-Part of the script states. e.g. `ZS_TALK_LOOP`.
+       * See AI::ScriptState for more information.
+       *
+       * @return Whether the State is done.
+       */
+      bool runStateLoopFunction(SymbolIndex function, HCharacter self);
+
       void initializeWorld(const bs::String& worldName) override;
 
       void setHero(ScriptObjectHandle hero);
@@ -44,24 +62,28 @@ namespace REGoth
        */
       ScriptObjectHandle victimInstance() const;
       HCharacter victim() const;
+      void setVictim(ScriptObjectHandle victim);
 
       /**
        * @return The script object in the instance `ITEM`.
        */
       ScriptObjectHandle itemInstance() const;
       HItem item() const;
+      void setItem(ScriptObjectHandle item);
 
       /**
        * @return The script object in the instance `OTHER`.
        */
       ScriptObjectHandle otherInstance() const;
       HCharacter other() const;
+      void setOther(ScriptObjectHandle other);
 
       /**
        * @return The script object in the instance `SELF`.
        */
       ScriptObjectHandle selfInstance() const;
       HCharacter self() const;
+      void setSelf(ScriptObjectHandle self);
 
     protected:
       /**
