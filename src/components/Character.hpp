@@ -20,8 +20,38 @@ namespace REGoth
     /**
      * Registers this character as the hero. The hero will most likely be the player,
      * but doesn't have to be, ie. if the player controls another character.
+     *
+     * Also sets this character to be referenced by `HERO` inside the scripts.
      */
     void useAsHero();
+
+    /**
+     * Sets this character to be referenced by `SELF` inside the scripts.
+     */
+    void useAsSelf();
+
+    /**
+     * Sets this character to be referenced by `VICTIM` inside the scripts.
+     */
+    void useAsVictim();
+
+    /**
+     * Sets this character to be referenced `OTHER` inside the scripts.
+     */
+    void useAsOther();
+
+    /**
+     * To be called from the ScriptState-module if this character is currently
+     * Unconscious.
+     */
+    void handleUnconsciousness();
+
+    /**
+     * TODO: Called from the ScriptState-Module. See in old REGoth what isReady() means.
+     *       Supposidly it "Checks for death, etc". So maybe a name of `isAliveAndWell()`
+     *       would me more descriptive.
+     */
+    bool isReady();
 
     /**
      * @return Distance from this Character to the given other Character in meters.
@@ -57,6 +87,37 @@ namespace REGoth
 
     void setToFightMode(const bs::String& weapon);
     void setToFistMode();
+
+    /**
+     * @return The waypoint this character is around, needed by the scripts.
+     */
+    const bs::String& currentWaypoint() const;
+
+    /**
+     * Sets the waypoint this character is around, needed by the scripts.
+     * This could be the waypoint of the active routine, for example.
+     */
+    void setCurrentWaypoint(const bs::String& waypoint);
+
+    /**
+     * @return On monsters, this will return the AI-state the monster should
+     *         automatically start after spawning.
+     *         On Humans, this will return an empty string.
+     */
+    const bs::String& getStartAIState();
+
+    /**
+     * @return Name of the script function to call for the daily routine.
+     */
+    const bs::String& getDailyRoutine();
+
+    /**
+     * @return If this is a monster, it will not use routines to manage it's actions, but
+     *         rather start a script-state which dictates what the monster should do.
+     *         So basically this should return TRUE, if this is monster,
+     *         FALSE, if this is a human.
+     */
+    bool isStateDriven();
 
     /**
      * @return Whether this character is controlled by the player.

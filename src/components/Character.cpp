@@ -23,6 +23,26 @@ namespace REGoth
     gameWorld()->scriptVM().setHero(scriptObject());
   }
 
+  void Character::useAsSelf()
+  {
+    gameWorld()->scriptVM().setSelf(scriptObject());
+  }
+
+  void Character::useAsVictim()
+  {
+    gameWorld()->scriptVM().setVictim(scriptObject());
+  }
+
+  void Character::useAsOther()
+  {
+    gameWorld()->scriptVM().setOther(scriptObject());
+  }
+
+  void Character::handleUnconsciousness()
+  {
+    // TODO: See how old REGoth implmented checkUnconscious()
+  }
+
   bool Character::checkInfo(bool important)
   {
     return true;
@@ -68,12 +88,45 @@ namespace REGoth
     return true;
   }
 
+  bool Character::isStateDriven()
+  {
+    return scriptObjectData().functionPointerValue("START_AISTATE") != 0;
+  }
+
+  const bs::String& Character::getStartAIState()
+  {
+    bs::UINT32 address = scriptObjectData().functionPointerValue("START_AISTATE");
+
+    Scripting::SymbolIndex symbol = scriptVM().scriptSymbols().findFunctionByAddress(address);
+
+    return scriptVM().scriptSymbols().getSymbolName(symbol);
+  }
+
+  const bs::String& Character::getDailyRoutine()
+  {
+    bs::UINT32 address = scriptObjectData().functionPointerValue("DAILY_ROUTINE");
+
+    Scripting::SymbolIndex symbol = scriptVM().scriptSymbols().findFunctionByAddress(address);
+
+    return scriptVM().scriptSymbols().getSymbolName(symbol);
+  }
+
   void Character::refuseTalk()
   {
   }
 
   void Character::setRefuseTalk(bs::INT32 durationSeconds)
   {
+  }
+
+  void Character::setCurrentWaypoint(const bs::String& waypoint)
+  {
+    scriptObjectData().stringValue("WP") = waypoint;
+  }
+
+  const bs::String& Character::currentWaypoint() const
+  {
+    return scriptObjectData().stringValue("WP");
   }
 
   bs::String Character::getNextWaypoint()
