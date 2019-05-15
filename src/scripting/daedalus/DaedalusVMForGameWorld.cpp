@@ -1,9 +1,10 @@
 #include "DaedalusVMForGameWorld.hpp"
-#include <components/CharacterEventQueue.hpp>
 #include "DaedalusClassVarResolver.hpp"
 #include <RTTI/RTTI_DaedalusVMForGameWorld.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
+#include <components/Item.hpp>
+#include <components/CharacterEventQueue.hpp>
 #include <components/GameClock.hpp>
 #include <components/GameWorld.hpp>
 #include <components/VisualCharacter.hpp>
@@ -17,6 +18,17 @@ namespace REGoth
         : DaedalusVM(datFile)
         , mWorld(gameWorld)
     {
+    }
+
+    void DaedalusVMForGameWorld::fillSymbolStorage()
+    {
+      DaedalusVM::fillSymbolStorage();
+
+      mHeroSymbol  = getInstance("HERO");
+      mSelfSymbol  = getInstance("SELF");
+      mOtherSymbol = getInstance("OTHER");
+      mVictimSymbol = getInstance("VICTIM");
+      mItemSymbol   = getInstance("ITEM");
     }
 
     ScriptObjectHandle DaedalusVMForGameWorld::instanciateClass(const bs::String& className,
@@ -91,12 +103,60 @@ namespace REGoth
 
     void DaedalusVMForGameWorld::setHero(ScriptObjectHandle hero)
     {
-      setInstance("HERO", hero);
+      setInstance(mHeroSymbol, hero);
     }
 
-    ScriptObjectHandle DaedalusVMForGameWorld::getHero()
+    ScriptObjectHandle DaedalusVMForGameWorld::heroInstance()
     {
-      return getInstance("HERO");
+      return getInstance(mHeroSymbol);
+    }
+
+    ScriptObjectHandle DaedalusVMForGameWorld::victimInstance() const
+    {
+      return getInstance(mVictimSymbol);
+    }
+
+    HCharacter DaedalusVMForGameWorld::victim() const
+    {
+      return getInstanceCharacter(mVictimSymbol);
+    }
+
+    ScriptObjectHandle DaedalusVMForGameWorld::itemInstance() const
+    {
+      return getInstance(mItemSymbol);
+    }
+
+    HItem DaedalusVMForGameWorld::item() const
+    {
+      return getInstanceItem(mItemSymbol);
+    }
+
+    ScriptObjectHandle DaedalusVMForGameWorld::otherInstance() const
+    {
+      return getInstance(mOtherSymbol);
+    }
+
+    HCharacter DaedalusVMForGameWorld::other() const
+    {
+      return getInstanceCharacter(mOtherSymbol);
+    }
+
+    ScriptObjectHandle DaedalusVMForGameWorld::selfInstance() const
+    {
+      return getInstance(mSelfSymbol);
+    }
+
+    HCharacter DaedalusVMForGameWorld::self() const
+    {
+      return getInstanceCharacter(mSelfSymbol);
+    }
+
+    void DaedalusVMForGameWorld::setInstance(SymbolIndex instance,
+                                             ScriptObjectHandle scriptObject)
+    {
+      SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instance);
+
+      symbol.instance = scriptObject;
     }
 
     void DaedalusVMForGameWorld::setInstance(const bs::String& instance,
@@ -119,6 +179,78 @@ namespace REGoth
       const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(symbolIndex);
 
       return symbol.instance;
+    }
+
+    HCharacter DaedalusVMForGameWorld::getInstanceCharacter(const bs::String& instance) const
+    {
+      const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instance);
+
+      bs::HSceneObject characterSO = mappingConst().getMappedSceneObject(symbol.instance);
+
+      HCharacter character = characterSO->getComponent<Character>();
+
+      if (!character)
+      {
+        REGOTH_THROW(InvalidParametersException,
+                     "Expected to be passed a Character instance, but the scene object does "
+                     "not have a character-component!");
+      }
+
+      return character;
+    }
+
+    HCharacter DaedalusVMForGameWorld::getInstanceCharacter(SymbolIndex symbolIndex) const
+    {
+      const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(symbolIndex);
+
+      bs::HSceneObject characterSO = mappingConst().getMappedSceneObject(symbol.instance);
+
+      HCharacter character = characterSO->getComponent<Character>();
+
+      if (!character)
+      {
+        REGOTH_THROW(InvalidParametersException,
+                     "Expected to be passed a Character instance, but the scene object does "
+                     "not have a character-component!");
+      }
+
+      return character;
+    }
+
+    HItem DaedalusVMForGameWorld::getInstanceItem(const bs::String& instance) const
+    {
+      const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instance);
+
+      bs::HSceneObject itemSO = mappingConst().getMappedSceneObject(symbol.instance);
+
+      HItem item = itemSO->getComponent<Item>();
+
+      if (!item)
+      {
+        REGOTH_THROW(InvalidParametersException,
+                     "Expected to be passed a Item instance, but the scene object does "
+                     "not have a item-component!");
+      }
+
+      return item;
+    }
+
+    HItem DaedalusVMForGameWorld::getInstanceItem(SymbolIndex symbolIndex) const
+    {
+      const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(symbolIndex);
+
+      bs::HSceneObject itemSO = mappingConst().getMappedSceneObject(symbol.instance);
+
+      HItem item = itemSO->getComponent<Item>();
+
+      if (!item)
+      {
+        REGOTH_THROW(InvalidParametersException,
+                     "Expected to be passed a Item instance, but the scene object does "
+                     "not have a item-component!");
+      }
+
+      return item;
     }
 
     HCharacter DaedalusVMForGameWorld::popCharacterInstance()
@@ -357,7 +489,7 @@ namespace REGoth
     void DaedalusVMForGameWorld::external_AI_GotoWaypoint()
     {
       bs::String waypoint = popStringValue();
-      HCharacter self = popCharacterInstance();
+      HCharacter self     = popCharacterInstance();
 
       auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
 

@@ -45,17 +45,17 @@ namespace REGoth
        *
        * Throws if no such mapping exists.
        */
-      bs::HSceneObject getMappedSceneObject(ScriptObjectHandle scriptObject);
+      bs::HSceneObject getMappedSceneObject(ScriptObjectHandle scriptObject) const;
 
       /**
        * @return Whether the given script object is mapped to a scene object.
        */
-      bool isMappedToSomething(ScriptObjectHandle scriptObject);
+      bool isMappedToSomething(ScriptObjectHandle scriptObject) const;
 
       /**
        * @return Whether the two given objects are mapped to eachother.
        */
-      bool areMapped(ScriptObjectHandle scriptObject, bs::HSceneObject sceneObject);
+      bool areMapped(ScriptObjectHandle scriptObject, bs::HSceneObject sceneObject) const;
 
     private:
       bs::Map<ScriptObjectHandle, bs::HSceneObject> mScriptToSceneObjectMapping;

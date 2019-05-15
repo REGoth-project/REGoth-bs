@@ -5,13 +5,13 @@ namespace REGoth
 {
   namespace Scripting
   {
-    bool ScriptObjectMapping::isMappedToSomething(ScriptObjectHandle scriptObject)
+    bool ScriptObjectMapping::isMappedToSomething(ScriptObjectHandle scriptObject) const
     {
       return mScriptToSceneObjectMapping.find(scriptObject) != mScriptToSceneObjectMapping.end();
     }
 
     bool ScriptObjectMapping::areMapped(ScriptObjectHandle scriptObject,
-                                        bs::HSceneObject sceneObject)
+                                        bs::HSceneObject sceneObject) const
     {
       auto reverseSceneObject = mScriptToSceneObjectMapping.find(scriptObject);
 
@@ -20,7 +20,7 @@ namespace REGoth
       return true;
     }
 
-    bs::HSceneObject ScriptObjectMapping::getMappedSceneObject(ScriptObjectHandle scriptObject)
+    bs::HSceneObject ScriptObjectMapping::getMappedSceneObject(ScriptObjectHandle scriptObject) const
     {
       auto it = mScriptToSceneObjectMapping.find(scriptObject);
 

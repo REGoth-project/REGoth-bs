@@ -20,6 +20,7 @@ namespace REGoth
       // be annoying when we switch to another scripting backend.
       ScriptVMForGameWorld(HGameWorld gameWorld, const Daedalus::DATFile& datFile);
 
+
     protected:
     public:
       REGOTH_DECLARE_RTTI(ScriptVMForGameWorld);

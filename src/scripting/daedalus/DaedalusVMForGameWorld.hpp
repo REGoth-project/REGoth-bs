@@ -12,6 +12,9 @@ namespace REGoth
   class GameWorld;
   using HGameWorld = bs::GameObjectHandle<GameWorld>;
 
+  class Item;
+  using HItem = bs::GameObjectHandle<Item>;
+
   namespace Scripting
   {
     /**
@@ -28,13 +31,37 @@ namespace REGoth
       ScriptObjectHandle instanciateClass(const bs::String& className,
                                           SymbolIndex instanceSymbolIndex,
                                           bs::HSceneObject mappedSceneObject);
-      ScriptObjectHandle instanciateClass(const bs::String& className,
-                                          SymbolInstance& instance,
+      ScriptObjectHandle instanciateClass(const bs::String& className, SymbolInstance& instance,
                                           bs::HSceneObject mappedSceneObject);
 
       void initializeWorld(const bs::String& worldName) override;
-      void setHero(ScriptObjectHandle hero) override;
-      ScriptObjectHandle getHero() override;
+
+      void setHero(ScriptObjectHandle hero);
+      ScriptObjectHandle heroInstance();
+
+      /**
+       * @return The script object in the instance `VICTIM`.
+       */
+      ScriptObjectHandle victimInstance() const;
+      HCharacter victim() const;
+
+      /**
+       * @return The script object in the instance `ITEM`.
+       */
+      ScriptObjectHandle itemInstance() const;
+      HItem item() const;
+
+      /**
+       * @return The script object in the instance `OTHER`.
+       */
+      ScriptObjectHandle otherInstance() const;
+      HCharacter other() const;
+
+      /**
+       * @return The script object in the instance `SELF`.
+       */
+      ScriptObjectHandle selfInstance() const;
+      HCharacter self() const;
 
     protected:
       /**
@@ -55,6 +82,7 @@ namespace REGoth
        * @oaram  scriptObject  Script object to assign.
        */
       void setInstance(const bs::String& instance, ScriptObjectHandle scriptObject);
+      void setInstance(SymbolIndex instance, ScriptObjectHandle scriptObject);
 
       /**
        * Looks up what the given instance has assigned to.
@@ -67,6 +95,20 @@ namespace REGoth
        */
       ScriptObjectHandle getInstance(const bs::String& instance) const;
       ScriptObjectHandle getInstance(SymbolIndex symbolIndex) const;
+
+      /**
+       * Looks up what the given instance has assigned to and casts it to a character.
+       *
+       * Throws if the instance does not exist.
+       *
+       * @param  instance  Instance to query, e.g. `self`.
+       *
+       * @return Handle the instance was set to. Might be invalid!
+       */
+      HCharacter getInstanceCharacter(const bs::String& instance) const;
+      HCharacter getInstanceCharacter(SymbolIndex symbolIndex) const;
+      HItem getInstanceItem(const bs::String& instance) const;
+      HItem getInstanceItem(SymbolIndex symbolIndex) const;
 
       void script_PrintPlus(const bs::String& text);
 
@@ -89,6 +131,7 @@ namespace REGoth
       void external_MDL_SetVisualBody();
       void external_AI_GotoWaypoint();
 
+      void fillSymbolStorage() override;
       void registerAllExternals() override;
 
     protected:
@@ -96,6 +139,13 @@ namespace REGoth
        * Handle to the game world this is used in
        */
       HGameWorld mWorld;
+
+      // Quick access to often used symbols
+      SymbolIndex mHeroSymbol   = SYMBOL_INDEX_INVALID;
+      SymbolIndex mSelfSymbol   = SYMBOL_INDEX_INVALID;
+      SymbolIndex mOtherSymbol  = SYMBOL_INDEX_INVALID;
+      SymbolIndex mVictimSymbol = SYMBOL_INDEX_INVALID;
+      SymbolIndex mItemSymbol   = SYMBOL_INDEX_INVALID;
 
     public:
       REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(DaedalusVMForGameWorld);
