@@ -94,6 +94,19 @@ namespace REGoth
         return mScriptObjectMapping;
       }
 
+      /**
+       * Access to the script symbol storage
+       */
+      ScriptSymbolStorage& scriptSymbols()
+      {
+        return mScriptSymbols;
+      }
+
+      const ScriptSymbolStorage& scriptSymbolsConst() const
+      {
+        return mScriptSymbols;
+      }
+
     protected:
       /**
        * Get a list of all symbols and move them into the symbol storage vector.
