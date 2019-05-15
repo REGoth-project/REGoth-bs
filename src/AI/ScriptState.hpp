@@ -1,6 +1,6 @@
 #pragma once
-#include <RTTI/RTTIUtil.hpp>
 #include <BsCorePrerequisites.h>
+#include <RTTI/RTTIUtil.hpp>
 #include <scripting/ScriptTypes.hpp>
 
 namespace REGoth
@@ -92,7 +92,9 @@ namespace REGoth
       struct AIState;
 
     public:
-      ScriptState(HGameWorld world, HCharacter hostCharacter);
+      ScriptState(::REGoth::HGameWorld world, ::REGoth::HCharacter hostCharacter,
+                  ::REGoth::HCharacterEventQueue hostEventQueue,
+                  ::REGoth::HCharacterAI hostAI);
       ~ScriptState();
 
       /**
@@ -134,7 +136,6 @@ namespace REGoth
        * @param  instruction  Script function to call, e.g. `B_SOMETHING`.
        */
       void runInstruction(const bs::String& instruction);
-
 
       /**
        * To be called after a new AI-state has just been queued. This method will interrupt
@@ -263,7 +264,6 @@ namespace REGoth
       void reinitRoutine();
 
     protected:
-
       /**
        * Quick access to the script VM
        */
@@ -299,17 +299,17 @@ namespace REGoth
         Phase phase = Phase::Uninitialized;
 
         // Whether the script symbols defined above are valid or a native state is set.
-        bool isValid;
+        bool isValid = false;
 
         // Name of the state: ZS_name
         bs::String name;
 
         // How long this is already running
-        float timeRunning;
+        float timeRunning = 0.0;
 
         // User defined index to choose instead of calling a script-function.
         // If this says `ScriptBased`, the symbols defined above are used as state functions.
-        NativeState nativeState;
+        NativeState nativeState = NativeState::ScriptBased;
 
         // Whether this is a state from a daily routine
         bool isRoutineState = false;
@@ -346,7 +346,7 @@ namespace REGoth
       AIState mNextState;
 
       // Index of the last states main-function
-      Scripting::SymbolIndex mLastStateSymIndex;
+      Scripting::SymbolIndex mLastStateSymIndex = Scripting::SYMBOL_INDEX_INVALID;
 
       // World this resides in
       HGameWorld mWorld;
@@ -357,9 +357,9 @@ namespace REGoth
       HCharacterAI mHostAI;
 
       // Other/victim/item set when we started the state
-      Scripting::ScriptObjectHandle mStateOther;
-      Scripting::ScriptObjectHandle mStateVictim;
-      Scripting::ScriptObjectHandle mStateItem;
+      Scripting::ScriptObjectHandle mStateOther = Scripting::SCRIPT_OBJECT_HANDLE_INVALID;
+      Scripting::ScriptObjectHandle mStateVictim = Scripting::SCRIPT_OBJECT_HANDLE_INVALID;
+      Scripting::ScriptObjectHandle mStateItem = Scripting::SCRIPT_OBJECT_HANDLE_INVALID;
 
       struct
       {

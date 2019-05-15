@@ -1,4 +1,5 @@
 #include "CharacterEventQueue.hpp"
+#include <AI/ScriptState.hpp>
 #include <RTTI/RTTI_CharacterEventQueue.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
@@ -13,7 +14,6 @@ namespace REGoth
   CharacterEventQueue::CharacterEventQueue(const bs::HSceneObject& parent, HGameWorld world)
       : EventQueue(parent)
       , mWorld(world)
-      , mPathfinder(bs::bs_shared_ptr_new<AI::Pathfinder>(world->waynet()))
   {
     setName("CharacterEventQueue");
 
@@ -29,10 +29,32 @@ namespace REGoth
     {
       REGOTH_THROW(InvalidStateException, "CharacterAI component expected!");
     }
+
   }
 
   CharacterEventQueue::~CharacterEventQueue()
   {
+  }
+
+  void CharacterEventQueue::onInitialized()
+  {
+    EventQueue::onInitialized();
+
+    // Must create these here as we need the handle to this component, which is
+    // not valid in the constructor. The null-checks are for when we're getting
+    // deserialized.
+
+    if (!mPathfinder)
+    {
+      mPathfinder = bs::bs_shared_ptr_new<AI::Pathfinder>(mWorld->waynet());
+    }
+
+    if (!mScriptState)
+    {
+      HCharacterEventQueue hthis = bs::static_object_cast<CharacterEventQueue>(getHandle());
+
+      mScriptState = bs::bs_shared_ptr_new<AI::ScriptState>(mWorld, mCharacter, hthis, mCharacterAI);
+    }
   }
 
   void CharacterEventQueue::startRouteToPosition(const bs::Vector3& target)
@@ -264,6 +286,8 @@ namespace REGoth
   void CharacterEventQueue::fixedUpdate()
   {
     EventQueue::fixedUpdate();
+
+    mScriptState->doAIState(bs::gTime().getFixedFrameDelta());
   }
 
   SharedEMessage CharacterEventQueue::pushGotoPosition(const bs::Vector3& position)
@@ -284,6 +308,16 @@ namespace REGoth
     msg.targetObject = object;
 
     return onMessage(msg);
+  }
+
+  void CharacterEventQueue::insertRoutineTask(const AI::ScriptState::RoutineTask& task)
+  {
+    mScriptState->insertRoutineTask(task);
+  }
+
+  void CharacterEventQueue::reinitRoutine()
+  {
+    mScriptState->reinitRoutine();
   }
 
   REGOTH_DEFINE_RTTI(CharacterEventQueue)

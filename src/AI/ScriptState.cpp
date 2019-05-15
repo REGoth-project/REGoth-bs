@@ -27,11 +27,13 @@ namespace REGoth
         "INVALID_PRG", "ZS_ANSWER", "ZS_DEAD", "ZS_UNCONSCIOUS", "ZS_FADEAWAY", "ZS_FOLLOW",
     };
 
-    ScriptState::ScriptState(::REGoth::HGameWorld world, ::REGoth::HCharacter hostCharacter)
+    ScriptState::ScriptState(::REGoth::HGameWorld world, ::REGoth::HCharacter hostCharacter,
+                             ::REGoth::HCharacterEventQueue hostEventQueue,
+                             ::REGoth::HCharacterAI hostAI)
         : mWorld(world)
         , mHostCharacter(hostCharacter)
-        , mHostEventQueue(hostCharacter->SO()->getComponent<CharacterEventQueue>())
-        , mHostAI(hostCharacter->SO()->getComponent<CharacterAI>())
+        , mHostEventQueue(hostEventQueue)
+        , mHostAI(hostAI)
     {
     }
 
@@ -199,11 +201,13 @@ namespace REGoth
           for (RoutineTask& e : mRoutine.routine)
           {
             // Don't start the same routine again
-            if (i == mRoutine.activeRoutineIndex) continue;
-            if (!isTimeInTaskRange(e, hour, minute)) continue;
+            if (i != mRoutine.activeRoutineIndex)
+            {
+              if (!isTimeInTaskRange(e, hour, minute)) continue;
 
-            mRoutine.activeRoutineIndex    = i;
-            mRoutine.shouldStartNewRoutine = true;
+              mRoutine.activeRoutineIndex    = i;
+              mRoutine.shouldStartNewRoutine = true;
+            }
 
             i++;
           }
@@ -376,7 +380,7 @@ namespace REGoth
       if (mHostCharacter->isPlayer()) return false;
 
       // Check for death, etc
-      if (mHostCharacter->isReady()) return false;
+      if (!mHostCharacter->isReady()) return false;
 
       const RoutineTask& task = activeTask();
 
@@ -442,7 +446,7 @@ namespace REGoth
 
     void ScriptState::reinitRoutine()
     {
-      const bs::String& routine = mHostCharacter->getDailyRoutine();
+      const bs::String& routine = mHostCharacter->dailyRoutine();
 
       // Clear old routine
       mRoutine.routine.clear();

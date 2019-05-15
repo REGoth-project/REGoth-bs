@@ -1,7 +1,8 @@
 #pragma once
 #include "EventQueue.hpp"
-#include <RTTI/RTTIUtil.hpp>
+#include <AI/ScriptState.hpp>
 #include <AI/Pathfinder.hpp>
+#include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
 {
@@ -20,7 +21,7 @@ namespace REGoth
   namespace AI
   {
     class Pathfinder;
-  }
+  }  // namespace AI
 
   /**
    * Implmementaion of the EventQueue for Character-related messages.
@@ -45,7 +46,20 @@ namespace REGoth
      */
     SharedEMessage pushGotoObject(bs::HSceneObject object);
 
+    /**
+     * Insert a new routine task. See AI::ScriptState::insertRoutineTask().
+     */
+    void insertRoutineTask(const AI::ScriptState::RoutineTask& task);
+
+    /**
+     * Queries the routine supposed to be active from the characters script
+     * object and starts it.
+     */
+    void reinitRoutine();
+
   protected:
+
+    void onInitialized() override;
 
     /**
      * Uses the Pathfinder to start a new route to the given location.
@@ -102,6 +116,7 @@ namespace REGoth
     HCharacterAI mCharacterAI;
     HGameWorld mWorld;
     bs::SPtr<AI::Pathfinder> mPathfinder;
+    bs::SPtr<AI::ScriptState> mScriptState;
 
   public:
     REGOTH_DECLARE_RTTI(CharacterEventQueue)

@@ -43,6 +43,12 @@ namespace REGoth
     // TODO: See how old REGoth implmented checkUnconscious()
   }
 
+  bool Character::isReady()
+  {
+    // TODO: Implement
+    return true;
+  }
+
   bool Character::checkInfo(bool important)
   {
     return true;
@@ -102,13 +108,37 @@ namespace REGoth
     return scriptVM().scriptSymbols().getSymbolName(symbol);
   }
 
-  const bs::String& Character::getDailyRoutine()
+  bs::String Character::dailyRoutine()
   {
     bs::UINT32 address = scriptObjectData().functionPointerValue("DAILY_ROUTINE");
 
     Scripting::SymbolIndex symbol = scriptVM().scriptSymbols().findFunctionByAddress(address);
 
+    if (symbol == Scripting::SYMBOL_INDEX_INVALID)
+    {
+      return "";
+    }
+
     return scriptVM().scriptSymbols().getSymbolName(symbol);
+  }
+
+  void Character::setDailyRoutine(const bs::String& newDailyRoutine)
+  {
+    if (newDailyRoutine.empty())
+    {
+      scriptObjectData().functionPointerValue("DAILY_ROUTINE") = 0;
+    }
+    else
+    {
+      bs::UINT32 id = scriptObjectData().intValue("ID");
+
+      bs::String functionName = "RTN_" + newDailyRoutine + "_" + bs::toString(id);
+
+      const auto& fn =
+          scriptVM().scriptSymbols().getSymbol<Scripting::SymbolScriptFunction>(functionName);
+
+      scriptObjectData().functionPointerValue("DAILY_ROUTINE") = fn.address;
+    }
   }
 
   void Character::refuseTalk()
@@ -178,7 +208,7 @@ namespace REGoth
 
   bool Character::isPlayer()
   {
-    return true;
+    return scriptVM().heroInstance() == scriptObject();
   }
 
   void Character::setToFistMode()

@@ -109,7 +109,8 @@ namespace REGoth
     /**
      * @return Name of the script function to call for the daily routine.
      */
-    const bs::String& getDailyRoutine();
+    bs::String dailyRoutine();
+    void setDailyRoutine(const bs::String& newDailyRoutine);
 
     /**
      * @return If this is a monster, it will not use routines to manage it's actions, but

@@ -1,5 +1,6 @@
 #pragma once
 #include "ScriptBackedBy.hpp"
+#include <AI/ScriptState.hpp>
 #include <BsPrerequisites.h>
 #include <RTTI/RTTIUtil.hpp>
 
@@ -140,6 +141,9 @@ namespace REGoth
     // Visual attached to this character
     HVisualCharacter mVisual;
     bs::HCharacterController mCharacterController;
+
+    // AI-Script state handler
+    bs::SPtr<AI::ScriptState> mScriptState;
 
     enum class TurnDirection
     {
