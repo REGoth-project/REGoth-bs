@@ -15,6 +15,7 @@ namespace REGoth
       BS_BEGIN_RTTI_MEMBERS
       BS_RTTI_MEMBER_PLAIN(mSymbolsByName, 1)
       BS_RTTI_MEMBER_REFLPTR_ARRAY(mStorage, 2)
+      BS_RTTI_MEMBER_PLAIN(mFunctionsByAddress, 3)
       BS_END_RTTI_MEMBERS
 
     public:
