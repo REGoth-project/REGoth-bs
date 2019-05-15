@@ -1,4 +1,5 @@
 #include "ScriptState.hpp"
+#include <RTTI/RTTI_ScriptState.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
 #include <components/CharacterAI.hpp>
@@ -40,15 +41,15 @@ namespace REGoth
 
     void ScriptState::interruptActiveState()
     {
-      m_CurrentState.phase = AIState::Phase::Interrupt;
+      mCurrentState.phase = AIState::Phase::Interrupt;
 
       // Set to invalid so the queued state can take over in the next cycle
-      m_CurrentState.isValid = false;
+      mCurrentState.isValid = false;
 
       // Non-Player Characters can use any state. But the Player character has only
       // a limited subset. It is unclear who would start a state that is invalid on
       // the player however. Also, shouldn't that check be done much earlier?
-      if (!mHostCharacter->isPlayer() || canPlayerUseAIState(m_NextState))
+      if (!mHostCharacter->isPlayer() || canPlayerUseAIState(mNextState))
       {
         // FIXME: I think we need to also kill the active route the character is traveling on
         mHostEventQueue->clear();
@@ -58,7 +59,7 @@ namespace REGoth
     void ScriptState::requestEndActiveState()
     {
       // Let the state exit normally over the next cycles
-      m_CurrentState.phase = AIState::Phase::End;
+      mCurrentState.phase = AIState::Phase::End;
     }
 
     void ScriptState::startNativeAIState(NativeState state)
@@ -66,58 +67,58 @@ namespace REGoth
       bs::UINT32 index = (bs::UINT32)state;
 
       // Save script variables used by the state
-      m_StateOther  = scriptVM().otherInstance();
-      m_StateVictim = scriptVM().victimInstance();
-      m_StateItem   = scriptVM().itemInstance();
+      mStateOther  = scriptVM().otherInstance();
+      mStateVictim = scriptVM().victimInstance();
+      mStateItem   = scriptVM().itemInstance();
 
       // Save name to the main function, to which we can append the tags like _LOOP and _END
-      m_NextState.name        = s_NativeStateNames[index];
-      m_NextState.nativeState = state;
+      mNextState.name        = s_NativeStateNames[index];
+      mNextState.nativeState = state;
 
-      fillStateScriptFunctions(m_NextState);
+      fillStateScriptFunctions(mNextState);
 
       // Native states can never be routine states
-      m_NextState.isRoutineState = false;
+      mNextState.isRoutineState = false;
 
-      m_NextState.isValid = true;
+      mNextState.isValid = true;
     }
 
     void ScriptState::startScriptAIState(const bs::String& state)
     {
       // Save script variables used by the state
-      m_StateOther  = scriptVM().otherInstance();
-      m_StateVictim = scriptVM().victimInstance();
-      m_StateItem   = scriptVM().itemInstance();
+      mStateOther  = scriptVM().otherInstance();
+      mStateVictim = scriptVM().victimInstance();
+      mStateItem   = scriptVM().itemInstance();
 
       // Save name to the main function, to which we can append the tags like _LOOP and _END
-      m_NextState.name        = state;
-      m_NextState.nativeState = NativeState::ScriptBased;
+      mNextState.name        = state;
+      mNextState.nativeState = NativeState::ScriptBased;
 
-      fillStateScriptFunctions(m_NextState);
+      fillStateScriptFunctions(mNextState);
 
       // Script states CAN be routine states, so while this is set to false here, it will
       // be set to true in startRoutineState() which calls this method first
-      m_NextState.isRoutineState = false;
+      mNextState.isRoutineState = false;
 
-      m_NextState.isValid = true;
+      mNextState.isValid = true;
     }
 
     void ScriptState::startRoutineState(const bs::String& state)
     {
       startScriptAIState(state);
 
-      m_NextState.isRoutineState = true;
+      mNextState.isRoutineState = true;
     }
 
     void ScriptState::runInstruction(const bs::String& instruction)
     {
       // Disable routine-flag for this, since scripts could let the npc assess something
-      bool oldIsRoutineState        = m_CurrentState.isRoutineState;
-      m_CurrentState.isRoutineState = false;
+      bool oldIsRoutineState        = mCurrentState.isRoutineState;
+      mCurrentState.isRoutineState = false;
 
       scriptVM().runFunctionOnSelf(instruction, mHostCharacter);
 
-      m_CurrentState.isRoutineState = oldIsRoutineState;
+      mCurrentState.isRoutineState = oldIsRoutineState;
     }
 
     void ScriptState::fillStateScriptFunctions(AIState& state)
@@ -128,25 +129,25 @@ namespace REGoth
       const auto& symbols        = scriptVM().scriptSymbolsConst();
 
       // No check whether this exists here, let getSymbol throw if the main-function does not exist
-      m_NextState.symIndex = symbols.getSymbol<Scripting::SymbolScriptFunction>(state.name).index;
+      mNextState.symIndex = symbols.getSymbol<Scripting::SymbolScriptFunction>(state.name).index;
 
       // End, Loop and Interrupt are optional
       if (symbols.hasSymbolWithName(end))
       {
         const auto& symbol = symbols.getSymbol<Scripting::SymbolScriptFunction>(end);
-        m_NextState.symEnd = symbol.index;
+        mNextState.symEnd = symbol.index;
       }
 
       if (symbols.hasSymbolWithName(loop))
       {
         const auto& symbol  = symbols.getSymbol<Scripting::SymbolScriptFunction>(loop);
-        m_NextState.symLoop = symbol.index;
+        mNextState.symLoop = symbol.index;
       }
 
       if (symbols.hasSymbolWithName(interrupt))
       {
         const auto& symbol       = symbols.getSymbol<Scripting::SymbolScriptFunction>(interrupt);
-        m_NextState.symInterrupt = symbol.index;
+        mNextState.symInterrupt = symbol.index;
       }
     }
 
@@ -180,12 +181,12 @@ namespace REGoth
     bool ScriptState::doAIState(float deltaTime)
     {
       // Increase time this state is already running
-      if (m_CurrentState.isValid && m_CurrentState.phase == AIState::Phase::Loop)
+      if (mCurrentState.isValid && mCurrentState.phase == AIState::Phase::Loop)
       {
-        m_CurrentState.timeRunning += deltaTime;
+        mCurrentState.timeRunning += deltaTime;
       }
 
-      if (m_Routine.hasRoutine && isInRoutine())
+      if (mRoutine.hasRoutine && isInRoutine())
       {
         bs::INT32 hour   = mWorld->gameclock()->getHour();
         bs::INT32 minute = mWorld->gameclock()->getMinute();
@@ -195,14 +196,14 @@ namespace REGoth
           // Find next
           bs::UINT32 i = 0;
 
-          for (RoutineTask& e : m_Routine.routine)
+          for (RoutineTask& e : mRoutine.routine)
           {
             // Don't start the same routine again
-            if (i == m_Routine.activeRoutineIndex) continue;
+            if (i == mRoutine.activeRoutineIndex) continue;
             if (!isTimeInTaskRange(e, hour, minute)) continue;
 
-            m_Routine.activeRoutineIndex    = i;
-            m_Routine.shouldStartNewRoutine = true;
+            mRoutine.activeRoutineIndex    = i;
+            mRoutine.shouldStartNewRoutine = true;
 
             i++;
           }
@@ -215,11 +216,11 @@ namespace REGoth
         bool startNewRoutine = true;
 
         // Start daily routine if wanted
-        if (!m_Routine.shouldStartNewRoutine)
+        if (!mRoutine.shouldStartNewRoutine)
         {
           startNewRoutine = false;
         }
-        else if (!m_Routine.hasRoutine)
+        else if (!mRoutine.hasRoutine)
         {
           startNewRoutine = false;
         }
@@ -237,20 +238,20 @@ namespace REGoth
           startDailyRoutine();
         }
 
-        if (!m_CurrentState.isValid)
+        if (!mCurrentState.isValid)
         {
           // Can we move to the next state?
-          if (m_NextState.isValid)
+          if (mNextState.isValid)
           {
             // Remember the last state we were in
-            m_LastStateSymIndex = m_CurrentState.symIndex;
+            mLastStateSymIndex = mCurrentState.symIndex;
 
             // Move to next state
-            m_CurrentState = m_NextState;
+            mCurrentState = mNextState;
 
-            m_CurrentState.timeRunning = 0.0f;
+            mCurrentState.timeRunning = 0.0f;
 
-            m_NextState.isValid = false;
+            mNextState.isValid = false;
           }
           else
           {
@@ -260,42 +261,42 @@ namespace REGoth
         }
 
         // If this is the player, only allow states the player is allowed to have
-        if (mHostCharacter->isPlayer() && !canPlayerUseAIState(m_CurrentState)) return false;
+        if (mHostCharacter->isPlayer() && !canPlayerUseAIState(mCurrentState)) return false;
 
-        if (m_CurrentState.isValid)
+        if (mCurrentState.isValid)
         {
-          scriptVM().setOther(m_StateOther);
-          scriptVM().setVictim(m_StateVictim);
-          scriptVM().setItem(m_StateItem);
+          scriptVM().setOther(mStateOther);
+          scriptVM().setVictim(mStateVictim);
+          scriptVM().setItem(mStateItem);
 
-          if (m_CurrentState.phase == AIState::Phase::Uninitialized)
+          if (mCurrentState.phase == AIState::Phase::Uninitialized)
           {
             // TODO: Set perception-time to 5000
 
-            if (m_CurrentState.symIndex != Scripting::SYMBOL_INDEX_INVALID)
+            if (mCurrentState.symIndex != Scripting::SYMBOL_INDEX_INVALID)
             {
-              scriptVM().runFunctionOnSelf(m_CurrentState.symIndex, mHostCharacter);
+              scriptVM().runFunctionOnSelf(mCurrentState.symIndex, mHostCharacter);
             }
 
             // Now do the looping function every frame
-            m_CurrentState.phase = AIState::Phase::Loop;
+            mCurrentState.phase = AIState::Phase::Loop;
           }
-          else if (m_CurrentState.phase == AIState::Phase::Loop)
+          else if (mCurrentState.phase == AIState::Phase::Loop)
           {
             bool end = true;
 
             // Call looping-function
-            if (m_CurrentState.symLoop != Scripting::SYMBOL_INDEX_INVALID)
+            if (mCurrentState.symLoop != Scripting::SYMBOL_INDEX_INVALID)
             {
-              end = scriptVM().runStateLoopFunction(m_CurrentState.symLoop, mHostCharacter);
+              end = scriptVM().runStateLoopFunction(mCurrentState.symLoop, mHostCharacter);
             }
 
             // Run a program based state
-            if (m_CurrentState.nativeState != NativeState::ScriptBased)
+            if (mCurrentState.nativeState != NativeState::ScriptBased)
             {
               // Only CheckUnconscious() is called here in the original.
               //  There is also a state for following, but it doesn't do anything here
-              switch (m_CurrentState.nativeState)
+              switch (mCurrentState.nativeState)
               {
                   // case NPC_PRGAISTATE_ANSWER:break;
                   // case NPC_PRGAISTATE_DEAD:break;
@@ -312,20 +313,20 @@ namespace REGoth
             // Check if we're done and remove the state in the next frame
             if (end)
             {
-              m_CurrentState.phase = AIState::Phase::End;
+              mCurrentState.phase = AIState::Phase::End;
             }
           }
-          else if (m_CurrentState.phase == AIState::Phase::End)
+          else if (mCurrentState.phase == AIState::Phase::End)
           {
             // Call end-function
-            if (m_CurrentState.symEnd != Scripting::SYMBOL_INDEX_INVALID)
+            if (mCurrentState.symEnd != Scripting::SYMBOL_INDEX_INVALID)
             {
-              scriptVM().runFunctionOnSelf(m_CurrentState.symEnd, mHostCharacter);
+              scriptVM().runFunctionOnSelf(mCurrentState.symEnd, mHostCharacter);
             }
 
             // Invalidate the state and get it ready for the next one
-            m_CurrentState.phase   = AIState::Phase::Interrupt;
-            m_CurrentState.isValid = false;
+            mCurrentState.phase   = AIState::Phase::Interrupt;
+            mCurrentState.isValid = false;
           }
         }
       }
@@ -339,28 +340,28 @@ namespace REGoth
       if (mHostCharacter->isPlayer()) return true;
 
       // Turn off, so we don't recurse
-      m_Routine.shouldStartNewRoutine = false;
+      mRoutine.shouldStartNewRoutine = false;
 
       // Start new state
       bool wasStarted = activateRoutineState(force);
 
-      m_Routine.shouldStartNewRoutine = !wasStarted;
+      mRoutine.shouldStartNewRoutine = !wasStarted;
 
       return wasStarted;
     }
 
     bool ScriptState::isInRoutine()
     {
-      if (m_CurrentState.isValid)
+      if (mCurrentState.isValid)
       {
-        if (m_CurrentState.isRoutineState)
+        if (mCurrentState.isRoutineState)
         {
           return true;
         }
       }
       else
       {
-        if (!m_NextState.isValid)
+        if (!mNextState.isValid)
         {
           return true;
         }
@@ -379,17 +380,17 @@ namespace REGoth
 
       const RoutineTask& task = activeTask();
 
-      if (m_Routine.hasRoutine)
+      if (mRoutine.hasRoutine)
       {
         // No routine present?
-        if (m_Routine.routine.empty()) return false;
+        if (mRoutine.routine.empty()) return false;
 
         if (!force)
         {
           if (!mHostEventQueue->isEmpty()) return false;  // EM not empty, don't start routine yet!
 
           // Check if the routine is already running
-          if (m_CurrentState.name == task.scriptFunction) return true;
+          if (mCurrentState.name == task.scriptFunction) return true;
 
           if (!isInRoutine()) return false;  // Currently in other state...
         }
@@ -407,12 +408,12 @@ namespace REGoth
         if (force)
         {
           // Make it look like we don't have anything running now
-          m_NextState.isValid    = false;
-          m_CurrentState.isValid = false;
+          mNextState.isValid    = false;
+          mCurrentState.isValid = false;
         }
 
         // Don't make a new state if we already have something running
-        if (m_CurrentState.isValid || m_NextState.isValid) return false;
+        if (mCurrentState.isValid || mNextState.isValid) return false;
 
         startScriptAIState(mHostCharacter->getStartAIState());
         requestEndActiveState();
@@ -426,7 +427,7 @@ namespace REGoth
     void ScriptState::insertRoutineTask(const RoutineTask& task)
     {
       // FIXME: HACK, let the npc teleport to the first entry of the routine
-      if (!m_Routine.hasRoutine)
+      if (!mRoutine.hasRoutine)
       {
         if (!task.waypoint.empty())
         {
@@ -434,9 +435,9 @@ namespace REGoth
         }
       }
 
-      m_Routine.hasRoutine = true;  // At least one routine-target present
+      mRoutine.hasRoutine = true;  // At least one routine-target present
 
-      m_Routine.routine.push_back(task);
+      mRoutine.routine.push_back(task);
     }
 
     void ScriptState::reinitRoutine()
@@ -444,8 +445,8 @@ namespace REGoth
       const bs::String& routine = mHostCharacter->getDailyRoutine();
 
       // Clear old routine
-      m_Routine.routine.clear();
-      m_Routine.activeRoutineIndex = 0;
+      mRoutine.routine.clear();
+      mRoutine.activeRoutineIndex = 0;
 
       if (!routine.empty())
       {
@@ -455,13 +456,13 @@ namespace REGoth
 
     bool ScriptState::isInState(const bs::String& state)
     {
-      if (m_CurrentState.isValid)
+      if (mCurrentState.isValid)
       {
-        if (m_CurrentState.name == state) return true;
+        if (mCurrentState.name == state) return true;
       }
-      else if (m_NextState.isValid)
+      else if (mNextState.isValid)
       {
-        if (m_NextState.name == state) return true;
+        if (mNextState.name == state) return true;
       }
 
       return false;
@@ -469,15 +470,15 @@ namespace REGoth
 
     void ScriptState::clearRoutine()
     {
-      m_Routine.hasRoutine = false;
-      m_Routine.routine.clear();
+      mRoutine.hasRoutine = false;
+      mRoutine.routine.clear();
     }
 
     void ScriptState::setCurrentStateTime(float time)
     {
-      if (m_CurrentState.isValid)
+      if (mCurrentState.isValid)
       {
-        m_CurrentState.timeRunning = time;
+        mCurrentState.timeRunning = time;
       }
     }
 
@@ -488,7 +489,7 @@ namespace REGoth
 
     ScriptState::RoutineTask& ScriptState::activeTask()
     {
-      return m_Routine.routine[m_Routine.activeRoutineIndex];
+      return mRoutine.routine[mRoutine.activeRoutineIndex];
     }
 
     bool ScriptState::isTimeInTaskRange(const RoutineTask& task, bs::INT32 hours, bs::INT32 minutes)
@@ -517,5 +518,9 @@ namespace REGoth
       }
     }
 
+    REGOTH_DEFINE_RTTI(ScriptState)
+
+    using RoutineTask = ScriptState::RoutineTask;
+    REGOTH_DEFINE_RTTI(RoutineTask)
   }  // namespace AI
 }  // namespace REGoth

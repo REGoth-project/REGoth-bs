@@ -59,5 +59,7 @@ namespace REGoth
     TID_REGOTH_MagicMessage                 = 600051,
     TID_REGOTH_MobMessage                   = 600052,
     TID_REGOTH_UseItemMessage               = 600053,
+    TID_REGOTH_ScriptState                  = 600054,
+    TID_REGOTH_RoutineTask                  = 600055,
   };
 }  // namespace REGoth

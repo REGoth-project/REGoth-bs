@@ -1,4 +1,5 @@
 #pragma once
+#include <RTTI/RTTIUtil.hpp>
 #include <BsCorePrerequisites.h>
 #include <scripting/ScriptTypes.hpp>
 
@@ -85,7 +86,7 @@ namespace REGoth
      * That script function might queue some event-messages like "Go to waypoint X",
      * then "Start cooking", then "Go to Waypoint Y".
      */
-    class ScriptState
+    class ScriptState : public bs::IReflectable
     {
     protected:
       struct AIState;
@@ -164,7 +165,7 @@ namespace REGoth
        */
       Scripting::SymbolIndex getLastState()
       {
-        return m_LastStateSymIndex;
+        return mLastStateSymIndex;
       }
       /**
        * Checks whether the PLAYER going to the given state would be valid at this time
@@ -178,7 +179,7 @@ namespace REGoth
        */
       bool isStateActive()
       {
-        return m_CurrentState.isValid;
+        return mCurrentState.isValid;
       }
       /**
        * Performs the actions needed for the current frame and the current state. Advances to the
@@ -221,7 +222,7 @@ namespace REGoth
        */
       bool activateRoutineState(bool force);
 
-      struct RoutineTask
+      struct RoutineTask : public IReflectable
       {
         bs::INT32 hoursStart;
         bs::INT32 minutesStart;
@@ -229,6 +230,8 @@ namespace REGoth
         bs::INT32 minutesEnd;
         bs::String scriptFunction;
         bs::String waypoint;
+
+        REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(RoutineTask);
       };
 
       /**
@@ -243,7 +246,7 @@ namespace REGoth
        */
       float getCurrentStateRunningTime()
       {
-        return m_CurrentState.isValid ? m_CurrentState.timeRunning : 0.0f;
+        return mCurrentState.isValid ? mCurrentState.timeRunning : 0.0f;
       }
 
       /**
@@ -337,13 +340,13 @@ namespace REGoth
       RoutineTask& activeTask();
 
       // Currently executed AI-state
-      AIState m_CurrentState;
+      AIState mCurrentState;
 
       // Next AI-state in queue
-      AIState m_NextState;
+      AIState mNextState;
 
       // Index of the last states main-function
-      Scripting::SymbolIndex m_LastStateSymIndex;
+      Scripting::SymbolIndex mLastStateSymIndex;
 
       // World this resides in
       HGameWorld mWorld;
@@ -354,9 +357,9 @@ namespace REGoth
       HCharacterAI mHostAI;
 
       // Other/victim/item set when we started the state
-      Scripting::ScriptObjectHandle m_StateOther;
-      Scripting::ScriptObjectHandle m_StateVictim;
-      Scripting::ScriptObjectHandle m_StateItem;
+      Scripting::ScriptObjectHandle mStateOther;
+      Scripting::ScriptObjectHandle mStateVictim;
+      Scripting::ScriptObjectHandle mStateItem;
 
       struct
       {
@@ -371,7 +374,13 @@ namespace REGoth
 
         // Whether any routine has been registered yet
         bool hasRoutine = false;
-      } m_Routine;
+      } mRoutine;
+
+    public:
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(ScriptState);
+
+    protected:
+      ScriptState() = default;  // For RTTI
     };
   }  // namespace AI
 }  // namespace REGoth
