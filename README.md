@@ -1,7 +1,7 @@
 [![Built with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg)](http://spacemacs.org)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/REGoth/Lobby)
 
-![Logo](https://files.gitter.im/REGoth/Lobby/HjP3/immagine.png)  
+![Logo](https://files.gitter.im/REGoth/Lobby/XIq5/immagine.png)  
 *(Preliminary Logo - We all suck at art)*
 
 
