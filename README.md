@@ -1,8 +1,9 @@
 [![Built with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg)](http://spacemacs.org)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/REGoth/Lobby)
 
-![Logo](https://files.gitter.im/REGoth/Lobby/XIq5/immagine.png)  
-*(Preliminary Logo - We all suck at art)*
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/11406580/57923271-1d1d3800-78a2-11e9-9750-cf814302edcc.png" />
+</p>
 
 
 OpenSource-Reimplementation of the zEngine, used by the game "Gothic" and "Gothic II".
@@ -75,3 +76,8 @@ cmake --build . --target REGoth_docs
 
 This will generate the documentation as HTML into `build/docs-source/html`. 
 To update Github-pages, copy the contents of that directory into the `docs` directory at the repository root.
+
+
+# Special Thanks
+
+ - @truepaddii for creating REGoth's logo!
