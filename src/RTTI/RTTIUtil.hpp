@@ -42,7 +42,7 @@
   friend class bs::SceneObject;             \
   friend class RTTI_##classname;            \
   static bs::RTTITypeBase* getRTTIStatic(); \
-  decltype(classname::getRTTIStatic()) getRTTI() const override;
+  virtual decltype(classname::getRTTIStatic()) getRTTI() const override;
 
 /**
  * See REGOTH_DECLARE_RTTI. This is a special version for IReflectables,

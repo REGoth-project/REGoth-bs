@@ -9,7 +9,7 @@ namespace REGoth
       : public bs::RTTIType<VisualStaticMesh, bs::Component, RTTI_VisualStaticMesh>
   {
     BS_BEGIN_RTTI_MEMBERS
-    BS_RTTI_MEMBER_REFL(mRenderable, 0)
+    BS_RTTI_MEMBER_REFL(mVisual, 0)
     BS_END_RTTI_MEMBERS
 
   public:

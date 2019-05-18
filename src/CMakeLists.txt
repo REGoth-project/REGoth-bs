@@ -33,6 +33,8 @@ add_library(REGothEngine
   components/ScriptBackedBy.cpp
   components/GameWorld.hpp
   components/GameWorld.cpp
+  components/MeshVisual.hpp
+  components/MeshVisual.cpp
   components/NeedsGameWorld.hpp
   components/NeedsGameWorld.cpp
   components/Visual.hpp
@@ -116,14 +118,21 @@ add_library(REGothEngine
   gui/skin_gothic.cpp
   world/internals/ImportSingleVob.hpp
   world/internals/ImportSingleVob.cpp
+  visual/MaterialModifier.hpp
+  visual/MaterialModifier.cpp
+  visual/GenericMaterialModifier.hpp
+  visual/GenericMaterialModifier.cpp
   RTTI/RTTI_CharacterAI.hpp
   RTTI/RTTI_Character.hpp
   RTTI/RTTI_CharacterKeyboardInput.hpp
+  RTTI/RTTI_GenericMaterialModifier.hpp
+  RTTI/RTTI_MaterialModifier.hpp
   RTTI/RTTI_ScriptBackedBy.hpp
   RTTI/RTTI_ScriptObject.hpp
   RTTI/RTTI_ScriptObjectStorage.hpp
   RTTI/RTTI_TypeIDs.hpp
   RTTI/RTTIUtil.hpp
+  RTTI/RTTI_MeshVisual.hpp
   RTTI/RTTI_VisualCharacter.hpp
   RTTI/RTTI_VisualStaticMesh.hpp
   RTTI/RTTI_VisualInteractiveObject.hpp

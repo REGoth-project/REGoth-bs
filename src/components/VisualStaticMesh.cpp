@@ -5,13 +5,22 @@
 #include <Scene/BsSceneObject.h>
 #include <original-content/VirtualFileSystem.hpp>
 #include <RTTI/RTTI_VisualStaticMesh.hpp>
+#include <components/MeshVisual.hpp>
+#include <components/Visual.hpp>
 
 namespace REGoth
 {
   VisualStaticMesh::VisualStaticMesh(const bs::HSceneObject& parent)
       : bs::Component(parent)
   {
-    mRenderable = createRenderable();
+  }
+
+  void VisualStaticMesh::onInitialized()
+  {
+    if (mVisual.isDestroyed())
+    {
+      mVisual = createRenderable();
+    }
   }
 
   void VisualStaticMesh::setMesh(const bs::String& originalMeshFileName)
@@ -34,11 +43,11 @@ namespace REGoth
       return;
     }
 
-    mRenderable->setMesh(mesh->getMesh());
-    mRenderable->setMaterials(mesh->getMaterials());
+    mVisual->setMesh(mesh->getMesh());
+    mVisual->setMaterials(mesh->getMaterials());
   }
 
-  bs::HRenderable VisualStaticMesh::createRenderable()
+  HMeshVisual VisualStaticMesh::createRenderable()
   {
     using namespace bs;
     if (hasRenderableComponent())
@@ -46,12 +55,12 @@ namespace REGoth
       BS_EXCEPT(InvalidStateException, "Scene object should not already have a CRenderable!");
     }
 
-    return SO()->addComponent<bs::CRenderable>();
+    return SO()->addComponent<MeshVisual>();
   }
 
   bool VisualStaticMesh::hasRenderableComponent()
   {
-    return SO()->getComponent<bs::CRenderable>() != nullptr;
+    return SO()->getComponent<MeshVisual>() != nullptr;
   }
 
   REGOTH_DEFINE_RTTI(VisualStaticMesh);

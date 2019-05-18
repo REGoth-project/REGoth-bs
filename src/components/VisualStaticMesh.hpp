@@ -10,6 +10,9 @@
 
 namespace REGoth
 {
+  class MeshVisual;
+  using HMeshVisual = bs::GameObjectHandle<MeshVisual>;
+
   /**
    * Component for loading and rendering a static mesh (Decoration, Items).
    *
@@ -20,6 +23,8 @@ namespace REGoth
   {
   public:
     VisualStaticMesh(const bs::HSceneObject& parent);
+
+    virtual void onInitialized() override;
 
     /**
      * Set which mesh this component should display.
@@ -34,7 +39,7 @@ namespace REGoth
     /**
      * Creates the renderable on the scene object
      */
-    bs::HRenderable createRenderable();
+    HMeshVisual createRenderable();
 
     /**
      * @return Whether there is a renderable component attached to
@@ -47,7 +52,7 @@ namespace REGoth
     /**
      * Renderable this is setting up for drawing
      */
-    bs::HRenderable mRenderable;
+    HMeshVisual mVisual;
 
   public:
     REGOTH_DECLARE_RTTI(VisualStaticMesh)

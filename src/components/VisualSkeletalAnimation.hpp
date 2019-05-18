@@ -14,6 +14,9 @@ namespace REGoth
   class NodeVisuals;
   using HNodeVisuals = bs::GameObjectHandle<NodeVisuals>;
 
+  class MeshVisual;
+  using HMeshVisual = bs::GameObjectHandle<MeshVisual>;
+
   /**
    * Component for rendering an object animated using skeletal animation (Player, NPC, Monster).
    *
@@ -285,7 +288,7 @@ namespace REGoth
     // Object Sub Tree --------------------------------------------------------
     bs::Vector<bs::HSceneObject> mSubObjects; /**< All created sub-objects by this component */
 
-    bs::HRenderable mSubRenderable; /**< The Renderable created inside a sub object */
+    HMeshVisual mSubRenderable;     /**< The Renderable created inside a sub object */
     bs::HAnimation mSubAnimation;   /**< The Animation-Component created inside a sub object */
     HNodeVisuals mSubNodeVisuals;   /**< The NodeVisuals-Component created inside a sub object */
 

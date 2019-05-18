@@ -62,5 +62,8 @@ namespace REGoth
     TID_REGOTH_ScriptState                  = 600054,
     TID_REGOTH_RoutineTask                  = 600055,
     TID_REGOTH_Freepoint                    = 600056,
+    TID_REGOTH_MeshVisual                   = 600057,
+    TID_REGOTH_MaterialModifier             = 600058,
+    TID_REGOTH_GenericMaterialModifierVec3  = 600059,
   };
 }  // namespace REGoth

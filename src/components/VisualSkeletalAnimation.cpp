@@ -14,6 +14,7 @@
 #include <animation/StateNaming.hpp>
 #include <components/NodeVisuals.hpp>
 #include <exception/Throw.hpp>
+#include <components/MeshVisual.hpp>
 
 namespace REGoth
 {
@@ -151,7 +152,7 @@ namespace REGoth
 
   bs::Bounds VisualSkeletalAnimation::getBounds() const
   {
-    return mSubRenderable ? mSubRenderable->getBounds() : bs::Bounds();
+    return mSubRenderable ? mSubRenderable->renderable()->getBounds() : bs::Bounds();
   }
 
   bool VisualSkeletalAnimation::isMeshRegisteredInModelScript(BsZenLib::Res::HMeshWithMaterials mesh)
@@ -195,7 +196,7 @@ namespace REGoth
                                               bs::Radian(0));
     renderSO->getParent()->rotate(rotate90Y);
 
-    mSubRenderable  = renderSO->addComponent<bs::CRenderable>();
+    mSubRenderable  = renderSO->addComponent<MeshVisual>();
     mSubAnimation   = renderSO->addComponent<bs::CAnimation>();
     mSubNodeVisuals = renderSO->addComponent<NodeVisuals>();
   }

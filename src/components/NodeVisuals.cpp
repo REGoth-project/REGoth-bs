@@ -5,6 +5,7 @@
 #include <Mesh/BsMesh.h>
 #include <RTTI/RTTI_NodeVisuals.hpp>
 #include <Scene/BsSceneObject.h>
+#include <components/MeshVisual.hpp>
 #include <components/Visual.hpp>
 #include <components/VisualStaticMesh.hpp>
 
@@ -74,7 +75,7 @@ namespace REGoth
     bs::HBone bone = boneSO->addComponent<bs::CBone>();
     bone->setBoneName(node);
 
-    bs::HRenderable renderable = boneSO->addComponent<bs::CRenderable>();
+    HMeshVisual renderable = boneSO->addComponent<MeshVisual>();
     renderable->setMesh(mesh->getMesh());
     renderable->setMaterials(mesh->getMaterials());
   }
@@ -91,13 +92,13 @@ namespace REGoth
 
   bs::SPtr<bs::Skeleton> NodeVisuals::getSkeleton() const
   {
-    bs::HRenderable renderable = SO()->getComponent<bs::CRenderable>();
+    HMeshVisual renderable = SO()->getComponent<MeshVisual>();
 
     if (!renderable) return nullptr;
 
-    if (!renderable->getMesh()) return nullptr;
+    if (!renderable->renderable()->getMesh()) return nullptr;
 
-    return renderable->getMesh()->getSkeleton();
+    return renderable->renderable()->getMesh()->getSkeleton();
   }
 
   REGOTH_DEFINE_RTTI(NodeVisuals)
