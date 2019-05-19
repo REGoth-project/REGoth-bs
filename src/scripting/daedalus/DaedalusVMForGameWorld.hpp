@@ -151,6 +151,8 @@ namespace REGoth
       void external_HLP_IsValidNpc();
       void external_HLP_IsValidItem();
       void external_IntToString();
+      void external_IntToFloat();
+      void external_FloatToInt();
       void external_ConcatStrings();
       void external_WLD_InsertItem();
       void external_WLD_InsertNpc();

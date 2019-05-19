@@ -259,7 +259,10 @@ namespace REGoth
         break;
 
         case Daedalus::EParOp_AssignFloat:
-          popFloatReference() = popFloatValue();
+          {
+            auto& ref = popFloatReference();
+            ref = popFloatValue();
+          }
           break;
 
         case Daedalus::EParOp_AssignInstance:
@@ -493,7 +496,7 @@ namespace REGoth
 
     float& DaedalusVM::popFloatReference()
     {
-      DaedalusStack::StackVariableValue var = mStack.popStringVariable();
+      DaedalusStack::StackVariableValue var = mStack.popFloatVariable();
 
       SymbolBase& symbol = mScriptSymbols.getSymbolBase(var.symbol);
 

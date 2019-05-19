@@ -370,6 +370,8 @@ namespace REGoth
       registerExternal("HLP_ISVALIDNPC", (externalCallback)&This::external_HLP_IsValidNpc);
       registerExternal("HLP_ISVALIDITEM", (externalCallback)&This::external_HLP_IsValidItem);
       registerExternal("INTTOSTRING", (externalCallback)&This::external_IntToString);
+      registerExternal("INTTOFLOAT", (externalCallback)&This::external_IntToFloat);
+      registerExternal("FLOATTOINT", (externalCallback)&This::external_FloatToInt);
       registerExternal("NPC_ISPLAYER", (externalCallback)&This::external_NPC_IsPlayer);
       registerExternal("WLD_INSERTNPC", (externalCallback)&This::external_WLD_InsertNpc);
       registerExternal("CONCATSTRINGS", (externalCallback)&This::external_ConcatStrings);
@@ -421,7 +423,17 @@ namespace REGoth
 
     void DaedalusVMForGameWorld::external_IntToString()
     {
-      mStack.pushString(bs::toString(popIntValue()));
+     mStack.pushString(bs::toString(popIntValue()));
+    }
+
+    void DaedalusVMForGameWorld::external_IntToFloat()
+    {
+      mStack.pushFloat((float)popIntValue());
+    }
+
+    void DaedalusVMForGameWorld::external_FloatToInt()
+    {
+      mStack.pushInt((bs::INT32)popFloatValue());
     }
 
     void DaedalusVMForGameWorld::external_ConcatStrings()

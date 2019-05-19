@@ -122,7 +122,7 @@ namespace REGoth
         return 0;
       }
 
-      if (isTopOfStringStackVariable())
+      if (isTopOfFloatStackVariable())
       {
         REGOTH_THROW(
             InvalidParametersException,
