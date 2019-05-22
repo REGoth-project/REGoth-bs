@@ -287,7 +287,10 @@ namespace REGoth
   {
     EventQueue::fixedUpdate();
 
-    mScriptState->doAIState(bs::gTime().getFixedFrameDelta());
+    if (mCharacterAI->isPhysicsActive())
+    {
+      mScriptState->doAIState(bs::gTime().getFixedFrameDelta());
+    }
   }
 
   SharedEMessage CharacterEventQueue::pushGotoPosition(const bs::Vector3& position)

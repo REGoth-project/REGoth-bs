@@ -34,6 +34,11 @@ namespace REGoth
     void activatePhysics();
 
     /**
+     * Whether Physics is active for this character.
+     */
+    bool isPhysicsActive() const;
+
+    /**
      * Virtual input to the character. Calling these functions is equivalent to
      * holding down a button on the keyboard. If `goForward` is called, the Character
      * will try to move forward for as long as no other movement-function is called.
@@ -130,6 +135,33 @@ namespace REGoth
     void processInfos();
 
   private:
+    /**
+     * Checks whether the character is so far away from the player that it should
+     * deactivate physics to save some performance. Note that there exists another
+     * method for checking whether to *activate* physics again. If the character
+     * stands between the distances required for both these methods, both will
+     * return false.
+     *
+     * See https://regoth-project.github.io/REGoth-bs/content/characters.html
+     */
+    bool shouldDisablePhysics() const;
+
+    /**
+     * Checks whether the character is so close to the player that it should
+     * wake up and activate physics. Note that there exists another
+     * method for checking whether to *deactivate* physics. If the character
+     * stands between the distances required for both these methods, both will
+     * return false.
+     *
+     * See https://regoth-project.github.io/REGoth-bs/content/characters.html
+     */
+    bool shouldEnablePhysics() const;
+
+    /**
+     * Activates, deactivates or keeps the current state of whether the physics
+     * of this character are enabled. To be called every couple frames.
+     */
+    void handlePhysicsActivation();
 
     /**
      * Applies the currently set turning parameters to the character.

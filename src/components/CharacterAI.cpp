@@ -1,6 +1,8 @@
 #include "CharacterAI.hpp"
+#include <Components/BsCCamera.h>
 #include <Components/BsCCharacterController.h>
 #include <RTTI/RTTI_CharacterAI.hpp>
+#include <Scene/BsSceneManager.h>
 #include <Scene/BsSceneObject.h>
 #include <animation/StateNaming.hpp>
 #include <components/VisualCharacter.hpp>
@@ -13,6 +15,18 @@ namespace REGoth
 
   /** Multiplicator of how fast the character can turn while holding a weapon. */
   constexpr float TURN_SPEED_MULTIPLICATOR_WITH_WEAPON = 2.0f;
+
+  /**
+   * How far away the character can be from the camera until it should disable physics.
+   * Must be larger than the range which activates physics again, ACTIVATE_PHYSICS_RANGE_METERS.
+   * See https://regoth-project.github.io/REGoth-bs/content/characters.html
+   *
+   * TODO: Make this configurable.
+   */
+  constexpr float DEACTIVATE_PHYSICS_RANGE_METERS = 45.0;
+
+  /** See DEACTIVATE_PHYSICS_RANGE_METERS */
+  constexpr float ACTIVATE_PHYSICS_RANGE_METERS = 40.0;
 
   CharacterAI::CharacterAI(const bs::HSceneObject& parent)
       : bs::Component(parent)
@@ -46,6 +60,51 @@ namespace REGoth
   void CharacterAI::activatePhysics()
   {
     mIsPhysicsActive = true;
+  }
+
+  bool CharacterAI::shouldDisablePhysics() const
+  {
+    const auto& mainCamera     = bs::gSceneManager().getMainCamera();
+    const auto& cameraPosition = mainCamera->getTransform().pos();
+    const auto& soPosition     = SO()->getTransform().pos();
+
+    float maxRangeSq = DEACTIVATE_PHYSICS_RANGE_METERS * DEACTIVATE_PHYSICS_RANGE_METERS;
+
+    return cameraPosition.squaredDistance(soPosition) > maxRangeSq;
+  }
+
+  bool CharacterAI::shouldEnablePhysics() const
+  {
+    const auto& mainCamera     = bs::gSceneManager().getMainCamera();
+    const auto& cameraPosition = mainCamera->getTransform().pos();
+    const auto& soPosition     = SO()->getTransform().pos();
+
+    float minRangeSq = ACTIVATE_PHYSICS_RANGE_METERS * ACTIVATE_PHYSICS_RANGE_METERS;
+
+    return cameraPosition.squaredDistance(soPosition) < minRangeSq;
+  }
+
+  bool CharacterAI::isPhysicsActive() const
+  {
+    return mIsPhysicsActive;
+  }
+
+  void CharacterAI::handlePhysicsActivation()
+  {
+    if (mIsPhysicsActive)
+    {
+      if (shouldDisablePhysics())
+      {
+        deactivatePhysics();
+      }
+    }
+    else
+    {
+      if (shouldEnablePhysics())
+      {
+        activatePhysics();
+      }
+    }
   }
 
   bool CharacterAI::goForward()
@@ -161,9 +220,10 @@ namespace REGoth
 
   void CharacterAI::fixedUpdate()
   {
+    handlePhysicsActivation();
+
     if (!mIsPhysicsActive)
     {
-      // Skip all movement and physics calculations to save processing time.
       return;
     }
 
