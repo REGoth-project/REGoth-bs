@@ -9,6 +9,9 @@ namespace REGoth
   class VisualCharacter;
   using HVisualCharacter = bs::GameObjectHandle<VisualCharacter>;
 
+  class GameWorld;
+  using HGameWorld = bs::GameObjectHandle<GameWorld>;
+
   /**
    * Character AI. Implements most of the `AI_*` externals.
    * Needs to be attached to a scene-object which also has s `Character`-Component.
@@ -16,7 +19,7 @@ namespace REGoth
   class CharacterAI : public bs::Component
   {
   public:
-    CharacterAI(const bs::HSceneObject& parent);
+    CharacterAI(const bs::HSceneObject& parent, HGameWorld world);
 
     /**
      * Puts the characters physics to sleep which saves processing time.
@@ -172,6 +175,7 @@ namespace REGoth
 
     // Visual attached to this character
     HVisualCharacter mVisual;
+    HGameWorld mWorld;
     bs::HCharacterController mCharacterController;
 
     // AI-Script state handler

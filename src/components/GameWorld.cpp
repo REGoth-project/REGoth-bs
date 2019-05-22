@@ -118,7 +118,7 @@ namespace REGoth
     controller->setRadius(0.35f);
     controller->setHeight(0.5f);
 
-    auto ai = characterSO->addComponent<CharacterAI>();
+    auto ai = characterSO->addComponent<CharacterAI>(thisWorld);
 
     // All script-inserted characters will be disabled right after inserting them so they
     // don't cause the game to slow down. If they are all active, physics will be calculated

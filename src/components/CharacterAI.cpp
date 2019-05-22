@@ -5,6 +5,7 @@
 #include <Scene/BsSceneManager.h>
 #include <Scene/BsSceneObject.h>
 #include <animation/StateNaming.hpp>
+#include <components/GameWorld.hpp>
 #include <components/VisualCharacter.hpp>
 #include <exception/Throw.hpp>
 
@@ -28,8 +29,9 @@ namespace REGoth
   /** See DEACTIVATE_PHYSICS_RANGE_METERS */
   constexpr float ACTIVATE_PHYSICS_RANGE_METERS = 40.0;
 
-  CharacterAI::CharacterAI(const bs::HSceneObject& parent)
+  CharacterAI::CharacterAI(const bs::HSceneObject& parent, HGameWorld world)
       : bs::Component(parent)
+      , mWorld(world)
   {
     mVisual = SO()->getComponent<VisualCharacter>();
 
@@ -276,6 +278,26 @@ namespace REGoth
 
   void CharacterAI::teleport(const bs::String& waypoint)
   {
+    bs::HSceneObject so = mWorld->SO()->findChild(waypoint);
+
+    if (!so)
+    {
+      // Usually we would throw here, but Gothic has some invalid waypoints inside it's scripts
+      // so we would break the original games if we did that. Resort to a warning for those,
+      // better than nothing, I guess.
+      bs::gDebug().logWarning("[CharacterAI] Teleport failed, waypoint doesn't exist: " + waypoint);
+      return;
+    }
+
+    SO()->setPosition(so->getTransform().pos());
+
+    // Turn the same way the waypoint is oriented, but have the character keep looking forward
+    bs::Vector3 forwardCenterd = so->getTransform().getForward();
+
+    forwardCenterd.y = 0;
+    forwardCenterd.normalize();
+
+    SO()->setForward(forwardCenterd);
   }
 
   void CharacterAI::turnToNPC(bs::HSceneObject targetSO)
