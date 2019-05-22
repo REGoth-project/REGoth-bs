@@ -11,6 +11,7 @@
 
 <p align="center">
   <img src="https://www.mobygames.com/images/promo/l/30647-gothic-screenshot.jpg" />
+  <p align="center"><em>(Official Gothic promotional Image)</em></p>
 </p>
 
 
