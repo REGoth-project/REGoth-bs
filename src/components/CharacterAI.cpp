@@ -220,6 +220,11 @@ namespace REGoth
     return (SO()->getTransform().pos() - position).length() < 0.5f;
   }
 
+  void CharacterAI::fastMove(float factor)
+  {
+    mVisual->setDebugAnimationSpeedFactor(factor);
+  }
+
   void CharacterAI::fixedUpdate()
   {
     handlePhysicsActivation();

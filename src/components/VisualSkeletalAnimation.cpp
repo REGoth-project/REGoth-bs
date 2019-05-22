@@ -192,7 +192,7 @@ namespace REGoth
 
     // For some weird reason, the rotations don't match with the root motion.
     // Work around that here...
-    bs::Quaternion rotate90Y = bs::Quaternion(bs::Radian(0),               // .
+    bs::Quaternion rotate90Y = bs::Quaternion(bs::Radian(0),                // .
                                               bs::Radian(bs::Degree(-90)),  // .
                                               bs::Radian(0));
     renderSO->getParent()->rotate(rotate90Y);
@@ -208,7 +208,7 @@ namespace REGoth
     // rotate objects which have an animation component, but only their parents.
     // We need to fix the weird rotation-bug however, so we put one more sub-object we
     // can rotate in between.
-    bs::HSceneObject subSO = bs::SceneObject::create(name);
+    bs::HSceneObject subSO    = bs::SceneObject::create(name);
     bs::HSceneObject subsubSO = bs::SceneObject::create(name);
 
     bool dontKeepWorldTransform = false;
@@ -504,6 +504,15 @@ namespace REGoth
     {
       mSubNodeVisuals->attachMeshToNode(attachment.first, attachment.second);
     }
+  }
+
+  void VisualSkeletalAnimation::setDebugAnimationSpeedFactor(float factor)
+  {
+    if (mSubAnimation)
+    {
+      mSubAnimation->setSpeed(factor);
+    }
+
   }
 
   REGOTH_DEFINE_RTTI(VisualSkeletalAnimation)

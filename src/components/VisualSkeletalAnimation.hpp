@@ -154,6 +154,12 @@ namespace REGoth
      */
     bool isPlayingAnimationInterruptable() const;
 
+    /**
+     * This is only for debugging, don't expect this to be saved with a savegame!
+     * Sets the animation speed factor, e.g. for fast running.
+     */
+    void setDebugAnimationSpeedFactor(float factor);
+
   protected:
 
     void onInitialized() override;

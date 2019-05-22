@@ -114,6 +114,12 @@ namespace REGoth
      */
     bool isAtPosition(const bs::Vector3& position);
 
+    /**
+     * Debug routine to make animations play faster, which also makes movement
+     * faster.
+     */
+    void fastMove(float factor);
+
     // Component -----------------------------------------------------------------------------------
 
     void fixedUpdate() override;
