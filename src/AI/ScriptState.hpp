@@ -192,6 +192,13 @@ namespace REGoth
       bool doAIState(float deltaTime);
 
       /**
+       * Lighter method to process the script state for this character to be used when the
+       * character is out of range. In general, this will only roughly set the characters
+       * position based on the currently active routine task.
+       */
+      void doAIStateDuringShrink();
+
+      /**
        * Starts the routine-state set for this NPC
        * @return Whether the state could be started
        */
@@ -331,6 +338,14 @@ namespace REGoth
        *         the given task.
        */
       static bool isTimeInTaskRange(const RoutineTask& task, bs::INT32 hours, bs::INT32 minutes);
+
+      /**
+       * Given a character which is currently doing its daily routine, with the game world
+       * time being out of range from the active task, this method will figure out the
+       * task which should be executed now. If the task was changed,
+       * `mRoutine.shouldStartNewRoutine` will be set to true.
+       */
+      void startNewRoutineTaskMatchingTime();
 
       /**
        * @return The currently active routine task.

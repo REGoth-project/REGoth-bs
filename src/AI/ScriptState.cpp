@@ -115,7 +115,7 @@ namespace REGoth
     void ScriptState::runInstruction(const bs::String& instruction)
     {
       // Disable routine-flag for this, since scripts could let the npc assess something
-      bool oldIsRoutineState        = mCurrentState.isRoutineState;
+      bool oldIsRoutineState       = mCurrentState.isRoutineState;
       mCurrentState.isRoutineState = false;
 
       scriptVM().runFunctionOnSelf(instruction, mHostCharacter);
@@ -137,18 +137,18 @@ namespace REGoth
       if (symbols.hasSymbolWithName(end))
       {
         const auto& symbol = symbols.getSymbol<Scripting::SymbolScriptFunction>(end);
-        mNextState.symEnd = symbol.index;
+        mNextState.symEnd  = symbol.index;
       }
 
       if (symbols.hasSymbolWithName(loop))
       {
-        const auto& symbol  = symbols.getSymbol<Scripting::SymbolScriptFunction>(loop);
+        const auto& symbol = symbols.getSymbol<Scripting::SymbolScriptFunction>(loop);
         mNextState.symLoop = symbol.index;
       }
 
       if (symbols.hasSymbolWithName(interrupt))
       {
-        const auto& symbol       = symbols.getSymbol<Scripting::SymbolScriptFunction>(interrupt);
+        const auto& symbol      = symbols.getSymbol<Scripting::SymbolScriptFunction>(interrupt);
         mNextState.symInterrupt = symbol.index;
       }
     }
@@ -188,29 +188,14 @@ namespace REGoth
         mCurrentState.timeRunning += deltaTime;
       }
 
-      if (mRoutine.hasRoutine && isInRoutine())
+      if (isInRoutine())
       {
         bs::INT32 hour   = mWorld->gameclock()->getHour();
         bs::INT32 minute = mWorld->gameclock()->getMinute();
 
         if (!isTimeInTaskRange(activeTask(), hour, minute))
         {
-          // Find next
-          bs::UINT32 i = 0;
-
-          for (RoutineTask& e : mRoutine.routine)
-          {
-            // Don't start the same routine again
-            if (i != mRoutine.activeRoutineIndex)
-            {
-              if (!isTimeInTaskRange(e, hour, minute)) continue;
-
-              mRoutine.activeRoutineIndex    = i;
-              mRoutine.shouldStartNewRoutine = true;
-            }
-
-            i++;
-          }
+          startNewRoutineTaskMatchingTime();
         }
       }
 
@@ -338,6 +323,42 @@ namespace REGoth
       return true;
     }
 
+    void ScriptState::doAIStateDuringShrink()
+    {
+      bs::INT32 hour   = mWorld->gameclock()->getHour();
+      bs::INT32 minute = mWorld->gameclock()->getMinute();
+
+      if (mRoutine.hasRoutine)
+      {
+        bool isDoingScriptState = mCurrentState.isValid || mNextState.isValid;
+
+        if (!isDoingScriptState || isInRoutine())
+        {
+          // If the characters are too far away from the camera, they will just be
+          // teleported to the position they should be at according to their currently
+          // active routine state. This is why Diego will be already in the old-camp
+          // when you reach it, even though you just saw him walking very slowly towards it.
+          if (!isTimeInTaskRange(activeTask(), hour, minute))
+          {
+            startNewRoutineTaskMatchingTime();
+          }
+
+          if (mRoutine.shouldStartNewRoutine)
+          {
+            // Force-start the new task so the character won't be stuck moving to its
+            // current routine task target
+            if (startDailyRoutine(true))
+            {
+              if (!activeTask().waypoint.empty())
+              {
+                mHostAI->teleport(activeTask().waypoint);
+              }
+            }
+          }
+        }
+      }
+    }
+
     bool ScriptState::startDailyRoutine(bool force)
     {
       // Just say "yes" for the player, as he never has any routine
@@ -356,6 +377,8 @@ namespace REGoth
 
     bool ScriptState::isInRoutine()
     {
+      if (!mRoutine.hasRoutine) return false;
+
       if (mCurrentState.isValid)
       {
         if (mCurrentState.isRoutineState)
@@ -430,18 +453,29 @@ namespace REGoth
 
     void ScriptState::insertRoutineTask(const RoutineTask& task)
     {
+      mRoutine.routine.push_back(task);
+
+      RoutineTask& addedTask = mRoutine.routine.back();
+
+      // Some task definitions use XXX to say that the character should stay where it is.
+      // This is defined inside gothics scripts, nothing we can do about it.
+      if (addedTask.waypoint == "XXX")
+      {
+        // Replace the XXX with the empty string to denote that there should not be a target
+        // waypoint for this task.
+        addedTask.waypoint = "";
+      }
+
       // FIXME: HACK, let the npc teleport to the first entry of the routine
       if (!mRoutine.hasRoutine)
       {
-        if (!task.waypoint.empty())
+        if (!addedTask.waypoint.empty())
         {
-          mHostAI->teleport(task.waypoint);
+          mHostAI->teleport(addedTask.waypoint);
         }
       }
 
       mRoutine.hasRoutine = true;  // At least one routine-target present
-
-      mRoutine.routine.push_back(task);
     }
 
     void ScriptState::reinitRoutine()
@@ -519,6 +553,30 @@ namespace REGoth
       {
         return trange(task.hoursStart, task.minutesStart, hours, minutes, 24, 0) &&
                trange(0, 0, hours, minutes, task.hoursEnd, task.minutesEnd);
+      }
+    }
+
+    void ScriptState::startNewRoutineTaskMatchingTime()
+    {
+      bs::UINT32 i     = 0;
+      bs::INT32 hour   = mWorld->gameclock()->getHour();
+      bs::INT32 minute = mWorld->gameclock()->getMinute();
+
+      for (RoutineTask& e : mRoutine.routine)
+      {
+        // Don't start the same routine again
+        if (i == mRoutine.activeRoutineIndex)
+        {
+          if (isTimeInTaskRange(e, hour, minute))
+          {
+            mRoutine.activeRoutineIndex    = i;
+            mRoutine.shouldStartNewRoutine = true;
+
+            return;
+          }
+        }
+
+        i++;
       }
     }
 

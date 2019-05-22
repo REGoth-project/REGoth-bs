@@ -291,6 +291,10 @@ namespace REGoth
     {
       mScriptState->doAIState(bs::gTime().getFixedFrameDelta());
     }
+    else
+    {
+      mScriptState->doAIStateDuringShrink();
+    }
   }
 
   SharedEMessage CharacterEventQueue::pushGotoPosition(const bs::Vector3& position)
