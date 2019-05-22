@@ -80,22 +80,22 @@ namespace REGoth
     {
       return import_zCVobAnimate(vob, parentSO);
     }
-    else if (vob.objectClass == "oCMobInter:oCMOB:zCVob")
-    {
-      return import_oCMobInter(vob, parentSO);
-    }
-    else if (vob.objectClass == "oCMobContainer:oCMobInter:oCMOB:zCVob")
-    {
-      return import_oCMobContainer(vob, parentSO);
-    }
-    else if (vob.objectClass == "oCMobBed:oCMobInter:oCMOB:zCVob")
-    {
-      return import_oCMobBed(vob, parentSO);
-    }
-    else if (vob.objectClass == "oCMobDoor:oCMobInter:oCMOB:zCVob")
-    {
-      return import_oCMobDoor(vob, parentSO);
-    }
+    // else if (vob.objectClass == "oCMobInter:oCMOB:zCVob")
+    // {
+    //   return import_oCMobInter(vob, parentSO);
+    // }
+    // else if (vob.objectClass == "oCMobContainer:oCMobInter:oCMOB:zCVob")
+    // {
+    //   return import_oCMobContainer(vob, parentSO);
+    // }
+    // else if (vob.objectClass == "oCMobBed:oCMobInter:oCMOB:zCVob")
+    // {
+    //   return import_oCMobBed(vob, parentSO);
+    // }
+    // else if (vob.objectClass == "oCMobDoor:oCMobInter:oCMOB:zCVob")
+    // {
+    //   return import_oCMobDoor(vob, parentSO);
+    // }
     else
     {
       bs::gDebug().logWarning("[ImportSingleVob] Unsupported vob class: " +
