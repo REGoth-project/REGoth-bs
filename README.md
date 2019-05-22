@@ -3,12 +3,19 @@
 
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/11406580/57923271-1d1d3800-78a2-11e9-9750-cf814302edcc.png" />
+  <img src="https://user-images.githubusercontent.com/11406580/58186975-2cdbb880-7cb6-11e9-9a6d-b38326bc3edb.png" />
+  <p align="center"><em>OpenSource-Reimplementation of the zEngine, used by the game "Gothic" and "Gothic II"</em></p>
 </p>
 
 ---
 
-OpenSource-Reimplementation of the zEngine, used by the game "Gothic" and "Gothic II".
+<p align="center">
+  <img src="https://www.mobygames.com/images/promo/l/30647-gothic-screenshot.jpg" />
+</p>
+
+
+
+# Developer Chat-Room
 
 We have an active Chatroom on [Gitter](https://gitter.im/REGoth/Lobby)! If you want to reach us, this is the best way!
 
