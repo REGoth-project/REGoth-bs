@@ -139,11 +139,11 @@ namespace REGoth
     struct DamageMessage : public NpcMessage
     // FIXME: Reimplement that using a sound handle
     {
-      enum class DamageSubType
+      enum DamageSubType : bs::UINT32
       {
-        Once,
-        PerFrame,
-        Max
+        ST_Once,
+        ST_PerFrame,
+        ST_Max
       };
 
       DamageMessage()
@@ -158,7 +158,7 @@ namespace REGoth
 
     struct WeaponMessage : public NpcMessage
     {
-      enum WeaponSubType
+      enum WeaponSubType : bs::UINT32
       {
         ST_DrawWeapon,
         ST_DrawWeapon1,
@@ -195,7 +195,7 @@ namespace REGoth
 
     struct MovementMessage : public NpcMessage
     {
-      enum MovementSubType
+      enum MovementSubType : bs::UINT32
       {
         ST_RobustTrace,
         ST_GotoPos,
@@ -264,7 +264,7 @@ namespace REGoth
 
     struct AttackMessage : public NpcMessage
     {
-      enum AttackSubType
+      enum AttackSubType : bs::UINT32
       {
         ST_AttackForward,
         ST_AttackLeft,
@@ -313,7 +313,7 @@ namespace REGoth
 
     struct UseItemMessage : public NpcMessage
     {
-      enum UseItemSubType
+      enum UseItemSubType : bs::UINT32
       {
         EV_Drink,
         EV_EquipItem,
@@ -335,7 +335,7 @@ namespace REGoth
 
     struct StateMessage : public NpcMessage
     {
-      enum TStateSubType
+      enum TStateSubType : bs::UINT32
       {
         EV_StartState,
         EV_Wait,
@@ -394,7 +394,7 @@ namespace REGoth
     class ManipulateMessage : public NpcMessage
     {
     public:
-      enum ManipulateSubType
+      enum ManipulateSubType : bs::UINT32
       {
         ST_TakeObject = 0,
         ST_DropObject,
@@ -469,7 +469,7 @@ namespace REGoth
     struct ConversationMessage : public NpcMessage
     {
       // These need to be compatible with scripts
-      enum ConversationSubType
+      enum ConversationSubType : bs::UINT32
       {
         ST_PlayAniSound = 0,
         ST_PlayAni,
@@ -579,7 +579,7 @@ namespace REGoth
 
     struct MagicMessage : public NpcMessage
     {
-      enum MagicSubType
+      enum MagicSubType : bs::UINT32
       {
         ST_Open,
         ST_Close,
@@ -607,14 +607,14 @@ namespace REGoth
 
     struct MobMessage : public EventMessage
     {
-      enum MobSubType
+      enum MobSubType : bs::UINT32
       {
-        ST_STARTINTERACTION = 0,
-        ST_STARTSTATECHANGE,
-        ST_ENDINTERACTION,
-        ST_UNLOCK,
-        ST_LOCK,
-        ST_CALLSCRIPT
+        ST_StartInteraction = 0,
+        ST_StartSTateChange,
+        ST_EndInteraction,
+        ST_Unlock,
+        ST_Lock,
+        ST_Callscript
       };
 
       MobMessage()
