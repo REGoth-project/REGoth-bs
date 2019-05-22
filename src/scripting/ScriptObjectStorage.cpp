@@ -32,6 +32,8 @@ namespace REGoth
         REGOTH_THROW(InvalidStateException, "Script Object Handle overflow");
       }
 
+      invalidateCache();
+
       return mObjects.insert({object.handle, std::move(object)}).first->second;
     }
 
@@ -43,6 +45,8 @@ namespace REGoth
       }
 
       mObjects.erase(scriptObjectHandle);
+
+      invalidateCache();
     }
 
     ScriptObject& ScriptObjectStorage::get(ScriptObjectHandle handle)
@@ -52,21 +56,71 @@ namespace REGoth
         REGOTH_THROW(InvalidStateException, "Script Object Handle is invalid!");
       }
 
-      auto it = mObjects.find(handle);
+      ScriptObject* pCached = findHandleInCache(handle);
 
-      if (it == mObjects.end())
+      if (pCached)
       {
-        REGOTH_THROW(InvalidStateException, "Script Object Handle does reference a known object!");
+        return *pCached;
       }
+      else
+      {
+        auto it = mObjects.find(handle);
 
-      return it->second;
+        if (it == mObjects.end())
+        {
+          REGOTH_THROW(InvalidStateException, "Script Object Handle does reference a known object!");
+        }
+
+        addObjectToCache(handle, it->second);
+
+        return it->second;
+      }
     }
 
     void ScriptObjectStorage::clear()
     {
       mObjects.clear();
       mNextHandle = 1;
+
+      invalidateCache();
     }
+
+    ScriptObject* ScriptObjectStorage::findHandleInCache(ScriptObjectHandle handle) const
+    {
+      for (bs::UINT32 i = 0; i < ACCESS_CACHE_SIZE; i++)
+      {
+        if (mAccessCachedHandles[i] == handle)
+        {
+          return mAccessCachedObjects[i];
+        }
+      }
+
+      return nullptr;
+    }
+
+    void ScriptObjectStorage::addObjectToCache(ScriptObjectHandle handle, ScriptObject& object)
+    {
+      mAccessCachedHandles[mCachePosition] = handle;
+      mAccessCachedObjects[mCachePosition] = &object;
+
+      mCachePosition = (mCachePosition + 1) % ACCESS_CACHE_SIZE;
+    }
+
+    void ScriptObjectStorage::invalidateCache()
+    {
+      for (auto& h : mAccessCachedHandles)
+      {
+        h = SCRIPT_OBJECT_HANDLE_INVALID;
+      }
+
+      for (auto& p : mAccessCachedObjects)
+      {
+        p = nullptr;
+      }
+
+      mCachePosition = 0;
+    }
+
     REGOTH_DEFINE_RTTI(ScriptObjectStorage)
 
   }  // namespace Scripting
