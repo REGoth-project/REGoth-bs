@@ -81,6 +81,40 @@ namespace REGoth
     return mWaypoints[nearestIndex];
   }
 
+  HWaypoint Waynet::findSecondClosestWaypointTo(const bs::Vector3& position)
+  {
+    if (!hasCachedWaypointPositions())
+    {
+      populateWaypointPositionCache();
+    }
+
+    // No waypoints at all?
+    if (mWaypointPositions.empty())
+    {
+      return {};
+    }
+
+    HWaypoint nearest       = findClosestWaypointTo(position);
+    float distanceToNearest = nearest->SO()->getTransform().getPosition().squaredDistance(position);
+
+    // Any waypoint would do for initialization, 0 is as good as any other
+    bs::UINT32 secondNearestIndex = 0;
+    float secondNearestDistance   = std::numeric_limits<float>().max();
+
+    for (bs::UINT32 i = 0; i < (bs::UINT32)mWaypointPositions.size(); i++)
+    {
+      float thisDistance = (position - mWaypointPositions[i]).squaredLength();
+
+      if (thisDistance > distanceToNearest && thisDistance < secondNearestDistance)
+      {
+        secondNearestDistance = thisDistance;
+        secondNearestIndex    = i;
+      }
+    }
+
+    return mWaypoints[secondNearestIndex];
+  }
+
   HFreepoint Waynet::findClosestFreepointTo(const bs::Vector3& position)
   {
     if (!hasCachedFreepointPositions())
@@ -126,7 +160,7 @@ namespace REGoth
     }
 
     HFreepoint nearest      = findClosestFreepointTo(position);
-    float distanceToNearest = nearest->SO()->getTransform().getPosition().distance(position);
+    float distanceToNearest = nearest->SO()->getTransform().getPosition().squaredDistance(position);
 
     // Any freepoint would do for initialization, 0 is as good as any other
     bs::UINT32 secondNearestIndex = 0;

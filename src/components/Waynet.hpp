@@ -75,6 +75,20 @@ namespace REGoth
     HWaypoint findClosestWaypointTo(const bs::Vector3& position);
 
     /**
+     * Searches the *second* closest Waypoint to the given position,
+     * not the closest one, but the one which is closest after that one.
+     *
+     * Does not check whether the waypoint is obstructed by anything and
+     * ignores all waypoint connections.
+     *
+     * @param  position  Position to search around.
+     *
+     * @return Closest Waypoint to the given position. Should only be empty
+     *         if no waypoint exists at all.
+     */
+    HWaypoint findSecondClosestWaypointTo(const bs::Vector3& position);
+
+    /**
      * Searches the closest Freepoint to the given position.
      *
      * Does not check whether the Freepoint is obstructed by anything and
