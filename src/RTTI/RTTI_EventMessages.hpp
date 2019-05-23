@@ -87,8 +87,8 @@ namespace REGoth
     class RTTI_StateMessage : public bs::RTTIType<StateMessage, NpcMessage, RTTI_StateMessage>
     {
       BS_BEGIN_RTTI_MEMBERS
-      BS_RTTI_MEMBER_PLAIN(functionSymbol, 0)
-      BS_RTTI_MEMBER_PLAIN(endOldState, 1)
+      BS_RTTI_MEMBER_PLAIN(state, 0)
+      BS_RTTI_MEMBER_PLAIN(interruptOldState, 1)
       BS_RTTI_MEMBER_REFL(other, 2)
       BS_RTTI_MEMBER_REFL(victim, 3)
       BS_RTTI_MEMBER_PLAIN(isRoutineState, 4)
@@ -124,7 +124,7 @@ namespace REGoth
       BS_RTTI_MEMBER_PLAIN(name, 1)
       BS_RTTI_MEMBER_REFL(target, 2)
       BS_RTTI_MEMBER_PLAIN(targetPosition, 3)
-      BS_RTTI_MEMBER_PLAIN(animationIndex, 4)
+      BS_RTTI_MEMBER_REFL(playingClip, 4)
       BS_RTTI_MEMBER_PLAIN(animation, 5)
       BS_RTTI_MEMBER_PLAIN(status, 6)
       BS_RTTI_MEMBER_PLAIN(canceled, 7)

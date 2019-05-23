@@ -8,19 +8,19 @@
 
 namespace REGoth
 {
+  class Waypoint;
+  using HWaypoint = bs::GameObjectHandle<Waypoint>;
+
+  class Character;
+  using HCharacter = bs::GameObjectHandle<Character>;
+
+  class Item;
+  using HItem = bs::GameObjectHandle<Item>;
+
   namespace AI
   {
     struct EventMessage;
     using SharedEMessage = bs::SPtr<EventMessage>;
-
-    class Waypoint;
-    using HWaypoint = bs::GameObjectHandle<Waypoint>;
-
-    class Character;
-    using HCharacter = bs::GameObjectHandle<Character>;
-
-    class Item;
-    using HItem = bs::GameObjectHandle<Item>;
 
     enum class EventMessageType
     {
@@ -344,14 +344,14 @@ namespace REGoth
       }
 
       /**
-       * Symbol to the Setupfunction for this state (ZS_...)
+       * Name of the Setupfunction for this state (ZS_...)
        */
-      Scripting::SymbolIndex functionSymbol;
+      bs::String state;
 
       /**
-       * Whether the old state should be ended properly (true), or just interrupted (false)
+       * Whether the old state should be ended properly, or be interrupted and canceled.
        */
-      bool endOldState;
+      bool interruptOldState = false;
 
       /**
        * Symbols for other and victim
@@ -362,17 +362,17 @@ namespace REGoth
       /**
        * Whether this belongs to the daily routine
        */
-      bool isRoutineState;
+      bool isRoutineState = false;
 
       /**
        * Whether this is a program-managed state. List of states in NpcScriptState.h
        */
-      bool isPrgState;
+      bool isPrgState = false;
 
       /**
        * If this is a wait-message, this is how long we should wait
        */
-      float waitTime;
+      float waitTime = 0.0f;
 
       /**
        * Waypoint name to got to, in case the state needs that
@@ -539,9 +539,9 @@ namespace REGoth
       bs::Vector3 targetPosition;
 
       /**
-       * Animation to play. -1 if none
+       * Only valid while the message is being processed. Clip matching the given animation name.
        */
-      bs::INT32 animationIndex;
+      bs::HAnimationClip playingClip;
 
       /**
        * Animation name to be used. If empty, index will be checked.

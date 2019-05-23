@@ -1,5 +1,7 @@
 #include "CharacterEventQueue.hpp"
+#include <components/VisualCharacter.hpp>
 #include <AI/ScriptState.hpp>
+#include <scripting/ScriptVMForGameWorld.hpp>
 #include <RTTI/RTTI_CharacterEventQueue.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
@@ -19,6 +21,7 @@ namespace REGoth
 
     mCharacter   = SO()->getComponent<Character>();
     mCharacterAI = SO()->getComponent<CharacterAI>();
+    mVisualCharacter = SO()->getComponent<VisualCharacter>();
 
     if (!mCharacter)
     {
@@ -28,6 +31,11 @@ namespace REGoth
     if (!mCharacterAI)
     {
       REGOTH_THROW(InvalidStateException, "CharacterAI component expected!");
+    }
+
+    if (!mVisualCharacter)
+    {
+      REGOTH_THROW(InvalidStateException, "VisualCharacter component expected!");
     }
   }
 
@@ -260,6 +268,43 @@ namespace REGoth
 
     switch ((AI::StateMessage::StateSubType)message.subType)
     {
+    case AI::StateMessage::ST_StartState:
+
+      mCharacter->useAsSelf();
+
+      if (message.other)
+      {
+        message.other->useAsOther();
+      }
+
+      if (message.victim)
+      {
+        message.victim->useAsVictim();
+      }
+
+      if (message.state.empty())
+      {
+        mScriptState->startDailyRoutine(true);
+      }
+      else
+      {
+        mScriptState->startScriptAIState(message.state);
+      }
+
+      if (message.interruptOldState)
+      {
+        mScriptState->interruptActiveState();
+      }
+      else
+      {
+        mScriptState->requestEndActiveState();
+      }
+
+      mScriptState->applyStateChange();
+
+      isDone = true;
+      break;
+
       case AI::StateMessage::ST_Wait:
         message.waitTime -= bs::gTime().getFixedFrameDelta();
 
@@ -290,10 +335,39 @@ namespace REGoth
   bool CharacterEventQueue::EV_Conversation(AI::ConversationMessage& message,
                                             bs::HSceneObject sender)
   {
-    bool done = false;
+    bool isDone = false;
 
-    done = true;  // TODO: Implement events
-    return done;
+    switch ((AI::ConversationMessage::ConversationSubType)message.subType)
+    {
+    case AI::ConversationMessage::ST_PlayAni:
+
+      if (message.isFirstRun)
+      {
+        message.playingClip = mVisualCharacter->findAnimationClip(message.animation);
+
+        if (message.playingClip)
+        {
+          mVisualCharacter->playAnimation(message.playingClip);
+        }
+        else
+        {
+          isDone = true;
+        }
+      }
+      else
+      {
+        isDone = !mVisualCharacter->isAnimationPlaying(message.playingClip);
+      }
+      break;
+
+      default:
+        bs::gDebug().logWarning("[CharacterEventQueue] Unhandled Conversation-Sub Type: " +
+                                bs::toString((int)message.subType));
+        isDone = true;
+        break;
+    }
+
+    return isDone;
   }
 
   bool CharacterEventQueue::EV_Magic(AI::MagicMessage& message, bs::HSceneObject sender)
@@ -353,6 +427,55 @@ namespace REGoth
 
     msg.subType  = AI::StateMessage::ST_Wait;
     msg.waitTime = seconds;
+
+    return onMessage(msg);
+  }
+
+  SharedEMessage CharacterEventQueue::pushStartScriptState(const bs::String& state,
+                                                           const bs::String& waypoint,
+                                                           HCharacter other, HCharacter victim)
+  {
+    AI::StateMessage msg;
+
+    msg.isRoutineState    = false;
+    msg.isPrgState        = false;
+    msg.interruptOldState = false;
+
+    msg.subType = AI::StateMessage::ST_StartState;
+    msg.wpname  = waypoint;
+    msg.other   = other;
+    msg.victim  = victim;
+    msg.state   = state;
+
+    return onMessage(msg);
+  }
+
+  SharedEMessage CharacterEventQueue::pushInterruptAndStartScriptState(const bs::String& state,
+                                                                       const bs::String& waypoint,
+                                                                       HCharacter other,
+                                                                       HCharacter victim)
+  {
+    AI::StateMessage msg;
+
+    msg.isRoutineState    = false;
+    msg.isPrgState        = false;
+    msg.interruptOldState = true;
+
+    msg.subType = AI::StateMessage::ST_StartState;
+    msg.wpname  = waypoint;
+    msg.other   = other;
+    msg.victim  = victim;
+    msg.state   = state;
+
+    return onMessage(msg);
+  }
+
+  SharedEMessage CharacterEventQueue::pushPlayAnimation(const bs::String animation)
+  {
+    AI::ConversationMessage msg;
+
+    msg.subType = AI::ConversationMessage::ST_PlayAni;
+    msg.animation = animation;
 
     return onMessage(msg);
   }

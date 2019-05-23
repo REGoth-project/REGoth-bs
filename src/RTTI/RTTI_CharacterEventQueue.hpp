@@ -12,6 +12,7 @@ namespace REGoth
     BS_RTTI_MEMBER_REFL(mWorld, 2)
     BS_RTTI_MEMBER_REFLPTR(mPathfinder, 3)
     BS_RTTI_MEMBER_REFLPTR(mScriptState, 4)
+    BS_RTTI_MEMBER_REFL(mVisualCharacter, 5)
     BS_END_RTTI_MEMBERS
 
   public:

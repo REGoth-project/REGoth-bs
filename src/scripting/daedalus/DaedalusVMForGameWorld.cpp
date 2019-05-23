@@ -230,6 +230,11 @@ namespace REGoth
     {
       const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instance);
 
+      if (!mappingConst().isMappedToSomething(symbol.instance))
+      {
+        return {};
+      }
+
       bs::HSceneObject characterSO = mappingConst().getMappedSceneObject(symbol.instance);
 
       HCharacter character = characterSO->getComponent<Character>();
@@ -247,6 +252,11 @@ namespace REGoth
     HCharacter DaedalusVMForGameWorld::getInstanceCharacter(SymbolIndex symbolIndex) const
     {
       const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(symbolIndex);
+
+      if (!mappingConst().isMappedToSomething(symbol.instance))
+      {
+        return {};
+      }
 
       bs::HSceneObject characterSO = mappingConst().getMappedSceneObject(symbol.instance);
 
@@ -392,6 +402,8 @@ namespace REGoth
       registerExternal("AI_GOTOWP", (externalCallback)&This::external_AI_GotoWaypoint);
       registerExternal("AI_SETWALKMODE", (externalCallback)&This::external_AI_SetWalkMode);
       registerExternal("AI_WAIT", (externalCallback)&This::external_AI_Wait);
+      registerExternal("AI_STARTSTATE", (externalCallback)&This::external_AI_StartState);
+      registerExternal("AI_PLAYANI", (externalCallback)&This::external_AI_PlayAnimation);
     }
 
     void DaedalusVMForGameWorld::external_Print()
@@ -699,6 +711,38 @@ namespace REGoth
       auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
 
       eventQueue->pushWait(seconds);
+    }
+
+    void DaedalusVMForGameWorld::external_AI_StartState()
+    {
+      bs::String waypoint    = popStringValue();
+      bs::INT32 endOldState  = popIntValue();
+      bs::INT32 stateFnIndex = popIntValue();
+      HCharacter self        = popCharacterInstance();
+
+      const auto& functionSym = scriptSymbols().getSymbol<SymbolScriptFunction>(stateFnIndex);
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      if (endOldState != 0)
+      {
+        // End old state gracefully
+        eventQueue->pushStartScriptState(functionSym.name, waypoint, other(), victim());
+      }
+      else
+      {
+        // Interrupt old state
+        eventQueue->pushInterruptAndStartScriptState(functionSym.name, waypoint, other(), victim());
+      }
+    }
+
+    void DaedalusVMForGameWorld::external_AI_PlayAnimation()
+    {
+      bs::String animation = popStringValue();
+      HCharacter self = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+      eventQueue->pushPlayAnimation(animation);
     }
 
     void DaedalusVMForGameWorld::script_PrintPlus(const bs::String& text)

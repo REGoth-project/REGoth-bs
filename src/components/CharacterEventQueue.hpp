@@ -1,7 +1,7 @@
 #pragma once
 #include "EventQueue.hpp"
-#include <AI/ScriptState.hpp>
 #include <AI/Pathfinder.hpp>
+#include <AI/ScriptState.hpp>
 #include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
@@ -17,6 +17,9 @@ namespace REGoth
 
   class CharacterEventQueue;
   using HCharacterEventQueue = bs::GameObjectHandle<CharacterEventQueue>;
+
+  class VisualCharacter;
+  using HVisualCharacter = bs::GameObjectHandle<VisualCharacter>;
 
   namespace AI
   {
@@ -57,6 +60,23 @@ namespace REGoth
     SharedEMessage pushWait(float seconds);
 
     /**
+     * Push a message which starts a new script state after ending the current one gracefully.
+     */
+    SharedEMessage pushStartScriptState(const bs::String& state, const bs::String& waypoint,
+                                        HCharacter other, HCharacter victim);
+    /**
+     * Push a message which interrupts the currently active script state starts a new one.
+     */
+    SharedEMessage pushInterruptAndStartScriptState(const bs::String& state,
+                                                    const bs::String& waypoint, HCharacter other,
+                                                    HCharacter victim);
+
+    /**
+     * Push a message which will make the character play an animation.
+     */
+    SharedEMessage pushPlayAnimation(const bs::String animation);
+
+    /**
      * Insert a new routine task. See AI::ScriptState::insertRoutineTask().
      */
     void insertRoutineTask(const AI::ScriptState::RoutineTask& task);
@@ -68,7 +88,6 @@ namespace REGoth
     void reinitRoutine();
 
   protected:
-
     void onInitialized() override;
 
     /**
@@ -124,6 +143,7 @@ namespace REGoth
      */
     HCharacter mCharacter;
     HCharacterAI mCharacterAI;
+    HVisualCharacter mVisualCharacter;
     HGameWorld mWorld;
     bs::SPtr<AI::Pathfinder> mPathfinder;
     bs::SPtr<AI::ScriptState> mScriptState;
