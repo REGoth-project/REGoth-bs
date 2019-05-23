@@ -39,6 +39,9 @@ namespace REGoth
 
   void GameWorld::onInitialized()
   {
+    // Always do this after importing or deserializing
+    fillFindByNameCache();
+
     // If this is true here, we're being de-serialized
     if (mIsInitialized) return;
 
@@ -67,9 +70,6 @@ namespace REGoth
     mGameClock = SO()->addComponent<GameClock>();
 
     mIsInitialized = true;
-
-    // Always do this after importing or deserializing
-    fillFindByNameCache();
   }
 
   HItem GameWorld::insertItem(const bs::String& instance, const bs::Transform& transform)
@@ -282,6 +282,8 @@ namespace REGoth
         visit(child);
       }
     };
+
+    visit(SO());
   }
 
   void GameWorld::save(const bs::String& saveName)
