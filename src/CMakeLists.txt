@@ -47,6 +47,8 @@ add_library(REGothEngine
   components/CharacterAI.cpp
   components/Waypoint.hpp
   components/Waypoint.cpp
+  components/Freepoint.hpp
+  components/Freepoint.cpp
   components/Waynet.hpp
   components/Waynet.cpp
   components/CharacterKeyboardInput.hpp

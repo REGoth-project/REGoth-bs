@@ -3,6 +3,7 @@
 #include <RTTI/RTTI_Waynet.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/AnchoredTextLabels.h>
+#include <components/Freepoint.hpp>
 #include <components/Waypoint.hpp>
 
 namespace REGoth
@@ -25,6 +26,11 @@ namespace REGoth
   {
     mWaypoints.push_back(waypoint);
     mWaypoints.back()->mIndex = mWaypoints.size() - 1;
+  }
+
+  void Waynet::addFreepoint(HFreepoint freepoint)
+  {
+    mFreepoints.push_back(freepoint);
   }
 
   void Waynet::debugDraw(const REGoth::HAnchoredTextLabels& textLabels)
@@ -73,6 +79,71 @@ namespace REGoth
     }
 
     return mWaypoints[nearestIndex];
+  }
+
+  HFreepoint Waynet::findClosestFreepointTo(const bs::Vector3& position)
+  {
+    if (!hasCachedFreepointPositions())
+    {
+      populateFreepointPositionCache();
+    }
+
+    // No freepoints at all?
+    if (mFreepointPositions.empty())
+    {
+      return {};
+    }
+
+    // Any freepoint would do for initialization, 0 is as good as any other
+    bs::UINT32 nearestIndex = 0;
+    float nearestDistance   = std::numeric_limits<float>().max();
+
+    for (bs::UINT32 i = 0; i < (bs::UINT32)mFreepointPositions.size(); i++)
+    {
+      float thisDistance = (position - mFreepointPositions[i]).squaredLength();
+
+      if (thisDistance < nearestDistance)
+      {
+        nearestDistance = thisDistance;
+        nearestIndex    = i;
+      }
+    }
+
+    return mFreepoints[nearestIndex];
+  }
+
+  HFreepoint Waynet::findSecondClosestFreepointTo(const bs::Vector3& position)
+  {
+    if (!hasCachedFreepointPositions())
+    {
+      populateFreepointPositionCache();
+    }
+
+    // No freepoints at all?
+    if (mFreepointPositions.empty())
+    {
+      return {};
+    }
+
+    HFreepoint nearest      = findClosestFreepointTo(position);
+    float distanceToNearest = nearest->SO()->getTransform().getPosition().distance(position);
+
+    // Any freepoint would do for initialization, 0 is as good as any other
+    bs::UINT32 secondNearestIndex = 0;
+    float secondNearestDistance   = std::numeric_limits<float>().max();
+
+    for (bs::UINT32 i = 0; i < (bs::UINT32)mFreepointPositions.size(); i++)
+    {
+      float thisDistance = (position - mFreepointPositions[i]).squaredLength();
+
+      if (thisDistance > distanceToNearest && thisDistance < secondNearestDistance)
+      {
+        secondNearestDistance = thisDistance;
+        secondNearestIndex    = i;
+      }
+    }
+
+    return mFreepoints[secondNearestIndex];
   }
 
   bs::Vector<HWaypoint> Waynet::findWay(HWaypoint from, HWaypoint to)
@@ -185,9 +256,25 @@ namespace REGoth
     }
   }
 
+  void Waynet::populateFreepointPositionCache()
+  {
+    mFreepointPositions.clear();
+    mFreepointPositions.reserve(mFreepoints.size());
+
+    for (HFreepoint fp : allFreepoints())
+    {
+      mFreepointPositions.push_back(fp->SO()->getTransform().pos());
+    }
+  }
+
   bool Waynet::hasCachedWaypointPositions() const
   {
     return !mWaypointPositions.empty();
+  }
+
+  bool Waynet::hasCachedFreepointPositions() const
+  {
+    return !mFreepointPositions.empty();
   }
 
   REGOTH_DEFINE_RTTI(Waynet)

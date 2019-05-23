@@ -7,7 +7,9 @@
 #include <Components/BsCMeshCollider.h>
 #include <Physics/BsPhysicsMesh.h>
 #include <Resources/BsResources.h>
+#include <Scene/BsSceneManager.h>
 #include <Scene/BsSceneObject.h>
+#include <components/Freepoint.hpp>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
 #include <exception/Throw.hpp>
@@ -205,6 +207,14 @@ namespace REGoth
 
       waypoints[edge.first]->addPathTo(waypoints[edge.second]);
       waypoints[edge.second]->addPathTo(waypoints[edge.first]);
+    }
+
+    // Find Freepoints and save them into the waynet
+    auto freepoints = bs::gSceneManager().findComponents<Freepoint>(false);
+
+    for (const auto& fp : freepoints)
+    {
+      waynet->addFreepoint(fp);
     }
   }
 

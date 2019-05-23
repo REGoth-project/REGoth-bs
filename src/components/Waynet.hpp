@@ -11,6 +11,9 @@ namespace REGoth
   class Waypoint;
   using HWaypoint = bs::GameObjectHandle<Waypoint>;
 
+  class Freepoint;
+  using HFreepoint = bs::GameObjectHandle<Freepoint>;
+
   class AnchoredTextLabels;
   using HAnchoredTextLabels = bs::GameObjectHandle<AnchoredTextLabels>;
 
@@ -72,11 +75,43 @@ namespace REGoth
     HWaypoint findClosestWaypointTo(const bs::Vector3& position);
 
     /**
+     * Searches the closest Freepoint to the given position.
+     *
+     * Does not check whether the Freepoint is obstructed by anything and
+     * ignores all waypoint connections.
+     *
+     * @param  position  Position to search around.
+     *
+     * @return Closest Freepoint to the given position. Should only be empty
+     *         if no Freepoint exists at all.
+     */
+    HFreepoint findClosestFreepointTo(const bs::Vector3& position);
+
+    /**
+     * Searches the *second* closest Freepoint to the given position,
+     * not the closest one, but the one which is closest after that one.
+     *
+     * Does not check whether the Freepoint is obstructed by anything and
+     * ignores all waypoint connections.
+     *
+     * @param  position  Position to search around.
+     *
+     * @return Closest Freepoint to the given position. Should only be empty
+     *         if no Freepoint exists at all.
+     */
+    HFreepoint findSecondClosestFreepointTo(const bs::Vector3& position);
+
+    /**
      * Finds a way between two waypoints in the given waypoint instance
      *
      * @return List of all waypoints that need to be visited. Will be empty if none was found.
      */
     bs::Vector<HWaypoint> findWay(HWaypoint from, HWaypoint to);
+
+    /**
+     * Registers the given waypoint in the waynet.
+     */
+    void addFreepoint(HFreepoint freepoint);
 
     /**
      * Registers the given waypoint in the waynet.
@@ -92,6 +127,14 @@ namespace REGoth
     }
 
     /**
+     * @return List of all freepoints.
+     */
+    const bs::Vector<HFreepoint>& allFreepoints()
+    {
+      return mFreepoints;
+    }
+
+    /**
      * Draws the waynet as lines.
      */
     void debugDraw(const REGoth::HAnchoredTextLabels& textLabels);
@@ -104,6 +147,7 @@ namespace REGoth
      * Will drop anything already in the vector and thus can be called multiple times.
      */
     void populateWaypointPositionCache();
+    void populateFreepointPositionCache();
 
     /**
      * @return Whether mWaypointPositions has been filled with data.
@@ -111,14 +155,17 @@ namespace REGoth
      * @note To fill it, use populateWaypointPositionCache().
      */
     bool hasCachedWaypointPositions() const;
+    bool hasCachedFreepointPositions() const;
 
     bs::Vector<HWaypoint> mWaypoints;
+    bs::Vector<HFreepoint> mFreepoints;
 
     /**
      * Cached positions for faster access during searches.
      * Waypoints are supposed to be static, so it's okay to cache these.
      */
     bs::Vector<bs::Vector3> mWaypointPositions;
+    bs::Vector<bs::Vector3> mFreepointPositions;
 
   public:
     REGOTH_DECLARE_RTTI(Waynet)

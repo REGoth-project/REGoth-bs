@@ -61,5 +61,6 @@ namespace REGoth
     TID_REGOTH_UseItemMessage               = 600053,
     TID_REGOTH_ScriptState                  = 600054,
     TID_REGOTH_RoutineTask                  = 600055,
+    TID_REGOTH_Freepoint                    = 600056,
   };
 }  // namespace REGoth

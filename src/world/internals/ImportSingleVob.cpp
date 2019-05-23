@@ -11,6 +11,7 @@
 #include <Physics/BsPhysicsMesh.h>
 #include <Resources/BsResources.h>
 #include <Scene/BsSceneObject.h>
+#include <components/Freepoint.hpp>
 #include <components/Item.hpp>
 #include <components/Visual.hpp>
 #include <components/VisualStaticMesh.hpp>
@@ -185,7 +186,7 @@ namespace REGoth
   {
     bs::HSceneObject so = import_zCVob(vob, parentSO);
 
-    // Spots are found by name of the scene object
+    so->addComponent<Freepoint>();
 
     return so;
   }
