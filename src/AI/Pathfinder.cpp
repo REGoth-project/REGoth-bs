@@ -250,8 +250,8 @@ namespace REGoth
         mActiveRoute.isTargetUnreachable = true;
 
         bs::gDebug().logDebug(bs::StringUtil::format("[Pathfinder] No path from {0} to {1}",
-                                                     nearestWpToStart->getName(),
-                                                     nearestWpToTarget->getName()));
+                                                     nearestWpToStart->SO()->getName(),
+                                                     nearestWpToTarget->SO()->getName()));
         return;
       }
 
