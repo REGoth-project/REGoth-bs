@@ -68,6 +68,7 @@ namespace REGoth
     onImportedZEN();
 
     mGameClock = SO()->addComponent<GameClock>();
+    mGameClock->setTime(8, 0);
 
     mIsInitialized = true;
   }
