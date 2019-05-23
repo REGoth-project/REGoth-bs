@@ -12,6 +12,7 @@ namespace REGoth
     BS_RTTI_MEMBER_REFL(mCharacterController, 1)
     BS_RTTI_MEMBER_PLAIN(mIsPhysicsActive, 2)
     BS_RTTI_MEMBER_REFL(mWorld, 3)
+    BS_RTTI_MEMBER_PLAIN(mWalkMode, 4)
     BS_END_RTTI_MEMBERS
 
   public:

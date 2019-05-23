@@ -1,7 +1,4 @@
 #include "VisualSkeletalAnimation.hpp"
-#include <RTTI/RTTI_VisualSkeletalAnimation.hpp>
-
-#include "VisualSkeletalAnimation.hpp"
 #include "original-content/VirtualFileSystem.hpp"
 #include <Animation/BsAnimationClip.h>
 #include <BsZenLib/ImportPath.hpp>
@@ -11,6 +8,7 @@
 #include <Debug/BsDebug.h>
 #include <Mesh/BsMesh.h>
 #include <RTTI/RTTI_VisualCharacter.hpp>
+#include <RTTI/RTTI_VisualSkeletalAnimation.hpp>
 #include <Scene/BsSceneObject.h>
 #include <animation/Animation.hpp>
 #include <animation/StateNaming.hpp>
@@ -360,7 +358,7 @@ namespace REGoth
 
     // Some animations are directly reachable, like S_RUN -> T_JUMPB. Whether the transition makes
     // sense has to be checked elsewhere.
-    if (!Animation::isTransitionNeeded(state))
+    if (!AnimationState::isTransitionNeeded(state))
     {
       return state;
     }
@@ -373,7 +371,7 @@ namespace REGoth
       return "";
     }
 
-    bs::String to = Animation::getStateName(state);
+    bs::String to = AnimationState::getStateName(state);
 
     // Target animation is not a state name?
     if (to.empty())
@@ -382,7 +380,7 @@ namespace REGoth
     }
 
     bs::String transition =
-        Animation::constructTransitionAnimationName(Animation::WeaponMode::None, from, to);
+        AnimationState::constructTransitionAnimationName(AI::WeaponMode::None, from, to);
 
     // Transition not possible since it wasn't meant to be possible
     if (transition.empty())
@@ -440,7 +438,7 @@ namespace REGoth
 
   bs::String VisualSkeletalAnimation::getStateFromPlayingAnimation() const
   {
-    return Animation::getStateName(getPlayingAnimationName());
+    return AnimationState::getStateName(getPlayingAnimationName());
   }
 
   bs::Vector3 VisualSkeletalAnimation::resolveFrameRootMotion()
@@ -462,7 +460,7 @@ namespace REGoth
         float then = mRootMotionLastTime;
         float now  = mRootMotionLastClip->getLength();
 
-        motion += Animation::getRootMotionSince(mRootMotionLastClip, then, now);
+        motion += AnimationState::getRootMotionSince(mRootMotionLastClip, then, now);
       }
 
       mRootMotionLastTime = 0.0f;
@@ -484,7 +482,7 @@ namespace REGoth
     // Comparing floats here is intentional, since we don't touch them in the meantime.
     if (then != now)
     {
-      motion += Animation::getRootMotionSince(clipNow, then, now);
+      motion += AnimationState::getRootMotionSince(clipNow, then, now);
 
       // bs::gDebug().logDebug(bs::StringUtil::format("RootMotion {0} -> {1}: {2}", then, now,
       // bs::toString(motion)));
@@ -512,7 +510,6 @@ namespace REGoth
     {
       mSubAnimation->setSpeed(factor);
     }
-
   }
 
   REGOTH_DEFINE_RTTI(VisualSkeletalAnimation)

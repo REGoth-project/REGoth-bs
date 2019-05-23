@@ -1,37 +1,30 @@
 /**\file
  * See documentation at:
- * https://regoth-project.github.io/REGoth-bs/content/character-statemachine.html
+ * https://regoth-project.github.io/REGoth-bs/content/case-study-character-statemachine.html
  */
 
 #pragma once
 #include <BsPrerequisites.h>
+#include <AI/WalkMode.hpp>
+#include <AI/WeaponMode.hpp>
 
 namespace REGoth
 {
-  namespace Animation
+  namespace AnimationState
   {
-    enum class WeaponMode
-    {
-      None,
-      OneHanded,
-      TwoHanded,
-      Bow,
-      Crossbow,
-      Magic,
-      Fist,
-    };
-
     /**
      * Construct a state animation name from the given weapon-mode and state-name.
      *
      * @note There might be no actual file for the generated animation name.
      *
      * @param  weaponMode  Weapon-Mode, like *None* or *One Handed Weapon*.
-     * @param  stateName   Name of the state, like *RUNL*, *JUMPB*.
+     * @param  walkMode    Walk-Mode, like *Run* or *Sneak*.
+     * @param  stateName   Name of the state, like *L*.
      *
      * @result State-Animation name, like *S_RUNL*.
      */
-    bs::String constructStateAnimationName(WeaponMode weaponMode, const bs::String& name);
+    bs::String constructStateAnimationName(AI::WeaponMode weaponMode, AI::WalkMode walkMode,
+                                           const bs::String& name);
 
     /**
      * Construct a transition animation name from the given weapon-mode and state-name to go from and
@@ -43,9 +36,9 @@ namespace REGoth
      * @param  from        Name of the state currently in, like *RUN*.
      * @param  to          Name of the state going to, like *RUNL*.
      *
-     * @result State-Animation name, like *S_RUNL*.
+     * @result Transition animation, like *T_RUN_2_RUNL*.
      */
-    bs::String constructTransitionAnimationName(WeaponMode weaponMode, const bs::String& from,
+    bs::String constructTransitionAnimationName(AI::WeaponMode weaponMode, const bs::String& from,
                                                 const bs::String& to);
 
     /**
@@ -63,13 +56,13 @@ namespace REGoth
      * Given an animation name like `S_1HRUNL`, this function will return which
      * weapon mode the animation is for.
      *
-     * So for `S_1HRUNL` it will return `WeaponMode::OneHanded`.
+     * So for `S_1HRUNL` it will return `AI::WeaponMode::OneHanded`.
      *
      * @param  animation  State-Animation name, like `S_1HRUNL`.
      *
      * @return Weapon mode of the given animation.
      */
-    WeaponMode getWeaponMode(const bs::String& animation);
+    AI::WeaponMode getWeaponMode(const bs::String& animation);
 
     /**
      * Checks whether the given animation needs a transition.

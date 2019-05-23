@@ -1,7 +1,8 @@
 #pragma once
 #include "ScriptBackedBy.hpp"
-#include <AI/ScriptState.hpp>
 #include <BsPrerequisites.h>
+#include <AI/ScriptState.hpp>
+#include <AI/WalkMode.hpp>
 #include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
@@ -138,10 +139,14 @@ namespace REGoth
                     const bs::String& waypoint);
     void wait(float seconds);
     void playAni(const bs::String& animation);
-    void setWalkMode(bs::UINT32 walkMode);
     void stopProcessingInfos();
     void output(bs::HSceneObject characterSO, const bs::String& svmName);
     void processInfos();
+
+    /**
+     * Sets how this character should move, like walking, running, sneaking.
+     */
+    void setWalkMode(AI::WalkMode walkMode);
 
   private:
     /**
@@ -199,6 +204,9 @@ namespace REGoth
 
     // Whether Physics is being processed for this character
     bool mIsPhysicsActive = true;
+
+    // Whether the character is running, sneaking, etc
+    AI::WalkMode mWalkMode = AI::WalkMode::Run;
 
   public:
     REGOTH_DECLARE_RTTI(CharacterAI);

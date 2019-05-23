@@ -113,7 +113,10 @@ namespace REGoth
   {
     if (!isStateSwitchAllowed()) return false;
 
-    return mVisual->tryPlayTransitionAnimationTo("S_RUNL");
+    bs::String anim = AnimationState::constructStateAnimationName(AI::WeaponMode::None,
+                                                                  mWalkMode, "L");
+
+    return mVisual->tryPlayTransitionAnimationTo(anim);
   }
 
   bool CharacterAI::goBackward()
@@ -162,7 +165,10 @@ namespace REGoth
   {
     if (!isStateSwitchAllowed()) return false;
 
-    return mVisual->tryPlayTransitionAnimationTo("S_RUN");
+    bs::String anim =
+        AnimationState::constructStateAnimationName(AI::WeaponMode::None, mWalkMode, "");
+
+    return mVisual->tryPlayTransitionAnimationTo(anim);
   }
 
   bool CharacterAI::stopTurning()
@@ -179,7 +185,7 @@ namespace REGoth
 
     if (playingAnim.empty()) return true;
 
-    bs::String state = Animation::getStateName(playingAnim);
+    bs::String state = AnimationState::getStateName(playingAnim);
 
     // Playing some weird animation we don't know the naming scheme for?
     if (state.empty()) return false;
@@ -346,8 +352,9 @@ namespace REGoth
   {
   }
 
-  void CharacterAI::setWalkMode(bs::UINT32 walkMode)
+  void CharacterAI::setWalkMode(AI::WalkMode walkMode)
   {
+    mWalkMode = walkMode;
   }
 
   void CharacterAI::stopProcessingInfos()

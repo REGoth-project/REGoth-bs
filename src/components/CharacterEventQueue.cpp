@@ -252,10 +252,27 @@ namespace REGoth
 
   bool CharacterEventQueue::EV_State(AI::StateMessage& message, bs::HSceneObject sender)
   {
-    bool done = false;
+    bool isDone = false;
 
-    done = true;  // TODO: Implement events
-    return done;
+    switch ((AI::StateMessage::StateSubType)message.subType)
+    {
+      case AI::StateMessage::ST_Wait:
+        message.waitTime -= bs::gTime().getFixedFrameDelta();
+
+        if (message.waitTime <= 0)
+        {
+          isDone = true;
+        }
+        break;
+
+      default:
+        bs::gDebug().logWarning("[CharacterEventQueue] Unhandled StateMessage-Sub Type: " +
+                                bs::toString((int)message.subType));
+        isDone = true;
+        break;
+    }
+
+    return isDone;
   }
 
   bool CharacterEventQueue::EV_Manipulate(AI::ManipulateMessage& message, bs::HSceneObject sender)

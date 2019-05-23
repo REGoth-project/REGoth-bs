@@ -1,8 +1,9 @@
 #pragma once
 
-#include <RTTI/RTTIUtil.hpp>
 #include <BsCorePrerequisites.h>
+#include <AI/WalkMode.hpp>
 #include <Math/BsVector3.h>
+#include <RTTI/RTTIUtil.hpp>
 #include <scripting/ScriptTypes.hpp>
 
 namespace REGoth
@@ -218,16 +219,6 @@ namespace REGoth
         ST_MoveMax
       };
 
-      enum class WalkMode
-      {
-        Run = 0,
-        Walk,
-        Sneak,
-        Water,
-        Swim,
-        Dive
-      };
-
       MovementMessage()
       {
         messageType = EventMessageType::Movement;
@@ -252,7 +243,7 @@ namespace REGoth
       /**
        * How we should go to our position
        */
-      WalkMode walkMode = WalkMode::Run;
+      AI::WalkMode walkMode = AI::WalkMode::Run;
 
       /**
        * General purpose mode
@@ -335,14 +326,14 @@ namespace REGoth
 
     struct StateMessage : public NpcMessage
     {
-      enum TStateSubType : bs::UINT32
+      enum StateSubType : bs::UINT32
       {
-        EV_StartState,
-        EV_Wait,
-        EV_SetNpcsToState,
-        EV_SetTime,
-        EV_ApplyTimedOverlay,
-        EV_StateMax
+        ST_StartState,
+        ST_Wait,
+        ST_SetNpcsToState,
+        ST_SetTime,
+        ST_ApplyTimedOverlay,
+        ST_StateMax
       } ConversationMessage;
 
       StateMessage()
@@ -510,9 +501,9 @@ namespace REGoth
 
       ConversationMessage()
       {
-        messageType    = EventMessageType::Conversation;
-        status         = Status::INIT;
-        canceled       = false;
+        messageType = EventMessageType::Conversation;
+        status      = Status::INIT;
+        canceled    = false;
       }
 
       /**
