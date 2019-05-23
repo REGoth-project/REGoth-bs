@@ -226,8 +226,9 @@ namespace REGoth
     void Pathfinder::startNewRouteTo(const bs::Vector3& positionNow, const bs::Vector3& position)
     {
       mActiveRoute.positionsToGo.clear();
-      mActiveRoute.lastKnownPosition = positionNow;
-      mActiveRoute.targetEntity      = {};
+      mActiveRoute.lastKnownPosition   = positionNow;
+      mActiveRoute.targetEntity        = {};
+      mActiveRoute.isTargetUnreachable = false;
 
       if (isTargetReachedByPosition(positionNow, position)) return;
 
@@ -241,6 +242,18 @@ namespace REGoth
       HWaypoint nearestWpToStart  = mWaynet->findClosestWaypointTo(positionNow);
 
       bs::Vector<HWaypoint> path = mWaynet->findWay(nearestWpToStart, nearestWpToTarget);
+
+      if (path.empty())
+      {
+        // We already checked whether we can directly move here. So since it's not possible
+        // via the waynet, just exit here.
+        mActiveRoute.isTargetUnreachable = true;
+
+        bs::gDebug().logDebug(bs::StringUtil::format("[Pathfinder] No path from {0} to {1}",
+                                                     nearestWpToStart->getName(),
+                                                     nearestWpToTarget->getName()));
+        return;
+      }
 
       for (auto wp : path)
       {
@@ -382,8 +395,11 @@ namespace REGoth
       // Notice how the hill is blocking the view to the two waypoints, but the slope could still be
       // walkable!
 
-      // if(!canDirectlyMovetoLocation(positionNow, getCurrentTargetPosition(positionNow)))
-      //    return true;
+      if (mActiveRoute.isTargetUnreachable)
+      {
+        // We have already given up, makes no sense to try again
+        return false;
+      }
 
       if (!isTargetAnEntity())
       {

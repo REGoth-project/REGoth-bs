@@ -54,6 +54,11 @@ namespace REGoth
         // This must be saved so we can perform a re-route if the target moves too far from the spot
         // the route goes to
         bs::Vector3 targetEntityPositionOnStart;
+
+        // The target might be unreachable because of being in a separate isle of the waynet,
+        // or it might be completely off the waynet with no way to figure out how to get there.
+        // If such a case is detected, we don't want to waste time trying over and over again.
+        bool isTargetUnreachable = false;
       };
 
       Pathfinder(HWaynet waynet);
