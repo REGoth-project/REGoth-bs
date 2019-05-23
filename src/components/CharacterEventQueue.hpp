@@ -37,14 +37,24 @@ namespace REGoth
     virtual ~CharacterEventQueue();
 
     /**
-     * Quick access to push a message to go to a position into the queue.
+     * Push a message to go to a position into the queue.
      */
     SharedEMessage pushGotoPosition(const bs::Vector3& position);
 
     /**
-     * Quick access to push a message to go to an object into the queue.
+     * Push a message to go to an object into the queue.
      */
     SharedEMessage pushGotoObject(bs::HSceneObject object);
+
+    /**
+     * Push a message to set the walk-mode into the queue.
+     */
+    SharedEMessage pushSetWalkMode(AI::WalkMode walkMode);
+
+    /**
+     * Push a message which lets the queue execution wait for the given time.
+     */
+    SharedEMessage pushWait(float seconds);
 
     /**
      * Insert a new routine task. See AI::ScriptState::insertRoutineTask().

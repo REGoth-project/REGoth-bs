@@ -2,7 +2,9 @@
 #include "DaedalusClassVarResolver.hpp"
 #include <RTTI/RTTI_DaedalusVMForGameWorld.hpp>
 #include <Scene/BsSceneObject.h>
+#include <animation/StateNaming.hpp>
 #include <components/Character.hpp>
+#include <components/CharacterAI.hpp>
 #include <components/CharacterEventQueue.hpp>
 #include <components/GameClock.hpp>
 #include <components/GameWorld.hpp>
@@ -388,6 +390,8 @@ namespace REGoth
       registerExternal("TA_MIN", (externalCallback)&This::external_TA_Min);
       registerExternal("NPC_EXCHANGEROUTINE", (externalCallback)&This::external_NPC_ExchangeRoutine);
       registerExternal("AI_GOTOWP", (externalCallback)&This::external_AI_GotoWaypoint);
+      registerExternal("AI_SETWALKMODE", (externalCallback)&This::external_AI_SetWalkMode);
+      registerExternal("AI_WAIT", (externalCallback)&This::external_AI_Wait);
     }
 
     void DaedalusVMForGameWorld::external_Print()
@@ -423,7 +427,7 @@ namespace REGoth
 
     void DaedalusVMForGameWorld::external_IntToString()
     {
-     mStack.pushString(bs::toString(popIntValue()));
+      mStack.pushString(bs::toString(popIntValue()));
     }
 
     void DaedalusVMForGameWorld::external_IntToFloat()
@@ -603,23 +607,24 @@ namespace REGoth
     void DaedalusVMForGameWorld::external_TA_Min()
     {
       bs::String waypoint = popStringValue();
-      SymbolIndex action  = popIntValue(); // This does not push onto the function stack for some reason
-      bs::INT32 stop_m    = popIntValue();
-      bs::INT32 stop_h    = popIntValue();
-      bs::INT32 start_m   = popIntValue();
-      bs::INT32 start_h   = popIntValue();
-      HCharacter self     = popCharacterInstance();
+      SymbolIndex action =
+          popIntValue();  // This does not push onto the function stack for some reason
+      bs::INT32 stop_m  = popIntValue();
+      bs::INT32 stop_h  = popIntValue();
+      bs::INT32 start_m = popIntValue();
+      bs::INT32 start_h = popIntValue();
+      HCharacter self   = popCharacterInstance();
 
       bs::StringUtil::toUpperCase(waypoint);
 
       AI::ScriptState::RoutineTask task;
-      task.hoursStart     = start_h;
-      task.hoursEnd       = stop_h;
+      task.hoursStart = start_h;
+      task.hoursEnd   = stop_h;
 
-      task.minutesStart   = start_m;
-      task.minutesEnd     = stop_m;
+      task.minutesStart = start_m;
+      task.minutesEnd   = stop_m;
 
-      task.waypoint       = waypoint;
+      task.waypoint = waypoint;
 
       if (action != SYMBOL_INDEX_INVALID)
       {
@@ -643,6 +648,57 @@ namespace REGoth
       self->setDailyRoutine(routineName);
 
       eventQueue->reinitRoutine();
+    }
+
+    void DaedalusVMForGameWorld::external_AI_SetWalkMode()
+    {
+      bs::INT32 walkModeIndex = popIntValue();
+      HCharacter self         = popCharacterInstance();
+
+      AI::WalkMode realWalkMode;
+      switch (walkModeIndex)
+      {
+        case 0:
+          realWalkMode = AI::WalkMode::Run;
+          break;
+
+        case 1:
+          realWalkMode = AI::WalkMode::Walk;
+          break;
+
+        case 2:
+          realWalkMode = AI::WalkMode::Sneak;
+          break;
+
+        case 3:
+          realWalkMode = AI::WalkMode::Water;
+          break;
+
+        case 4:
+          realWalkMode = AI::WalkMode::Swim;
+          break;
+
+        case 5:
+          realWalkMode = AI::WalkMode::Dive;
+          break;
+
+        default:
+          REGOTH_THROW(InvalidParametersException, "Invalid Walk-Mode!");
+      }
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushSetWalkMode(realWalkMode);
+    }
+
+    void DaedalusVMForGameWorld::external_AI_Wait()
+    {
+      float seconds   = popFloatValue();
+      HCharacter self = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushWait(seconds);
     }
 
     void DaedalusVMForGameWorld::script_PrintPlus(const bs::String& text)

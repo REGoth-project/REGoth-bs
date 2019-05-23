@@ -29,7 +29,6 @@ namespace REGoth
     {
       REGOTH_THROW(InvalidStateException, "CharacterAI component expected!");
     }
-
   }
 
   CharacterEventQueue::~CharacterEventQueue()
@@ -224,6 +223,11 @@ namespace REGoth
         }
         break;
 
+      case AI::MovementMessage::ST_SetWalkMode:
+        mCharacterAI->setWalkMode(message.walkMode);
+        isDone = true;
+        break;
+
       default:
         bs::gDebug().logWarning("[CharacterEventQueue] Unhandled MovementMessage-Sub Type: " +
                                 bs::toString((int)message.subType));
@@ -330,6 +334,25 @@ namespace REGoth
 
     msg.subType      = AI::MovementMessage::ST_GotoObject;
     msg.targetObject = object;
+
+    return onMessage(msg);
+  }
+
+  SharedEMessage CharacterEventQueue::pushSetWalkMode(AI::WalkMode walkMode)
+  {
+    AI::MovementMessage msg;
+    msg.subType  = AI::MovementMessage::ST_SetWalkMode;
+    msg.walkMode = walkMode;
+
+    return onMessage(msg);
+  }
+
+  SharedEMessage CharacterEventQueue::pushWait(float seconds)
+  {
+    AI::StateMessage msg;
+
+    msg.subType  = AI::StateMessage::ST_Wait;
+    msg.waitTime = seconds;
 
     return onMessage(msg);
   }

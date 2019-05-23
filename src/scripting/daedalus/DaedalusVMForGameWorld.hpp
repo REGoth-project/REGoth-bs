@@ -169,6 +169,8 @@ namespace REGoth
       void external_AI_GotoWaypoint();
       void external_TA_Min();
       void external_NPC_ExchangeRoutine();
+      void external_AI_SetWalkMode();
+      void external_AI_Wait();
 
       void fillSymbolStorage() override;
       void registerAllExternals() override;
