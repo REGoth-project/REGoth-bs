@@ -261,6 +261,23 @@ namespace REGoth
      */
     HCharacter hero() const;
 
+    /**
+     * Finds a scene object with the given name.
+     *
+     * This method uses a hash-map over the scene objects so finding an object by name
+     * is faster than using bs::SceneObject::findChild(), which will recursivly go
+     * through all children and check every single one of them.
+     *
+     * If there are multiple objects with the given name, which one will be returned is
+     * undefined. Also, while this method does access a cached list of all objects, it
+     * may doesn't find an object and has to search for it which could take a little longer.
+     *
+     * @param  name  Name to search for.
+     *
+     * @return Scene Object with the given name
+     */
+    bs::HSceneObject findObjectByName(const bs::String& name);
+
   protected:
     void onInitialized() override;
 
@@ -283,6 +300,12 @@ namespace REGoth
     void findWaynet();
 
     /**
+     * Clears and fills the mSceneObjectsByNameCached map with objects being
+     * in the scene right now.
+     */
+    void fillFindByNameCache();
+
+    /**
      * ZEN-File this world was created from, e.g. `NEWWORLD.ZEN`.
      */
     bs::String mZenFile;
@@ -301,6 +324,13 @@ namespace REGoth
      * Script-VM with GOTHIC.DAT loaded.
      */
     bs::SPtr<Scripting::ScriptVMForGameWorld> mScriptVM;
+
+    /**
+     * Contains a list of most scene objects by their names. This is used to find
+     * object quicker than using findChild(), but it might be missing some objects,
+     * so remember to do an actual findChild() if your object wasn't found in here.
+     */
+    bs::UnorderedMap<bs::String, bs::HSceneObject> mSceneObjectsByNameCached;
 
     /**
      * Used to skip onInitialized() when loading via RTTI.

@@ -597,7 +597,7 @@ namespace REGoth
 
       auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
 
-      eventQueue->pushGotoObject(mWorld->SO()->findChild(waypoint));
+      eventQueue->pushGotoObject(mWorld->findObjectByName(waypoint));
     }
 
     void DaedalusVMForGameWorld::external_TA_Min()

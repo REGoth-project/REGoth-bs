@@ -283,7 +283,7 @@ namespace REGoth
 
   void CharacterAI::teleport(const bs::String& waypoint)
   {
-    bs::HSceneObject so = mWorld->SO()->findChild(waypoint);
+    bs::HSceneObject so = mWorld->findObjectByName(waypoint);
 
     if (!so)
     {

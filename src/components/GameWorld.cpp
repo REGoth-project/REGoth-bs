@@ -67,6 +67,9 @@ namespace REGoth
     mGameClock = SO()->addComponent<GameClock>();
 
     mIsInitialized = true;
+
+    // Always do this after importing or deserializing
+    fillFindByNameCache();
   }
 
   HItem GameWorld::insertItem(const bs::String& instance, const bs::Transform& transform)
@@ -82,7 +85,7 @@ namespace REGoth
 
   HItem GameWorld::insertItem(const bs::String& instance, const bs::String& spawnPoint)
   {
-    bs::HSceneObject spawnPointSO = SO()->findChild(spawnPoint);
+    bs::HSceneObject spawnPointSO = findObjectByName(spawnPoint);
     bs::Transform transform;
 
     if (spawnPointSO)
@@ -139,7 +142,7 @@ namespace REGoth
 
   HCharacter GameWorld::insertCharacter(const bs::String& instance, const bs::String& spawnPoint)
   {
-    bs::HSceneObject spawnPointSO = SO()->findChild(spawnPoint);
+    bs::HSceneObject spawnPointSO = findObjectByName(spawnPoint);
     bs::Transform transform;
 
     if (spawnPointSO)
@@ -230,6 +233,55 @@ namespace REGoth
     bs::HSceneObject heroSO = mScriptVM->mapping().getMappedSceneObject(scriptObject);
 
     return heroSO->getComponent<Character>();
+  }
+
+  bs::HSceneObject GameWorld::findObjectByName(const bs::String& name)
+  {
+    auto it = mSceneObjectsByNameCached.find(name);
+
+    if (it != mSceneObjectsByNameCached.end())
+    {
+      // Found it in cache!
+      if (!it->second.isDestroyed())
+      {
+        return it->second;
+      }
+      else
+      {
+        // If the object was destroyed, act like the object wasn't found, the cache might be outdated
+        // and there is such an object now.
+      }
+    }
+
+    bs::HSceneObject so = SO()->findChild(name);
+
+    if (so)
+    {
+      mSceneObjectsByNameCached[name] = so;
+    }
+
+    return so;
+  }
+
+  void GameWorld::fillFindByNameCache()
+  {
+    mSceneObjectsByNameCached.clear();
+
+    std::function<void(bs::HSceneObject)> visit = [&](bs::HSceneObject parent) {
+      for (bs::UINT32 i = 0; i < parent->getNumChildren(); i++)
+      {
+        bs::HSceneObject child = parent->getChild(i);
+
+        bs::String name = child->getName();
+
+        if (!name.empty())
+        {
+          mSceneObjectsByNameCached[name] = child;
+        }
+
+        visit(child);
+      }
+    };
   }
 
   void GameWorld::save(const bs::String& saveName)

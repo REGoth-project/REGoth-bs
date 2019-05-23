@@ -47,6 +47,11 @@ namespace REGoth
     /**
      * Finds a waypoint by name.
      *
+     * Note that this will *only* look for actual waypoints. In Gothic, while the name
+     * Waypoint means exactly what one expects, when a script-function asks for a waypoint
+     * it could also mean a freepoint. So if you want to be on the safe-side, then use
+     * GameWorld::findObjectByName(), which is also faster.
+     *
      * @param  name  Name of the Waypoint to look for.
      *
      * @return Handle to the waypoint. Invalid if not found.
