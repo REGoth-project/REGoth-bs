@@ -404,6 +404,8 @@ namespace REGoth
       registerExternal("AI_WAIT", (externalCallback)&This::external_AI_Wait);
       registerExternal("AI_STARTSTATE", (externalCallback)&This::external_AI_StartState);
       registerExternal("AI_PLAYANI", (externalCallback)&This::external_AI_PlayAnimation);
+      registerExternal("NPC_GETNEARESTWP", (externalCallback)&This::external_Npc_GetNearestWP);
+      registerExternal("NPC_GETNEXTWP", (externalCallback)&This::external_Npc_GetNextWP);
     }
 
     void DaedalusVMForGameWorld::external_Print()
@@ -739,10 +741,24 @@ namespace REGoth
     void DaedalusVMForGameWorld::external_AI_PlayAnimation()
     {
       bs::String animation = popStringValue();
-      HCharacter self = popCharacterInstance();
+      HCharacter self      = popCharacterInstance();
 
       auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
       eventQueue->pushPlayAnimation(animation);
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_GetNearestWP()
+    {
+      HCharacter self = popCharacterInstance();
+
+      mStack.pushString(self->getNearestWaypoint());
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_GetNextWP()
+    {
+      HCharacter self = popCharacterInstance();
+
+      mStack.pushString(self->getNextWaypoint());
     }
 
     void DaedalusVMForGameWorld::script_PrintPlus(const bs::String& text)

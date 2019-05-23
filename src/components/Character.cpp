@@ -1,8 +1,10 @@
 #include "Character.hpp"
+#include <components/Waypoint.hpp>
 #include <RTTI/RTTI_Character.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/GameWorld.hpp>
 #include <components/VisualCharacter.hpp>
+#include <components/Waynet.hpp>
 #include <scripting/ScriptVMForGameWorld.hpp>
 
 namespace REGoth
@@ -161,16 +163,20 @@ namespace REGoth
 
   bs::String Character::getNextWaypoint()
   {
-    bs::String b;
+    const bs::Vector3& pos = SO()->getTransform().pos();
 
-    return b;
+    auto wp = gameWorld()->waynet()->findSecondClosestWaypointTo(pos);
+
+    return wp->SO()->getName();
   }
 
   bs::String Character::getNearestWaypoint()
   {
-    bs::String b;
+    const bs::Vector3& pos = SO()->getTransform().pos();
 
-    return b;
+    auto wp = gameWorld()->waynet()->findClosestWaypointTo(pos);
+
+    return wp->SO()->getName();
   }
 
   void Character::exchangeRoutine(const bs::String& routineName)

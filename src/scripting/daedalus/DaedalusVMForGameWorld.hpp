@@ -173,6 +173,8 @@ namespace REGoth
       void external_AI_Wait();
       void external_AI_StartState();
       void external_AI_PlayAnimation();
+      void external_Npc_GetNearestWP();
+      void external_Npc_GetNextWP();
 
       void fillSymbolStorage() override;
       void registerAllExternals() override;
