@@ -34,12 +34,22 @@ namespace REGoth
 
       mPC = symbol.address;
 
+      if (mIsDisassemblerEnabled)
+      {
+        findFunctionAtAddressAndLog(mPC);
+      }
+
       executeUntilReturn();
     }
 
     void DaedalusVM::executeScriptFunction(bs::UINT32 address)
     {
       mPC = address;
+
+      if (mIsDisassemblerEnabled)
+      {
+        findFunctionAtAddressAndLog(mPC);
+      }
 
       executeUntilReturn();
     }
@@ -58,7 +68,10 @@ namespace REGoth
     {
       Daedalus::PARStackOpCode opcode = mDatFile->getStackOpCode(mPC);
 
-      // disassembleAndLogOpcode(opcode);
+      if (mIsDisassemblerEnabled)
+      {
+        disassembleAndLogOpcode(opcode);
+      }
 
       mPC += opcode.opSize;
 
@@ -259,11 +272,11 @@ namespace REGoth
         break;
 
         case Daedalus::EParOp_AssignFloat:
-          {
-            auto& ref = popFloatReference();
-            ref = popFloatValue();
-          }
-          break;
+        {
+          auto& ref = popFloatReference();
+          ref       = popFloatValue();
+        }
+        break;
 
         case Daedalus::EParOp_AssignInstance:
           // -
@@ -615,27 +628,29 @@ namespace REGoth
 
     void DaedalusVM::disassembleAndLogOpcode(const Daedalus::PARStackOpCode& opcode)
     {
-      bs::String depth = "";
+      bs::gDebug().logDebug(bs::StringUtil::format("[DaedalusVM] Exec: {0}{1}",
+                                                   makeCallDepthString(mCallDepth),
+                                                   disassembleOpcode(opcode, mScriptSymbols)));
+    }
 
-      for (bs::INT32 i = 0; i < mCallDepth; i++)
+    void DaedalusVM::findFunctionAtAddressAndLog(bs::UINT32 address)
+    {
+      auto fnSymbolIdx = scriptSymbols().findFunctionByAddress(address);
+
+      bs::String name;
+      if (fnSymbolIdx == SYMBOL_INDEX_INVALID)
       {
-        bs::INT32 level = i % 3;
-        switch (level)
-        {
-          case 0:
-            depth += "|";
-            break;
-          case 1:
-            depth += ";";
-            break;
-          case 2:
-            depth += ".";
-            break;
-        }
+        name = "<invalid function address>";
+      }
+      else
+      {
+        const auto& fnSymbol = scriptSymbols().getSymbol<SymbolScriptFunction>(fnSymbolIdx);
+
+        name = fnSymbol.name;
       }
 
-      bs::gDebug().logDebug("[DaedalusVM] Exec: " + depth +
-                            disassembleOpcode(opcode, mScriptSymbols));
+      bs::gDebug().logDebug(bs::StringUtil::format("[DaedalusVM] Exec: {0}Call {1} (From Engine)",
+                                                   makeCallDepthString(mCallDepth), name));
     }
 
     REGOTH_DEFINE_RTTI(DaedalusVM);

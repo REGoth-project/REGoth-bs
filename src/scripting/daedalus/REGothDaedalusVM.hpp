@@ -122,6 +122,7 @@ namespace REGoth
       void registerExternal(const bs::String& name, externalCallback callback);
 
     protected:
+
       bs::SPtr<DaedalusClassVarResolver> mClassVarResolver;
       DaedalusStack mStack;
 
@@ -131,6 +132,16 @@ namespace REGoth
        * Disassembles and logs the given opcode in respect ti the call-depth.
        */
       void disassembleAndLogOpcode(const Daedalus::PARStackOpCode& opcode);
+
+      /**
+       * Looks up the function at the given address and returns its name
+       */
+      void findFunctionAtAddressAndLog(bs::UINT32 address);
+
+      /**
+       * If true, every executed instruction will be logged to the console.
+       */
+      bool mIsDisassemblerEnabled = false;
 
       /**
        * Program counter register
