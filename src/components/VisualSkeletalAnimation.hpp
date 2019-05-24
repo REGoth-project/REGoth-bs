@@ -271,6 +271,12 @@ namespace REGoth
      */
     void addDefaultAttachments();
 
+    /**
+     * Whether the given clip should be played as looping. If not, it will likely
+     * switch to a different animation when it's done.
+     */
+    bool isClipLooping(bs::HAnimationClip clip);
+
     // Configuration ----------------------------------------------------------
 
     BsZenLib::Res::HModelScriptFile mModelScript; /**< Model-script of the displayed model */

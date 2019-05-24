@@ -232,9 +232,6 @@ namespace REGoth
   {
     using namespace bs;
 
-    // We do manual looping by using Animation Events with an event on the last frame
-    mSubAnimation->setWrapMode(AnimWrapMode::Clamp);
-
     // Subscribe to animation events
     mSubAnimation->onEventTriggered.connect([this](auto clip, auto string) {
       // Call objects actual method
@@ -248,23 +245,29 @@ namespace REGoth
 
     throwIfNotReadyForRendering();
 
-    bs::String command = string.substr(0, string.find_first_of(':'));
-    bs::String action  = string.substr(command.length() + 1);
+    // Commands could come in the form of "COMMAND:ACTION" or just "COMMAND"
+    size_t separator = string.find_first_of(':');
+    bs::String command;
+    bs::String action;
+
+    if (separator != bs::String::npos)
+    {
+      command = string.substr(0, separator);
+      action  = string.substr(command.length() + 1);
+    }
+    else
+    {
+      command = string;
+    }
 
     bs::AnimationClipState state;
     mSubAnimation->getState(clip, state);
 
-    // gDebug().logDebug(bs::StringUtil::format(
-    //     "[VisualSkeletalAnimation] Got animation event: {0}:{1} while playing {2} at {3}",
-    //     command, action, clip->getName(), state.time));
-
-    // gDebug().logDebug("Animation has the following events: ");
-    // for (auto& event : clip->getEvents())
-    // {
-    //   gDebug().logDebug(bs::StringUtil::format(" - {0}: {1}", event.time, event.name));
-    // }
-
-    if (command == "PLAYCLIP")
+    if (command == "LOOP")
+    {
+      // Handled when the animation was started by setting the animation wrapmode to "loop"
+    }
+    else if (command == "PLAYCLIP")
     {
       HAnimationClip clip = findAnimationClip(action);
 
@@ -291,6 +294,15 @@ namespace REGoth
 
     if (clip)
     {
+      if (isClipLooping(clip))
+      {
+        mSubAnimation->setWrapMode(bs::AnimWrapMode::Loop);
+      }
+      else
+      {
+        mSubAnimation->setWrapMode(bs::AnimWrapMode::Clamp);
+      }
+
       // bs::gDebug().logDebug(clip->getName());
       mSubAnimation->play(clip);
     }
@@ -502,6 +514,22 @@ namespace REGoth
     {
       mSubNodeVisuals->attachMeshToNode(attachment.first, attachment.second);
     }
+  }
+
+  bool VisualSkeletalAnimation::isClipLooping(bs::HAnimationClip clip)
+  {
+    // If the clip is supposed to loop, it will have a "LOOP" event at its very end.
+    // Since it makes no sense to have multiple "LOOP" events in there, we just
+    // check whether one exists at all and don't care about the time.
+    for (const auto& event : clip->getEvents())
+    {
+      if (event.name == "LOOP")
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   void VisualSkeletalAnimation::setDebugAnimationSpeedFactor(float factor)
