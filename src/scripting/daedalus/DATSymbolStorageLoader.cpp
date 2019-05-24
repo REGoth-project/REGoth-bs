@@ -256,6 +256,33 @@ namespace REGoth
 
         target.address = source.address;
 
+        switch (source.properties.offClsRet)
+        {
+          case Daedalus::EParType_Void:
+            target.returnType = ReturnType::Void;
+            break;
+
+          case Daedalus::EParType_Float:
+            target.returnType = ReturnType::Float;
+            break;
+
+          case Daedalus::EParType_Int:
+            target.returnType = ReturnType::Int;
+            break;
+
+          case Daedalus::EParType_String:
+            target.returnType = ReturnType::String;
+            break;
+
+          default:
+          case Daedalus::EParType_Class:
+          case Daedalus::EParType_Func:
+          case Daedalus::EParType_Prototype:
+          case Daedalus::EParType_Instance:
+            target.returnType = ReturnType::Invalid;
+            break;
+        }
+
         mStorage.registerFunctionAddress(target.index);
       }
 

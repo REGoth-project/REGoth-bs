@@ -86,6 +86,7 @@ namespace REGoth
     {
       BS_BEGIN_RTTI_MEMBERS
       BS_RTTI_MEMBER_PLAIN(address, 0)
+      BS_RTTI_MEMBER_PLAIN(returnType, 1)
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolScriptFunction)

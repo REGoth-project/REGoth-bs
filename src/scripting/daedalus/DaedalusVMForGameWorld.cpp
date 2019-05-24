@@ -118,7 +118,17 @@ namespace REGoth
       const auto& functionSym = scriptSymbols().getSymbol<SymbolScriptFunction>(function);
       executeScriptFunction(functionSym.address);
 
-      return popIntValue() != 0;
+      if (functionSym.returnType != ReturnType::Void)
+      {
+        return popIntValue() != 0;
+      }
+      else
+      {
+        // Some of these have a return type of `void` to say that they should be looping forever.
+        // This happens on most sub-states of `ZS_MM_ALLSCHEDULER`, for example.
+        return false;
+      }
+
     }
 
     void DaedalusVMForGameWorld::runFunctionOnSelf(SymbolIndex function, HCharacter self)

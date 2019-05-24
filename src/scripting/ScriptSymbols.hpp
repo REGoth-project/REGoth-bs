@@ -114,6 +114,7 @@ namespace REGoth
        * Bytecode address of where this function starts.
        */
       bs::UINT32 address;
+      ReturnType returnType;
 
       REGOTH_DECLARE_RTTI(SymbolScriptFunction)
     };
