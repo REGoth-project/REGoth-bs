@@ -1,12 +1,9 @@
 #include "GameWorld.hpp"
 #include <BsZenLib/ImportPath.hpp>
-#include <Components/BsCCharacterController.h>
 #include <RTTI/RTTI_GameWorld.hpp>
 #include <Resources/BsResources.h>
 #include <Scene/BsPrefab.h>
 #include <components/Character.hpp>
-#include <components/CharacterAI.hpp>
-#include <components/CharacterEventQueue.hpp>
 #include <components/GameClock.hpp>
 #include <components/Item.hpp>
 #include <components/VisualCharacter.hpp>
@@ -49,8 +46,10 @@ namespace REGoth
 
     if (!mZenFile.empty())
     {
+      HGameWorld thisWorld = bs::static_object_cast<GameWorld>(getHandle());
+
       // Import the ZEN and add all scene objects as children to this SO.
-      bs::HSceneObject so = Internals::constructFromZEN(SO(), mZenFile);
+      bs::HSceneObject so = Internals::constructFromZEN(thisWorld, mZenFile);
 
       if (!so)
       {
@@ -75,13 +74,15 @@ namespace REGoth
 
   HItem GameWorld::insertItem(const bs::String& instance, const bs::Transform& transform)
   {
+    HGameWorld thisWorld = bs::static_object_cast<GameWorld>(getHandle());
+
     bs::HSceneObject itemSO = bs::SceneObject::create(instance);
     itemSO->setParent(SO());
 
     itemSO->setPosition(transform.pos());
     itemSO->setRotation(transform.rot());
 
-    return itemSO->addComponent<Item>(instance);
+    return itemSO->addComponent<Item>(instance, thisWorld);
   }
 
   HItem GameWorld::insertItem(const bs::String& instance, const bs::String& spawnPoint)
@@ -114,29 +115,13 @@ namespace REGoth
     characterSO->setPosition(transform.pos());
     characterSO->setRotation(transform.rot());
 
-    characterSO->addComponent<VisualCharacter>();
-
-    auto controller = characterSO->addComponent<bs::CCharacterController>();
-
-    // FIXME: Assign the radius and height set via the visuals bounding box
-    controller->setRadius(0.35f);
-    controller->setHeight(0.5f);
-
-    auto ai = characterSO->addComponent<CharacterAI>(thisWorld);
-
     // All script-inserted characters will be disabled right after inserting them so they
     // don't cause the game to slow down. If they are all active, physics will be calculated
     // even for those out of reach which takes a huge hit on performance.
     // The character-controller will be enabled by the AI or user input.
     // ai->deactivatePhysics(); // Commented out for testing
 
-    auto character = characterSO->addComponent<Character>(instance);
-
-    // Must be added after the Character and CharacterAI components
-    auto eventQueue = characterSO->addComponent<CharacterEventQueue>(thisWorld);
-
-    // If we don't init the routine now, the character won't have its default routine
-    eventQueue->reinitRoutine();
+    auto character = characterSO->addComponent<Character>(instance, thisWorld);
 
     return character;
   }

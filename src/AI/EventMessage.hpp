@@ -2,6 +2,7 @@
 
 #include <BsCorePrerequisites.h>
 #include <AI/WalkMode.hpp>
+#include <AI/WeaponMode.hpp>
 #include <Math/BsVector3.h>
 #include <RTTI/RTTIUtil.hpp>
 #include <scripting/ScriptTypes.hpp>
@@ -186,8 +187,7 @@ namespace REGoth
       /**
        * Type of weapon to go to
        */
-      // TODO: Need EWeapon-Mode!
-      // EWeaponMode targetMode;
+      WeaponMode targetMode;
 
       // TODO: There is an animation-field here, find out what it does!
 

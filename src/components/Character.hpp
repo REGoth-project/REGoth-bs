@@ -13,7 +13,7 @@ namespace REGoth
   class Character : public ScriptBackedBy
   {
   public:
-    Character(const bs::HSceneObject& parent, const bs::String& instance);
+    Character(const bs::HSceneObject& parent, const bs::String& instance, HGameWorld gameWorld);
 
     void onInitialized() override;
 
@@ -86,7 +86,6 @@ namespace REGoth
     void createInventoryItem(const bs::String& instance, bs::INT32 num);
 
     void setToFightMode(const bs::String& weapon);
-    void setToFistMode();
 
     /**
      * @return The waypoint this character is around, needed by the scripts.

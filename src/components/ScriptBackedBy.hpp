@@ -3,7 +3,6 @@
 #include <Scene/BsComponent.h>
 #include <scripting/ScriptTypes.hpp>
 #include <RTTI/RTTIUtil.hpp>
-#include "NeedsGameWorld.hpp"
 
 namespace REGoth
 {
@@ -12,6 +11,9 @@ namespace REGoth
     class ScriptVMForGameWorld;
     struct ScriptObject;
   }
+
+  class GameWorld;
+  using HGameWorld = bs::GameObjectHandle<GameWorld>;
 
   /**
    * Base-component for components which need to be closely related to a script object.
@@ -42,11 +44,11 @@ namespace REGoth
    * When loading the object again, we have to hope our handle stayed the same and will
    * skip creating a new instance of the backing script object inside `onInitialized()`.
    */
-  class ScriptBackedBy : public NeedsGameWorld
+  class ScriptBackedBy : public bs::Component
   {
   public:
     ScriptBackedBy(const bs::HSceneObject& parent, const bs::String& className,
-                   const bs::String& instance);
+                   const bs::String& instance, HGameWorld gameWorld);
     virtual ~ScriptBackedBy();
 
   protected:
@@ -76,6 +78,14 @@ namespace REGoth
      */
     bool hasInstantiatedScriptObject() const;
 
+    /**
+     * @return GameWorld this scene object is in.
+     */
+    HGameWorld gameWorld() const
+    {
+      return mGameWorld;
+    }
+
   private:
 
     /**
@@ -96,6 +106,7 @@ namespace REGoth
 
     bs::String mScriptClassName;
     bs::String mScriptInstance;
+    HGameWorld mGameWorld;
 
   public:
     REGOTH_DECLARE_RTTI(ScriptBackedBy)

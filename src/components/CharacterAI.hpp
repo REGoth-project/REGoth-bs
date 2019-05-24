@@ -3,6 +3,7 @@
 #include <BsPrerequisites.h>
 #include <AI/ScriptState.hpp>
 #include <AI/WalkMode.hpp>
+#include <AI/WeaponMode.hpp>
 #include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
@@ -148,6 +149,13 @@ namespace REGoth
      */
     void setWalkMode(AI::WalkMode walkMode);
 
+    /**
+     * Sets the kind of weapon this character should pull. Monsters need to have
+     * this set to "fist" or they won't be able to move since all their animations
+     * are for that mode only.
+     */
+    void setWeaponMode(AI::WeaponMode mode);
+
   private:
     /**
      * Checks whether the character is so far away from the player that it should
@@ -207,6 +215,9 @@ namespace REGoth
 
     // Whether the character is running, sneaking, etc
     AI::WalkMode mWalkMode = AI::WalkMode::Run;
+
+    // Type of weapon the character is currently holding
+    AI::WeaponMode mWeaponMode = AI::WeaponMode::None;
 
   public:
     REGOTH_DECLARE_RTTI(CharacterAI);

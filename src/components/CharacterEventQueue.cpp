@@ -1,42 +1,28 @@
 #include "CharacterEventQueue.hpp"
-#include <components/VisualCharacter.hpp>
 #include <AI/ScriptState.hpp>
-#include <scripting/ScriptVMForGameWorld.hpp>
 #include <RTTI/RTTI_CharacterEventQueue.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
 #include <components/CharacterAI.hpp>
 #include <components/GameWorld.hpp>
+#include <components/VisualCharacter.hpp>
 #include <exception/Throw.hpp>
+#include <scripting/ScriptVMForGameWorld.hpp>
 
 namespace REGoth
 {
   using SharedEMessage = CharacterEventQueue::SharedEMessage;
 
-  CharacterEventQueue::CharacterEventQueue(const bs::HSceneObject& parent, HGameWorld world)
+  CharacterEventQueue::CharacterEventQueue(const bs::HSceneObject& parent, HCharacter character,
+                                           HCharacterAI characterAI,
+                                           HVisualCharacter visualCharacter, HGameWorld world)
       : EventQueue(parent)
+      , mCharacter(character)
+      , mCharacterAI(characterAI)
+      , mVisualCharacter(visualCharacter)
       , mWorld(world)
   {
     setName("CharacterEventQueue");
-
-    mCharacter   = SO()->getComponent<Character>();
-    mCharacterAI = SO()->getComponent<CharacterAI>();
-    mVisualCharacter = SO()->getComponent<VisualCharacter>();
-
-    if (!mCharacter)
-    {
-      REGOTH_THROW(InvalidStateException, "Character component expected!");
-    }
-
-    if (!mCharacterAI)
-    {
-      REGOTH_THROW(InvalidStateException, "CharacterAI component expected!");
-    }
-
-    if (!mVisualCharacter)
-    {
-      REGOTH_THROW(InvalidStateException, "VisualCharacter component expected!");
-    }
   }
 
   CharacterEventQueue::~CharacterEventQueue()
@@ -184,10 +170,21 @@ namespace REGoth
 
   bool CharacterEventQueue::EV_Weapon(AI::WeaponMessage& message, bs::HSceneObject sender)
   {
-    bool done = false;
+    bool isDone = false;
+    switch ((AI::WeaponMessage::WeaponSubType)message.subType)
+    {
+      case AI::WeaponMessage::ST_ChooseWeapon:
+        mCharacterAI->setWeaponMode(message.targetMode);
+        isDone = true;
+        break;
+      default:
+        bs::gDebug().logWarning("[CharacterEventQueue] Unhandled WeaponMode-Sub Type: " +
+                                bs::toString((int)message.subType));
+        isDone = true;
+        break;
+    }
 
-    done = true;  // TODO: Implement events
-    return done;
+    return isDone;
   }
 
   bool CharacterEventQueue::EV_Movement(AI::MovementMessage& message, bs::HSceneObject sender)
@@ -268,42 +265,42 @@ namespace REGoth
 
     switch ((AI::StateMessage::StateSubType)message.subType)
     {
-    case AI::StateMessage::ST_StartState:
+      case AI::StateMessage::ST_StartState:
 
-      mCharacter->useAsSelf();
+        mCharacter->useAsSelf();
 
-      if (message.other)
-      {
-        message.other->useAsOther();
-      }
+        if (message.other)
+        {
+          message.other->useAsOther();
+        }
 
-      if (message.victim)
-      {
-        message.victim->useAsVictim();
-      }
+        if (message.victim)
+        {
+          message.victim->useAsVictim();
+        }
 
-      if (message.state.empty())
-      {
-        mScriptState->startDailyRoutine(true);
-      }
-      else
-      {
-        mScriptState->startScriptAIState(message.state);
-      }
+        if (message.state.empty())
+        {
+          mScriptState->startDailyRoutine(true);
+        }
+        else
+        {
+          mScriptState->startScriptAIState(message.state);
+        }
 
-      if (message.interruptOldState)
-      {
-        mScriptState->interruptActiveState();
-      }
-      else
-      {
-        mScriptState->requestEndActiveState();
-      }
+        if (message.interruptOldState)
+        {
+          mScriptState->interruptActiveState();
+        }
+        else
+        {
+          mScriptState->requestEndActiveState();
+        }
 
-      mScriptState->applyStateChange();
+        mScriptState->applyStateChange();
 
-      isDone = true;
-      break;
+        isDone = true;
+        break;
 
       case AI::StateMessage::ST_Wait:
         message.waitTime -= bs::gTime().getFixedFrameDelta();
@@ -339,26 +336,26 @@ namespace REGoth
 
     switch ((AI::ConversationMessage::ConversationSubType)message.subType)
     {
-    case AI::ConversationMessage::ST_PlayAni:
+      case AI::ConversationMessage::ST_PlayAni:
 
-      if (message.isFirstRun)
-      {
-        message.playingClip = mVisualCharacter->findAnimationClip(message.animation);
-
-        if (message.playingClip)
+        if (message.isFirstRun)
         {
-          mVisualCharacter->playAnimation(message.playingClip);
+          message.playingClip = mVisualCharacter->findAnimationClip(message.animation);
+
+          if (message.playingClip)
+          {
+            mVisualCharacter->playAnimation(message.playingClip);
+          }
+          else
+          {
+            isDone = true;
+          }
         }
         else
         {
-          isDone = true;
+          isDone = !mVisualCharacter->isAnimationPlaying(message.playingClip);
         }
-      }
-      else
-      {
-        isDone = !mVisualCharacter->isAnimationPlaying(message.playingClip);
-      }
-      break;
+        break;
 
       default:
         bs::gDebug().logWarning("[CharacterEventQueue] Unhandled Conversation-Sub Type: " +
@@ -474,8 +471,20 @@ namespace REGoth
   {
     AI::ConversationMessage msg;
 
-    msg.subType = AI::ConversationMessage::ST_PlayAni;
+    msg.subType   = AI::ConversationMessage::ST_PlayAni;
     msg.animation = animation;
+
+    return onMessage(msg);
+  }
+
+  SharedEMessage CharacterEventQueue::pushGoToFistModeImmediate()
+  {
+    AI::WeaponMessage msg;
+
+    msg.subType        = AI::WeaponMessage::ST_ChooseWeapon;
+    msg.targetMode     = AI::WeaponMode::Fist;
+    msg.isJob          = false;
+    msg.isHighPriority = true;
 
     return onMessage(msg);
   }

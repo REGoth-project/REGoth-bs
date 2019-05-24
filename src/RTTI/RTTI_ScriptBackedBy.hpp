@@ -6,12 +6,13 @@
 namespace REGoth
 {
   class RTTI_ScriptBackedBy
-      : public bs::RTTIType<ScriptBackedBy, NeedsGameWorld, RTTI_ScriptBackedBy>
+    : public bs::RTTIType<ScriptBackedBy, bs::Component, RTTI_ScriptBackedBy>
   {
     BS_BEGIN_RTTI_MEMBERS
     BS_RTTI_MEMBER_PLAIN(mScriptClassName, 0)
     BS_RTTI_MEMBER_PLAIN(mScriptInstance, 1)
     BS_RTTI_MEMBER_PLAIN(mScriptObject, 2)
+    BS_RTTI_MEMBER_REFL(mGameWorld, 3)
     BS_END_RTTI_MEMBERS
 
   public:

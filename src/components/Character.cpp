@@ -1,23 +1,50 @@
 #include "Character.hpp"
-#include <components/Waypoint.hpp>
+#include <Components/BsCCharacterController.h>
 #include <RTTI/RTTI_Character.hpp>
 #include <Scene/BsSceneObject.h>
+#include <components/CharacterAI.hpp>
+#include <components/CharacterEventQueue.hpp>
 #include <components/GameWorld.hpp>
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
+#include <components/Waypoint.hpp>
 #include <scripting/ScriptVMForGameWorld.hpp>
 
 namespace REGoth
 {
-  Character::Character(const bs::HSceneObject& parent, const bs::String& instance)
-      : ScriptBackedBy(parent, "C_NPC", instance)
+  Character::Character(const bs::HSceneObject& parent, const bs::String& instance,
+                       HGameWorld gameWorld)
+    : ScriptBackedBy(parent, "C_NPC", instance, gameWorld)
   {
     setName("Character");
   }
 
   void Character::onInitialized()
   {
-    ScriptBackedBy::onInitialized();
+    // Only run this when we're not getting deserialized
+    if (!hasInstantiatedScriptObject())
+    {
+      HCharacter thisCharacter = bs::static_object_cast<Character>(getHandle());
+
+      auto controller = SO()->addComponent<bs::CCharacterController>();
+
+      // FIXME: Assign the radius and height set via the visuals bounding box
+      controller->setRadius(0.35f);
+      controller->setHeight(0.5f);
+
+      auto visual = SO()->addComponent<VisualCharacter>();
+      auto ai     = SO()->addComponent<CharacterAI>(gameWorld());
+
+      auto eventQueue =
+          SO()->addComponent<CharacterEventQueue>(thisCharacter, ai, visual, gameWorld());
+
+      ScriptBackedBy::onInitialized();
+
+      // If we don't init the routine now, the character won't have its default routine
+      // Must also come *after* the script object has been created since this might run
+      // some scripts.
+      eventQueue->reinitRoutine();
+    }
   }
 
   void Character::useAsHero()
@@ -215,10 +242,6 @@ namespace REGoth
   bool Character::isPlayer()
   {
     return scriptVM().heroInstance() == scriptObject();
-  }
-
-  void Character::setToFistMode()
-  {
   }
 
   void Character::setToFightMode(const bs::String& weapon)

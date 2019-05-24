@@ -36,7 +36,9 @@ namespace REGoth
   class CharacterEventQueue : public EventQueue
   {
   public:
-    CharacterEventQueue(const bs::HSceneObject& parent, HGameWorld world);
+    CharacterEventQueue(const bs::HSceneObject& parent, HCharacter character,
+                        HCharacterAI characterAI, HVisualCharacter visualCharacter,
+                        HGameWorld world);
     virtual ~CharacterEventQueue();
 
     /**
@@ -75,6 +77,11 @@ namespace REGoth
      * Push a message which will make the character play an animation.
      */
     SharedEMessage pushPlayAnimation(const bs::String animation);
+
+    /**
+     * Push a message which will make the character go into fist-mode immediately.
+     */
+    SharedEMessage pushGoToFistModeImmediate();
 
     /**
      * Insert a new routine task. See AI::ScriptState::insertRoutineTask().

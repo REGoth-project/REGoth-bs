@@ -21,13 +21,6 @@ namespace REGoth
 
     void onInitialized() override;
 
-    /**
-     * @return GameWorld this scene object is in.
-     */
-    HGameWorld gameWorld() const
-    {
-      return mGameWorld;
-    }
 
   private:
 

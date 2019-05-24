@@ -44,8 +44,9 @@ namespace REGoth
 
     class RTTI_WeaponMessage : public bs::RTTIType<WeaponMessage, NpcMessage, RTTI_WeaponMessage>
     {
-      // BS_BEGIN_RTTI_MEMBERS
-      // BS_END_RTTI_MEMBERS
+      BS_BEGIN_RTTI_MEMBERS
+      BS_RTTI_MEMBER_PLAIN(targetMode, 0)
+      BS_END_RTTI_MEMBERS
 
       REGOTH_IMPLEMENT_RTTI_CLASS_FOR_REFLECTABLE(WeaponMessage)
     };

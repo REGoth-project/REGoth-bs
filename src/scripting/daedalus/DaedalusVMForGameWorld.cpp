@@ -128,7 +128,6 @@ namespace REGoth
         // This happens on most sub-states of `ZS_MM_ALLSCHEDULER`, for example.
         return false;
       }
-
     }
 
     void DaedalusVMForGameWorld::runFunctionOnSelf(SymbolIndex function, HCharacter self)
@@ -421,6 +420,7 @@ namespace REGoth
       registerExternal("AI_PLAYANI", (externalCallback)&This::external_AI_PlayAnimation);
       registerExternal("NPC_GETNEARESTWP", (externalCallback)&This::external_Npc_GetNearestWP);
       registerExternal("NPC_GETNEXTWP", (externalCallback)&This::external_Npc_GetNextWP);
+      registerExternal("NPC_SETTOFISTMODE", (externalCallback)&This::external_Npc_SetToFistMode);
     }
 
     void DaedalusVMForGameWorld::external_Print()
@@ -811,6 +811,15 @@ namespace REGoth
       HCharacter self = popCharacterInstance();
 
       mStack.pushString(self->getNextWaypoint());
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_SetToFistMode()
+    {
+      HCharacter self = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushGoToFistModeImmediate();
     }
 
     void DaedalusVMForGameWorld::script_PrintPlus(const bs::String& text)
