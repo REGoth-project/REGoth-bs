@@ -209,6 +209,11 @@ namespace REGoth
       waypoints[edge.second]->addPathTo(waypoints[edge.first]);
     }
 
+    // FIXME: Initializes internal data structures for findComponents() to work. Should be removed
+    //        once this is fixed upstream.
+    bs::gSceneManager().setComponentState(bs::ComponentState::Paused);
+    bs::gSceneManager().setComponentState(bs::ComponentState::Running);
+
     // Find Freepoints and save them into the waynet
     auto freepoints = bs::gSceneManager().findComponents<Freepoint>(false);
 
