@@ -115,7 +115,7 @@ namespace REGoth
     return mWaypoints[secondNearestIndex];
   }
 
-  HFreepoint Waynet::findClosestFreepointTo(const bs::Vector3& position)
+  HFreepoint Waynet::findClosestFreepointTo(const bs::String& name, const bs::Vector3& position)
   {
     if (!hasCachedFreepointPositions())
     {
@@ -138,15 +138,19 @@ namespace REGoth
 
       if (thisDistance < nearestDistance)
       {
-        nearestDistance = thisDistance;
-        nearestIndex    = i;
+        if (mFreepoints[i]->getName() == name)
+        {
+          nearestDistance = thisDistance;
+          nearestIndex    = i;
+        }
       }
     }
 
     return mFreepoints[nearestIndex];
   }
 
-  HFreepoint Waynet::findSecondClosestFreepointTo(const bs::Vector3& position)
+  HFreepoint Waynet::findSecondClosestFreepointTo(const bs::String& name,
+                                                  const bs::Vector3& position)
   {
     if (!hasCachedFreepointPositions())
     {
@@ -159,7 +163,7 @@ namespace REGoth
       return {};
     }
 
-    HFreepoint nearest      = findClosestFreepointTo(position);
+    HFreepoint nearest      = findClosestFreepointTo(name, position);
     float distanceToNearest = nearest->SO()->getTransform().getPosition().squaredDistance(position);
 
     // Any freepoint would do for initialization, 0 is as good as any other
@@ -172,8 +176,11 @@ namespace REGoth
 
       if (thisDistance > distanceToNearest && thisDistance < secondNearestDistance)
       {
-        secondNearestDistance = thisDistance;
-        secondNearestIndex    = i;
+        if (mFreepoints[i]->getName() == name)
+        {
+          secondNearestDistance = thisDistance;
+          secondNearestIndex    = i;
+        }
       }
     }
 

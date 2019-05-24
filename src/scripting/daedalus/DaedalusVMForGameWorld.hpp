@@ -167,6 +167,9 @@ namespace REGoth
       void external_MDL_SetVisual();
       void external_MDL_SetVisualBody();
       void external_AI_GotoWaypoint();
+      void external_AI_GotoFreepoint();
+      void external_AI_GotoNextFreepoint();
+      void external_AI_GotoNpc();
       void external_TA_Min();
       void external_NPC_ExchangeRoutine();
       void external_AI_SetWalkMode();

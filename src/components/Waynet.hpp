@@ -99,7 +99,7 @@ namespace REGoth
      * @return Closest Freepoint to the given position. Should only be empty
      *         if no Freepoint exists at all.
      */
-    HFreepoint findClosestFreepointTo(const bs::Vector3& position);
+    HFreepoint findClosestFreepointTo(const bs::String& name, const bs::Vector3& position);
 
     /**
      * Searches the *second* closest Freepoint to the given position,
@@ -113,7 +113,7 @@ namespace REGoth
      * @return Closest Freepoint to the given position. Should only be empty
      *         if no Freepoint exists at all.
      */
-    HFreepoint findSecondClosestFreepointTo(const bs::Vector3& position);
+    HFreepoint findSecondClosestFreepointTo(const bs::String& name, const bs::Vector3& position);
 
     /**
      * Finds a way between two waypoints in the given waypoint instance

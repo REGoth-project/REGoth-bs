@@ -6,10 +6,12 @@
 #include <components/Character.hpp>
 #include <components/CharacterAI.hpp>
 #include <components/CharacterEventQueue.hpp>
+#include <components/Freepoint.hpp>
 #include <components/GameClock.hpp>
 #include <components/GameWorld.hpp>
 #include <components/Item.hpp>
 #include <components/VisualCharacter.hpp>
+#include <components/Waynet.hpp>
 
 namespace REGoth
 {
@@ -400,6 +402,9 @@ namespace REGoth
       registerExternal("TA_MIN", (externalCallback)&This::external_TA_Min);
       registerExternal("NPC_EXCHANGEROUTINE", (externalCallback)&This::external_NPC_ExchangeRoutine);
       registerExternal("AI_GOTOWP", (externalCallback)&This::external_AI_GotoWaypoint);
+      registerExternal("AI_GOTOFP", (externalCallback)&This::external_AI_GotoFreepoint);
+      registerExternal("AI_GOTONEXTFP", (externalCallback)&This::external_AI_GotoNextFreepoint);
+      registerExternal("AI_GOTONPC", (externalCallback)&This::external_AI_GotoNpc);
       registerExternal("AI_SETWALKMODE", (externalCallback)&This::external_AI_SetWalkMode);
       registerExternal("AI_WAIT", (externalCallback)&This::external_AI_Wait);
       registerExternal("AI_STARTSTATE", (externalCallback)&This::external_AI_StartState);
@@ -616,6 +621,43 @@ namespace REGoth
       auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
 
       eventQueue->pushGotoObject(mWorld->findObjectByName(waypoint));
+    }
+
+    void DaedalusVMForGameWorld::external_AI_GotoFreepoint()
+    {
+      bs::String freepoint = popStringValue();
+      HCharacter self      = popCharacterInstance();
+
+      bs::StringUtil::toUpperCase(freepoint);
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushGotoObject(mWorld->findObjectByName(freepoint));
+    }
+
+    void DaedalusVMForGameWorld::external_AI_GotoNextFreepoint()
+    {
+      bs::String freepointName = popStringValue();
+      HCharacter self          = popCharacterInstance();
+
+      bs::StringUtil::toUpperCase(freepointName);
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      HFreepoint freepoint = mWorld->waynet()->findSecondClosestFreepointTo(
+          freepointName, self->SO()->getTransform().pos());
+
+      eventQueue->pushGotoObject(freepoint->SO());
+    }
+
+    void DaedalusVMForGameWorld::external_AI_GotoNpc()
+    {
+      HCharacter other = popCharacterInstance();
+      HCharacter self  = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushGotoObject(other->SO());
     }
 
     void DaedalusVMForGameWorld::external_TA_Min()
