@@ -464,16 +464,14 @@ namespace REGoth
     if (mRootMotionLastClip != clipNow)
     {
       // Make sure to get the last bits of the last clip too
-      if (mRootMotionLastClip)
-      {
-        bs::AnimationClipState state;
-        mSubAnimation->getState(mRootMotionLastClip, state);
+      // Commented out: FIXME Doesn't seem to work, but it has to be something like this
+      // if (mRootMotionLastClip)
+      // {
+      //   float then = fmod(mRootMotionLastTime, mRootMotionLastClip->getLength());
+      //   float now  = mRootMotionLastClip->getLength();
 
-        float then = mRootMotionLastTime;
-        float now  = mRootMotionLastClip->getLength();
-
-        motion += AnimationState::getRootMotionSince(mRootMotionLastClip, then, now);
-      }
+      //   motion += AnimationState::getRootMotionSince(mRootMotionLastClip, then, now);
+      // }
 
       mRootMotionLastTime = 0.0f;
       mRootMotionLastClip = clipNow;
@@ -494,13 +492,30 @@ namespace REGoth
     // Comparing floats here is intentional, since we don't touch them in the meantime.
     if (then != now)
     {
-      motion += AnimationState::getRootMotionSince(clipNow, then, now);
+      // Root motion has to be calculated using non-looping times since it needs to find the
+      // first and last frames of animations.
+      if (mSubAnimation->getWrapMode() == bs::AnimWrapMode::Loop)
+      {
+        then = fmod(then, clipNow->getLength());
+        now  = fmod(now, clipNow->getLength());
+      }
+
+      if (now < then)
+      {
+        // Animation wrapped
+        motion += AnimationState::getRootMotionSince(clipNow, 0.0f, now);
+        motion += AnimationState::getRootMotionSince(clipNow, then, clipNow->getLength());
+      }
+      else
+      {
+        motion += AnimationState::getRootMotionSince(clipNow, then, now);
+      }
 
       // bs::gDebug().logDebug(bs::StringUtil::format("RootMotion {0} -> {1}: {2}", then, now,
       // bs::toString(motion)));
     }
 
-    mRootMotionLastTime = now;
+    mRootMotionLastTime = state.time;
     mRootMotionLastClip = clipNow;
 
     return motion;
