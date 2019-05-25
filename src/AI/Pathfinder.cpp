@@ -182,7 +182,14 @@ namespace REGoth
 
     bool Pathfinder::isTargetAnEntity() const
     {
-      return !!mActiveRoute.targetEntity;
+      if (mActiveRoute.targetEntity)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
     }
 
     bs::Vector3 Pathfinder::getCurrentTargetPosition(const bs::Vector3& positionNow) const
