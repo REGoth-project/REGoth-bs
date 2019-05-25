@@ -42,7 +42,7 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
 cmake --build . --parallel 8
 ```
 
-**Note**: If the linker complains about missing `.so` files when you try to run an executable,
+**Note**: If you get complains about missing `.so` files when you try to run an executable,
 try running it as `LD_LIBRARY_PATH=../lib ./REGothSomething`. Also, you might get an error indicating `libPhysX3_x64.so` not being found. You need to go into `REGoth-bs/lib/bsf/Dependencies/PhysX/lib/` and copy all `.so`-files to the location where `libbsf.so` was built, usually `REGoth/build/lib`.
 
 ### Windows using Visual Studio Code
