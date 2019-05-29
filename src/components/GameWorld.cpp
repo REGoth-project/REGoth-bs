@@ -1,4 +1,5 @@
 #include "GameWorld.hpp"
+#include <components/Sky.hpp>
 #include <BsZenLib/ImportPath.hpp>
 #include <RTTI/RTTI_GameWorld.hpp>
 #include <Resources/BsResources.h>
@@ -36,6 +37,8 @@ namespace REGoth
 
   void GameWorld::onInitialized()
   {
+    HGameWorld thisWorld = bs::static_object_cast<GameWorld>(getHandle());
+
     // Always do this after importing or deserializing
     fillFindByNameCache();
 
@@ -46,8 +49,6 @@ namespace REGoth
 
     if (!mZenFile.empty())
     {
-      HGameWorld thisWorld = bs::static_object_cast<GameWorld>(getHandle());
-
       // Import the ZEN and add all scene objects as children to this SO.
       bs::HSceneObject so = Internals::constructFromZEN(thisWorld, mZenFile);
 
@@ -68,6 +69,8 @@ namespace REGoth
 
     mGameClock = SO()->addComponent<GameClock>();
     mGameClock->setTime(8, 0);
+
+    SO()->addComponent<Sky>(thisWorld);
 
     mIsInitialized = true;
   }

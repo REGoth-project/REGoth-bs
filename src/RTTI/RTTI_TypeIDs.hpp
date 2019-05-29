@@ -62,5 +62,6 @@ namespace REGoth
     TID_REGOTH_ScriptState                  = 600054,
     TID_REGOTH_RoutineTask                  = 600055,
     TID_REGOTH_Freepoint                    = 600056,
+    TID_REGOTH_Sky                          = 600057,
   };
 }  // namespace REGoth
