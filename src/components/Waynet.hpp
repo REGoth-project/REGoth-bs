@@ -136,7 +136,7 @@ namespace REGoth
     bs::Vector<HWaypoint> findWay(HWaypoint from, HWaypoint to);
 
     /**
-     * Registers the given waypoint in the waynet.
+     * Registers the given freepoint in the waynet.
      */
     void addFreepoint(HFreepoint freepoint);
 
