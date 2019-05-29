@@ -69,8 +69,6 @@ namespace REGoth
       }
     }
 
-    if (mEventQueue.empty()) return;
-
     // Process messages as far as we can
     for (SharedEMessage ev : mEventQueue)
     {
