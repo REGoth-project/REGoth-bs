@@ -109,6 +109,19 @@ namespace REGoth
      * @return Name of the script function to call for the daily routine.
      */
     bs::String dailyRoutine();
+
+    /**
+     * Sets the name of the daily routine this character should use to the characters script object.
+     * Note that you will need to call CharacterEventQueue::reinitRoutine() to actually apply
+     * the new routine.
+     *
+     * @param  newDailyRoutine  Name of the daily routine as used inside Gothic scripts.
+     *                          This is actually a part of a script function name. For
+     *                          example, if a routine name of "Start" is supplied and this
+     *                          character has an ID of 456, then the final routine function
+     *                          would be constructed as `Rtn_Start_456`, which needs to
+     *                          be an actual script function.
+     */
     void setDailyRoutine(const bs::String& newDailyRoutine);
 
     /**
