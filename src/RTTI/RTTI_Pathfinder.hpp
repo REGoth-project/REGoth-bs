@@ -32,5 +32,4 @@ namespace REGoth
       REGOTH_IMPLEMENT_RTTI_CLASS_FOR_REFLECTABLE(Pathfinder)
     };
   }  // namespace AI
-  // namespace AI
 }  // namespace REGoth
