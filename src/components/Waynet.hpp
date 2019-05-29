@@ -24,23 +24,52 @@ namespace REGoth
    * other scripting related things like placing an item at a
    * certain location.
    *
-   * It consists out of Nodes, which have bi-directional connections to other nodes.
-   * To naviage somewhere, the shortest path between two nodes is taken.
+   * It consists out of Nodes called Waypoints, which have bi-directional
+   * connections to other nodes. To naviage somewhere, the shortest path between
+   * two nodes is taken.
    *
    * How exactly Gothic uses the waynet is still unknown. Tests with a simple
-   * pathfinding algorithm have shown that there must be more to it. For example:
+   * pathfinding algorithm have shown that there must be more to it. For
+   * example:
    *
-   *  In REGoth, before bs:f, the character showing the way from the old camp to the
-   *  swamp will go though the forest, while he goes around the forest in the original.
+   *  In REGoth, before bs:f, the character showing the way from the old camp to
+   *  the swamp will go though the forest, while he goes around the forest in
+   *  the original.
    *
-   * Maybe the characters are advised to go through the Outside-world, if possible?
+   * Maybe the characters are advised to go through the Outside-world, if
+   * possible?
    *
    *
-   * # Scene Object structure
+   * Freepoints and Waypoints
+   * ========================
    *
-   * The object this component is attached to will be the parent of all Waypoints
-   * this waynet has. So to search for a waypoint, simply search the children of
-   * the Waynet-SO.
+   * The original engine uses Waypoints for most of the navigation. However,
+   * the term *Freepoint* sometimes pops up in the same context. A Freepoint
+   * is, even if the names are similar, fundamentally different from a
+   * Waypoint. While a Waypoint is a specialized part of the Waynet, used for
+   * navigation, a Freepoint is just a simple spot in the world.
+   *
+   * Those spots describe that a certain location could be used by a Character to
+   * do something, without needing an object to interact with. For example,
+   * there could be multiple Freepoints called `SIT` located around a fireplace.
+   * Characters which are told to sit down by their daily routine will search
+   * for a non-occupied freepoint with the name `SIT` and if they find one,
+   * walk to it, mark the Freepoint as occupied and play the sitting-animation.
+   *
+   * Another use-case for Freepoints is for Monsters to know where to walk when
+   * they are supposed to roam around their home-location. You will find multiple
+   * Freepoints called `ROAM` scattered near monsters which they walk to in a
+   * random order every so often.
+   *
+   *
+   * Scene Object structure
+   * ======================
+   *
+   * The object this component is attached to will be the parent of all
+   * Waypoints this waynet has. So to search for a waypoint, you could simply
+   * search the children of the Waynet-SO. Since this is a rather slow
+   * operation, see findWaypoint() for alternatives.
+   *
    */
   class Waynet : public bs::Component
   {
