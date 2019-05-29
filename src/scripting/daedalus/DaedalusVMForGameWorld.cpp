@@ -654,8 +654,9 @@ namespace REGoth
 
       auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
 
-      HFreepoint freepoint = mWorld->waynet()->findSecondClosestFreepointTo(
-          freepointName, self->SO()->getTransform().pos());
+      const auto& at = self->SO()->getTransform().pos();
+      HFreepoint freepoint =
+          mWorld->waynet()->findClosestFreepointTo(freepointName, at).secondClosest;
 
       eventQueue->pushGotoObject(freepoint->SO());
     }

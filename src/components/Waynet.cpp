@@ -50,7 +50,7 @@ namespace REGoth
     }
   }
 
-  HWaypoint Waynet::findClosestWaypointTo(const bs::Vector3& position)
+  Waynet::ClosestWaypoints Waynet::findClosestWaypointTo(const bs::Vector3& position)
   {
     if (!hasCachedWaypointPositions())
     {
@@ -63,7 +63,9 @@ namespace REGoth
       return {};
     }
 
-    // Any waypoint would do for initialization, 0 is as good as any other
+    bs::UINT32 secondNearestIndex = 0;
+    float secondNearestDistance   = std::numeric_limits<float>().max();
+
     bs::UINT32 nearestIndex = 0;
     float nearestDistance   = std::numeric_limits<float>().max();
 
@@ -76,46 +78,23 @@ namespace REGoth
         nearestDistance = thisDistance;
         nearestIndex    = i;
       }
-    }
 
-    return mWaypoints[nearestIndex];
-  }
-
-  HWaypoint Waynet::findSecondClosestWaypointTo(const bs::Vector3& position)
-  {
-    if (!hasCachedWaypointPositions())
-    {
-      populateWaypointPositionCache();
-    }
-
-    // No waypoints at all?
-    if (mWaypointPositions.empty())
-    {
-      return {};
-    }
-
-    HWaypoint nearest       = findClosestWaypointTo(position);
-    float distanceToNearest = nearest->SO()->getTransform().getPosition().squaredDistance(position);
-
-    // Any waypoint would do for initialization, 0 is as good as any other
-    bs::UINT32 secondNearestIndex = 0;
-    float secondNearestDistance   = std::numeric_limits<float>().max();
-
-    for (bs::UINT32 i = 0; i < (bs::UINT32)mWaypointPositions.size(); i++)
-    {
-      float thisDistance = (position - mWaypointPositions[i]).squaredLength();
-
-      if (thisDistance > distanceToNearest && thisDistance < secondNearestDistance)
+      if (thisDistance > nearestDistance && thisDistance < secondNearestDistance)
       {
         secondNearestDistance = thisDistance;
         secondNearestIndex    = i;
       }
     }
 
-    return mWaypoints[secondNearestIndex];
+    ClosestWaypoints result;
+    result.closest       = mWaypoints[nearestIndex];
+    result.secondClosest = mWaypoints[secondNearestIndex];
+
+    return result;
   }
 
-  HFreepoint Waynet::findClosestFreepointTo(const bs::String& name, const bs::Vector3& position)
+  Waynet::ClosestFreepoints Waynet::findClosestFreepointTo(const bs::String& name,
+                                                           const bs::Vector3& position)
   {
     if (!hasCachedFreepointPositions())
     {
@@ -128,7 +107,9 @@ namespace REGoth
       return {};
     }
 
-    // Any freepoint would do for initialization, 0 is as good as any other
+    bs::UINT32 secondNearestIndex = 0;
+    float secondNearestDistance   = std::numeric_limits<float>().max();
+
     bs::UINT32 nearestIndex = 0;
     float nearestDistance   = std::numeric_limits<float>().max();
 
@@ -138,53 +119,22 @@ namespace REGoth
 
       if (thisDistance < nearestDistance)
       {
-        if (mFreepoints[i]->getName() == name)
-        {
-          nearestDistance = thisDistance;
-          nearestIndex    = i;
-        }
+        nearestDistance = thisDistance;
+        nearestIndex    = i;
       }
-    }
 
-    return mFreepoints[nearestIndex];
-  }
-
-  HFreepoint Waynet::findSecondClosestFreepointTo(const bs::String& name,
-                                                  const bs::Vector3& position)
-  {
-    if (!hasCachedFreepointPositions())
-    {
-      populateFreepointPositionCache();
-    }
-
-    // No freepoints at all?
-    if (mFreepointPositions.empty())
-    {
-      return {};
-    }
-
-    HFreepoint nearest      = findClosestFreepointTo(name, position);
-    float distanceToNearest = nearest->SO()->getTransform().getPosition().squaredDistance(position);
-
-    // Any freepoint would do for initialization, 0 is as good as any other
-    bs::UINT32 secondNearestIndex = 0;
-    float secondNearestDistance   = std::numeric_limits<float>().max();
-
-    for (bs::UINT32 i = 0; i < (bs::UINT32)mFreepointPositions.size(); i++)
-    {
-      float thisDistance = (position - mFreepointPositions[i]).squaredLength();
-
-      if (thisDistance > distanceToNearest && thisDistance < secondNearestDistance)
+      if (thisDistance > nearestDistance && thisDistance < secondNearestDistance)
       {
-        if (mFreepoints[i]->getName() == name)
-        {
-          secondNearestDistance = thisDistance;
-          secondNearestIndex    = i;
-        }
+        secondNearestDistance = thisDistance;
+        secondNearestIndex    = i;
       }
     }
 
-    return mFreepoints[secondNearestIndex];
+    ClosestFreepoints result;
+    result.closest       = mFreepoints[nearestIndex];
+    result.secondClosest = mFreepoints[secondNearestIndex];
+
+    return result;
   }
 
   bs::Vector<HWaypoint> Waynet::findWay(HWaypoint from, HWaypoint to)

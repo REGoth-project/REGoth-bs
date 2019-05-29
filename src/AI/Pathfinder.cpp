@@ -94,7 +94,7 @@ namespace REGoth
     HWaypoint Pathfinder::findNextVisibleWaypoint(const bs::Vector3& from) const
     {
       // TODO: Check for obstructions
-      return mWaynet->findClosestWaypointTo(from);
+      return mWaynet->findClosestWaypointTo(from).closest;
     }
 
     bool Pathfinder::hasActiveRouteBeenCompleted(const bs::Vector3& positionNow) const
@@ -245,8 +245,8 @@ namespace REGoth
         return;
       }
 
-      HWaypoint nearestWpToTarget = mWaynet->findClosestWaypointTo(position);
-      HWaypoint nearestWpToStart  = mWaynet->findClosestWaypointTo(positionNow);
+      HWaypoint nearestWpToTarget = mWaynet->findClosestWaypointTo(position).closest;
+      HWaypoint nearestWpToStart  = mWaynet->findClosestWaypointTo(positionNow).closest;
 
       bs::Vector<HWaypoint> path = mWaynet->findWay(nearestWpToStart, nearestWpToTarget);
 

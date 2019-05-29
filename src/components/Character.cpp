@@ -192,7 +192,7 @@ namespace REGoth
   {
     const bs::Vector3& pos = SO()->getTransform().pos();
 
-    auto wp = gameWorld()->waynet()->findSecondClosestWaypointTo(pos);
+    auto wp = gameWorld()->waynet()->findClosestWaypointTo(pos).secondClosest;
 
     return wp->SO()->getName();
   }
@@ -201,7 +201,7 @@ namespace REGoth
   {
     const bs::Vector3& pos = SO()->getTransform().pos();
 
-    auto wp = gameWorld()->waynet()->findClosestWaypointTo(pos);
+    auto wp = gameWorld()->waynet()->findClosestWaypointTo(pos).closest;
 
     return wp->SO()->getName();
   }

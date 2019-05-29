@@ -90,6 +90,12 @@ namespace REGoth
      */
     HWaypoint findWaypoint(const bs::String& name);
 
+    struct ClosestWaypoints
+    {
+      HWaypoint closest;
+      HWaypoint secondClosest;
+    };
+
     /**
      * Searches the closest waypoint to the given position.
      *
@@ -101,21 +107,13 @@ namespace REGoth
      * @return Closest Waypoint to the given position. Should only be empty
      *         if no waypoint exists at all.
      */
-    HWaypoint findClosestWaypointTo(const bs::Vector3& position);
+    ClosestWaypoints findClosestWaypointTo(const bs::Vector3& position);
 
-    /**
-     * Searches the *second* closest Waypoint to the given position,
-     * not the closest one, but the one which is closest after that one.
-     *
-     * Does not check whether the waypoint is obstructed by anything and
-     * ignores all waypoint connections.
-     *
-     * @param  position  Position to search around.
-     *
-     * @return Closest Waypoint to the given position. Should only be empty
-     *         if no waypoint exists at all.
-     */
-    HWaypoint findSecondClosestWaypointTo(const bs::Vector3& position);
+    struct ClosestFreepoints
+    {
+      HFreepoint closest;
+      HFreepoint secondClosest;
+    };
 
     /**
      * Searches the closest Freepoint to the given position.
@@ -128,21 +126,7 @@ namespace REGoth
      * @return Closest Freepoint to the given position. Should only be empty
      *         if no Freepoint exists at all.
      */
-    HFreepoint findClosestFreepointTo(const bs::String& name, const bs::Vector3& position);
-
-    /**
-     * Searches the *second* closest Freepoint to the given position,
-     * not the closest one, but the one which is closest after that one.
-     *
-     * Does not check whether the Freepoint is obstructed by anything and
-     * ignores all waypoint connections.
-     *
-     * @param  position  Position to search around.
-     *
-     * @return Closest Freepoint to the given position. Should only be empty
-     *         if no Freepoint exists at all.
-     */
-    HFreepoint findSecondClosestFreepointTo(const bs::String& name, const bs::Vector3& position);
+    ClosestFreepoints findClosestFreepointTo(const bs::String& name, const bs::Vector3& position);
 
     /**
      * Finds a way between two waypoints in the given waypoint instance
