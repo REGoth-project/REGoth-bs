@@ -1,8 +1,11 @@
 #include "CharacterAI.hpp"
+#include <Components/BsCCamera.h>
 #include <Components/BsCCharacterController.h>
 #include <RTTI/RTTI_CharacterAI.hpp>
+#include <Scene/BsSceneManager.h>
 #include <Scene/BsSceneObject.h>
 #include <animation/StateNaming.hpp>
+#include <components/GameWorld.hpp>
 #include <components/VisualCharacter.hpp>
 #include <exception/Throw.hpp>
 
@@ -14,8 +17,21 @@ namespace REGoth
   /** Multiplicator of how fast the character can turn while holding a weapon. */
   constexpr float TURN_SPEED_MULTIPLICATOR_WITH_WEAPON = 2.0f;
 
-  CharacterAI::CharacterAI(const bs::HSceneObject& parent)
+  /**
+   * How far away the character can be from the camera until it should disable physics.
+   * Must be larger than the range which activates physics again, ACTIVATE_PHYSICS_RANGE_METERS.
+   * See https://regoth-project.github.io/REGoth-bs/content/characters.html
+   *
+   * TODO: Make this configurable.
+   */
+  constexpr float DEACTIVATE_PHYSICS_RANGE_METERS = 45.0;
+
+  /** See DEACTIVATE_PHYSICS_RANGE_METERS */
+  constexpr float ACTIVATE_PHYSICS_RANGE_METERS = 40.0;
+
+  CharacterAI::CharacterAI(const bs::HSceneObject& parent, HGameWorld world)
       : bs::Component(parent)
+      , mWorld(world)
   {
     mVisual = SO()->getComponent<VisualCharacter>();
 
@@ -48,11 +64,58 @@ namespace REGoth
     mIsPhysicsActive = true;
   }
 
+  bool CharacterAI::shouldDisablePhysics() const
+  {
+    const auto& mainCamera     = bs::gSceneManager().getMainCamera();
+    const auto& cameraPosition = mainCamera->getTransform().pos();
+    const auto& soPosition     = SO()->getTransform().pos();
+
+    float maxRangeSq = DEACTIVATE_PHYSICS_RANGE_METERS * DEACTIVATE_PHYSICS_RANGE_METERS;
+
+    return cameraPosition.squaredDistance(soPosition) > maxRangeSq;
+  }
+
+  bool CharacterAI::shouldEnablePhysics() const
+  {
+    const auto& mainCamera     = bs::gSceneManager().getMainCamera();
+    const auto& cameraPosition = mainCamera->getTransform().pos();
+    const auto& soPosition     = SO()->getTransform().pos();
+
+    float minRangeSq = ACTIVATE_PHYSICS_RANGE_METERS * ACTIVATE_PHYSICS_RANGE_METERS;
+
+    return cameraPosition.squaredDistance(soPosition) < minRangeSq;
+  }
+
+  bool CharacterAI::isPhysicsActive() const
+  {
+    return mIsPhysicsActive;
+  }
+
+  void CharacterAI::handlePhysicsActivation()
+  {
+    if (mIsPhysicsActive)
+    {
+      if (shouldDisablePhysics())
+      {
+        deactivatePhysics();
+      }
+    }
+    else
+    {
+      if (shouldEnablePhysics())
+      {
+        activatePhysics();
+      }
+    }
+  }
+
   bool CharacterAI::goForward()
   {
     if (!isStateSwitchAllowed()) return false;
 
-    return mVisual->tryPlayTransitionAnimationTo("S_RUNL");
+    bs::String anim = AnimationState::constructStateAnimationName(mWeaponMode, mWalkMode, "L");
+
+    return mVisual->tryPlayTransitionAnimationTo(anim);
   }
 
   bool CharacterAI::goBackward()
@@ -101,7 +164,9 @@ namespace REGoth
   {
     if (!isStateSwitchAllowed()) return false;
 
-    return mVisual->tryPlayTransitionAnimationTo("S_RUN");
+    bs::String anim = AnimationState::constructStateAnimationName(mWeaponMode, mWalkMode, "");
+
+    return mVisual->tryPlayTransitionAnimationTo(anim);
   }
 
   bool CharacterAI::stopTurning()
@@ -118,7 +183,7 @@ namespace REGoth
 
     if (playingAnim.empty()) return true;
 
-    bs::String state = Animation::getStateName(playingAnim);
+    bs::String state = AnimationState::getStateName(playingAnim);
 
     // Playing some weird animation we don't know the naming scheme for?
     if (state.empty()) return false;
@@ -134,11 +199,42 @@ namespace REGoth
     return true;
   }
 
+  void CharacterAI::instantTurnToPosition(const bs::Vector3& position)
+  {
+    bs::Vector3 positionSameHeight = position;
+
+    // Characters should stay upright (at least most of them),
+    // thus modify the position as if it were straight ahead.
+    positionSameHeight.y = SO()->getTransform().pos().y;
+
+    SO()->lookAt(positionSameHeight);
+  }
+
+  bool CharacterAI::gotoPositionStraight(const bs::Vector3& position)
+  {
+    instantTurnToPosition(position);
+
+    goForward();
+
+    return isAtPosition(position);
+  }
+
+  bool CharacterAI::isAtPosition(const bs::Vector3& position)
+  {
+    return (SO()->getTransform().pos() - position).length() < 0.5f;
+  }
+
+  void CharacterAI::fastMove(float factor)
+  {
+    mVisual->setDebugAnimationSpeedFactor(factor);
+  }
+
   void CharacterAI::fixedUpdate()
   {
+    handlePhysicsActivation();
+
     if (!mIsPhysicsActive)
     {
-      // Skip all movement and physics calculations to save processing time.
       return;
     }
 
@@ -149,10 +245,10 @@ namespace REGoth
 
     bs::Vector3 rootMotion = mVisual->resolveFrameRootMotion();
 
-    // FIXME: Find out why the root motion is rotated 90 degrees?
-    bs::Vector3 rootMotionFixed(-rootMotion.z, rootMotion.y, rootMotion.x);
+    bs::Vector3 rootMotionRotated = SO()->getTransform().getRotation().rotate(rootMotion);
 
-    bs::Vector3 rootMotionRotated = SO()->getTransform().getRotation().rotate(rootMotionFixed);
+    // For some reason this is inverted
+    rootMotionRotated *= -1.0;
 
     // No need to multiply rootMotion by the frame delta since it is the actual movement since
     // last time we queried it.
@@ -191,6 +287,26 @@ namespace REGoth
 
   void CharacterAI::teleport(const bs::String& waypoint)
   {
+    bs::HSceneObject so = mWorld->findObjectByName(waypoint);
+
+    if (!so)
+    {
+      // Usually we would throw here, but Gothic has some invalid waypoints inside it's scripts
+      // so we would break the original games if we did that. Resort to a warning for those,
+      // better than nothing, I guess.
+      bs::gDebug().logWarning("[CharacterAI] Teleport failed, waypoint doesn't exist: " + waypoint);
+      return;
+    }
+
+    SO()->setPosition(so->getTransform().pos());
+
+    // Turn the same way the waypoint is oriented, but have the character keep looking forward
+    bs::Vector3 forwardCenterd = so->getTransform().getForward();
+
+    forwardCenterd.y = 0;
+    forwardCenterd.normalize();
+
+    SO()->setForward(forwardCenterd);
   }
 
   void CharacterAI::turnToNPC(bs::HSceneObject targetSO)
@@ -234,8 +350,14 @@ namespace REGoth
   {
   }
 
-  void CharacterAI::setWalkMode(bs::UINT32 walkMode)
+  void CharacterAI::setWalkMode(AI::WalkMode walkMode)
   {
+    mWalkMode = walkMode;
+  }
+
+  void CharacterAI::setWeaponMode(AI::WeaponMode mode)
+  {
+    mWeaponMode = mode;
   }
 
   void CharacterAI::stopProcessingInfos()

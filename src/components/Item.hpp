@@ -15,7 +15,7 @@ namespace REGoth
   class Item : public ScriptBackedBy
   {
   public:
-    Item(const bs::HSceneObject& parent, const bs::String& instance);
+    Item(const bs::HSceneObject& parent, const bs::String& instance, HGameWorld gameWorld);
 
   protected:
 

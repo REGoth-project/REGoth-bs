@@ -35,6 +35,15 @@ namespace REGoth
 
   private:
 
+    friend class Waynet;
+
+    /**
+     * Index only valid to the Waynet-component. This is the index this Waypoint
+     * has into the acceleration data structures of the Waynet. Should not be set
+     * other than during Waynet::addWaypoint().
+     */
+    bs::UINT32 mIndex = 0;
+
     /**
      * Other waypoint this one is connected to.
      */

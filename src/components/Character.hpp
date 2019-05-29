@@ -13,15 +13,45 @@ namespace REGoth
   class Character : public ScriptBackedBy
   {
   public:
-    Character(const bs::HSceneObject& parent, const bs::String& instance);
+    Character(const bs::HSceneObject& parent, const bs::String& instance, HGameWorld gameWorld);
 
     void onInitialized() override;
 
     /**
      * Registers this character as the hero. The hero will most likely be the player,
      * but doesn't have to be, ie. if the player controls another character.
+     *
+     * Also sets this character to be referenced by `HERO` inside the scripts.
      */
     void useAsHero();
+
+    /**
+     * Sets this character to be referenced by `SELF` inside the scripts.
+     */
+    void useAsSelf();
+
+    /**
+     * Sets this character to be referenced by `VICTIM` inside the scripts.
+     */
+    void useAsVictim();
+
+    /**
+     * Sets this character to be referenced `OTHER` inside the scripts.
+     */
+    void useAsOther();
+
+    /**
+     * To be called from the ScriptState-module if this character is currently
+     * Unconscious.
+     */
+    void handleUnconsciousness();
+
+    /**
+     * TODO: Called from the ScriptState-Module. See in old REGoth what isReady() means.
+     *       Supposidly it "Checks for death, etc". So maybe a name of `isAliveAndWell()`
+     *       would me more descriptive.
+     */
+    bool isReady();
 
     /**
      * @return Distance from this Character to the given other Character in meters.
@@ -56,7 +86,51 @@ namespace REGoth
     void createInventoryItem(const bs::String& instance, bs::INT32 num);
 
     void setToFightMode(const bs::String& weapon);
-    void setToFistMode();
+
+    /**
+     * @return The waypoint this character is around, needed by the scripts.
+     */
+    const bs::String& currentWaypoint() const;
+
+    /**
+     * Sets the waypoint this character is around, needed by the scripts.
+     * This could be the waypoint of the active routine, for example.
+     */
+    void setCurrentWaypoint(const bs::String& waypoint);
+
+    /**
+     * @return On monsters, this will return the AI-state the monster should
+     *         automatically start after spawning.
+     *         On Humans, this will return an empty string.
+     */
+    const bs::String& getStartAIState();
+
+    /**
+     * @return Name of the script function to call for the daily routine.
+     */
+    bs::String dailyRoutine();
+
+    /**
+     * Sets the name of the daily routine this character should use to the characters script object.
+     * Note that you will need to call CharacterEventQueue::reinitRoutine() to actually apply
+     * the new routine.
+     *
+     * @param  newDailyRoutine  Name of the daily routine as used inside Gothic scripts.
+     *                          This is actually a part of a script function name. For
+     *                          example, if a routine name of "Start" is supplied and this
+     *                          character has an ID of 456, then the final routine function
+     *                          would be constructed as `Rtn_Start_456`, which needs to
+     *                          be an actual script function.
+     */
+    void setDailyRoutine(const bs::String& newDailyRoutine);
+
+    /**
+     * @return If this is a monster, it will not use routines to manage it's actions, but
+     *         rather start a script-state which dictates what the monster should do.
+     *         So basically this should return TRUE, if this is monster,
+     *         FALSE, if this is a human.
+     */
+    bool isStateDriven();
 
     /**
      * @return Whether this character is controlled by the player.

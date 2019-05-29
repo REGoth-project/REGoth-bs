@@ -1,26 +1,81 @@
 #include "Character.hpp"
+#include <Components/BsCCharacterController.h>
 #include <RTTI/RTTI_Character.hpp>
 #include <Scene/BsSceneObject.h>
+#include <components/CharacterAI.hpp>
+#include <components/CharacterEventQueue.hpp>
 #include <components/GameWorld.hpp>
 #include <components/VisualCharacter.hpp>
+#include <components/Waynet.hpp>
+#include <components/Waypoint.hpp>
 #include <scripting/ScriptVMForGameWorld.hpp>
 
 namespace REGoth
 {
-  Character::Character(const bs::HSceneObject& parent, const bs::String& instance)
-      : ScriptBackedBy(parent, "C_NPC", instance)
+  Character::Character(const bs::HSceneObject& parent, const bs::String& instance,
+                       HGameWorld gameWorld)
+    : ScriptBackedBy(parent, "C_NPC", instance, gameWorld)
   {
     setName("Character");
   }
 
   void Character::onInitialized()
   {
-    ScriptBackedBy::onInitialized();
+    // Only run this when we're not getting deserialized
+    if (!hasInstantiatedScriptObject())
+    {
+      HCharacter thisCharacter = bs::static_object_cast<Character>(getHandle());
+
+      auto controller = SO()->addComponent<bs::CCharacterController>();
+
+      // FIXME: Assign the radius and height set via the visuals bounding box
+      controller->setRadius(0.35f);
+      controller->setHeight(0.5f);
+
+      auto visual = SO()->addComponent<VisualCharacter>();
+      auto ai     = SO()->addComponent<CharacterAI>(gameWorld());
+
+      auto eventQueue =
+          SO()->addComponent<CharacterEventQueue>(thisCharacter, ai, visual, gameWorld());
+
+      ScriptBackedBy::onInitialized();
+
+      // If we don't init the routine now, the character won't have its default routine
+      // Must also come *after* the script object has been created since this might run
+      // some scripts.
+      eventQueue->reinitRoutine();
+    }
   }
 
   void Character::useAsHero()
   {
     gameWorld()->scriptVM().setHero(scriptObject());
+  }
+
+  void Character::useAsSelf()
+  {
+    gameWorld()->scriptVM().setSelf(scriptObject());
+  }
+
+  void Character::useAsVictim()
+  {
+    gameWorld()->scriptVM().setVictim(scriptObject());
+  }
+
+  void Character::useAsOther()
+  {
+    gameWorld()->scriptVM().setOther(scriptObject());
+  }
+
+  void Character::handleUnconsciousness()
+  {
+    // TODO: See how old REGoth implmented checkUnconscious()
+  }
+
+  bool Character::isReady()
+  {
+    // TODO: Implement
+    return true;
   }
 
   bool Character::checkInfo(bool important)
@@ -68,6 +123,53 @@ namespace REGoth
     return true;
   }
 
+  bool Character::isStateDriven()
+  {
+    return scriptObjectData().functionPointerValue("START_AISTATE") != 0;
+  }
+
+  const bs::String& Character::getStartAIState()
+  {
+    bs::UINT32 address = scriptObjectData().functionPointerValue("START_AISTATE");
+
+    Scripting::SymbolIndex symbol = scriptVM().scriptSymbols().findFunctionByAddress(address);
+
+    return scriptVM().scriptSymbols().getSymbolName(symbol);
+  }
+
+  bs::String Character::dailyRoutine()
+  {
+    bs::UINT32 address = scriptObjectData().functionPointerValue("DAILY_ROUTINE");
+
+    Scripting::SymbolIndex symbol = scriptVM().scriptSymbols().findFunctionByAddress(address);
+
+    if (symbol == Scripting::SYMBOL_INDEX_INVALID)
+    {
+      return "";
+    }
+
+    return scriptVM().scriptSymbols().getSymbolName(symbol);
+  }
+
+  void Character::setDailyRoutine(const bs::String& newDailyRoutine)
+  {
+    if (newDailyRoutine.empty())
+    {
+      scriptObjectData().functionPointerValue("DAILY_ROUTINE") = 0;
+    }
+    else
+    {
+      bs::UINT32 id = scriptObjectData().intValue("ID");
+
+      bs::String functionName = "RTN_" + newDailyRoutine + "_" + bs::toString(id);
+
+      const auto& fn =
+          scriptVM().scriptSymbols().getSymbol<Scripting::SymbolScriptFunction>(functionName);
+
+      scriptObjectData().functionPointerValue("DAILY_ROUTINE") = fn.address;
+    }
+  }
+
   void Character::refuseTalk()
   {
   }
@@ -76,18 +178,32 @@ namespace REGoth
   {
   }
 
+  void Character::setCurrentWaypoint(const bs::String& waypoint)
+  {
+    scriptObjectData().stringValue("WP") = waypoint;
+  }
+
+  const bs::String& Character::currentWaypoint() const
+  {
+    return scriptObjectData().stringValue("WP");
+  }
+
   bs::String Character::getNextWaypoint()
   {
-    bs::String b;
+    const bs::Vector3& pos = SO()->getTransform().pos();
 
-    return b;
+    auto wp = gameWorld()->waynet()->findClosestWaypointTo(pos).secondClosest;
+
+    return wp->SO()->getName();
   }
 
   bs::String Character::getNearestWaypoint()
   {
-    bs::String b;
+    const bs::Vector3& pos = SO()->getTransform().pos();
 
-    return b;
+    auto wp = gameWorld()->waynet()->findClosestWaypointTo(pos).closest;
+
+    return wp->SO()->getName();
   }
 
   void Character::exchangeRoutine(const bs::String& routineName)
@@ -125,11 +241,7 @@ namespace REGoth
 
   bool Character::isPlayer()
   {
-    return true;
-  }
-
-  void Character::setToFistMode()
-  {
+    return scriptVM().heroInstance() == scriptObject();
   }
 
   void Character::setToFightMode(const bs::String& weapon)

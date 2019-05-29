@@ -20,7 +20,7 @@ namespace REGoth
     class DaedalusVM : public ScriptVM
     {
     public:
-      DaedalusVM(const Daedalus::DATFile& datFile);
+      DaedalusVM(const bs::Vector<bs::UINT8>& datFileData);
 
     protected:
 
@@ -122,6 +122,7 @@ namespace REGoth
       void registerExternal(const bs::String& name, externalCallback callback);
 
     protected:
+
       bs::SPtr<DaedalusClassVarResolver> mClassVarResolver;
       DaedalusStack mStack;
 
@@ -133,6 +134,16 @@ namespace REGoth
       void disassembleAndLogOpcode(const Daedalus::PARStackOpCode& opcode);
 
       /**
+       * Looks up the function at the given address and returns its name
+       */
+      void findFunctionAtAddressAndLog(bs::UINT32 address);
+
+      /**
+       * If true, every executed instruction will be logged to the console.
+       */
+      bool mIsDisassemblerEnabled = false;
+
+      /**
        * Program counter register
        */
       bs::UINT32 mPC = 0;
@@ -142,15 +153,19 @@ namespace REGoth
        */
       bs::INT32 mCallDepth = 0;
 
-      bs::SPtr<DATSymbolStorageLoader> mInternals;
       bs::SPtr<Daedalus::DATFile> mDatFile;
+
+      // The whole DAT-file, for serialization
+      bs::Vector<bs::UINT8> mDatFileData;
 
       bs::Map<SymbolIndex, externalCallback> mExternals;
 
     public:
+
+      // Remember, this is abstract, so don't create an rttiCreateEmpty()
       REGOTH_DECLARE_RTTI(DaedalusVM);
 
-    public: // FIXME: RTTI protected
+    protected:
       DaedalusVM() = default; // For RTTI
     };
   }  // namespace Scripting

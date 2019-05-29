@@ -154,6 +154,12 @@ namespace REGoth
      */
     bool isPlayingAnimationInterruptable() const;
 
+    /**
+     * This is only for debugging, don't expect this to be saved with a savegame!
+     * Sets the animation speed factor, e.g. for fast running.
+     */
+    void setDebugAnimationSpeedFactor(float factor);
+
   protected:
 
     void onInitialized() override;
@@ -264,6 +270,12 @@ namespace REGoth
      * Adds the attachments defined inside the model script to their nodes.
      */
     void addDefaultAttachments();
+
+    /**
+     * Whether the given clip should be played as looping. If not, it will likely
+     * switch to a different animation when it's done.
+     */
+    bool isClipLooping(bs::HAnimationClip clip);
 
     // Configuration ----------------------------------------------------------
 

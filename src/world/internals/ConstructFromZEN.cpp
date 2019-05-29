@@ -7,7 +7,10 @@
 #include <Components/BsCMeshCollider.h>
 #include <Physics/BsPhysicsMesh.h>
 #include <Resources/BsResources.h>
+#include <Scene/BsSceneManager.h>
 #include <Scene/BsSceneObject.h>
+#include <components/Freepoint.hpp>
+#include <components/GameWorld.hpp>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
 #include <exception/Throw.hpp>
@@ -26,11 +29,12 @@ namespace REGoth
 
   static bool importZEN(const bs::String& zenFile, OriginalZen& result);
   static bs::HSceneObject importWorldMesh(const OriginalZen& zen);
-  static void importVobs(bs::HSceneObject sceneRoot, const OriginalZen& zen);
+  static void importVobs(bs::HSceneObject sceneRoot, HGameWorld gameWorld, const OriginalZen& zen);
   static void importWaynet(bs::HSceneObject sceneRoot, const OriginalZen& zen);
-  static void walkVobTree(bs::HSceneObject bsfParent, const ZenLoad::zCVobData& zenParent);
+  static void walkVobTree(bs::HSceneObject bsfParent, HGameWorld gameWorld,
+                          const ZenLoad::zCVobData& zenParent);
 
-  bs::HSceneObject Internals::constructFromZEN(bs::HSceneObject root, const bs::String& zenFile)
+  bs::HSceneObject Internals::constructFromZEN(HGameWorld gameWorld, const bs::String& zenFile)
   {
     OriginalZen zen;
 
@@ -43,10 +47,10 @@ namespace REGoth
     }
 
     bs::HSceneObject worldMesh = importWorldMesh(zen);
-    worldMesh->setParent(root);
+    worldMesh->setParent(gameWorld->SO());
 
-    importVobs(root, zen);
-    importWaynet(root, zen);
+    importVobs(gameWorld->SO(), gameWorld, zen);
+    importWaynet(gameWorld->SO(), zen);
 
     return worldMesh;
   }
@@ -66,23 +70,24 @@ namespace REGoth
     return importWorldMesh(zen);
   }
 
-  static void importVobs(bs::HSceneObject sceneRoot, const OriginalZen& zen)
+  static void importVobs(bs::HSceneObject sceneRoot, HGameWorld gameWorld, const OriginalZen& zen)
   {
     for (const ZenLoad::zCVobData& root : zen.vobTree.rootVobs)
     {
-      walkVobTree(sceneRoot, root);
+      walkVobTree(sceneRoot, gameWorld, root);
     }
   }
 
-  static void walkVobTree(bs::HSceneObject bsfParent, const ZenLoad::zCVobData& zenParent)
+  static void walkVobTree(bs::HSceneObject bsfParent, HGameWorld gameWorld,
+                          const ZenLoad::zCVobData& zenParent)
   {
     for (const auto& v : zenParent.childVobs)
     {
-      bs::HSceneObject so = Internals::importSingleVob(v, bsfParent);
+      bs::HSceneObject so = Internals::importSingleVob(v, bsfParent, gameWorld);
 
       if (so)
       {
-        walkVobTree(so, v);
+        walkVobTree(so, gameWorld, v);
       }
     }
   }
@@ -205,6 +210,19 @@ namespace REGoth
 
       waypoints[edge.first]->addPathTo(waypoints[edge.second]);
       waypoints[edge.second]->addPathTo(waypoints[edge.first]);
+    }
+
+    // FIXME: Initializes internal data structures for findComponents() to work. Should be removed
+    //        once this is fixed upstream.
+    bs::gSceneManager().setComponentState(bs::ComponentState::Paused);
+    bs::gSceneManager().setComponentState(bs::ComponentState::Running);
+
+    // Find Freepoints and save them into the waynet
+    auto freepoints = bs::gSceneManager().findComponents<Freepoint>(false);
+
+    for (const auto& fp : freepoints)
+    {
+      waynet->addFreepoint(fp);
     }
   }
 

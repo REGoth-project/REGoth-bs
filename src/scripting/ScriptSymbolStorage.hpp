@@ -217,6 +217,33 @@ namespace REGoth
         return it->second;
       }
 
+      /**
+       * Registers a mapping of script address -> symbol index so we can get the script
+       * Symbol from an address. This might not fit here, since the symbol storage doesn't
+       * know the types of the other symbols, but this seems to be the best place...
+       */
+      void registerFunctionAddress(SymbolIndex index)
+      {
+        SymbolScriptFunction& fn = getSymbol<SymbolScriptFunction>(index);
+
+        mFunctionsByAddress[fn.address] = index;
+      }
+
+      /**
+       * @return Symbol of the function with the given address.
+       */
+      SymbolIndex findFunctionByAddress(bs::UINT32 scriptAddress)
+      {
+        auto it = mFunctionsByAddress.find(scriptAddress);
+
+        if (it == mFunctionsByAddress.end())
+        {
+          return SYMBOL_INDEX_INVALID;
+        }
+
+        return it->second;
+      }
+
     private:
       /**
        * @return The symbol at the given index cast to the passed type.
@@ -258,9 +285,10 @@ namespace REGoth
 
       bs::Vector<bs::SPtr<SymbolBase>> mStorage;
       bs::Map<bs::String, SymbolIndex> mSymbolsByName;
+      bs::Map<bs::UINT32, SymbolIndex> mFunctionsByAddress;
 
     public:
-      REGOTH_DECLARE_RTTI(ScriptSymbolStorage)
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(ScriptSymbolStorage)
     };
   }  // namespace Scripting
 }  // namespace REGoth

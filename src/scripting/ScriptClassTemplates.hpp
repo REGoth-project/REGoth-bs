@@ -97,7 +97,7 @@ namespace REGoth
       bs::Map<bs::String, ScriptObject> mClassTemplates;
 
     public:
-      REGOTH_DECLARE_RTTI(ScriptClassTemplates)
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(ScriptClassTemplates)
     };
   }  // namespace Scripting
 }  // namespace REGoth

@@ -1,15 +1,13 @@
 #include "GameWorld.hpp"
 #include <BsZenLib/ImportPath.hpp>
-#include <Components/BsCCharacterController.h>
 #include <RTTI/RTTI_GameWorld.hpp>
 #include <Resources/BsResources.h>
 #include <Scene/BsPrefab.h>
 #include <components/Character.hpp>
-#include <components/CharacterAI.hpp>
+#include <components/GameClock.hpp>
 #include <components/Item.hpp>
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
-#include <components/GameClock.hpp>
 #include <daedalus/DATFile.h>
 #include <exception/Throw.hpp>
 #include <original-content/VirtualFileSystem.hpp>
@@ -38,6 +36,9 @@ namespace REGoth
 
   void GameWorld::onInitialized()
   {
+    // Always do this after importing or deserializing
+    fillFindByNameCache();
+
     // If this is true here, we're being de-serialized
     if (mIsInitialized) return;
 
@@ -45,8 +46,10 @@ namespace REGoth
 
     if (!mZenFile.empty())
     {
+      HGameWorld thisWorld = bs::static_object_cast<GameWorld>(getHandle());
+
       // Import the ZEN and add all scene objects as children to this SO.
-      bs::HSceneObject so = Internals::constructFromZEN(SO(), mZenFile);
+      bs::HSceneObject so = Internals::constructFromZEN(thisWorld, mZenFile);
 
       if (!so)
       {
@@ -64,24 +67,27 @@ namespace REGoth
     onImportedZEN();
 
     mGameClock = SO()->addComponent<GameClock>();
+    mGameClock->setTime(8, 0);
 
     mIsInitialized = true;
   }
 
   HItem GameWorld::insertItem(const bs::String& instance, const bs::Transform& transform)
   {
+    HGameWorld thisWorld = bs::static_object_cast<GameWorld>(getHandle());
+
     bs::HSceneObject itemSO = bs::SceneObject::create(instance);
     itemSO->setParent(SO());
 
     itemSO->setPosition(transform.pos());
     itemSO->setRotation(transform.rot());
 
-    return itemSO->addComponent<Item>(instance);
+    return itemSO->addComponent<Item>(instance, thisWorld);
   }
 
   HItem GameWorld::insertItem(const bs::String& instance, const bs::String& spawnPoint)
   {
-    bs::HSceneObject spawnPointSO = SO()->findChild(spawnPoint);
+    bs::HSceneObject spawnPointSO = findObjectByName(spawnPoint);
     bs::Transform transform;
 
     if (spawnPointSO)
@@ -101,34 +107,28 @@ namespace REGoth
 
   HCharacter GameWorld::insertCharacter(const bs::String& instance, const bs::Transform& transform)
   {
+    HGameWorld thisWorld = bs::static_object_cast<GameWorld>(getHandle());
+
     bs::HSceneObject characterSO = bs::SceneObject::create(instance);
     characterSO->setParent(SO());
 
     characterSO->setPosition(transform.pos());
     characterSO->setRotation(transform.rot());
 
-    characterSO->addComponent<VisualCharacter>();
-
-    auto controller = characterSO->addComponent<bs::CCharacterController>();
-
-    // FIXME: Assign the radius and height set via the visuals bounding box
-    controller->setRadius(0.35f);
-    controller->setHeight(0.5f);
-
-    auto ai = characterSO->addComponent<CharacterAI>();
-
     // All script-inserted characters will be disabled right after inserting them so they
     // don't cause the game to slow down. If they are all active, physics will be calculated
     // even for those out of reach which takes a huge hit on performance.
     // The character-controller will be enabled by the AI or user input.
-    ai->deactivatePhysics();
+    // ai->deactivatePhysics(); // Commented out for testing
 
-    return characterSO->addComponent<Character>(instance);
+    auto character = characterSO->addComponent<Character>(instance, thisWorld);
+
+    return character;
   }
 
   HCharacter GameWorld::insertCharacter(const bs::String& instance, const bs::String& spawnPoint)
   {
-    bs::HSceneObject spawnPointSO = SO()->findChild(spawnPoint);
+    bs::HSceneObject spawnPointSO = findObjectByName(spawnPoint);
     bs::Transform transform;
 
     if (spawnPointSO)
@@ -156,10 +156,9 @@ namespace REGoth
   void GameWorld::initScriptVM()
   {
     bs::Vector<bs::UINT8> data = gVirtualFileSystem().readFile("GOTHIC.DAT");
-    Daedalus::DATFile dat(data.data(), data.size());
 
     mScriptVM = bs::bs_shared_ptr_new<Scripting::ScriptVMForGameWorld>(
-        bs::static_object_cast<GameWorld>(getHandle()), dat);
+        bs::static_object_cast<GameWorld>(getHandle()), data);
 
     mScriptVM->initialize();
   }
@@ -213,13 +212,64 @@ namespace REGoth
 
   HCharacter GameWorld::hero() const
   {
-    auto scriptObject = mScriptVM->getHero();
+    auto scriptObject = mScriptVM->heroInstance();
 
     if (scriptObject == Scripting::SCRIPT_OBJECT_HANDLE_INVALID) return {};
 
     bs::HSceneObject heroSO = mScriptVM->mapping().getMappedSceneObject(scriptObject);
 
     return heroSO->getComponent<Character>();
+  }
+
+  bs::HSceneObject GameWorld::findObjectByName(const bs::String& name)
+  {
+    auto it = mSceneObjectsByNameCached.find(name);
+
+    if (it != mSceneObjectsByNameCached.end())
+    {
+      // Found it in cache!
+      if (!it->second.isDestroyed())
+      {
+        return it->second;
+      }
+      else
+      {
+        // If the object was destroyed, act like the object wasn't found, the cache might be outdated
+        // and there is such an object now.
+      }
+    }
+
+    bs::HSceneObject so = SO()->findChild(name);
+
+    if (so)
+    {
+      mSceneObjectsByNameCached[name] = so;
+    }
+
+    return so;
+  }
+
+  void GameWorld::fillFindByNameCache()
+  {
+    mSceneObjectsByNameCached.clear();
+
+    std::function<void(bs::HSceneObject)> visit = [&](bs::HSceneObject parent) {
+      for (bs::UINT32 i = 0; i < parent->getNumChildren(); i++)
+      {
+        bs::HSceneObject child = parent->getChild(i);
+
+        bs::String name = child->getName();
+
+        if (!name.empty())
+        {
+          mSceneObjectsByNameCached[name] = child;
+        }
+
+        visit(child);
+      }
+    };
+
+    visit(SO());
   }
 
   void GameWorld::save(const bs::String& saveName)

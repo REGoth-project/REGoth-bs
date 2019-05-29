@@ -33,8 +33,8 @@ namespace REGoth
             return bs::toString(symbols.getSymbol<SymbolFloat>(index).floats[arrayindex]);
           case SymbolType::String:
             return "'" + symbols.getSymbol<SymbolString>(index).strings[arrayindex] + "'";
-        default:
-          return bs::String("[-]");
+          default:
+            return bs::String("[-]");
         }
       };
 
@@ -196,6 +196,30 @@ namespace REGoth
           return bs::StringUtil::format("Unknown Opcode {0}", opcode.op);
           break;
       }
+    }
+
+    bs::String makeCallDepthString(bs::UINT32 callDepth)
+    {
+      bs::String depth = "";
+
+      for (bs::INT32 i = 0; i < callDepth; i++)
+      {
+        bs::INT32 level = i % 3;
+        switch (level)
+        {
+          case 0:
+            depth += "|";
+            break;
+          case 1:
+            depth += ";";
+            break;
+          case 2:
+            depth += ".";
+            break;
+        }
+      }
+
+      return depth;
     }
   }  // namespace Scripting
 }  // namespace REGoth

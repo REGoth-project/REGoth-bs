@@ -73,6 +73,15 @@ namespace REGoth
     {
       mCharacterAI->stopTurning();
     }
+
+    if (fastMove)
+    {
+      mCharacterAI->fastMove(4.0f);
+    }
+    else
+    {
+      mCharacterAI->fastMove(1.0f);
+    }
   }
 
   REGOTH_DEFINE_RTTI(CharacterKeyboardInput)

@@ -16,15 +16,14 @@ namespace REGoth
     class ScriptVMForGameWorld : public DaedalusVMForGameWorld
     {
     public:
-      // I don't quite like to reference the dat-file here... This will
-      // be annoying when we switch to another scripting backend.
-      ScriptVMForGameWorld(HGameWorld gameWorld, const Daedalus::DATFile& datFile);
+      ScriptVMForGameWorld(HGameWorld gameWorld, const bs::Vector<bs::UINT8>& datFileData);
 
     protected:
-    public:
-      REGOTH_DECLARE_RTTI(ScriptVMForGameWorld);
 
-    public:                              // FIXME: RTTI protected
+    public:
+      REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(ScriptVMForGameWorld);
+
+    protected:
       ScriptVMForGameWorld() = default;  // For RTTI
     };
   }  // namespace Scripting

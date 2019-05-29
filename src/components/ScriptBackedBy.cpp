@@ -6,10 +6,11 @@
 namespace REGoth
 {
   ScriptBackedBy::ScriptBackedBy(const bs::HSceneObject& parent, const bs::String& className,
-                                 const bs::String& instance)
+                                 const bs::String& instance, HGameWorld gameWorld)
       : mScriptClassName(className)
       , mScriptInstance(instance)
-      , NeedsGameWorld(parent)
+      , mGameWorld(gameWorld)
+      , bs::Component(parent)
   {
     setName("ScriptBackedBy");
   }
@@ -20,8 +21,6 @@ namespace REGoth
 
   void ScriptBackedBy::onInitialized()
   {
-    NeedsGameWorld::onInitialized();
-
     // When loading a saved instance this will have been already set and we
     // already have a valid handle. Only create a new instance on a really new
     // object.
@@ -51,10 +50,15 @@ namespace REGoth
     return mScriptObject != Scripting::SCRIPT_OBJECT_HANDLE_INVALID;
   }
 
-  Scripting::ScriptObject& ScriptBackedBy::scriptObjectData()
+  Scripting::ScriptObject& ScriptBackedBy::scriptObjectData() const
   {
     // Will throw if the handle is invalid
     return gameWorld()->scriptVM().scriptObjects().get(mScriptObject);
+  }
+
+  Scripting::ScriptVMForGameWorld& ScriptBackedBy::scriptVM() const
+  {
+    return gameWorld()->scriptVM();
   }
 
   REGOTH_DEFINE_RTTI(ScriptBackedBy)

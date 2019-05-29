@@ -1,12 +1,18 @@
 #pragma once
 #include "ScriptBackedBy.hpp"
 #include <BsPrerequisites.h>
+#include <AI/ScriptState.hpp>
+#include <AI/WalkMode.hpp>
+#include <AI/WeaponMode.hpp>
 #include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
 {
   class VisualCharacter;
   using HVisualCharacter = bs::GameObjectHandle<VisualCharacter>;
+
+  class GameWorld;
+  using HGameWorld = bs::GameObjectHandle<GameWorld>;
 
   /**
    * Character AI. Implements most of the `AI_*` externals.
@@ -15,7 +21,7 @@ namespace REGoth
   class CharacterAI : public bs::Component
   {
   public:
-    CharacterAI(const bs::HSceneObject& parent);
+    CharacterAI(const bs::HSceneObject& parent, HGameWorld world);
 
     /**
      * Puts the characters physics to sleep which saves processing time.
@@ -31,6 +37,11 @@ namespace REGoth
      * See deactivatePhysics() for more information.
      */
     void activatePhysics();
+
+    /**
+     * Whether Physics is active for this character.
+     */
+    bool isPhysicsActive() const;
 
     /**
      * Virtual input to the character. Calling these functions is equivalent to
@@ -75,6 +86,42 @@ namespace REGoth
      */
     bool isTurningAllowed();
 
+    /**
+     * Lets the character face into the direction of the given position instantly.
+     *
+     * Does not play any animations, just rotates the object accordingly.
+     */
+    void instantTurnToPosition(const bs::Vector3& position);
+
+    /**
+     * Will let the character move to the given postion.
+     *
+     * This will not do any obstruction checks and just walk the character there
+     * in a straight line.
+     *
+     * @param  position  Position to go to.
+     *
+     * @return True, if the character reached the destination,
+     *         False, while the character is still going.
+     */
+    bool gotoPositionStraight(const bs::Vector3& position);
+
+    /**
+     * Checks whether the character is at the given postiion.
+     *
+     * The check includes some leeway in all directions.
+     *
+     * @return True, if the character is currently at the given position
+     *         False, if the character is NOT at the given position
+     */
+    bool isAtPosition(const bs::Vector3& position);
+
+    /**
+     * Debug routine to make animations play faster, which also makes movement
+     * faster.
+     */
+    void fastMove(float factor);
+
     // Component -----------------------------------------------------------------------------------
 
     void fixedUpdate() override;
@@ -93,12 +140,50 @@ namespace REGoth
                     const bs::String& waypoint);
     void wait(float seconds);
     void playAni(const bs::String& animation);
-    void setWalkMode(bs::UINT32 walkMode);
     void stopProcessingInfos();
     void output(bs::HSceneObject characterSO, const bs::String& svmName);
     void processInfos();
 
+    /**
+     * Sets how this character should move, like walking, running, sneaking.
+     */
+    void setWalkMode(AI::WalkMode walkMode);
+
+    /**
+     * Sets the kind of weapon this character should pull. Monsters need to have
+     * this set to "fist" or they won't be able to move since all their animations
+     * are for that mode only.
+     */
+    void setWeaponMode(AI::WeaponMode mode);
+
   private:
+    /**
+     * Checks whether the character is so far away from the player that it should
+     * deactivate physics to save some performance. Note that there exists another
+     * method for checking whether to *activate* physics again. If the character
+     * stands between the distances required for both these methods, both will
+     * return false.
+     *
+     * See https://regoth-project.github.io/REGoth-bs/content/characters.html
+     */
+    bool shouldDisablePhysics() const;
+
+    /**
+     * Checks whether the character is so close to the player that it should
+     * wake up and activate physics. Note that there exists another
+     * method for checking whether to *deactivate* physics. If the character
+     * stands between the distances required for both these methods, both will
+     * return false.
+     *
+     * See https://regoth-project.github.io/REGoth-bs/content/characters.html
+     */
+    bool shouldEnablePhysics() const;
+
+    /**
+     * Activates, deactivates or keeps the current state of whether the physics
+     * of this character are enabled. To be called every couple frames.
+     */
+    void handlePhysicsActivation();
 
     /**
      * Applies the currently set turning parameters to the character.
@@ -109,7 +194,11 @@ namespace REGoth
 
     // Visual attached to this character
     HVisualCharacter mVisual;
+    HGameWorld mWorld;
     bs::HCharacterController mCharacterController;
+
+    // AI-Script state handler
+    bs::SPtr<AI::ScriptState> mScriptState;
 
     enum class TurnDirection
     {
@@ -123,6 +212,12 @@ namespace REGoth
 
     // Whether Physics is being processed for this character
     bool mIsPhysicsActive = true;
+
+    // Whether the character is running, sneaking, etc
+    AI::WalkMode mWalkMode = AI::WalkMode::Run;
+
+    // Type of weapon the character is currently holding
+    AI::WeaponMode mWeaponMode = AI::WeaponMode::None;
 
   public:
     REGOTH_DECLARE_RTTI(CharacterAI);

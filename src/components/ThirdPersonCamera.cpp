@@ -52,9 +52,7 @@ namespace REGoth
   {
     throwIfFollowedCharacterIsNotValid();
 
-    // FIXME: Seems like the models are incorrectly rotated for some reason
-    // return mFollowedCharacter->SO()->getTransform().getForward();
-    return -mFollowedCharacter->SO()->getTransform().getRight();
+    return mFollowedCharacter->SO()->getTransform().getForward();
   }
 
   void ThirdPersonCamera::fixedUpdate()

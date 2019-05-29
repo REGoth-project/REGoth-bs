@@ -48,14 +48,14 @@ namespace REGoth
 
       return true;
     }
-    if (kind == VisualKind::MorphMesh)
+    else if (kind == VisualKind::MorphMesh)
     {
       HVisualMorphMesh mesh = so->addComponent<VisualMorphMesh>();
       mesh->setMesh(visual);
 
       return true;
     }
-    if (kind == VisualKind::InteractiveObject)
+    else if (kind == VisualKind::InteractiveObject)
     {
       HVisualInteractiveObject mesh = so->addComponent<VisualInteractiveObject>();
 

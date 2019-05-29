@@ -2,20 +2,37 @@
 #include "DaedalusClassVarResolver.hpp"
 #include <RTTI/RTTI_DaedalusVMForGameWorld.hpp>
 #include <Scene/BsSceneObject.h>
+#include <animation/StateNaming.hpp>
 #include <components/Character.hpp>
-#include <components/GameWorld.hpp>
-#include <components/VisualCharacter.hpp>
+#include <components/CharacterAI.hpp>
+#include <components/CharacterEventQueue.hpp>
+#include <components/Freepoint.hpp>
 #include <components/GameClock.hpp>
+#include <components/GameWorld.hpp>
+#include <components/Item.hpp>
+#include <components/VisualCharacter.hpp>
+#include <components/Waynet.hpp>
 
 namespace REGoth
 {
   namespace Scripting
   {
     DaedalusVMForGameWorld::DaedalusVMForGameWorld(HGameWorld gameWorld,
-                                                   const Daedalus::DATFile& datFile)
-        : DaedalusVM(datFile)
+                                                   const bs::Vector<bs::UINT8>& datFileData)
+        : DaedalusVM(datFileData)
         , mWorld(gameWorld)
     {
+    }
+
+    void DaedalusVMForGameWorld::fillSymbolStorage()
+    {
+      DaedalusVM::fillSymbolStorage();
+
+      mHeroSymbol   = scriptSymbols().findIndexBySymbolName("HERO");
+      mSelfSymbol   = scriptSymbols().findIndexBySymbolName("SELF");
+      mOtherSymbol  = scriptSymbols().findIndexBySymbolName("OTHER");
+      mVictimSymbol = scriptSymbols().findIndexBySymbolName("VICTIM");
+      mItemSymbol   = scriptSymbols().findIndexBySymbolName("ITEM");
     }
 
     ScriptObjectHandle DaedalusVMForGameWorld::instanciateClass(const bs::String& className,
@@ -88,14 +105,114 @@ namespace REGoth
       return obj;
     }
 
-    void DaedalusVMForGameWorld::setHero(ScriptObjectHandle hero)
+    void DaedalusVMForGameWorld::runFunctionOnSelf(const bs::String& function, HCharacter self)
     {
-      setInstance("HERO", hero);
+      self->useAsSelf();
+      executeScriptFunction(function);
     }
 
-    ScriptObjectHandle DaedalusVMForGameWorld::getHero()
+    bool DaedalusVMForGameWorld::runStateLoopFunction(SymbolIndex function, HCharacter self)
     {
-      return getInstance("HERO");
+      self->useAsSelf();
+
+      const auto& functionSym = scriptSymbols().getSymbol<SymbolScriptFunction>(function);
+      executeScriptFunction(functionSym.address);
+
+      if (functionSym.returnType != ReturnType::Void)
+      {
+        return popIntValue() != 0;
+      }
+      else
+      {
+        // Some of these have a return type of `void` to say that they should be looping forever.
+        // This happens on most sub-states of `ZS_MM_ALLSCHEDULER`, for example.
+        return false;
+      }
+    }
+
+    void DaedalusVMForGameWorld::runFunctionOnSelf(SymbolIndex function, HCharacter self)
+    {
+      self->useAsSelf();
+
+      const auto& functionSym = scriptSymbols().getSymbol<SymbolScriptFunction>(function);
+      executeScriptFunction(functionSym.address);
+    }
+
+    void DaedalusVMForGameWorld::setHero(ScriptObjectHandle hero)
+    {
+      setInstance(mHeroSymbol, hero);
+    }
+
+    ScriptObjectHandle DaedalusVMForGameWorld::heroInstance()
+    {
+      return getInstance(mHeroSymbol);
+    }
+
+    ScriptObjectHandle DaedalusVMForGameWorld::victimInstance() const
+    {
+      return getInstance(mVictimSymbol);
+    }
+
+    HCharacter DaedalusVMForGameWorld::victim() const
+    {
+      return getInstanceCharacter(mVictimSymbol);
+    }
+
+    void DaedalusVMForGameWorld::setVictim(ScriptObjectHandle victim)
+    {
+      setInstance(mVictimSymbol, victim);
+    }
+
+    ScriptObjectHandle DaedalusVMForGameWorld::itemInstance() const
+    {
+      return getInstance(mItemSymbol);
+    }
+
+    HItem DaedalusVMForGameWorld::item() const
+    {
+      return getInstanceItem(mItemSymbol);
+    }
+
+    void DaedalusVMForGameWorld::setItem(ScriptObjectHandle item)
+    {
+      setInstance(mItemSymbol, item);
+    }
+
+    ScriptObjectHandle DaedalusVMForGameWorld::otherInstance() const
+    {
+      return getInstance(mOtherSymbol);
+    }
+
+    HCharacter DaedalusVMForGameWorld::other() const
+    {
+      return getInstanceCharacter(mOtherSymbol);
+    }
+
+    void DaedalusVMForGameWorld::setOther(ScriptObjectHandle other)
+    {
+      setInstance(mOtherSymbol, other);
+    }
+
+    ScriptObjectHandle DaedalusVMForGameWorld::selfInstance() const
+    {
+      return getInstance(mSelfSymbol);
+    }
+
+    HCharacter DaedalusVMForGameWorld::self() const
+    {
+      return getInstanceCharacter(mSelfSymbol);
+    }
+
+    void DaedalusVMForGameWorld::setSelf(ScriptObjectHandle self)
+    {
+      setInstance(mSelfSymbol, self);
+    }
+
+    void DaedalusVMForGameWorld::setInstance(SymbolIndex instance, ScriptObjectHandle scriptObject)
+    {
+      SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instance);
+
+      symbol.instance = scriptObject;
     }
 
     void DaedalusVMForGameWorld::setInstance(const bs::String& instance,
@@ -120,9 +237,96 @@ namespace REGoth
       return symbol.instance;
     }
 
+    HCharacter DaedalusVMForGameWorld::getInstanceCharacter(const bs::String& instance) const
+    {
+      const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instance);
+
+      if (!mappingConst().isMappedToSomething(symbol.instance))
+      {
+        return {};
+      }
+
+      bs::HSceneObject characterSO = mappingConst().getMappedSceneObject(symbol.instance);
+
+      HCharacter character = characterSO->getComponent<Character>();
+
+      if (!character)
+      {
+        REGOTH_THROW(InvalidParametersException,
+                     "Expected to be passed a Character instance, but the scene object does "
+                     "not have a character-component!");
+      }
+
+      return character;
+    }
+
+    HCharacter DaedalusVMForGameWorld::getInstanceCharacter(SymbolIndex symbolIndex) const
+    {
+      const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(symbolIndex);
+
+      if (!mappingConst().isMappedToSomething(symbol.instance))
+      {
+        return {};
+      }
+
+      bs::HSceneObject characterSO = mappingConst().getMappedSceneObject(symbol.instance);
+
+      HCharacter character = characterSO->getComponent<Character>();
+
+      if (!character)
+      {
+        REGOTH_THROW(InvalidParametersException,
+                     "Expected to be passed a Character instance, but the scene object does "
+                     "not have a character-component!");
+      }
+
+      return character;
+    }
+
+    HItem DaedalusVMForGameWorld::getInstanceItem(const bs::String& instance) const
+    {
+      const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(instance);
+
+      bs::HSceneObject itemSO = mappingConst().getMappedSceneObject(symbol.instance);
+
+      HItem item = itemSO->getComponent<Item>();
+
+      if (!item)
+      {
+        REGOTH_THROW(InvalidParametersException,
+                     "Expected to be passed a Item instance, but the scene object does "
+                     "not have a item-component!");
+      }
+
+      return item;
+    }
+
+    HItem DaedalusVMForGameWorld::getInstanceItem(SymbolIndex symbolIndex) const
+    {
+      const SymbolInstance& symbol = mScriptSymbols.getSymbol<SymbolInstance>(symbolIndex);
+
+      bs::HSceneObject itemSO = mappingConst().getMappedSceneObject(symbol.instance);
+
+      HItem item = itemSO->getComponent<Item>();
+
+      if (!item)
+      {
+        REGOTH_THROW(InvalidParametersException,
+                     "Expected to be passed a Item instance, but the scene object does "
+                     "not have a item-component!");
+      }
+
+      return item;
+    }
+
     HCharacter DaedalusVMForGameWorld::popCharacterInstance()
     {
       ScriptObjectHandle scriptObject = popInstanceScriptObject();
+
+      if (scriptObject == SCRIPT_OBJECT_HANDLE_INVALID)
+      {
+        return {};
+      }
 
       bs::HSceneObject characterSO = mapping().getMappedSceneObject(scriptObject);
 
@@ -136,6 +340,29 @@ namespace REGoth
       }
 
       return character;
+    }
+
+    HItem DaedalusVMForGameWorld::popItemInstance()
+    {
+      ScriptObjectHandle scriptObject = popInstanceScriptObject();
+
+      if (scriptObject == SCRIPT_OBJECT_HANDLE_INVALID)
+      {
+        return {};
+      }
+
+      bs::HSceneObject itemSO = mapping().getMappedSceneObject(scriptObject);
+
+      HItem item = itemSO->getComponent<Item>();
+
+      if (!item)
+      {
+        REGOTH_THROW(InvalidParametersException,
+                     "Expected to find a item instance on the stack, but the scene object does "
+                     "not have a item-component!");
+      }
+
+      return item;
     }
 
     void DaedalusVMForGameWorld::initializeWorld(const bs::String& worldName)
@@ -163,7 +390,11 @@ namespace REGoth
       registerExternal("PRINT", (externalCallback)&This::external_Print);
       registerExternal("HLP_RANDOM", (externalCallback)&This::external_HLP_Random);
       registerExternal("HLP_GETNPC", (externalCallback)&This::external_HLP_GetNpc);
+      registerExternal("HLP_ISVALIDNPC", (externalCallback)&This::external_HLP_IsValidNpc);
+      registerExternal("HLP_ISVALIDITEM", (externalCallback)&This::external_HLP_IsValidItem);
       registerExternal("INTTOSTRING", (externalCallback)&This::external_IntToString);
+      registerExternal("INTTOFLOAT", (externalCallback)&This::external_IntToFloat);
+      registerExternal("FLOATTOINT", (externalCallback)&This::external_FloatToInt);
       registerExternal("NPC_ISPLAYER", (externalCallback)&This::external_NPC_IsPlayer);
       registerExternal("WLD_INSERTNPC", (externalCallback)&This::external_WLD_InsertNpc);
       registerExternal("CONCATSTRINGS", (externalCallback)&This::external_ConcatStrings);
@@ -177,6 +408,19 @@ namespace REGoth
       registerExternal("WLD_GETDAY", (externalCallback)&This::external_WLD_GetDay);
       registerExternal("WLD_ISTIME", (externalCallback)&This::external_WLD_IsTime);
       registerExternal("WLD_SETTIME", (externalCallback)&This::external_WLD_SetTime);
+      registerExternal("TA_MIN", (externalCallback)&This::external_TA_Min);
+      registerExternal("NPC_EXCHANGEROUTINE", (externalCallback)&This::external_NPC_ExchangeRoutine);
+      registerExternal("AI_GOTOWP", (externalCallback)&This::external_AI_GotoWaypoint);
+      registerExternal("AI_GOTOFP", (externalCallback)&This::external_AI_GotoFreepoint);
+      registerExternal("AI_GOTONEXTFP", (externalCallback)&This::external_AI_GotoNextFreepoint);
+      registerExternal("AI_GOTONPC", (externalCallback)&This::external_AI_GotoNpc);
+      registerExternal("AI_SETWALKMODE", (externalCallback)&This::external_AI_SetWalkMode);
+      registerExternal("AI_WAIT", (externalCallback)&This::external_AI_Wait);
+      registerExternal("AI_STARTSTATE", (externalCallback)&This::external_AI_StartState);
+      registerExternal("AI_PLAYANI", (externalCallback)&This::external_AI_PlayAnimation);
+      registerExternal("NPC_GETNEARESTWP", (externalCallback)&This::external_Npc_GetNearestWP);
+      registerExternal("NPC_GETNEXTWP", (externalCallback)&This::external_Npc_GetNextWP);
+      registerExternal("NPC_SETTOFISTMODE", (externalCallback)&This::external_Npc_SetToFistMode);
     }
 
     void DaedalusVMForGameWorld::external_Print()
@@ -196,9 +440,47 @@ namespace REGoth
       mStack.pushInstance((SymbolIndex)symbolIndex);
     }
 
+    void DaedalusVMForGameWorld::external_HLP_IsValidNpc()
+    {
+      HCharacter character = popCharacterInstance();
+
+      if (character.isDestroyed())
+      {
+        mStack.pushInt(0);
+      }
+      else
+      {
+        mStack.pushInt(1);
+      }
+    }
+
+    void DaedalusVMForGameWorld::external_HLP_IsValidItem()
+    {
+      HItem item = popItemInstance();
+
+      if (item.isDestroyed())
+      {
+        mStack.pushInt(0);
+      }
+      else
+      {
+        mStack.pushInt(1);
+      }
+    }
+
     void DaedalusVMForGameWorld::external_IntToString()
     {
       mStack.pushString(bs::toString(popIntValue()));
+    }
+
+    void DaedalusVMForGameWorld::external_IntToFloat()
+    {
+      mStack.pushFloat((float)popIntValue());
+    }
+
+    void DaedalusVMForGameWorld::external_FloatToInt()
+    {
+      mStack.pushInt((bs::INT32)popFloatValue());
     }
 
     void DaedalusVMForGameWorld::external_ConcatStrings()
@@ -351,6 +633,208 @@ namespace REGoth
 
       bs::StringUtil::toUpperCase(headMesh);
       characterVisual->setHeadMesh(headMesh);
+    }
+
+    void DaedalusVMForGameWorld::external_AI_GotoWaypoint()
+    {
+      bs::String waypoint = popStringValue();
+      HCharacter self     = popCharacterInstance();
+
+      bs::StringUtil::toUpperCase(waypoint);
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushGotoObject(mWorld->findObjectByName(waypoint));
+    }
+
+    void DaedalusVMForGameWorld::external_AI_GotoFreepoint()
+    {
+      bs::String freepoint = popStringValue();
+      HCharacter self      = popCharacterInstance();
+
+      bs::StringUtil::toUpperCase(freepoint);
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushGotoObject(mWorld->findObjectByName(freepoint));
+    }
+
+    void DaedalusVMForGameWorld::external_AI_GotoNextFreepoint()
+    {
+      bs::String freepointName = popStringValue();
+      HCharacter self          = popCharacterInstance();
+
+      bs::StringUtil::toUpperCase(freepointName);
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      const auto& at = self->SO()->getTransform().pos();
+      HFreepoint freepoint =
+          mWorld->waynet()->findClosestFreepointTo(freepointName, at).secondClosest;
+
+      eventQueue->pushGotoObject(freepoint->SO());
+    }
+
+    void DaedalusVMForGameWorld::external_AI_GotoNpc()
+    {
+      HCharacter other = popCharacterInstance();
+      HCharacter self  = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushGotoObject(other->SO());
+    }
+
+    void DaedalusVMForGameWorld::external_TA_Min()
+    {
+      bs::String waypoint = popStringValue();
+      SymbolIndex action =
+          popIntValue();  // This does not push onto the function stack for some reason
+      bs::INT32 stop_m  = popIntValue();
+      bs::INT32 stop_h  = popIntValue();
+      bs::INT32 start_m = popIntValue();
+      bs::INT32 start_h = popIntValue();
+      HCharacter self   = popCharacterInstance();
+
+      bs::StringUtil::toUpperCase(waypoint);
+
+      AI::ScriptState::RoutineTask task;
+      task.hoursStart = start_h;
+      task.hoursEnd   = stop_h;
+
+      task.minutesStart = start_m;
+      task.minutesEnd   = stop_m;
+
+      task.waypoint = waypoint;
+
+      if (action != SYMBOL_INDEX_INVALID)
+      {
+        task.scriptFunction = scriptSymbols().getSymbolName(action);
+      }
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->insertRoutineTask(task);
+    }
+
+    void DaedalusVMForGameWorld::external_NPC_ExchangeRoutine()
+    {
+      bs::String routineName = popStringValue();
+      HCharacter self        = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      bs::StringUtil::toUpperCase(routineName);
+
+      self->setDailyRoutine(routineName);
+
+      eventQueue->reinitRoutine();
+    }
+
+    void DaedalusVMForGameWorld::external_AI_SetWalkMode()
+    {
+      bs::INT32 walkModeIndex = popIntValue();
+      HCharacter self         = popCharacterInstance();
+
+      AI::WalkMode realWalkMode;
+      switch (walkModeIndex)
+      {
+        case 0:
+          realWalkMode = AI::WalkMode::Run;
+          break;
+
+        case 1:
+          realWalkMode = AI::WalkMode::Walk;
+          break;
+
+        case 2:
+          realWalkMode = AI::WalkMode::Sneak;
+          break;
+
+        case 3:
+          realWalkMode = AI::WalkMode::Water;
+          break;
+
+        case 4:
+          realWalkMode = AI::WalkMode::Swim;
+          break;
+
+        case 5:
+          realWalkMode = AI::WalkMode::Dive;
+          break;
+
+        default:
+          REGOTH_THROW(InvalidParametersException, "Invalid Walk-Mode!");
+      }
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushSetWalkMode(realWalkMode);
+    }
+
+    void DaedalusVMForGameWorld::external_AI_Wait()
+    {
+      float seconds   = popFloatValue();
+      HCharacter self = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushWait(seconds);
+    }
+
+    void DaedalusVMForGameWorld::external_AI_StartState()
+    {
+      bs::String waypoint    = popStringValue();
+      bs::INT32 endOldState  = popIntValue();
+      bs::INT32 stateFnIndex = popIntValue();
+      HCharacter self        = popCharacterInstance();
+
+      const auto& functionSym = scriptSymbols().getSymbol<SymbolScriptFunction>(stateFnIndex);
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      if (endOldState != 0)
+      {
+        // End old state gracefully
+        eventQueue->pushStartScriptState(functionSym.name, waypoint, other(), victim());
+      }
+      else
+      {
+        // Interrupt old state
+        eventQueue->pushInterruptAndStartScriptState(functionSym.name, waypoint, other(), victim());
+      }
+    }
+
+    void DaedalusVMForGameWorld::external_AI_PlayAnimation()
+    {
+      bs::String animation = popStringValue();
+      HCharacter self      = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+      eventQueue->pushPlayAnimation(animation);
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_GetNearestWP()
+    {
+      HCharacter self = popCharacterInstance();
+
+      mStack.pushString(self->getNearestWaypoint());
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_GetNextWP()
+    {
+      HCharacter self = popCharacterInstance();
+
+      mStack.pushString(self->getNextWaypoint());
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_SetToFistMode()
+    {
+      HCharacter self = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushGoToFistModeImmediate();
     }
 
     void DaedalusVMForGameWorld::script_PrintPlus(const bs::String& text)

@@ -47,6 +47,8 @@ add_library(REGothEngine
   components/CharacterAI.cpp
   components/Waypoint.hpp
   components/Waypoint.cpp
+  components/Freepoint.hpp
+  components/Freepoint.cpp
   components/Waynet.hpp
   components/Waynet.cpp
   components/CharacterKeyboardInput.hpp
@@ -55,6 +57,16 @@ add_library(REGothEngine
   components/GameClock.cpp
   components/ThirdPersonCamera.hpp
   components/ThirdPersonCamera.cpp
+  components/EventQueue.hpp
+  components/EventQueue.cpp
+  components/CharacterEventQueue.hpp
+  components/CharacterEventQueue.cpp
+  AI/EventMessage.hpp
+  AI/EventMessage.cpp
+  AI/ScriptState.hpp
+  AI/ScriptState.cpp
+  AI/Pathfinder.hpp
+  AI/Pathfinder.cpp
   exception/Throw.hpp
   animation/StateNaming.hpp
   animation/StateNaming.cpp

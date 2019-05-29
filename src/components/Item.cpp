@@ -5,9 +5,10 @@
 
 namespace REGoth
 {
-  Item::Item(const bs::HSceneObject& parent, const bs::String& instance)
-      : ScriptBackedBy(parent, "C_ITEM", instance)
+  Item::Item(const bs::HSceneObject& parent, const bs::String& instance, HGameWorld gameWorld)
+      : ScriptBackedBy(parent, "C_ITEM", instance, gameWorld)
   {
+    setName("Item");
   }
 
   void Item::onInitialized()

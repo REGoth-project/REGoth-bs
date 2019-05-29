@@ -17,6 +17,7 @@
 #include <BsCorePrerequisites.h>
 #include <Reflection/BsRTTIType.h>
 #include <Scene/BsSceneObject.h>
+#include <exception/Throw.hpp>
 
 /**
  * For use in the actual components header. Declares the functions for accessing
@@ -37,11 +38,32 @@
  * note that there is not semicolon after the makro!
  * Futhermore, the makro invocation needs to be in `public`-land of the component.
  */
-#define REGOTH_DECLARE_RTTI(classname)                           \
-  friend class bs::SceneObject;                                  \
+#define REGOTH_DECLARE_RTTI(classname)      \
+  friend class bs::SceneObject;             \
+  friend class RTTI_##classname;            \
+  static bs::RTTITypeBase* getRTTIStatic(); \
+  decltype(classname::getRTTIStatic()) getRTTI() const override;
+
+/**
+ * See REGOTH_DECLARE_RTTI. This is a special version for IReflectables,
+ * which cannot be default constructed by default. Should be used in favor
+ * of the plain REGOTH_DECLARE_RTTI if used for IReflectables, except for
+ * abstract classes.
+ *
+ * @note rttiCreateEmpty() is private so sub-classes which forget to use this
+ * makro wont have access to the wrong rttiCreateEmpty().
+ **/
+#define REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(classname)           \
+public:                                                          \
   friend class RTTI_##classname;                                 \
   static bs::RTTITypeBase* getRTTIStatic();                      \
-  decltype(classname::getRTTIStatic()) getRTTI() const override; 
+  decltype(classname::getRTTIStatic()) getRTTI() const override; \
+                                                                 \
+private:                                                         \
+  static inline bs::SPtr<classname> rttiCreateEmpty()            \
+  {                                                              \
+    return bs::bs_shared_ptr(new classname());                   \
+  }
 
 /**
  * For use in the actual components source. Defines the functions for accessing
@@ -103,7 +125,7 @@
                                                                \
   bs::SPtr<bs::IReflectable> newRTTIObject() override          \
   {                                                            \
-    return bs::bs_shared_ptr_new<classname>();                 \
+    return classname::rttiCreateEmpty();                       \
   }                                                            \
                                                                \
   const bs::String& getRTTIName() override                     \

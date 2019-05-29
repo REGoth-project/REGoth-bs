@@ -33,6 +33,18 @@ namespace REGoth
     };
 
     /**
+     * Possible return types for script functions.
+     */
+    enum class ReturnType
+    {
+      Float,
+      Int,
+      String,
+      Void,
+      Invalid,
+    };
+
+    /**
      * Script objects will get a simple increasing number as a handle.
      * No number can be used twice. An invalid handle will get the number 0.
      */

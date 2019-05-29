@@ -2,48 +2,30 @@
 #include <Animation/BsAnimation.h>
 #include <Animation/BsAnimationClip.h>
 
-using namespace REGoth;
-
-bs::Vector3 Animation::getRootMotionSince(bs::HAnimationClip clip, float then, float now)
+namespace REGoth
 {
-  using namespace bs;
-
-  if (!clip->getRootMotion())
+  bs::Vector3 AnimationState::getRootMotionSince(bs::HAnimationClip clip, float then, float now)
   {
-    // No root motion wanted
-    return bs::Vector3(bs::BsZero);
-  }
+    using namespace bs;
 
-  // TODO: Look after rotation too
-  const auto& curve = clip->getRootMotion()->position;
+    if (!clip->getRootMotion())
+    {
+      // No root motion wanted
+      return bs::Vector3(bs::BsZero);
+    }
 
-  enum : bool
-  {
-    Wrap  = true,
-    Clamp = false
-  };
+    // TODO: Look after rotation too
+    const auto& curve = clip->getRootMotion()->position;
 
-  if (then <= now)
-  {
+    enum : bool
+    {
+      Wrap  = true,
+      Clamp = false
+    };
+
     bs::Vector3 positionThen = curve.evaluate(then, Clamp);
     bs::Vector3 positionNow  = curve.evaluate(now, Clamp);
 
     return positionNow - positionThen;
   }
-  else /* now < then */
-  {
-    return bs::Vector3(bs::BsZero);
-
-    // Wrapped, need to also take care of the time spent before the wrap
-    // bs::Vector3 atEnd = curve.evaluate(curve.getLength(), Clamp);
-
-    // bs::Vector3 positionThen = curve.evaluate(then, Clamp);
-    // bs::Vector3 positionNow  = curve.evaluate(now, Clamp);
-
-    // bs::Vector3 toEnd = atEnd - positionThen;
-    // bs::Vector3 fromStart = positionNow;
-
-    // return fromStart;
-    // return toEnd + fromStart;
-  }
-}
+}  // namespace REGoth

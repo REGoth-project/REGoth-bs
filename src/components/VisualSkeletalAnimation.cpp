@@ -1,7 +1,4 @@
 #include "VisualSkeletalAnimation.hpp"
-#include <RTTI/RTTI_VisualSkeletalAnimation.hpp>
-
-#include "VisualSkeletalAnimation.hpp"
 #include "original-content/VirtualFileSystem.hpp"
 #include <Animation/BsAnimationClip.h>
 #include <BsZenLib/ImportPath.hpp>
@@ -11,6 +8,7 @@
 #include <Debug/BsDebug.h>
 #include <Mesh/BsMesh.h>
 #include <RTTI/RTTI_VisualCharacter.hpp>
+#include <RTTI/RTTI_VisualSkeletalAnimation.hpp>
 #include <Scene/BsSceneObject.h>
 #include <animation/Animation.hpp>
 #include <animation/StateNaming.hpp>
@@ -190,6 +188,13 @@ namespace REGoth
   {
     bs::HSceneObject renderSO = createAndRegisterSubObject("Renderable");
 
+    // For some weird reason, the rotations don't match with the root motion.
+    // Work around that here...
+    bs::Quaternion rotate90Y = bs::Quaternion(bs::Radian(0),                // .
+                                              bs::Radian(bs::Degree(-90)),  // .
+                                              bs::Radian(0));
+    renderSO->getParent()->rotate(rotate90Y);
+
     mSubRenderable  = renderSO->addComponent<bs::CRenderable>();
     mSubAnimation   = renderSO->addComponent<bs::CAnimation>();
     mSubNodeVisuals = renderSO->addComponent<NodeVisuals>();
@@ -197,15 +202,22 @@ namespace REGoth
 
   bs::HSceneObject VisualSkeletalAnimation::createAndRegisterSubObject(const bs::String& name)
   {
-    bs::HSceneObject subSO = bs::SceneObject::create(name);
+    // Need to create that weird sub-sub-object setup here since it seems that you can't
+    // rotate objects which have an animation component, but only their parents.
+    // We need to fix the weird rotation-bug however, so we put one more sub-object we
+    // can rotate in between.
+    bs::HSceneObject subSO    = bs::SceneObject::create(name);
+    bs::HSceneObject subsubSO = bs::SceneObject::create(name);
 
     bool dontKeepWorldTransform = false;
 
     subSO->setParent(SO(), dontKeepWorldTransform);
+    subsubSO->setParent(subSO, dontKeepWorldTransform);
 
     mSubObjects.push_back(subSO);
+    mSubObjects.push_back(subsubSO);
 
-    return subSO;
+    return subsubSO;
   }
 
   void VisualSkeletalAnimation::setupRenderableComponent()
@@ -220,9 +232,6 @@ namespace REGoth
   {
     using namespace bs;
 
-    // We do manual looping by using Animation Events with an event on the last frame
-    mSubAnimation->setWrapMode(AnimWrapMode::Clamp);
-
     // Subscribe to animation events
     mSubAnimation->onEventTriggered.connect([this](auto clip, auto string) {
       // Call objects actual method
@@ -236,23 +245,29 @@ namespace REGoth
 
     throwIfNotReadyForRendering();
 
-    bs::String command = string.substr(0, string.find_first_of(':'));
-    bs::String action  = string.substr(command.length() + 1);
+    // Commands could come in the form of "COMMAND:ACTION" or just "COMMAND"
+    size_t separator = string.find_first_of(':');
+    bs::String command;
+    bs::String action;
+
+    if (separator != bs::String::npos)
+    {
+      command = string.substr(0, separator);
+      action  = string.substr(command.length() + 1);
+    }
+    else
+    {
+      command = string;
+    }
 
     bs::AnimationClipState state;
     mSubAnimation->getState(clip, state);
 
-    // gDebug().logDebug(bs::StringUtil::format(
-    //     "[VisualSkeletalAnimation] Got animation event: {0}:{1} while playing {2} at {3}",
-    //     command, action, clip->getName(), state.time));
-
-    // gDebug().logDebug("Animation has the following events: ");
-    // for (auto& event : clip->getEvents())
-    // {
-    //   gDebug().logDebug(bs::StringUtil::format(" - {0}: {1}", event.time, event.name));
-    // }
-
-    if (command == "PLAYCLIP")
+    if (command == "LOOP")
+    {
+      // Handled when the animation was started by setting the animation wrapmode to "loop"
+    }
+    else if (command == "PLAYCLIP")
     {
       HAnimationClip clip = findAnimationClip(action);
 
@@ -279,6 +294,15 @@ namespace REGoth
 
     if (clip)
     {
+      if (isClipLooping(clip))
+      {
+        mSubAnimation->setWrapMode(bs::AnimWrapMode::Loop);
+      }
+      else
+      {
+        mSubAnimation->setWrapMode(bs::AnimWrapMode::Clamp);
+      }
+
       // bs::gDebug().logDebug(clip->getName());
       mSubAnimation->play(clip);
     }
@@ -346,7 +370,7 @@ namespace REGoth
 
     // Some animations are directly reachable, like S_RUN -> T_JUMPB. Whether the transition makes
     // sense has to be checked elsewhere.
-    if (!Animation::isTransitionNeeded(state))
+    if (!AnimationState::isTransitionNeeded(state))
     {
       return state;
     }
@@ -359,7 +383,7 @@ namespace REGoth
       return "";
     }
 
-    bs::String to = Animation::getStateName(state);
+    bs::String to = AnimationState::getStateName(state);
 
     // Target animation is not a state name?
     if (to.empty())
@@ -368,7 +392,7 @@ namespace REGoth
     }
 
     bs::String transition =
-        Animation::constructTransitionAnimationName(Animation::WeaponMode::None, from, to);
+        AnimationState::constructTransitionAnimationName(AI::WeaponMode::None, from, to);
 
     // Transition not possible since it wasn't meant to be possible
     if (transition.empty())
@@ -426,7 +450,7 @@ namespace REGoth
 
   bs::String VisualSkeletalAnimation::getStateFromPlayingAnimation() const
   {
-    return Animation::getStateName(getPlayingAnimationName());
+    return AnimationState::getStateName(getPlayingAnimationName());
   }
 
   bs::Vector3 VisualSkeletalAnimation::resolveFrameRootMotion()
@@ -440,16 +464,14 @@ namespace REGoth
     if (mRootMotionLastClip != clipNow)
     {
       // Make sure to get the last bits of the last clip too
-      if (mRootMotionLastClip)
-      {
-        bs::AnimationClipState state;
-        mSubAnimation->getState(mRootMotionLastClip, state);
+      // Commented out: FIXME Doesn't seem to work, but it has to be something like this
+      // if (mRootMotionLastClip)
+      // {
+      //   float then = fmod(mRootMotionLastTime, mRootMotionLastClip->getLength());
+      //   float now  = mRootMotionLastClip->getLength();
 
-        float then = mRootMotionLastTime;
-        float now  = mRootMotionLastClip->getLength();
-
-        motion += Animation::getRootMotionSince(mRootMotionLastClip, then, now);
-      }
+      //   motion += AnimationState::getRootMotionSince(mRootMotionLastClip, then, now);
+      // }
 
       mRootMotionLastTime = 0.0f;
       mRootMotionLastClip = clipNow;
@@ -470,13 +492,30 @@ namespace REGoth
     // Comparing floats here is intentional, since we don't touch them in the meantime.
     if (then != now)
     {
-      motion += Animation::getRootMotionSince(clipNow, then, now);
+      // Root motion has to be calculated using non-looping times since it needs to find the
+      // first and last frames of animations.
+      if (mSubAnimation->getWrapMode() == bs::AnimWrapMode::Loop)
+      {
+        then = fmod(then, clipNow->getLength());
+        now  = fmod(now, clipNow->getLength());
+      }
+
+      if (now < then)
+      {
+        // Animation wrapped
+        motion += AnimationState::getRootMotionSince(clipNow, 0.0f, now);
+        motion += AnimationState::getRootMotionSince(clipNow, then, clipNow->getLength());
+      }
+      else
+      {
+        motion += AnimationState::getRootMotionSince(clipNow, then, now);
+      }
 
       // bs::gDebug().logDebug(bs::StringUtil::format("RootMotion {0} -> {1}: {2}", then, now,
       // bs::toString(motion)));
     }
 
-    mRootMotionLastTime = now;
+    mRootMotionLastTime = state.time;
     mRootMotionLastClip = clipNow;
 
     return motion;
@@ -489,6 +528,30 @@ namespace REGoth
     for (const auto& attachment : mMesh->getNodeAttachments())
     {
       mSubNodeVisuals->attachMeshToNode(attachment.first, attachment.second);
+    }
+  }
+
+  bool VisualSkeletalAnimation::isClipLooping(bs::HAnimationClip clip)
+  {
+    // If the clip is supposed to loop, it will have a "LOOP" event at its very end.
+    // Since it makes no sense to have multiple "LOOP" events in there, we just
+    // check whether one exists at all and don't care about the time.
+    for (const auto& event : clip->getEvents())
+    {
+      if (event.name == "LOOP")
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  void VisualSkeletalAnimation::setDebugAnimationSpeedFactor(float factor)
+  {
+    if (mSubAnimation)
+    {
+      mSubAnimation->setSpeed(factor);
     }
   }
 

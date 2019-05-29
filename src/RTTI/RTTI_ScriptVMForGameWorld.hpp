@@ -23,5 +23,4 @@ namespace REGoth
       REGOTH_IMPLEMENT_RTTI_CLASS_FOR_REFLECTABLE(ScriptVMForGameWorld)
     };
   }  // namespace Scripting
-  // namespace Scripting
 }  // namespace REGoth

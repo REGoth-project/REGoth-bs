@@ -1,12 +1,14 @@
 #include "BsFPSCamera.h"
-#include <components/ThirdPersonCamera.hpp>
 #include <REGothEngine.hpp>
 #include <Components/BsCCamera.h>
 #include <Scene/BsPrefab.h>
 #include <Scene/BsSceneObject.h>
 #include <components/Character.hpp>
+#include <components/CharacterAI.hpp>
+#include <components/CharacterEventQueue.hpp>
 #include <components/CharacterKeyboardInput.hpp>
 #include <components/GameWorld.hpp>
+#include <components/ThirdPersonCamera.hpp>
 #include <exception/Throw.hpp>
 #include <original-content/OriginalGameFiles.hpp>
 #include <original-content/VirtualFileSystem.hpp>
@@ -41,7 +43,7 @@ public:
   {
     using namespace REGoth;
 
-    const bs::String WORLD    = "ADDONWORLD.ZEN";
+    const bs::String WORLD    = "OLDMINE.ZEN";
     const bs::String SAVEGAME = "WorldViewer-" + WORLD;
 
     bs::HPrefab worldPrefab = GameWorld::load(SAVEGAME);
@@ -51,9 +53,11 @@ public:
     {
       world = GameWorld::importZEN(WORLD);
 
-      HCharacter hero = world->insertCharacter("PC_HERO", "START_DRAGONISLAND");
+      HCharacter hero = world->insertCharacter("PC_HERO", "START");
       hero->useAsHero();
       hero->SO()->addComponent<CharacterKeyboardInput>();
+
+      // bs::HSceneObject diegoSO = world->insertCharacter("PC_THIEF", "WP_INTRO_FALL3")->SO();
 
       world->runInitScripts();
 

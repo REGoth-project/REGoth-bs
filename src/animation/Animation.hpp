@@ -7,7 +7,7 @@
 
 namespace REGoth
 {
-  namespace Animation
+  namespace AnimationState
   {
     bs::Vector3 getRootMotionSince(bs::HAnimationClip clip, float then, float now);
   }
