@@ -444,14 +444,28 @@ namespace REGoth
     {
       HCharacter character = popCharacterInstance();
 
-      mStack.pushInt(!!character ? 1 : 0);
+      if (character.isDestroyed())
+      {
+        mStack.pushInt(0);
+      }
+      else
+      {
+        mStack.pushInt(1);
+      }
     }
 
     void DaedalusVMForGameWorld::external_HLP_IsValidItem()
     {
       HItem item = popItemInstance();
 
-      mStack.pushInt(!!item ? 1 : 0);
+      if (item.isDestroyed())
+      {
+        mStack.pushInt(0);
+      }
+      else
+      {
+        mStack.pushInt(1);
+      }
     }
 
     void DaedalusVMForGameWorld::external_IntToString()
