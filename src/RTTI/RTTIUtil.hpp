@@ -60,7 +60,7 @@ public:                                                          \
   decltype(classname::getRTTIStatic()) getRTTI() const override; \
                                                                  \
 private:                                                         \
-  static bs::SPtr<classname> rttiCreateEmpty()                   \
+  static inline bs::SPtr<classname> rttiCreateEmpty()            \
   {                                                              \
     return bs::bs_shared_ptr(new classname());                   \
   }
