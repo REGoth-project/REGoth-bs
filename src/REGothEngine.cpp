@@ -154,8 +154,8 @@ void REGothEngine::setupMainCamera()
   rs->enableTonemapping              = false;
   rs->enableAutoExposure             = false;
   rs->enableSkybox                   = false;
-  rs->exposureScale                  = 1.0f;
-  rs->gamma                          = 1.5f;
+  rs->exposureScale                  = 0.f;
+  rs->gamma                          = 2.f;
   rs->cullDistance                   = 100.0f;
 
   sceneCamera->setRenderSettings(rs);
