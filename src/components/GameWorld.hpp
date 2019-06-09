@@ -20,6 +20,8 @@ namespace REGoth
   class GameWorld;
   using HGameWorld = bs::GameObjectHandle<GameWorld>;
 
+  extern const char* const WORLD_STARTPOINT;
+
   namespace Scripting
   {
     class ScriptVMForGameWorld;

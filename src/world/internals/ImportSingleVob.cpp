@@ -185,6 +185,11 @@ namespace REGoth
     // Startpoint is found by name of the scene object
     REGOTH_LOG(Info, Uncategorized, "[ImportSingleVob] Found startpoint: {0}", so->getName());
 
+    // A startpoint has an arbitrary names, which makes it hard to find it at a later point.
+    // Thus, rename it to a known constant. As there should always only be one startpoint in
+    // a world, this should cause no conflicts.
+    so->setName(WORLD_STARTPOINT);
+
     return so;
   }
 
