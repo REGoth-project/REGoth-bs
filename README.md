@@ -68,6 +68,33 @@ cmake -G"Visual Studio 15 2017 Win64" ..
 cmake --build . --config RelWithDebInfo --parallel 8
 ```
 
+### Windows using Ninja
+
+The Ninja-Build System performs faster than MsBuild since it is able to run more tasks in parallel: While MsBuild can only build different projects in parallel, Ninja acts as you would expect and is able to build multiple files in parallel, even if they are from within the same project.
+
+Unfortunately, using it on Windows is a little bit tricky. From a *x64 Native Tools Command Prompt*, navigate to where you cloned REGoth and run:
+
+```sh
+md build
+cd build
+cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_COMPILER="cl.exe" -DCMAKE_CXX_COMPILER="cl.exe" -DMSVC_TOOLSET_VERSION=140 ..
+ninja
+```
+
+Note that Visual Studio Code seems to figure this out automatically and uses Ninja by default.
+
+## Using our own copy of Vcpkg
+
+REGoth uses [Vcpkg](https://github.com/microsoft/vcpkg) internally. To make building as seamless as possible, the build script will take care of getting a copy of Vcpkg, bootstrap it and install the required packages. All this happens inside the `build`-directory so it doesn't clutter your system with stuff you don't want.
+
+If you want to use your own copy of Vcpkg, just pass the toolchain-file as usual.
+
+
+## Building without Vcpkg
+
+If you don't want to have anything to do with Vcpkg, you can also choose to supply the required packages yourself. To do this, you need to pass `-DSKIP_AUTOMATE_VCPKG=ON` to CMake. Now you're completely on your own to gather the required dependencies for REGoth.
+
+
 ## Building the Documentation
 
 You will need:

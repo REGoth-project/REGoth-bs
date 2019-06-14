@@ -1,7 +1,28 @@
 cmake_minimum_required (VERSION 3.12.0)
+
+
+###############################################################################
+#                               Automate VCPKG                                #
+###############################################################################
+
+option(SKIP_AUTOMATE_VCPKG "When ON, you will need to built the packages required by REGoth on your own or supply your own vcpkg toolchain.")
+
+if (NOT SKIP_AUTOMATE_VCPKG)
+  include(cmake/automate-vcpkg.cmake)
+
+  vcpkg_bootstrap()
+  vcpkg_install_packages(libsquish physfs)
+endif()
+
+
+
 project (REGoth)
 
 option(REGOTH_USE_SYSTEM_BSF "Whether to use the system installed bsf via find_package." OFF)
+
+if (NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+  message(FATAL_ERROR "REGoth does not support to be built on architectures other than 64 bit.")
+endif()
 
 ###############################################################################
 #                                Configuration                                #
@@ -28,6 +49,9 @@ endif()
 ###############################################################################
 #                            Add external libraries                           #
 ###############################################################################
+
+# Required by the libsquish vcpkg package
+find_package(OpenMP REQUIRED) # Find the package
 
 # Let CMake know where to find the Findbsf.cmake file
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")

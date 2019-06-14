@@ -135,6 +135,7 @@ add_library(REGothEngine
   )
 
 target_link_libraries(REGothEngine PUBLIC bsf BsZenLib)
+target_link_libraries(REGothEngine PUBLIC ${OpenMP_CXX_LIBRARIES})
 target_include_directories(REGothEngine PUBLIC .)
 
 add_executable(REGoth main.cpp)

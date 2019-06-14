@@ -1,0 +1,126 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+# We can run multiple jobs in parallel. For this project
+# I'm running Linux, Windows, and macOS jobs. For syntac details
+# see https://docs.microsoft.com/en-us/azure/devops/pipelines/process/phases
+jobs:
+  - job: Linux
+
+    # The VM image to use for the hosted agent. For a list of possible agents
+    # see https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted
+    # You can see the software installed on each agent at the same link.
+    pool:
+      vmImage: 'ubuntu-16.04'
+  
+    steps:
+    - task: Bash@3
+      displayName: Install Packages via apt-get
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          sudo apt-get update
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt-get install uuid-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev gcc-8 g++-8
+    
+    - task: Bash@3
+      displayName: Build REGoth
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            export CC=gcc-8
+            export CXX=g++-8
+            cd ci
+            ./build-linux.sh
+
+    - task: Bash@3
+      displayName: List build directory
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            cd ci
+            find build/
+
+    - task: Bash@3
+      displayName: Gather build artifacts
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            cd ci
+            ./pack-release-linux.sh
+            find artifacts/
+            
+    - task: CopyFiles@2
+      inputs:
+        contents: 'ci/artifacts\**'
+        targetFolder: $(Build.ArtifactStagingDirectory)
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: $(Build.ArtifactStagingDirectory)
+        artifactName: REGoth-ci-bin
+
+#  - job: macOS
+#    pool:
+#      vmImage: 'macOS-10.14'
+#    steps:
+#    - bash: |
+#          brew install ossp-uuid
+#          brew install gcc-8
+#          export CC=gcc-8
+#          export CXX=g++-8
+#          mkdir build
+#          cd build
+#          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+#          cmake --build . --parallel
+
+  - job: Windows
+    pool:
+      vmImage: 'vs2017-win2016'
+
+    steps:
+    - task: Bash@3
+      displayName: Build REGoth
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            cd ci
+            ./build-windows.sh
+
+    - task: Bash@3
+      displayName: List build directory
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            cd ci
+            find build/
+            
+    - task: Bash@3
+      displayName: Gather build artifacts
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            cd ci
+            ./pack-release-windows.sh
+            find artifacts/
+
+    - task: CopyFiles@2
+      inputs:
+        contents: 'ci/artifacts\**'
+        targetFolder: $(Build.ArtifactStagingDirectory)
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: $(Build.ArtifactStagingDirectory)
+        artifactName: REGoth-ci-bin
