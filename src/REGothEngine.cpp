@@ -23,7 +23,6 @@ const bs::String REGOTH_CONTENT_DIR_NAME = "content";
 
 REGothEngine::~REGothEngine()
 {
-  shutdown();
 }
 
 void REGothEngine::loadGamePackages(const bs::Path& executablePath, const bs::Path& gameDirectory)
