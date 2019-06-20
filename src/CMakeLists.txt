@@ -65,6 +65,12 @@ add_library(REGothEngine
   components/Sky.cpp
   sky/SkyColoring.hpp
   sky/SkyColoring.cpp
+  components/Focusable.hpp
+  components/Focusable.cpp
+  components/UIElement.hpp
+  components/UIElement.cpp
+  components/UIFocusText.hpp
+  components/UIFocusText.cpp
   AI/EventMessage.hpp
   AI/EventMessage.cpp
   AI/ScriptState.hpp
@@ -136,6 +142,8 @@ add_library(REGothEngine
   RTTI/RTTI_Waynet.hpp
   RTTI/RTTI_Waypoint.hpp
   RTTI/RTTI_GameClock.hpp
+  RTTI/RTTI_UIElement.hpp
+  RTTI/RTTI_UIFocusText.hpp
   )
 
 target_link_libraries(REGothEngine PUBLIC bsf BsZenLib)
@@ -171,3 +179,6 @@ target_link_libraries(REGothMobViewer REGothEngine samples-common)
 
 add_executable(REGothWorldCacheTest main_WorldCacheTest.cpp)
 target_link_libraries(REGothWorldCacheTest REGothEngine samples-common)
+
+add_executable(REGothFocusTester main_FocusTester.cpp)
+target_link_libraries(REGothFocusTester REGothEngine samples-common)

@@ -63,5 +63,8 @@ namespace REGoth
     TID_REGOTH_RoutineTask                  = 600055,
     TID_REGOTH_Freepoint                    = 600056,
     TID_REGOTH_Sky                          = 600057,
+    TID_REGOTH_UIElement                    = 600058,
+    TID_REGOTH_UIFocusText                  = 600059,
+    TID_REGOTH_Focusable                    = 600060,
   };
 }  // namespace REGoth

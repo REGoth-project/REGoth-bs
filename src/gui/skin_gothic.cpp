@@ -9,6 +9,7 @@
 
 namespace REGoth
 {
+  static bs::HGUISkin s_SkinGothic;
   /**
    * Loads a font from gothics original font format or a vector font format like ttf.
    */
@@ -36,6 +37,12 @@ namespace REGoth
 
   bs::HGUISkin GUI::createSkin_Gothic()
   {
+    if (s_SkinGothic)
+    {
+      // Was already created before, use the cached instance
+      return s_SkinGothic;
+    }
+
     bs::HGUISkin skin = bs::GUISkin::create();
 
     bs::HFont fontGothicDefault = loadFont("FONT_DEFAULT.FNT");
@@ -48,29 +55,41 @@ namespace REGoth
 
     bs::GUIElementStyle baseStyle;
     baseStyle.font = fontGothicDefault;
-    baseStyle.fontSize = 18;
+    baseStyle.fontSize = 17;
     baseStyle.wordWrap = true;
+    baseStyle.normal.textColor = bs::Color::White;
     skin->setStyle("Label", baseStyle);
 
     bs::GUIElementStyle labelDefault = baseStyle;
     labelDefault.font = fontGothicOld10White;
-    labelDefault.fontSize = 18;
+    labelDefault.fontSize = 17;
     skin->setStyle("GothicLabel", labelDefault);
 
     bs::GUIElementStyle labelLarge = baseStyle;
     labelLarge.font = fontGothicOld20White;
-    labelLarge.fontSize = 35;
+    labelLarge.fontSize = 36;
     skin->setStyle("GothicLabelLarge", labelLarge);
 
     bs::GUIElementStyle labelDefaultHighlighted = baseStyle;
     labelDefaultHighlighted.font = fontGothicOld10WhiteHi;
-    labelDefaultHighlighted.fontSize = 18;
+    labelDefaultHighlighted.fontSize = 17;
     skin->setStyle("GothicLabelHighlighted", labelDefaultHighlighted);
 
     bs::GUIElementStyle labelLargeHighlighted = baseStyle;
     labelLargeHighlighted.font = fontGothicOld20WhiteHi;
-    labelLargeHighlighted.fontSize = 35;
+    labelLargeHighlighted.fontSize = 36;
     skin->setStyle("GothicLabelLargeHighlighted", labelLargeHighlighted);
+
+    bs::GUIElementStyle labelObjectFocus = baseStyle;
+    labelObjectFocus.font = fontGothicOld10WhiteHi;
+    labelObjectFocus.fontSize = 17;
+    labelObjectFocus.wordWrap = false;
+    // labelObjectFocus.textHorzAlign = bs::TextHorzAlign::THA_Center;
+    // labelObjectFocus.textVertAlign = bs::TextVertAlign::TVA_Center;
+    skin->setStyle("GothicLabelObjectFocus", labelObjectFocus);
+
+    // Cache the skin for later use
+    s_SkinGothic = skin;
 
     return skin;
   }

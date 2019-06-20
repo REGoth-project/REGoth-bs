@@ -1,6 +1,7 @@
 #include "GameWorld.hpp"
 #include <components/Sky.hpp>
 #include <BsZenLib/ImportPath.hpp>
+#include <components/Focusable.hpp>
 #include <RTTI/RTTI_GameWorld.hpp>
 #include <Resources/BsResources.h>
 #include <Scene/BsPrefab.h>
@@ -85,7 +86,11 @@ namespace REGoth
     itemSO->setPosition(transform.pos());
     itemSO->setRotation(transform.rot());
 
-    return itemSO->addComponent<Item>(instance, thisWorld);
+    auto item = itemSO->addComponent<Item>(instance, thisWorld);
+
+    itemSO->addComponent<Focusable>();
+
+    return item;
   }
 
   HItem GameWorld::insertItem(const bs::String& instance, const bs::String& spawnPoint)
