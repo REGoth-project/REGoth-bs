@@ -1,6 +1,8 @@
 #include "UIElement.hpp"
+#include <original-content/OriginalGameResources.hpp>
 #include <GUI/BsCGUIWidget.h>
 #include <GUI/BsGUIPanel.h>
+#include <Image/BsSpriteTexture.h>
 #include <RTTI/RTTI_UIElement.hpp>
 #include <exception/Throw.hpp>
 #include <gui/skin_gothic.hpp>
@@ -83,6 +85,20 @@ namespace REGoth
     }
 
     return *camera;
+  }
+
+  bs::HSpriteTexture UIElement::loadSprite(const bs::String& texture)
+  {
+    bs::HTexture t = gOriginalGameResources().texture(texture);
+
+    if (!t)
+    {
+      bs::gDebug().logWarning("[UIElement] Failed to load texture: " + texture);
+
+      return {};
+    }
+
+    return bs::SpriteTexture::create(t);
   }
 
   REGOTH_DEFINE_RTTI(UIElement)

@@ -64,6 +64,14 @@ namespace REGoth
     bs::GUILayout& parentLayout() const;
     bs::Camera& camera() const;
 
+    /**
+     * Loads a texture into a sprite.
+     *
+     * @param  texture  Texture name as in the original game, e.g. `STONE.TGA`.
+     * @return Sprite with the given texture. Empty handle if loading failed.
+     */
+    bs::HSpriteTexture loadSprite(const bs::String& texture);
+
   private:
     bs::GUILayout* mGuiLayout;
     HUIElement mParentUiElement;
