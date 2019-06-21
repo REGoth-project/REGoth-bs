@@ -4,7 +4,7 @@
 #include <GUI/BsGUISkin.h>
 #include <GUI/BsGUITexture.h>
 #include <Text/BsFont.h>
-#include <original-content/VirtualFileSystem.hpp>
+#include <original-content/OriginalGameResources.hpp>
 #include <Importer/BsImporter.h>
 
 namespace REGoth
@@ -19,15 +19,7 @@ namespace REGoth
 
     if (bs::StringUtil::endsWith(fontFile, ".fnt", lowercase))
     {
-      bs::gDebug().logDebug("Loading .fnt: " + fontFile);
-      if (BsZenLib::HasCachedFont(fontFile))
-      {
-        return BsZenLib::LoadCachedFont(fontFile);
-      }
-      else
-      {
-        return BsZenLib::ImportAndCacheFont(fontFile, REGoth::gVirtualFileSystem().getFileIndex());
-      }
+      return gOriginalGameResources().font(fontFile);
     }
     else
     {

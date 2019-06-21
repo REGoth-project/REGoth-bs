@@ -1,19 +1,17 @@
 #include "VisualSkeletalAnimation.hpp"
 #include "original-content/VirtualFileSystem.hpp"
 #include <Animation/BsAnimationClip.h>
-#include <BsZenLib/ImportPath.hpp>
-#include <BsZenLib/ImportSkeletalMesh.hpp>
 #include <Components/BsCAnimation.h>
 #include <Components/BsCRenderable.h>
 #include <Debug/BsDebug.h>
 #include <Mesh/BsMesh.h>
-#include <RTTI/RTTI_VisualCharacter.hpp>
 #include <RTTI/RTTI_VisualSkeletalAnimation.hpp>
 #include <Scene/BsSceneObject.h>
 #include <animation/Animation.hpp>
 #include <animation/StateNaming.hpp>
 #include <components/NodeVisuals.hpp>
 #include <exception/Throw.hpp>
+#include <original-content/OriginalGameResources.hpp>
 
 namespace REGoth
 {
@@ -120,23 +118,7 @@ namespace REGoth
 
   void VisualSkeletalAnimation::setVisual(const bs::String& visual)
   {
-    BsZenLib::Res::HModelScriptFile modelScript;
-
-    // FIXME: Loading these from cache does work in the character viewer, but not in the world
-    // viewer?! This set is just a workaround so we always use model scripts from this run
-    // while caching only one of it. It should be removed once that is figured out.
-    static bs::Set<bs::String> s_cachedVisuals;
-    bool hasCachedItThisRun = s_cachedVisuals.find(visual) != s_cachedVisuals.end();
-
-    if (hasCachedItThisRun && BsZenLib::HasCachedMDS(visual))
-    {
-      modelScript = BsZenLib::LoadCachedMDS(visual);
-    }
-    else
-    {
-      modelScript = BsZenLib::ImportAndCacheMDS(visual, REGoth::gVirtualFileSystem().getFileIndex());
-      s_cachedVisuals.insert(visual);
-    }
+    auto modelScript = gOriginalGameResources().modelScript(visual);
 
     if (!modelScript)
     {

@@ -4,7 +4,7 @@
 #include <Components/BsCRenderable.h>
 #include <RTTI/RTTI_VisualMorphMesh.hpp>
 #include <Scene/BsSceneObject.h>
-#include <original-content/VirtualFileSystem.hpp>
+#include <original-content/OriginalGameResources.hpp>
 
 namespace REGoth
 {
@@ -16,17 +16,7 @@ namespace REGoth
 
   void VisualMorphMesh::setMesh(const bs::String& originalMeshFileName)
   {
-    BsZenLib::Res::HMeshWithMaterials mesh;
-
-    if (BsZenLib::HasCachedMorphMesh(originalMeshFileName))
-    {
-      mesh = BsZenLib::LoadCachedMorphMesh(originalMeshFileName);
-    }
-    else
-    {
-      mesh = BsZenLib::ImportAndCacheMorphMesh(originalMeshFileName,
-                                                gVirtualFileSystem().getFileIndex());
-    }
+    auto mesh = gOriginalGameResources().staticMesh(originalMeshFileName);
 
     if (!mesh)
     {

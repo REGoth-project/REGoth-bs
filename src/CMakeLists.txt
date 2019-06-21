@@ -116,6 +116,8 @@ add_library(REGothEngine
   original-content/VirtualFileSystem.cpp
   original-content/OriginalGameFiles.hpp
   original-content/OriginalGameFiles.cpp
+  original-content/OriginalGameResources.hpp
+  original-content/OriginalGameResources.cpp
   engine-content/EngineContent.cpp
   engine-content/EngineContent.hpp
   engine-content/internal/FindEngineContent.cpp

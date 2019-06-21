@@ -1,10 +1,9 @@
 #include "VisualStaticMesh.hpp"
-#include <BsZenLib/ImportPath.hpp>
-#include <BsZenLib/ImportStaticMesh.hpp>
 #include <Components/BsCRenderable.h>
 #include <Scene/BsSceneObject.h>
 #include <original-content/VirtualFileSystem.hpp>
 #include <RTTI/RTTI_VisualStaticMesh.hpp>
+#include <original-content/OriginalGameResources.hpp>
 
 namespace REGoth
 {
@@ -16,17 +15,7 @@ namespace REGoth
 
   void VisualStaticMesh::setMesh(const bs::String& originalMeshFileName)
   {
-    BsZenLib::Res::HMeshWithMaterials mesh;
-
-    if (BsZenLib::HasCachedStaticMesh(originalMeshFileName))
-    {
-      mesh = BsZenLib::LoadCachedStaticMesh(originalMeshFileName);
-    }
-    else
-    {
-      mesh = BsZenLib::ImportAndCacheStaticMesh(originalMeshFileName,
-                                                gVirtualFileSystem().getFileIndex());
-    }
+    auto mesh = gOriginalGameResources().staticMesh(originalMeshFileName);
 
     if (!mesh)
     {
