@@ -92,6 +92,15 @@ namespace REGoth
      * @return bsf resource handle. Empty if loading failed.
      */
     bs::HFont font(const bs::String& originalFileName);
+
+    /**
+     * Loads a texture into a sprite.
+     *
+     * @param  originalFileName  File name as in the original game, e.g. `STONE.TGA`.
+     *
+     * @return Sprite with the given texture. Empty handle if loading failed.
+     */
+    bs::HSpriteTexture sprite(const bs::String& originalFileName);
   };
 
   /**

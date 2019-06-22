@@ -5,11 +5,14 @@
 #include <Material/BsMaterial.h>
 #include <Resources/BsBuiltinResources.h>
 #include <Scene/BsSceneObject.h>
+#include <components/Focusable.hpp>
+#include <components/GameUI.hpp>
 #include <components/GameWorld.hpp>
 #include <components/Item.hpp>
+#include <components/UIDialogueChoice.hpp>
 #include <components/UIElement.hpp>
 #include <components/UIFocusText.hpp>
-#include <components/Focusable.hpp>
+#include <components/UISubtitleBox.hpp>
 
 class REGothCharacterMovementTester : public REGoth::REGothEngine
 {
@@ -54,15 +57,18 @@ public:
     item1->SO()->setPosition(bs::Vector3(1, 0.2, 0));
     item2->SO()->setPosition(bs::Vector3(-1, 0, 0));
 
-    auto uiRootSO = bs::SceneObject::create("UI Root");
-    auto uiRoot   = uiRootSO->addComponent<REGoth::UIElement>(mMainCamera);
+    GameUI::createGlobal(mMainCamera);
 
-    auto uiFocusTextSO = bs::SceneObject::create("UI Focus Text");
-    uiFocusTextSO->setParent(uiRootSO);
+    gGameUI()->focusText()->putTextAbove(item1->SO()->getComponent<REGoth::Focusable>(),
+                                         "Hello Focus!");
 
-    auto uiFocusText = uiFocusTextSO->addComponent<REGoth::UIFocusText>(uiRoot);
+    gGameUI()->subtitleBox()->open();
 
-    uiFocusText->putTextAbove(item1->SO()->getComponent<REGoth::Focusable>(), "Hello Focus!");
+    gGameUI()->choices()->addChoice({"Hello World!", "ScriptFn1"});
+    gGameUI()->choices()->addChoice({"This is a test!", "ScriptFn2"});
+    gGameUI()->choices()->addChoice({"What is this?", "ScriptFn3"});
+    gGameUI()->choices()->addChoice({"I'm hungry!", "ScriptFn4"});
+    gGameUI()->choices()->addChoice({"I'm not hungry!", "ScriptFn5"});
 
     mMainCamera->SO()->setPosition(bs::Vector3(0, 1, 3));
   }

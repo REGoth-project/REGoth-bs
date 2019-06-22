@@ -3,7 +3,7 @@
 
 namespace REGoth
 {
-  class RTTI_UIFocusText : public bs::RTTIType<UIFocusText, bs::Component, RTTI_UIFocusText>
+  class RTTI_UIFocusText : public bs::RTTIType<UIFocusText, UIElement, RTTI_UIFocusText>
   {
     BS_BEGIN_RTTI_MEMBERS
     // TODO: Fill RTTI Members

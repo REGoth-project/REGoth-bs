@@ -43,6 +43,37 @@ namespace REGoth
     void hide();
 
   protected:
+    /**
+     * Adds an UIElement as child to this one.
+     *
+     * @tparam  T     Type of UIElement to add.
+     * @tparam  ARGS  Constructor arguments to the UIElement after the `parentUiElement`.
+     *
+     * @param   soName  Name of the scene object the new UIElement will be attached to.
+     *
+     * @return  The newly created UIElement.
+     */
+    template <class T, typename... ARGS>
+    bs::GameObjectHandle<T> addChildElement(const bs::String soName, ARGS&&... args)
+    {
+      static_assert((std::is_base_of<UIElement, T>::value),
+                    "Specified type is not a valid UIElement.");
+
+      auto so         = addChildSceneObject(soName);
+
+      auto thisHandle = bs::static_object_cast<UIElement>(getHandle());
+
+      return so->addComponent<T>(thisHandle, std::forward<ARGS>(args)...);
+    }
+
+    /**
+     * Adds a scene object as child to the scene object holding this component. (Sets
+     * the parent of the newly created SO to the SO of this component.)
+     *
+     * This is needed for the addChildElement() method so we don't need to include
+     * `BsSceneObject.h` in this header to create the scene object.
+     */
+    bs::HSceneObject addChildSceneObject(const bs::String& name);
 
     /**
      * Constructs a new UIElement with an existing UIElement as parent.

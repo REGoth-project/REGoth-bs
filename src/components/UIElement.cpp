@@ -1,11 +1,11 @@
 #include "UIElement.hpp"
-#include <original-content/OriginalGameResources.hpp>
 #include <GUI/BsCGUIWidget.h>
 #include <GUI/BsGUIPanel.h>
 #include <Image/BsSpriteTexture.h>
 #include <RTTI/RTTI_UIElement.hpp>
 #include <exception/Throw.hpp>
 #include <gui/skin_gothic.hpp>
+#include <original-content/OriginalGameResources.hpp>
 
 namespace REGoth
 {
@@ -48,6 +48,14 @@ namespace REGoth
   void UIElement::hide()
   {
     layout().setVisible(false);
+  }
+
+  bs::HSceneObject UIElement::addChildSceneObject(const bs::String& name)
+  {
+    auto so = bs::SceneObject::create(name);
+    so->setParent(SO());
+
+    return so;
   }
 
   bs::GUILayout& UIElement::layout() const

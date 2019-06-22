@@ -1,11 +1,12 @@
 #include "skin_gothic.hpp"
 #include <BsZenLib/ImportFont.hpp>
+#include <Resources/BsBuiltinResources.h>
 #include <BsZenLib/ImportTexture.hpp>
 #include <GUI/BsGUISkin.h>
 #include <GUI/BsGUITexture.h>
+#include <Importer/BsImporter.h>
 #include <Text/BsFont.h>
 #include <original-content/OriginalGameResources.hpp>
-#include <Importer/BsImporter.h>
 
 namespace REGoth
 {
@@ -37,52 +38,62 @@ namespace REGoth
 
     bs::HGUISkin skin = bs::GUISkin::create();
 
-    bs::HFont fontGothicDefault = loadFont("FONT_DEFAULT.FNT");
-    bs::HFont fontGothic10Book = loadFont("FONT_10_BOOK.FNT");
-    bs::HFont fontGothic20Book = loadFont("FONT_20_BOOK.FNT");
-    bs::HFont fontGothicOld10White = loadFont("FONT_OLD_10_WHITE.FNT");
+    bs::HFont fontGothicDefault      = loadFont("FONT_DEFAULT.FNT");
+    bs::HFont fontGothic10Book       = loadFont("FONT_10_BOOK.FNT");
+    bs::HFont fontGothic20Book       = loadFont("FONT_20_BOOK.FNT");
+    bs::HFont fontGothicOld10White   = loadFont("FONT_OLD_10_WHITE.FNT");
     bs::HFont fontGothicOld10WhiteHi = loadFont("FONT_OLD_10_WHITE_HI.FNT");
-    bs::HFont fontGothicOld20White = loadFont("FONT_OLD_20_WHITE.FNT");
+    bs::HFont fontGothicOld20White   = loadFont("FONT_OLD_20_WHITE.FNT");
     bs::HFont fontGothicOld20WhiteHi = loadFont("FONT_OLD_20_WHITE_HI.FNT");
 
     bs::GUIElementStyle baseStyle;
-    baseStyle.font = fontGothicDefault;
-    baseStyle.fontSize = 17;
-    baseStyle.wordWrap = true;
+    baseStyle.font             = fontGothicDefault;
+    baseStyle.fontSize         = 17;
+    baseStyle.wordWrap         = true;
     baseStyle.normal.textColor = bs::Color::White;
     skin->setStyle("Label", baseStyle);
 
     bs::GUIElementStyle labelDefault = baseStyle;
-    labelDefault.font = fontGothicOld10White;
-    labelDefault.fontSize = 17;
+    labelDefault.font                = fontGothicOld10White;
+    labelDefault.fontSize            = 17;
     skin->setStyle("GothicLabel", labelDefault);
 
     bs::GUIElementStyle labelLarge = baseStyle;
-    labelLarge.font = fontGothicOld20White;
-    labelLarge.fontSize = 36;
+    labelLarge.font                = fontGothicOld20White;
+    labelLarge.fontSize            = 36;
     skin->setStyle("GothicLabelLarge", labelLarge);
 
     bs::GUIElementStyle labelDefaultHighlighted = baseStyle;
-    labelDefaultHighlighted.font = fontGothicOld10WhiteHi;
-    labelDefaultHighlighted.fontSize = 17;
+    labelDefaultHighlighted.font                = fontGothicOld10WhiteHi;
+    labelDefaultHighlighted.fontSize            = 17;
     skin->setStyle("GothicLabelHighlighted", labelDefaultHighlighted);
 
     bs::GUIElementStyle labelLargeHighlighted = baseStyle;
-    labelLargeHighlighted.font = fontGothicOld20WhiteHi;
-    labelLargeHighlighted.fontSize = 36;
+    labelLargeHighlighted.font                = fontGothicOld20WhiteHi;
+    labelLargeHighlighted.fontSize            = 36;
     skin->setStyle("GothicLabelLargeHighlighted", labelLargeHighlighted);
 
     bs::GUIElementStyle labelObjectFocus = baseStyle;
-    labelObjectFocus.font = fontGothicOld10WhiteHi;
-    labelObjectFocus.fontSize = 17;
-    labelObjectFocus.wordWrap = false;
+    labelObjectFocus.font                = fontGothicOld10WhiteHi;
+    labelObjectFocus.fontSize            = 17;
+    labelObjectFocus.wordWrap            = false;
     // labelObjectFocus.textHorzAlign = bs::TextHorzAlign::THA_Center;
     // labelObjectFocus.textVertAlign = bs::TextVertAlign::TVA_Center;
     skin->setStyle("GothicLabelObjectFocus", labelObjectFocus);
 
+    bs::GUIElementStyle subtitleBox = baseStyle;
+    subtitleBox.normal.texture      = gOriginalGameResources().sprite("DLG_CHOICE.TGA");
+    skin->setStyle("GothicDialogueBoxBackground", labelLargeHighlighted);
+
+    skin->setStyle("GothicSubtitleBoxCharacterName", labelDefaultHighlighted);
+    skin->setStyle("GothicSubtitleBoxText", labelDefault);
+
+    // skin->setStyle("Button", const GUIElementStyle &style)
+
     // Cache the skin for later use
     s_SkinGothic = skin;
 
-    return skin;
+    return bs::BuiltinResources::instance().getGUISkin();
+    // return skin;
   }
-}
+}  // namespace REGoth

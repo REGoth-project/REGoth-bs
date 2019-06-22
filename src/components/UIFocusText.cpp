@@ -13,7 +13,7 @@ namespace REGoth
     setName("UIFocusText");
 
     mLabelAboveObject = layout().addNewElement<bs::GUILabel>(bs::HString(""));
-    mLabelAboveObject->setStyle("GothicLabelObjectFocus");
+    // mLabelAboveObject->setStyle("GothicLabelObjectFocus");
   }
 
   UIFocusText::~UIFocusText()

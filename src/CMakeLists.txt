@@ -67,10 +67,16 @@ add_library(REGothEngine
   sky/SkyColoring.cpp
   components/Focusable.hpp
   components/Focusable.cpp
+  components/GameUI.hpp
+  components/GameUI.cpp
   components/UIElement.hpp
   components/UIElement.cpp
   components/UIFocusText.hpp
   components/UIFocusText.cpp
+  components/UISubtitleBox.hpp
+  components/UISubtitleBox.cpp
+  components/UIDialogueChoice.hpp
+  components/UIDialogueChoice.cpp
   AI/EventMessage.hpp
   AI/EventMessage.cpp
   AI/ScriptState.hpp

@@ -1,4 +1,5 @@
 #include "OriginalGameResources.hpp"
+#include <Image/BsSpriteTexture.h>
 #include <BsZenLib/ImportFont.hpp>
 #include <BsZenLib/ImportMorphMesh.hpp>
 #include <BsZenLib/ImportSkeletalMesh.hpp>
@@ -71,6 +72,20 @@ namespace REGoth
     {
       return BsZenLib::ImportAndCacheFont(originalFileName, gVirtualFileSystem().getFileIndex());
     }
+  }
+
+  bs::HSpriteTexture OriginalGameResources::sprite(const bs::String& originalFileName)
+  {
+    bs::HTexture t = texture(originalFileName);
+
+    if (!t)
+    {
+      bs::gDebug().logWarning("[UIElement] Failed to load texture: " + originalFileName);
+
+      return {};
+    }
+
+    return bs::SpriteTexture::create(t);
   }
 
   OriginalGameResources& gOriginalGameResources()
