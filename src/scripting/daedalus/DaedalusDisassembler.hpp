@@ -16,7 +16,8 @@ namespace REGoth
      * @return Disassembly as text.
      */
     bs::String disassembleOpcode(const Daedalus::PARStackOpCode& opcode,
-                                 const ScriptSymbolStorage& symbols);
+                                 const ScriptSymbolStorage& symbols, const bs::String& lhs = "a",
+                                 const bs::String& rhs = "b", const bs::String& res = "");
 
     /**
      * Makes a string with different characters for every call-depth.

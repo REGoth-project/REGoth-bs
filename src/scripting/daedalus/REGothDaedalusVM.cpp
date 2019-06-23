@@ -68,11 +68,6 @@ namespace REGoth
     {
       Daedalus::PARStackOpCode opcode = mDatFile->getStackOpCode(mPC);
 
-      if (mIsDisassemblerEnabled)
-      {
-        disassembleAndLogOpcode(opcode);
-      }
-
       mPC += opcode.opSize;
 
       switch (opcode.op)
@@ -81,129 +76,364 @@ namespace REGoth
           // ------------------------------------------------------------------------------
 
         case Daedalus::EParOp_Add:
-          mStack.pushInt(popIntValue() + popIntValue());
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs + rhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_Subract:
-          mStack.pushInt(popIntValue() - popIntValue());
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs - rhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_Multiply:
-          mStack.pushInt(popIntValue() * popIntValue());
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs * rhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_Divide:
-          mStack.pushInt(popIntValue() / popIntValue());
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs / rhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_Mod:
-          mStack.pushInt(popIntValue() % popIntValue());
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs % rhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
           // Binary
           // ----------------------------------------------------------------------------------
 
         case Daedalus::EParOp_BinOr:
-          mStack.pushInt(popIntValue() | popIntValue());
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs | rhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_BinAnd:
-          mStack.pushInt(popIntValue() & popIntValue());
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs & rhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_ShiftLeft:
-          mStack.pushInt(popIntValue() << popIntValue());
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs << rhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_ShiftRight:
-          mStack.pushInt(popIntValue() >> popIntValue());
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs >> rhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_Negate:
-          mStack.pushInt(~popIntValue());
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 res = ~lhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), "", bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
           // Logic
           // -----------------------------------------------------------------------------------
 
         case Daedalus::EParOp_LogOr:
-          // Note: This can't be done in one line because the second pop might not be executed,
-          // due to c++'s short-circuit evaluation
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs || rhs ? 1 : 0;
+
+          if (mIsDisassemblerEnabled)
           {
-            bs::INT32 a = popIntValue();
-            bs::INT32 b = popIntValue();
-            mStack.pushInt(a || b ? 1 : 0);
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
           }
-          break;
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_LogAnd:
-          // Note: This can't be done in one line because the second pop might not be executed,
-          // due to c++'s short-circuit evaluation
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs && rhs ? 1 : 0;
+
+          if (mIsDisassemblerEnabled)
           {
-            bs::INT32 a = popIntValue();
-            bs::INT32 b = popIntValue();
-            mStack.pushInt(a && b ? 1 : 0);
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
           }
-          break;
+
+          mStack.pushInt(res);
+        }
+        break;
 
           // Comparision
           // -----------------------------------------------------------------------------
 
         case Daedalus::EParOp_Less:
-          mStack.pushInt(popIntValue() < popIntValue() ? 1 : 0);
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs < rhs ? 1 : 0;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_Greater:
-          mStack.pushInt(popIntValue() > popIntValue() ? 1 : 0);
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs > rhs ? 1 : 0;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_LessOrEqual:
-          mStack.pushInt(popIntValue() <= popIntValue() ? 1 : 0);
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs <= rhs ? 1 : 0;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_Equal:
-          mStack.pushInt(popIntValue() == popIntValue() ? 1 : 0);
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs == rhs ? 1 : 0;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_NotEqual:
-          mStack.pushInt(popIntValue() != popIntValue() ? 1 : 0);
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs != rhs ? 1 : 0;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_GreaterOrEqual:
-          mStack.pushInt(popIntValue() >= popIntValue() ? 1 : 0);
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 rhs = popIntValue();
+          bs::INT32 res = lhs >= rhs ? 1 : 0;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), bs::toString(rhs), bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
           // Unary
           // -----------------------------------------------------------------------------------
 
         case Daedalus::EParOp_Plus:
-          mStack.pushInt(+popIntValue());
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 res = +lhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), "", bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_Minus:
-          mStack.pushInt(-popIntValue());
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 res = -lhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), "", bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
         case Daedalus::EParOp_Not:
-          mStack.pushInt(!popIntValue());
-          break;
+        {
+          bs::INT32 lhs = popIntValue();
+          bs::INT32 res = !lhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs), "", bs::toString(res));
+          }
+
+          mStack.pushInt(res);
+        }
+        break;
 
           // Stack
           // -----------------------------------------------------------------------------------
 
         case Daedalus::EParOp_PushInt:
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(opcode.value), "", "");
+          }
+
           mStack.pushInt(opcode.value);
           break;
 
         case Daedalus::EParOp_PushVar:
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, "", "", "");
+          }
+
           pushVariable((bs::UINT32)opcode.symbol, 0);
           break;
 
         case Daedalus::EParOp_PushInstance:
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, "", "", "");
+          }
+
           mStack.pushInstance((bs::UINT32)opcode.symbol);
           break;
 
         case Daedalus::EParOp_PushArrayVar:
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, "", "", "");
+          }
+
           pushVariable((bs::UINT32)opcode.symbol, opcode.index);
           break;
 
@@ -215,6 +445,11 @@ namespace REGoth
           {
             SymbolIndex targetIndex = mStack.popFunction();
             SymbolIndex sourceIndex = (SymbolIndex)popIntValue();
+
+            if (mIsDisassemblerEnabled)
+            {
+              disassembleAndLogOpcode(opcode, "", "", "");
+            }
 
             auto& target = mScriptSymbols.getSymbol<SymbolScriptFunction>(targetIndex);
 
@@ -265,16 +500,30 @@ namespace REGoth
 
         case Daedalus::EParOp_AssignString:
         {
-          auto& ref = popStringReference();
-          ref       = popStringValue();
+          auto& lhs       = popStringReference();
+          const auto& rhs = popStringValue();
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, rhs, lhs, "");
+          }
+
+          lhs = rhs;
         }
 
         break;
 
         case Daedalus::EParOp_AssignFloat:
         {
-          auto& ref = popFloatReference();
-          ref       = popFloatValue();
+          auto& lhs       = popFloatReference();
+          const auto& rhs = popFloatValue();
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(rhs), bs::toString(lhs), "");
+          }
+
+          lhs = rhs;
         }
         break;
 
@@ -287,42 +536,86 @@ namespace REGoth
             auto& target = mScriptSymbols.getSymbol<SymbolInstance>(targetIndex);
             auto& source = mScriptSymbols.getSymbol<SymbolInstance>(sourceIndex);
 
+            if (mIsDisassemblerEnabled)
+            {
+              disassembleAndLogOpcode(opcode, target.name, source.name, "");
+            }
+
             target.instance = source.instance;
           }
           break;
 
         case Daedalus::EParOp_Assign:
         {
-          auto& ref = popIntReference();
-          ref       = popIntValue();
+          auto& lhs       = popIntReference();
+          const auto& rhs = popIntValue();
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode);
+          }
+
+          lhs = rhs;
         }
         break;
 
         case Daedalus::EParOp_AssignAdd:
         {
-          auto& ref = popIntReference();
-          ref += popIntValue();
+          auto& lhs       = popIntReference();
+          const auto& rhs = popIntValue();
+          auto res        = lhs + rhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode);
+          }
+
+          lhs = res;
         }
         break;
 
         case Daedalus::EParOp_AssignSubtract:
         {
-          auto& ref = popIntReference();
-          ref -= popIntValue();
+          auto& lhs       = popIntReference();
+          const auto& rhs = popIntValue();
+          auto res        = lhs - rhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode);
+          }
+
+          lhs = res;
         }
         break;
 
         case Daedalus::EParOp_AssignMultiply:
         {
-          auto& ref = popIntReference();
-          ref *= popIntValue();
+          auto& lhs       = popIntReference();
+          const auto& rhs = popIntValue();
+          auto res        = lhs * rhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode);
+          }
+
+          lhs = res;
         }
         break;
 
         case Daedalus::EParOp_AssignDivide:
         {
-          auto& ref = popIntReference();
-          ref /= popIntValue();
+          auto& lhs       = popIntReference();
+          const auto& rhs = popIntValue();
+          auto res        = lhs / rhs;
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode);
+          }
+
+          lhs = res;
         }
         break;
 
@@ -334,75 +627,107 @@ namespace REGoth
           // ----------------------------------------------------------------------------
 
         case Daedalus::EParOp_Ret:
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode);
+          }
+
           // Script function Ends here!
           return false;
 
         case Daedalus::EParOp_Jump:
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode);
+          }
+
           mPC = (bs::UINT32)opcode.address;
           break;
 
         case Daedalus::EParOp_JumpIf:
+        {
+          bs::UINT32 lhs = popIntValue();
+
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode, bs::toString(lhs));
+          }
+
           // Jump if value on stack is 0
-          if (!popIntValue())
+          if (!lhs)
           {
             mPC = (bs::UINT32)opcode.address;
           }
-          break;
+        }
+        break;
 
         case Daedalus::EParOp_Call:
+        {
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode);
+          }
+
           // Save some of this functions state and execute the whole sub-function
+          SymbolIndex currentInstance = mClassVarResolver->getCurrentInstance();
+          bs::UINT32 pc               = mPC;
+
+          mPC = (bs::UINT32)opcode.address;
+          mCallDepth += 1;
+
+          executeUntilReturn();
+
+          mCallDepth -= 1;
+          mPC = pc;
+          mClassVarResolver->setCurrentInstance(currentInstance);
+        }
+        break;
+
+        case Daedalus::EParOp_CallExternal:
+        {
+          if (mIsDisassemblerEnabled)
+          {
+            disassembleAndLogOpcode(opcode);
+          }
+
+          auto it = mExternals.find(opcode.symbol);
+
+          if (it != mExternals.end())
           {
             SymbolIndex currentInstance = mClassVarResolver->getCurrentInstance();
             bs::UINT32 pc               = mPC;
-
-            mPC = (bs::UINT32)opcode.address;
             mCallDepth += 1;
 
-            executeUntilReturn();
+            (this->*it->second)();
 
             mCallDepth -= 1;
             mPC = pc;
             mClassVarResolver->setCurrentInstance(currentInstance);
           }
-          break;
-
-        case Daedalus::EParOp_CallExternal:
-          // -
+          else
           {
-            auto it = mExternals.find(opcode.symbol);
-
-            if (it != mExternals.end())
-            {
-              SymbolIndex currentInstance = mClassVarResolver->getCurrentInstance();
-              bs::UINT32 pc               = mPC;
-              mCallDepth += 1;
-
-              (this->*it->second)();
-
-              mCallDepth -= 1;
-              mPC = pc;
-              mClassVarResolver->setCurrentInstance(currentInstance);
-            }
-            else
-            {
-              // REGOTH_THROW(
-              //     NotImplementedException,
-              //     "External not implemented: " +
-              //     mScriptSymbols.getSymbolBase(opcode.symbol).name);
-            }
+            // REGOTH_THROW(
+            //     NotImplementedException,
+            //     "External not implemented: " +
+            //     mScriptSymbols.getSymbolBase(opcode.symbol).name);
           }
-          break;
+        }
+        break;
 
           // Other
           // -----------------------------------------------------------------------------------
 
         case Daedalus::EParOp_SetInstance:
-          // Look up the instances object
+        {
+          if (mIsDisassemblerEnabled)
           {
-            const SymbolInstance& instance = mScriptSymbols.getSymbol<SymbolInstance>(opcode.symbol);
-            mClassVarResolver->setCurrentInstance(instance.instance);
+            disassembleAndLogOpcode(opcode);
           }
-          break;
+
+          const SymbolInstance& instance = mScriptSymbols.getSymbol<SymbolInstance>(opcode.symbol);
+          mClassVarResolver->setCurrentInstance(instance.instance);
+        }
+        break;
 
         default:
           REGOTH_THROW(InvalidParametersException,
@@ -626,11 +951,13 @@ namespace REGoth
       mExternals[symbol] = callback;
     }
 
-    void DaedalusVM::disassembleAndLogOpcode(const Daedalus::PARStackOpCode& opcode)
+    void DaedalusVM::disassembleAndLogOpcode(const Daedalus::PARStackOpCode& opcode,
+                                             const bs::String& lhs, const bs::String& rhs,
+                                             const bs::String& res)
     {
-      bs::gDebug().logDebug(bs::StringUtil::format("[DaedalusVM] Exec: {0}{1}",
-                                                   makeCallDepthString(mCallDepth),
-                                                   disassembleOpcode(opcode, mScriptSymbols)));
+      bs::gDebug().logDebug(
+          bs::StringUtil::format("[DaedalusVM] Exec: {0}{1}", makeCallDepthString(mCallDepth),
+                                 disassembleOpcode(opcode, mScriptSymbols, lhs, rhs, res)));
     }
 
     void DaedalusVM::findFunctionAtAddressAndLog(bs::UINT32 address)

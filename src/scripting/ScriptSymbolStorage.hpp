@@ -271,6 +271,11 @@ namespace REGoth
       {
         using namespace bs;
 
+        if (index == SYMBOL_INDEX_INVALID)
+        {
+          BS_EXCEPT(InvalidStateException, "Symbol Index is set to INVALID!");
+        }
+
         if (index >= mStorage.size())
         {
           BS_EXCEPT(InvalidStateException, "Symbol Index out of range!");

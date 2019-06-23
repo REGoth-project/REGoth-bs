@@ -67,6 +67,8 @@ add_library(REGothEngine
   sky/SkyColoring.cpp
   components/Focusable.hpp
   components/Focusable.cpp
+  components/StoryInformation.hpp
+  components/StoryInformation.cpp
   components/GameUI.hpp
   components/GameUI.cpp
   components/UIElement.hpp
@@ -152,6 +154,7 @@ add_library(REGothEngine
   RTTI/RTTI_GameClock.hpp
   RTTI/RTTI_UIElement.hpp
   RTTI/RTTI_UIFocusText.hpp
+  RTTI/RTTI_StoryInformation.hpp
   )
 
 target_link_libraries(REGothEngine PUBLIC bsf BsZenLib)

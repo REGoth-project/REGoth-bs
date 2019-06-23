@@ -28,7 +28,7 @@ namespace REGoth
       /**
        * Initializes the ScriptVM. To be called after the object is constructed.
        */
-      void initialize();
+      virtual void initialize();
 
       /**
        * Creates a blank script object and gives it all member variables needed for

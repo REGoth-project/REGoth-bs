@@ -35,6 +35,7 @@ namespace REGoth
     bs::VirtualButton mMoveLeft;
     bs::VirtualButton mMoveRight;
     bs::VirtualButton mFastMove;
+    bs::VirtualButton mAction;
 
     // Handle to the CharacterAI component attached to the scene object
     HCharacterAI mCharacterAI;

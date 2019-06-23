@@ -99,7 +99,6 @@ namespace REGoth
   class GameWorld : public bs::Component
   {
   public:
-
     enum Empty
     {
       EmptyWorld,
@@ -278,6 +277,16 @@ namespace REGoth
      */
     bs::HSceneObject findObjectByName(const bs::String& name);
 
+    /**
+     * Finds all characters which are in the given range around the given location.
+     */
+    bs::Vector<HCharacter> findCharactersInRange(float rangeInMeters,
+                                                 const bs::Vector3& around) const;
+    /**
+     * Finds all items which are in the given range around the given location.
+     */
+    bs::Vector<HItem> findItemsInRange(float rangeInMeters, const bs::Vector3& around) const;
+
   protected:
     void onInitialized() override;
 
@@ -306,6 +315,12 @@ namespace REGoth
     void fillFindByNameCache();
 
     /**
+     * Fills mAllCharacters, mAllItems, and so on.
+     */
+    void findAllCharacters();
+    void findAllItems();
+
+    /**
      * ZEN-File this world was created from, e.g. `NEWWORLD.ZEN`.
      */
     bs::String mZenFile;
@@ -329,8 +344,16 @@ namespace REGoth
      * Contains a list of most scene objects by their names. This is used to find
      * object quicker than using findChild(), but it might be missing some objects,
      * so remember to do an actual findChild() if your object wasn't found in here.
+     *
+     * Does not need to be saved as the cache can be built up on the fly again.
      */
     bs::UnorderedMap<bs::String, bs::HSceneObject> mSceneObjectsByNameCached;
+
+    /**
+     * Access to every character, item and others. Not saved, can be built after loading.
+     */
+    bs::Vector<HCharacter> mAllCharacters;
+    bs::Vector<HItem> mAllItems;
 
     /**
      * Used to skip onInitialized() when loading via RTTI.
@@ -341,7 +364,7 @@ namespace REGoth
     REGOTH_DECLARE_RTTI(GameWorld)
 
   protected:
-    GameWorld() = default; // For RTTI
+    GameWorld() = default;  // For RTTI
   };
 
 }  // namespace REGoth

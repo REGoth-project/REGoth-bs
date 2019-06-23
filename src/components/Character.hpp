@@ -362,6 +362,13 @@ namespace REGoth
     void removeInventoryItems(const bs::String& instance, bs::INT32 amount);
     bool checkInfo(bool important);
 
+    /**
+     * All *Information*-Instances for this Character. See DaedalusVMForGameWorld::allInfosOfNpc().
+     *
+     * This is more like raw data. Use the `StoryInformation`-component to actually work with these.
+     */
+    const bs::Vector<Scripting::ScriptObjectHandle>& allInfosForThisCharacter() const;
+
     bs::INT32 GetStateTime();
 
   public:

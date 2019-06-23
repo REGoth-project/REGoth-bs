@@ -19,6 +19,18 @@ namespace REGoth
        */
       bs::Vector<SymbolIndex> findAllClasses(const ScriptSymbolStorage& storage);
 
+
+      /**
+       * Finds all Symbols which are instances of a given class.
+       *
+       * @param  storage    The script symbol storage to query.
+       * @param  className  Name of the class.
+       *
+       * @return Indices of all found symbols.
+       */
+      bs::Vector<SymbolIndex> findAllInstancesOfClass(const ScriptSymbolStorage& storage,
+                                                      const bs::String& className);
+
       /**
        * Finds all Symbols which have the given parent.
        *

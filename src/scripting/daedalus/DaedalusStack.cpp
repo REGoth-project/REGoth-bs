@@ -233,5 +233,14 @@ namespace REGoth
 
       return v;
     }
+
+    void DaedalusStack::clear()
+    {
+      mStackInt.clear();
+      mStackFloat.clear();
+      mStackString.clear();
+      mStackInstance.clear();
+      mStackFunction.clear();
+    }
   }  // namespace Scripting
 }  // namespace REGoth

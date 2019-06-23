@@ -18,6 +18,7 @@ namespace REGoth
       BS_RTTI_MEMBER_PLAIN(floats, 3)
       BS_RTTI_MEMBER_PLAIN(strings, 4)
       BS_RTTI_MEMBER_PLAIN(functionPointers, 5)
+      BS_RTTI_MEMBER_PLAIN(instanceName, 6)
       BS_END_RTTI_MEMBERS
 
     public:

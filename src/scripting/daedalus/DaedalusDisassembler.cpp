@@ -7,7 +7,8 @@ namespace REGoth
   namespace Scripting
   {
     bs::String disassembleOpcode(const Daedalus::PARStackOpCode& opcode,
-                                 const ScriptSymbolStorage& symbols)
+                                 const ScriptSymbolStorage& symbols, const bs::String& lhs,
+                                 const bs::String& rhs, const bs::String& res)
     {
       auto symName = [&](SymbolIndex index) { return symbols.getSymbolBase(index).name; };
 
@@ -44,34 +45,34 @@ namespace REGoth
           // ------------------------------------------------------------------------------
 
         case Daedalus::EParOp_Add:
-          return bs::StringUtil::format("Add a + b");
+          return bs::StringUtil::format("Add {0} + {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_Subract:
-          return bs::StringUtil::format("Sub a - b");
+          return bs::StringUtil::format("Sub {0} - {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_Multiply:
-          return bs::StringUtil::format("Mul a * b");
+          return bs::StringUtil::format("Mul {0} * {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_Divide:
-          return bs::StringUtil::format("Div a / b");
+          return bs::StringUtil::format("Div {0} / {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_Mod:
-          return bs::StringUtil::format("Mod a % b");
+          return bs::StringUtil::format("Mod {0} % {1} -> {2}", rhs, lhs, res);
 
           // Binary
           // ----------------------------------------------------------------------------------
 
         case Daedalus::EParOp_BinOr:
-          return bs::StringUtil::format("BinOr a | b");
+          return bs::StringUtil::format("BinOr {0} | {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_BinAnd:
-          return bs::StringUtil::format("BinAnd a & b");
+          return bs::StringUtil::format("BinAnd {0} & {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_ShiftLeft:
-          return bs::StringUtil::format("ShiftLeft a << b");
+          return bs::StringUtil::format("ShiftLeft {0} << {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_ShiftRight:
-          return bs::StringUtil::format("ShiftRight a >> b");
+          return bs::StringUtil::format("ShiftRight {0} >> {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_Negate:
           return bs::StringUtil::format("Negate ~a");
@@ -79,43 +80,43 @@ namespace REGoth
           // -----------------------------------------------------------------------------------
 
         case Daedalus::EParOp_LogOr:
-          return bs::StringUtil::format("LogOr a || b");
+          return bs::StringUtil::format("LogOr {0} || {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_LogAnd:
-          return bs::StringUtil::format("LogOr a && b");
+          return bs::StringUtil::format("LogAnd {0} && {1} -> {2}", rhs, lhs, res);
 
           // Comparision
           // -----------------------------------------------------------------------------
 
         case Daedalus::EParOp_Less:
-          return bs::StringUtil::format("Less a < b");
+          return bs::StringUtil::format("Less {0} < {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_Greater:
-          return bs::StringUtil::format("Greater a > b");
+          return bs::StringUtil::format("Greater {0} > {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_LessOrEqual:
-          return bs::StringUtil::format("LessOrEqual a < b");
+          return bs::StringUtil::format("LessOrEqual {0} < {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_Equal:
-          return bs::StringUtil::format("Equal a == b");
+          return bs::StringUtil::format("Equal {0} == {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_NotEqual:
-          return bs::StringUtil::format("NotEqual a != b");
+          return bs::StringUtil::format("NotEqual {0} != {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_GreaterOrEqual:
-          return bs::StringUtil::format("GreaterOrEqual a < b");
+          return bs::StringUtil::format("GreaterOrEqual {0} < {1} -> {2}", rhs, lhs, res);
 
           // Unary
           // -----------------------------------------------------------------------------------
 
         case Daedalus::EParOp_Plus:
-          return bs::StringUtil::format("Plus +a");
+          return bs::StringUtil::format("Plus +{0} -> {1}", lhs, res);
 
         case Daedalus::EParOp_Minus:
-          return bs::StringUtil::format("Minus -a");
+          return bs::StringUtil::format("Minus -{0} -> {1}", lhs, res);
 
         case Daedalus::EParOp_Not:
-          return bs::StringUtil::format("Not !a");
+          return bs::StringUtil::format("Not !{0} -> {1}", lhs, res);
 
           // Stack
           // -----------------------------------------------------------------------------------
@@ -139,31 +140,31 @@ namespace REGoth
           // ----------------------------------------------------------------------------------
 
         case Daedalus::EParOp_AssignFunc:
-          return bs::StringUtil::format("AssignFunc a = b");
+          return bs::StringUtil::format("AssignFunc {0} = {1}", rhs, lhs);
 
         case Daedalus::EParOp_AssignString:
-          return bs::StringUtil::format("AssignString a = b");
+          return bs::StringUtil::format("AssignString {0} = {1}", rhs, lhs);
 
         case Daedalus::EParOp_AssignFloat:
-          return bs::StringUtil::format("AssignFloat a = b");
+          return bs::StringUtil::format("AssignFloat {0} = {1}", rhs, lhs);
 
         case Daedalus::EParOp_AssignInstance:
-          return bs::StringUtil::format("AssignInstance a = b");
+          return bs::StringUtil::format("AssignInstance {0} = {1}", rhs, lhs);
 
         case Daedalus::EParOp_Assign:
-          return bs::StringUtil::format("Assign a = b");
+          return bs::StringUtil::format("Assign {0} = {1}", rhs, lhs);
 
         case Daedalus::EParOp_AssignAdd:
-          return bs::StringUtil::format("AssignAdd a += b");
+          return bs::StringUtil::format("AssignAdd {0} += {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_AssignSubtract:
-          return bs::StringUtil::format("AssignSubtract a -= b");
+          return bs::StringUtil::format("AssignSubtract {0} -= {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_AssignMultiply:
-          return bs::StringUtil::format("AssignMultiply a *= b");
+          return bs::StringUtil::format("AssignMultiply {0} *= {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_AssignDivide:
-          return bs::StringUtil::format("AssignDivide a /= b");
+          return bs::StringUtil::format("AssignDivide {0} /= {1} -> {2}", rhs, lhs, res);
 
         case Daedalus::EParOp_AssignStringRef:
           return bs::StringUtil::format("AssignStringRef UNIMPLEMENTED");
@@ -175,10 +176,10 @@ namespace REGoth
           return bs::StringUtil::format("Return");
 
         case Daedalus::EParOp_Jump:
-          return bs::StringUtil::format("Jump {0}", opcode.address);
+          return bs::StringUtil::format("Jump -> {0}", opcode.address);
 
         case Daedalus::EParOp_JumpIf:
-          return bs::StringUtil::format("JumpIf {0}", opcode.address);
+          return bs::StringUtil::format("JumpIf !{0} -> {1}", lhs, opcode.address);
 
         case Daedalus::EParOp_Call:
           return bs::StringUtil::format("Call {0}", findFunctionFromAddress(opcode.address));

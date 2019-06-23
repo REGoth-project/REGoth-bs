@@ -17,6 +17,31 @@ namespace REGoth
         return storage.query(isClass);
       }
 
+      bs::Vector<SymbolIndex> findAllInstancesOfClass(const ScriptSymbolStorage& storage,
+                                                      const bs::String& className)
+      {
+        SymbolClass& classSymbol = storage.getSymbol<SymbolClass>(className);
+
+        auto isInstanceOfClass = [&](const SymbolBase& s) {
+          if (s.type != SymbolType::Instance) return false;
+          if (s.parent == SYMBOL_INDEX_INVALID) return false;
+
+          if (s.parent != classSymbol.index)
+          {
+            // If the instances parent is not the class itself, it could be a prototype.
+            // The prototype then has to have the class as parent.
+            SymbolBase& parent = storage.getSymbolBase(s.parent);
+
+            if (parent.type != SymbolType::Prototype) return false;
+            if (parent.parent != classSymbol.index) return false;
+          }
+
+          return true;
+        };
+
+        return storage.query(isInstanceOfClass);
+      }
+
       bs::Vector<SymbolIndex> findAllWithParentOf(const ScriptSymbolStorage& storage,
                                                   SymbolIndex parent)
       {

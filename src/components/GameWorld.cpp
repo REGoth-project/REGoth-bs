@@ -1,11 +1,12 @@
 #include "GameWorld.hpp"
 #include <components/Sky.hpp>
 #include <BsZenLib/ImportPath.hpp>
-#include <components/Focusable.hpp>
 #include <RTTI/RTTI_GameWorld.hpp>
 #include <Resources/BsResources.h>
 #include <Scene/BsPrefab.h>
+#include <Scene/BsSceneManager.h>
 #include <components/Character.hpp>
+#include <components/Focusable.hpp>
 #include <components/GameClock.hpp>
 #include <components/Item.hpp>
 #include <components/VisualCharacter.hpp>
@@ -43,6 +44,9 @@ namespace REGoth
     // Always do this after importing or deserializing
     fillFindByNameCache();
 
+    findAllCharacters();
+    findAllItems();
+
     // If this is true here, we're being de-serialized
     if (mIsInitialized) return;
 
@@ -76,6 +80,16 @@ namespace REGoth
     mIsInitialized = true;
   }
 
+  void GameWorld::findAllCharacters()
+  {
+    mAllCharacters = bs::gSceneManager().findComponents<Character>(false);
+  }
+
+  void GameWorld::findAllItems()
+  {
+    mAllItems = bs::gSceneManager().findComponents<Item>(false);
+  }
+
   HItem GameWorld::insertItem(const bs::String& instance, const bs::Transform& transform)
   {
     HGameWorld thisWorld = bs::static_object_cast<GameWorld>(getHandle());
@@ -89,6 +103,8 @@ namespace REGoth
     auto item = itemSO->addComponent<Item>(instance, thisWorld);
 
     itemSO->addComponent<Focusable>();
+
+    mAllItems.push_back(item);
 
     return item;
   }
@@ -130,6 +146,8 @@ namespace REGoth
     // ai->deactivatePhysics(); // Commented out for testing
 
     auto character = characterSO->addComponent<Character>(instance, thisWorld);
+
+    mAllCharacters.push_back(character);
 
     return character;
   }
@@ -278,6 +296,43 @@ namespace REGoth
     };
 
     visit(SO());
+  }
+
+  bs::Vector<HCharacter> GameWorld::findCharactersInRange(float rangeInMeters,
+                                                          const bs::Vector3& around) const
+  {
+    float rangeSq = rangeInMeters * rangeInMeters;
+
+    bs::Vector<HCharacter> result;
+
+    for (HCharacter c : mAllCharacters)
+    {
+      const bs::Vector3& pos = c->SO()->getTransform().pos();
+
+      if (pos.squaredDistance(around) < rangeSq)
+      {
+        result.push_back(c);
+      }
+    }
+
+    return result;
+  }
+
+  bs::Vector<HItem> GameWorld::findItemsInRange(float rangeInMeters, const bs::Vector3& around) const
+  {
+    float rangeSq = rangeInMeters * rangeInMeters;
+
+    bs::Vector<HItem> result;
+
+    for (HItem i : mAllItems)
+    {
+      if (i->SO()->getTransform().pos().squaredDistance(around) < rangeSq)
+      {
+        result.push_back(i);
+      }
+    }
+
+    return result;
   }
 
   void GameWorld::save(const bs::String& saveName)

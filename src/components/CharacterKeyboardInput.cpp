@@ -35,6 +35,7 @@ namespace REGoth
     mMoveLeft    = bs::VirtualButton("Left");
     mMoveRight   = bs::VirtualButton("Right");
     mFastMove    = bs::VirtualButton("FastMove");
+    mAction      = bs::VirtualButton("Action");
   }
 
   void CharacterKeyboardInput::fixedUpdate()
@@ -44,6 +45,13 @@ namespace REGoth
     bool goingLeft    = bs::gVirtualInput().isButtonHeld(mMoveLeft);
     bool goingRight   = bs::gVirtualInput().isButtonHeld(mMoveRight);
     bool fastMove     = bs::gVirtualInput().isButtonHeld(mFastMove);
+
+    bool action = bs::gVirtualInput().isButtonDown(mAction);
+
+    if (action)
+    {
+      mCharacterAI->doAction();
+    }
 
     // Always keep the user controllers physics active
     mCharacterAI->activatePhysics();

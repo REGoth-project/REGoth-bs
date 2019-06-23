@@ -1,4 +1,5 @@
 #include "DaedalusVMForGameWorld.hpp"
+#include <components/StoryInformation.hpp>
 #include "DaedalusClassVarResolver.hpp"
 #include <RTTI/RTTI_DaedalusVMForGameWorld.hpp>
 #include <Scene/BsSceneObject.h>
@@ -12,6 +13,7 @@
 #include <components/Item.hpp>
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
+#include <scripting/ScriptSymbolQueries.hpp>
 
 namespace REGoth
 {
@@ -22,6 +24,13 @@ namespace REGoth
         : DaedalusVM(datFileData)
         , mWorld(gameWorld)
     {
+    }
+
+    void DaedalusVMForGameWorld::initialize()
+    {
+      DaedalusVM::initialize();
+
+      createAllInformationInstances();
     }
 
     void DaedalusVMForGameWorld::fillSymbolStorage()
@@ -78,6 +87,9 @@ namespace REGoth
       // to also map the objects *before* executing the constructor.
 
       ScriptObjectHandle obj = instanciateBlankObjectOfClass(className);
+      ScriptObject& objData  = mScriptObjects.get(obj);
+
+      objData.instanceName = instance.name;
 
       if (mappedSceneObject)
       {
@@ -99,7 +111,6 @@ namespace REGoth
       mClassVarResolver->setCurrentInstance(oldCurrentInstance);
       setInstance("SELF", oldSelf);
 
-      ScriptObject& objData = mScriptObjects.get(obj);
       // debugLogScriptObject(objData);
 
       return obj;
@@ -115,6 +126,8 @@ namespace REGoth
     {
       self->useAsSelf();
 
+      mStack.clear();
+
       const auto& functionSym = scriptSymbols().getSymbol<SymbolScriptFunction>(function);
       executeScriptFunction(functionSym.address);
 
@@ -128,6 +141,27 @@ namespace REGoth
         // This happens on most sub-states of `ZS_MM_ALLSCHEDULER`, for example.
         return false;
       }
+    }
+
+    bool DaedalusVMForGameWorld::runInfoConditionFunction(SymbolIndex function, HCharacter self,
+                                                          HCharacter other)
+    {
+      self->useAsSelf();
+      other->useAsOther();
+
+      mStack.clear();
+
+      const auto& functionSym = scriptSymbols().getSymbol<SymbolScriptFunction>(function);
+
+      executeScriptFunction(functionSym.address);
+
+      return popIntValue() != 0;
+    }
+
+    void DaedalusVMForGameWorld::runInfoFunction(SymbolIndex function, HCharacter self,
+                                                 HCharacter other)
+    {
+      bs::gDebug().logDebug("[DaedalusVMForGameWorld] Stub: runInfoFunction");
     }
 
     void DaedalusVMForGameWorld::runFunctionOnSelf(SymbolIndex function, HCharacter self)
@@ -421,6 +455,7 @@ namespace REGoth
       registerExternal("NPC_GETNEARESTWP", (externalCallback)&This::external_Npc_GetNearestWP);
       registerExternal("NPC_GETNEXTWP", (externalCallback)&This::external_Npc_GetNextWP);
       registerExternal("NPC_SETTOFISTMODE", (externalCallback)&This::external_Npc_SetToFistMode);
+      registerExternal("NPC_KNOWSINFO", (externalCallback)&This::external_Npc_KnowsInfo);
     }
 
     void DaedalusVMForGameWorld::external_Print()
@@ -837,10 +872,81 @@ namespace REGoth
       eventQueue->pushGoToFistModeImmediate();
     }
 
+    void DaedalusVMForGameWorld::external_Npc_KnowsInfo()
+    {
+      bs::INT32 infoSymbolIndex = popIntValue();
+      HCharacter self = popCharacterInstance();
+
+      const bs::String& infoName = scriptSymbols().getSymbolName(infoSymbolIndex);
+      auto information = self->SO()->getComponent<StoryInformation>();
+
+      if (information->knowsInfo(infoName))
+      {
+        mStack.pushInt(1);
+      }
+      else
+      {
+        mStack.pushInt(0);
+      }
+    }
+
     void DaedalusVMForGameWorld::script_PrintPlus(const bs::String& text)
     {
       mStack.pushString(text);
       executeScriptFunction("PrintPlus");
+    }
+
+    void DaedalusVMForGameWorld::createAllInformationInstances()
+    {
+      bs::Vector<SymbolIndex> instanceSymbols =
+          Queries::findAllInstancesOfClass(scriptSymbols(), "C_INFO");
+
+      bs::Vector<ScriptObjectHandle> instances;
+      for (SymbolIndex s : instanceSymbols)
+      {
+        instances.push_back(instanciateClass("C_INFO", s, {}));
+      }
+
+      bs::Vector<bs::UINT32> symbolIndices;
+      symbolIndices.reserve(instances.size());
+
+      for (ScriptObjectHandle h : instances)
+      {
+        symbolIndices.push_back(scriptObjects().get(h).intValue("NPC"));
+      }
+
+      for (bs::UINT32 i = 0; i < (bs::UINT32)instances.size(); i++)
+      {
+        SymbolIndex npcSymbol         = symbolIndices[i];
+        ScriptObjectHandle infoHandle = instances[i];
+
+        mInformationInstancesByNpcs[npcSymbol].push_back(infoHandle);
+      }
+    }
+
+    const bs::Vector<ScriptObjectHandle>& DaedalusVMForGameWorld::allInfosOfNpc(
+        const bs::String& instanceName) const
+    {
+      SymbolIndex npcInstance = scriptSymbolsConst().findIndexBySymbolName(instanceName);
+
+      if (mInformationInstancesByNpcs.empty())
+      {
+        REGOTH_THROW(InvalidStateException,
+                     "createAllInformationInstances has not been called or failed!");
+      }
+
+      auto it = mInformationInstancesByNpcs.find(npcInstance);
+
+      // Some NPCs don't have anything to say, so they don't appear in this list.
+      if (it == mInformationInstancesByNpcs.end())
+      {
+        // It's okay to return this static empty vector here because the return value is const.
+        static bs::Vector<ScriptObjectHandle> s_empty = {};
+
+        return s_empty;
+      }
+
+      return it->second;
     }
 
     REGOTH_DEFINE_RTTI(DaedalusVMForGameWorld)

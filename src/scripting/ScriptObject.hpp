@@ -19,6 +19,12 @@ namespace REGoth
       bs::String className;
 
       /**
+       * Name of the instance this was created from. Empty if the object was
+       * not created from an instance.
+       */
+      bs::String instanceName;
+
+      /**
        * Handle referencing this very script object. Should not be modified!
        */
       ScriptObjectHandle handle;

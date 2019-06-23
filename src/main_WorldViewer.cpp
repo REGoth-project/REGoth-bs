@@ -79,6 +79,9 @@ public:
 
     HCharacter hero = heroSO->getComponent<Character>();
 
+    mMainCamera->SO()->setActive(false);
+    mMainCamera->SO()->setActive(true);
+
     mThirdPersonCamera->follow(hero);
   }
 

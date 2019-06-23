@@ -73,6 +73,7 @@ namespace REGoth
     TID_REGOTH_UIDialogueChoice             = 600065,
     TID_REGOTH_UIDialogue                   = 600066,
     TID_REGOTH_GameUI                       = 600067,
+    TID_REGOTH_StoryInformation             = 600068,
 
   };
 }  // namespace REGoth

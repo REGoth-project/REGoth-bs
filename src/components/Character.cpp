@@ -1,4 +1,5 @@
 #include "Character.hpp"
+#include <components/StoryInformation.hpp>
 #include <Components/BsCCharacterController.h>
 #include <RTTI/RTTI_Character.hpp>
 #include <Scene/BsSceneObject.h>
@@ -14,7 +15,7 @@ namespace REGoth
 {
   Character::Character(const bs::HSceneObject& parent, const bs::String& instance,
                        HGameWorld gameWorld)
-    : ScriptBackedBy(parent, "C_NPC", instance, gameWorld)
+      : ScriptBackedBy(parent, "C_NPC", instance, gameWorld)
   {
     setName("Character");
   }
@@ -39,6 +40,9 @@ namespace REGoth
           SO()->addComponent<CharacterEventQueue>(thisCharacter, ai, visual, gameWorld());
 
       ScriptBackedBy::onInitialized();
+
+      // Needs a valid script object to initialize
+      auto infos  = SO()->addComponent<StoryInformation>(gameWorld(), thisCharacter);
 
       // If we don't init the routine now, the character won't have its default routine
       // Must also come *after* the script object has been created since this might run
@@ -288,6 +292,11 @@ namespace REGoth
     bs::INT32 b;
 
     return b;
+  }
+
+  const bs::Vector<Scripting::ScriptObjectHandle>& Character::allInfosForThisCharacter() const
+  {
+    return scriptVM().allInfosOfNpc(scriptObjectData().instanceName);
   }
 
   REGOTH_DEFINE_RTTI(Character);

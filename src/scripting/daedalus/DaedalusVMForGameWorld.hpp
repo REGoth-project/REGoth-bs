@@ -25,6 +25,11 @@ namespace REGoth
     public:
       DaedalusVMForGameWorld(HGameWorld gameWorld, const bs::Vector<bs::UINT8>& datFileData);
 
+      /**
+       * Initializes the ScriptVM. To be called after the object is constructed.
+       */
+      virtual void initialize();
+
       ScriptObjectHandle instanciateClass(const bs::String& className,
                                           const bs::String& instanceName,
                                           bs::HSceneObject mappedSceneObject) override;
@@ -48,9 +53,30 @@ namespace REGoth
        * Calls a function used during the LOOP-Part of the script states. e.g. `ZS_TALK_LOOP`.
        * See AI::ScriptState for more information.
        *
+       * @note  This function will clean the stack! Some script functions don't push a return value
+       *        and so we would get whatever was on the stack before. Since this is only called from
+       *        engine code, it's okay to throw away the whole script stack here.
+       *
        * @return Whether the State is done.
        */
       bool runStateLoopFunction(SymbolIndex function, HCharacter self);
+
+      /**
+       * Wrapper to call the function set in `C_INFO.condition` to check whether a dialogue line
+       * should be displayed to the user in the UI.
+       *
+       * @note  This function will clean the stack! Some script functions don't push a return value
+       *        and so we would get whatever was on the stack before. Since this is only called from
+       *        engine code, it's okay to throw away the whole script stack here.
+       *
+       * @return True, if the dialogue line should be visible.
+       */
+      bool runInfoConditionFunction(SymbolIndex function, HCharacter self, HCharacter other);
+
+      /**
+       * Wrapper to call the function set in `C_INFO.information`.
+       */
+      void runInfoFunction(SymbolIndex function, HCharacter self, HCharacter other);
 
       void initializeWorld(const bs::String& worldName) override;
 
@@ -85,7 +111,23 @@ namespace REGoth
       HCharacter self() const;
       void setSelf(ScriptObjectHandle self);
 
+      /**
+       * @return All *Information*-Instances meant for the given NPC. See
+       * createAllInformationInstances() for more information.
+       */
+      const bs::Vector<ScriptObjectHandle>& allInfosOfNpc(const bs::String& instanceName) const;
+
     protected:
+
+      /**
+       * Fills mAllInformationInstances. This is done here at one place because otherwise
+       * every single created NPC would need to loop through all symbols every time, find
+       * the `C_INFO` instances, create instances, check whether they are for the correct
+       * npc and so on. This would be rather inefficient, so we just keep a list of all
+       * *Information*-instances here.
+       */
+      void createAllInformationInstances();
+
       /**
        * Does popInstance() and resolves the Character-component.
        *
@@ -179,22 +221,24 @@ namespace REGoth
       void external_Npc_GetNearestWP();
       void external_Npc_GetNextWP();
       void external_Npc_SetToFistMode();
+      void external_Npc_KnowsInfo();
 
       void fillSymbolStorage() override;
       void registerAllExternals() override;
 
     protected:
-      /**
-       * Handle to the game world this is used in
-       */
+      /** Handle to the game world this is used in */
       HGameWorld mWorld;
 
-      // Quick access to often used symbols
+      /** Quick access to often used symbols */
       SymbolIndex mHeroSymbol   = SYMBOL_INDEX_INVALID;
       SymbolIndex mSelfSymbol   = SYMBOL_INDEX_INVALID;
       SymbolIndex mOtherSymbol  = SYMBOL_INDEX_INVALID;
       SymbolIndex mVictimSymbol = SYMBOL_INDEX_INVALID;
       SymbolIndex mItemSymbol   = SYMBOL_INDEX_INVALID;
+
+      /** Cache of all information instances for all NPCs */
+      bs::Map<SymbolIndex, bs::Vector<ScriptObjectHandle>> mInformationInstancesByNpcs;
 
     public:
       REGOTH_DECLARE_RTTI_FOR_REFLECTABLE(DaedalusVMForGameWorld);

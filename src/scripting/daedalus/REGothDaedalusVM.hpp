@@ -1,15 +1,15 @@
 /**\file
  */
 #pragma once
+#include "DaedalusStack.hpp"
 #include <BsPrerequisites.h>
 #include <scripting/ScriptVM.hpp>
-#include "DaedalusStack.hpp"
 
 namespace Daedalus
 {
   class DATFile;
   class PARStackOpCode;
-}
+}  // namespace Daedalus
 
 namespace REGoth
 {
@@ -23,7 +23,6 @@ namespace REGoth
       DaedalusVM(const bs::Vector<bs::UINT8>& datFileData);
 
     protected:
-
       /**
        * Executes a script function until it hits its return.
        *
@@ -105,7 +104,7 @@ namespace REGoth
       /**
        * Register all externals here. Use registerExternal().
        */
-      virtual void registerAllExternals() {};
+      virtual void registerAllExternals(){};
 
       /**
        * Callback type for a script external function.
@@ -122,26 +121,25 @@ namespace REGoth
       void registerExternal(const bs::String& name, externalCallback callback);
 
     protected:
-
       bs::SPtr<DaedalusClassVarResolver> mClassVarResolver;
       DaedalusStack mStack;
-
-    private:
-
-      /**
-       * Disassembles and logs the given opcode in respect ti the call-depth.
-       */
-      void disassembleAndLogOpcode(const Daedalus::PARStackOpCode& opcode);
-
-      /**
-       * Looks up the function at the given address and returns its name
-       */
-      void findFunctionAtAddressAndLog(bs::UINT32 address);
 
       /**
        * If true, every executed instruction will be logged to the console.
        */
       bool mIsDisassemblerEnabled = false;
+
+    private:
+      /**
+       * Disassembles and logs the given opcode in respect ti the call-depth.
+       */
+      void disassembleAndLogOpcode(const Daedalus::PARStackOpCode& opcode, const bs::String& lhs = "",
+                                   const bs::String& rhs = "", const bs::String& res = "");
+
+      /**
+       * Looks up the function at the given address and returns its name
+       */
+      void findFunctionAtAddressAndLog(bs::UINT32 address);
 
       /**
        * Program counter register
@@ -161,12 +159,11 @@ namespace REGoth
       bs::Map<SymbolIndex, externalCallback> mExternals;
 
     public:
-
       // Remember, this is abstract, so don't create an rttiCreateEmpty()
       REGOTH_DECLARE_RTTI(DaedalusVM);
 
     protected:
-      DaedalusVM() = default; // For RTTI
+      DaedalusVM() = default;  // For RTTI
     };
   }  // namespace Scripting
 }  // namespace REGoth

@@ -110,6 +110,11 @@ namespace REGoth
        */
       StackVariableValue popStringVariable();
 
+      /**
+       * Removes everything from the stacks, leaving all of them empty.
+       */
+      void clear();
+
     private:
       /**
        * Integer value to push onto the stack. Can be either a plain integer value

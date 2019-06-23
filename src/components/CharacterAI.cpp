@@ -1,4 +1,6 @@
 #include "CharacterAI.hpp"
+#include <components/Character.hpp>
+#include <components/StoryInformation.hpp>
 #include <Components/BsCCamera.h>
 #include <Components/BsCCharacterController.h>
 #include <RTTI/RTTI_CharacterAI.hpp>
@@ -176,6 +178,34 @@ namespace REGoth
     return true;
   }
 
+  bool CharacterAI::doAction()
+  {
+    // TODO: Proper implementation of using focusable things
+    auto characters = mWorld->findCharactersInRange(2.0f, SO()->getTransform().pos());
+
+    if (!characters.empty())
+    {
+      for (HCharacter c : characters)
+      {
+        // Skip self
+        if (c->SO() == SO())
+          continue;
+
+        HStoryInformation info = c->SO()->getComponent<StoryInformation>();
+
+        auto availableInfos = info->gatherAvailableDialogueLines(SO()->getComponent<Character>());
+
+        bs::gDebug().logDebug("[CharacterAI] NPC " + c->SO()->getName() + ":");
+        for (auto& info : availableInfos)
+        {
+          bs::gDebug().logDebug("[CharacterAI]   - " + info->name + " - " + info->choiceText);
+        }
+      }
+    }
+
+    return true;
+  }
+
   bool CharacterAI::isStateSwitchAllowed()
   {
     mVisual                = SO()->getComponent<VisualCharacter>();
@@ -282,7 +312,10 @@ namespace REGoth
         break;
     }
 
-    SO()->rotate(bs::Vector3::UNIT_Y, bs::Radian(frameTurn));
+    if (fabs(frameTurn) > 0.0001f)
+    {
+      SO()->rotate(bs::Vector3::UNIT_Y, bs::Radian(frameTurn));
+    }
   }
 
   void CharacterAI::teleport(const bs::String& waypoint)
