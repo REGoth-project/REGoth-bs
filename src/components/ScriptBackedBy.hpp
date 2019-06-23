@@ -1,8 +1,8 @@
 #pragma once
 #include <BsPrerequisites.h>
+#include <RTTI/RTTIUtil.hpp>
 #include <Scene/BsComponent.h>
 #include <scripting/ScriptTypes.hpp>
-#include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
 {
@@ -10,7 +10,7 @@ namespace REGoth
   {
     class ScriptVMForGameWorld;
     struct ScriptObject;
-  }
+  }  // namespace Scripting
 
   class GameWorld;
   using HGameWorld = bs::GameObjectHandle<GameWorld>;
@@ -52,7 +52,6 @@ namespace REGoth
     virtual ~ScriptBackedBy();
 
   protected:
-
     void onInitialized() override;
     void onDestroyed() override;
 
@@ -66,7 +65,10 @@ namespace REGoth
     /**
      * @return Handle of the script object backing this component.
      */
-    Scripting::ScriptObjectHandle scriptObject() const { return mScriptObject; }
+    Scripting::ScriptObjectHandle scriptObject() const
+    {
+      return mScriptObject;
+    }
 
     /**
      * @return Access to the script VM
@@ -87,7 +89,6 @@ namespace REGoth
     }
 
   private:
-
     /**
      * Instanciates the class backing this component. Must be called early, otherwise
      * exceptions will be thrown when accessing the script object data.
