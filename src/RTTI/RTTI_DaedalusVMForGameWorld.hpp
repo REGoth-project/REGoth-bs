@@ -24,6 +24,13 @@ namespace REGoth
       {
       }
 
+      void onDeserializationEnded(bs::IReflectable* _obj, bs::SerializationContext* context) override
+      {
+        auto obj = static_cast<DaedalusVMForGameWorld*>(_obj);
+
+        obj->createAllInformationInstances();
+      }
+
       REGOTH_IMPLEMENT_RTTI_CLASS_FOR_REFLECTABLE(DaedalusVMForGameWorld)
     };
   }  // namespace Scripting

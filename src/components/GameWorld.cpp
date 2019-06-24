@@ -44,8 +44,11 @@ namespace REGoth
     // Always do this after importing or deserializing
     fillFindByNameCache();
 
-    findAllCharacters();
-    findAllItems();
+    // FIXME: Enable these again if BsSceneManager::findComponents works at this point.
+    //        It seems to be too early for the components to be found when deserializing the world...
+    //        At the moment, these lists are stored inside the save game, which is not optimal.
+    // findAllCharacters();
+    // findAllItems();
 
     // If this is true here, we're being de-serialized
     if (mIsInitialized) return;

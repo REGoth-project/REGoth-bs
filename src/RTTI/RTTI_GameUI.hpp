@@ -9,7 +9,7 @@ namespace REGoth
       : public bs::RTTIType<GameUI, UIElement, RTTI_GameUI>
   {
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+    // This class should not be serialized
     BS_END_RTTI_MEMBERS
 
   public:

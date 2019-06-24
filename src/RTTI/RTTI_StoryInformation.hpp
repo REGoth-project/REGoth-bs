@@ -5,8 +5,12 @@ namespace REGoth
 {
   class RTTI_StoryInformation : public bs::RTTIType<StoryInformation, bs::Component, RTTI_StoryInformation>
   {
+
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+    // Explicitly Not serialized: mAllInfos
+    BS_RTTI_MEMBER_PLAIN(mKnownInfos, 0)
+    BS_RTTI_MEMBER_REFL(mSelf, 1)
+    BS_RTTI_MEMBER_REFL(mGameWorld, 2)
     BS_END_RTTI_MEMBERS
 
   public:

@@ -11,10 +11,24 @@ namespace REGoth
       : bs::Component(parent)
   {
     setName("CharacterKeyboardInput");
+  }
 
-    // Inside constructor so this doesn't run after deserialization where
-    // we already have the reference
-    mCharacter = SO()->getComponent<Character>();
+  CharacterKeyboardInput::~CharacterKeyboardInput()
+  {
+  }
+
+  void CharacterKeyboardInput::onInitialized()
+  {
+    bs::Component::onInitialized();
+
+    mMoveForward = bs::VirtualButton("Forward");
+    mMoveBack    = bs::VirtualButton("Back");
+    mMoveLeft    = bs::VirtualButton("Left");
+    mMoveRight   = bs::VirtualButton("Right");
+    mFastMove    = bs::VirtualButton("FastMove");
+    mAction      = bs::VirtualButton("Action");
+
+    mCharacter   = SO()->getComponent<Character>();
 
     if (mCharacter.isDestroyed())
     {
@@ -41,22 +55,6 @@ namespace REGoth
           bs::StringUtil::format("Scene Object {0} does not have a CharacterEventQueue component!",
                                  SO()->getName()));
     }
-  }
-
-  CharacterKeyboardInput::~CharacterKeyboardInput()
-  {
-  }
-
-  void CharacterKeyboardInput::onInitialized()
-  {
-    bs::Component::onInitialized();
-
-    mMoveForward = bs::VirtualButton("Forward");
-    mMoveBack    = bs::VirtualButton("Back");
-    mMoveLeft    = bs::VirtualButton("Left");
-    mMoveRight   = bs::VirtualButton("Right");
-    mFastMove    = bs::VirtualButton("FastMove");
-    mAction      = bs::VirtualButton("Action");
   }
 
   void CharacterKeyboardInput::update()

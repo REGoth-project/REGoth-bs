@@ -9,10 +9,10 @@ namespace REGoth
     : public bs::RTTIType<UIDialogueChoice, UIElement, RTTI_UIDialogueChoice>
   {
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+    // This class should not be serialized
     BS_END_RTTI_MEMBERS
 
-    public:
+  public:
     RTTI_UIDialogueChoice()
     {
     }

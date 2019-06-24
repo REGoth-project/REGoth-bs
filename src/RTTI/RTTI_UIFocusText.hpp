@@ -6,7 +6,7 @@ namespace REGoth
   class RTTI_UIFocusText : public bs::RTTIType<UIFocusText, UIElement, RTTI_UIFocusText>
   {
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+    // This class should not be serialized
     BS_END_RTTI_MEMBERS
 
   public:

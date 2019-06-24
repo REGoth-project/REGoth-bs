@@ -204,7 +204,8 @@ namespace REGoth
     REGOTH_DECLARE_RTTI(StoryInformation)
 
     /** All possible infos to talk about with this character. These are static and
-        can be gathered directly from the scripts on startup. */
+        can be gathered directly from the scripts on startup.
+        Not serialized, can be generated from script symbols easily. */
     bs::Vector<DialogueInfo> mAllInfos;
 
     /** Set of *Information*-Instances this character knows. Contains names such as

@@ -351,6 +351,7 @@ namespace REGoth
 
     /**
      * Access to every character, item and others. Not saved, can be built after loading.
+     * FIXME: Stored inside the savegame for now because BsSceneManager::findComponents doesn't work
      */
     bs::Vector<HCharacter> mAllCharacters;
     bs::Vector<HItem> mAllItems;
