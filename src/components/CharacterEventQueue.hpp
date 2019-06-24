@@ -62,6 +62,18 @@ namespace REGoth
     SharedEMessage pushWait(float seconds);
 
     /**
+     * Push a message which lets the character talk to the given other character.
+     *
+     * This is used to initiate a dialogue (with UI) between the player and an NPC. To do this,
+     * you would need to call pushTalkToCharacter() as seen from the Character the
+     * player wants to talk to.
+     *
+     * So, suppose you want the player to talk to Diego, you need to call pushTalkToCharacter()
+     * on Diego, with `other` set to the players handle.
+     */
+    SharedEMessage pushTalkToCharacter(HCharacter other);
+
+    /**
      * Push a message which starts a new script state after ending the current one gracefully.
      */
     SharedEMessage pushStartScriptState(const bs::String& state, const bs::String& waypoint,

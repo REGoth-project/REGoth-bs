@@ -428,6 +428,11 @@ namespace REGoth
     return onMessage(msg);
   }
 
+  SharedEMessage CharacterEventQueue::pushTalkToCharacter(HCharacter other)
+  {
+    return pushInterruptAndStartScriptState("ZS_TALK", "", other, {});
+  }
+
   SharedEMessage CharacterEventQueue::pushStartScriptState(const bs::String& state,
                                                            const bs::String& waypoint,
                                                            HCharacter other, HCharacter victim)
