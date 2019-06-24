@@ -10,6 +10,11 @@ namespace REGoth
 {
   namespace Scripting
   {
+    const bs::Set<bs::String> FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR = {
+        // "ZS_TALK",
+        // "ZS_TALK_LOOP",
+    };
+
     DaedalusVM::DaedalusVM(const bs::Vector<bs::UINT8>& datFileData)
     {
       mDatFile = bs::bs_shared_ptr_new<Daedalus::DATFile>(datFileData.data(), datFileData.size());
@@ -34,17 +39,58 @@ namespace REGoth
 
       mPC = symbol.address;
 
+      // TODO: Guard these by some configuration variable so they only run during development
+      if (mCallDepth == 0)
+      {
+        if (FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR.find(upper) !=
+            FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR.end())
+        {
+          mIsDisassemblerEnabled = true;
+        }
+        else
+        {
+          mIsDisassemblerEnabled = false;
+        }
+      }
+
       if (mIsDisassemblerEnabled)
       {
         findFunctionAtAddressAndLog(mPC);
       }
 
       executeUntilReturn();
+
+      if (mCallDepth == 0)
+      {
+        mIsDisassemblerEnabled = false;
+      }
     }
 
     void DaedalusVM::executeScriptFunction(bs::UINT32 address)
     {
       mPC = address;
+
+      // TODO: Guard these by some configuration variable so they only run during development
+      if (mCallDepth == 0)
+      {
+        auto symIndex = scriptSymbols().findFunctionByAddress(address);
+
+        if (symIndex != SYMBOL_INDEX_INVALID)
+        {
+          bs::String name = scriptSymbols().getSymbolName(symIndex);
+
+          if (FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR.find(name) !=
+              FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR.end())
+          {
+            mIsDisassemblerEnabled = true;
+          }
+          else
+          {
+            mIsDisassemblerEnabled = false;
+          }
+        }
+
+      }
 
       if (mIsDisassemblerEnabled)
       {
