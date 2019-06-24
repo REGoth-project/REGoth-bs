@@ -369,6 +369,13 @@ namespace REGoth
      */
     const bs::Vector<Scripting::ScriptObjectHandle>& allInfosForThisCharacter() const;
 
+    /**
+     * Returns a list of all characters standing near this character, in the specified range.
+     *
+     * @note This list will also include this character!
+     */
+    bs::Vector<HCharacter> findCharactersInRange(float range) const;
+
     bs::INT32 GetStateTime();
 
   public:

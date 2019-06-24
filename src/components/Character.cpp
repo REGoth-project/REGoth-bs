@@ -1,11 +1,11 @@
 #include "Character.hpp"
-#include <components/StoryInformation.hpp>
 #include <Components/BsCCharacterController.h>
 #include <RTTI/RTTI_Character.hpp>
 #include <Scene/BsSceneObject.h>
 #include <components/CharacterAI.hpp>
 #include <components/CharacterEventQueue.hpp>
 #include <components/GameWorld.hpp>
+#include <components/StoryInformation.hpp>
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
@@ -42,7 +42,7 @@ namespace REGoth
       ScriptBackedBy::onInitialized();
 
       // Needs a valid script object to initialize
-      auto infos  = SO()->addComponent<StoryInformation>(gameWorld(), thisCharacter);
+      auto infos = SO()->addComponent<StoryInformation>(gameWorld(), thisCharacter);
 
       // If we don't init the routine now, the character won't have its default routine
       // Must also come *after* the script object has been created since this might run
@@ -297,6 +297,11 @@ namespace REGoth
   const bs::Vector<Scripting::ScriptObjectHandle>& Character::allInfosForThisCharacter() const
   {
     return scriptVM().allInfosOfNpc(scriptObjectData().instanceName);
+  }
+
+  bs::Vector<HCharacter> Character::findCharactersInRange(float range) const
+  {
+    return gameWorld()->findCharactersInRange(range, SO()->getTransform().pos());
   }
 
   REGOTH_DEFINE_RTTI(Character);
