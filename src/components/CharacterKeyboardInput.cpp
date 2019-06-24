@@ -1,5 +1,7 @@
 #include "CharacterKeyboardInput.hpp"
+#include <components/Character.hpp>
 #include <RTTI/RTTI_CharacterKeyboardInput.hpp>
+#include <components/CharacterEventQueue.hpp>
 #include <components/CharacterAI.hpp>
 #include <exception/Throw.hpp>
 
@@ -12,6 +14,15 @@ namespace REGoth
 
     // Inside constructor so this doesn't run after deserialization where
     // we already have the reference
+    mCharacter = SO()->getComponent<Character>();
+
+    if (mCharacter.isDestroyed())
+    {
+      REGOTH_THROW(InvalidStateException,
+                   bs::StringUtil::format("Scene Object {0} does not have a Character component!",
+                                          SO()->getName()));
+    }
+
     mCharacterAI = SO()->getComponent<CharacterAI>();
 
     if (mCharacterAI.isDestroyed())
@@ -19,6 +30,16 @@ namespace REGoth
       REGOTH_THROW(InvalidStateException,
                    bs::StringUtil::format("Scene Object {0} does not have a CharacterAI component!",
                                           SO()->getName()));
+    }
+
+    mEventQueue = SO()->getComponent<CharacterEventQueue>();
+
+    if (mEventQueue.isDestroyed())
+    {
+      REGOTH_THROW(
+          InvalidStateException,
+          bs::StringUtil::format("Scene Object {0} does not have a CharacterEventQueue component!",
+                                 SO()->getName()));
     }
   }
 
@@ -38,6 +59,32 @@ namespace REGoth
     mAction      = bs::VirtualButton("Action");
   }
 
+  void CharacterKeyboardInput::update()
+  {
+    bool action = bs::gVirtualInput().isButtonDown(mAction);
+
+    if (action)
+    {
+      auto thisCharacter = SO()->getComponent<Character>();
+
+      // TODO: Proper implementation of using focusable things
+      auto characters = mCharacter->findCharactersInRange(2.0f);
+
+        for (HCharacter c : characters)
+        {
+          // Skip self
+          if (c->SO() == SO()) continue;
+
+          auto eventQueue = c->SO()->getComponent<CharacterEventQueue>();
+
+          bs::gDebug().logDebug("[CharacterKeyboardInput] Talk to: " + c->SO()->getName());
+          eventQueue->clear(); // FIXME: Find out what's blocking the new message
+          eventQueue->pushTalkToCharacter(thisCharacter);
+          break;
+        }
+    }
+  }
+
   void CharacterKeyboardInput::fixedUpdate()
   {
     bool goingForward = bs::gVirtualInput().isButtonHeld(mMoveForward);
@@ -45,13 +92,6 @@ namespace REGoth
     bool goingLeft    = bs::gVirtualInput().isButtonHeld(mMoveLeft);
     bool goingRight   = bs::gVirtualInput().isButtonHeld(mMoveRight);
     bool fastMove     = bs::gVirtualInput().isButtonHeld(mFastMove);
-
-    bool action = bs::gVirtualInput().isButtonDown(mAction);
-
-    if (action)
-    {
-      mCharacterAI->doAction();
-    }
 
     // Always keep the user controllers physics active
     mCharacterAI->activatePhysics();

@@ -7,6 +7,7 @@
 #include <components/CharacterAI.hpp>
 #include <components/CharacterEventQueue.hpp>
 #include <components/CharacterKeyboardInput.hpp>
+#include <components/GameUI.hpp>
 #include <components/GameWorld.hpp>
 #include <components/ThirdPersonCamera.hpp>
 #include <exception/Throw.hpp>
@@ -43,7 +44,7 @@ public:
   {
     using namespace REGoth;
 
-    const bs::String WORLD    = "OLDMINE.ZEN";
+    const bs::String WORLD    = "NEWWORLD.ZEN";
     const bs::String SAVEGAME = "WorldViewer-" + WORLD;
 
     bs::HPrefab worldPrefab = GameWorld::load(SAVEGAME);
@@ -83,6 +84,8 @@ public:
     mMainCamera->SO()->setActive(true);
 
     mThirdPersonCamera->follow(hero);
+
+    REGoth::GameUI::createGlobal(mMainCamera);
   }
 
 protected:

@@ -8,10 +8,8 @@
 
 namespace REGoth
 {
-  UIDialogueChoice::UIDialogueChoice(const bs::HSceneObject& parent, HUIElement parentUiElement,
-                                     OnChoiceCallback onChoice)
+  UIDialogueChoice::UIDialogueChoice(const bs::HSceneObject& parent, HUIElement parentUiElement)
       : UIElement(parent, parentUiElement, new bs::GUILayoutY())
-      , mOnChoice(onChoice)
   {
     mScrollArea = layout().addNewElement<bs::GUIScrollArea>(bs::ScrollBarType::ShowIfDoesntFit,
                                                             bs::ScrollBarType::NeverShow);
@@ -38,7 +36,7 @@ namespace REGoth
   {
     for (bs::GUIButton* pButton : mChoiceButtons)
     {
-      layout().removeElement(pButton);
+      mScrollArea->getLayout().removeElement(pButton);
     }
 
     mChoiceButtons.clear();

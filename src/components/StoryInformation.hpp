@@ -1,7 +1,7 @@
 #pragma once
+#include "scripting/ScriptTypes.hpp"
 #include <RTTI/RTTIUtil.hpp>
 #include <Scene/BsComponent.h>
-#include "scripting/ScriptTypes.hpp"
 
 namespace REGoth
 {
@@ -154,11 +154,33 @@ namespace REGoth
      */
     void giveKnowledgeAboutInfo(const bs::String& name);
 
+    /**
+     * TODO: Refactor, so this doesn't need to access the UI internally. I'd like this class to
+     *       be more of a dumb thing to the *Information*-instances, rather than one that accesses
+     *       the ui...
+     *
+     * Starts a dialogue with the given other character. If the dialogue is already going, it's
+     * continuing it.
+     */
+    void startDialogueWith(HCharacter other);
+    void stopDialogueWith(HCharacter other);
+
+    /**
+     * Adds a custom choice the the current choice list. (Used from script)
+     */
+    void addChoice(const bs::String& instanceName, const bs::String& text,
+                   Scripting::SymbolIndex infoFunction);
+
+    /**
+     * Removes all choices from the choice list so that custom choices can be added (Used from
+     * script).
+     */
+    void clearChoices();
+
   protected:
     void onInitialized() override;
 
   private:
-
     /**
      * Looks through all script symbols to find all *Information*-Instances available to this
      * character.
@@ -175,7 +197,8 @@ namespace REGoth
      *
      * @note   May call script code!
      */
-    bool isDialogueInfoAvaliable(bs::UINT32 index, HCharacter other, HStoryInformation otherInfo) const;
+    bool isDialogueInfoAvaliable(bs::UINT32 index, HCharacter other,
+                                 HStoryInformation otherInfo) const;
 
   public:
     REGOTH_DECLARE_RTTI(StoryInformation)

@@ -33,6 +33,14 @@ namespace REGoth
      */
     static void createGlobal(bs::HCamera camera);
 
+    /**
+     * Starts a dialogue. I'm not happy with this being here, should be moved *somewhere* else,
+     * but it seems like this needs to be a global object...
+     */
+    void startDialogue();
+    bool isDialogueInProgress() const;
+    void stopDialogue();
+
     HUIDialogueChoice choices() const
     {
       return mChoices;

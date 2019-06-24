@@ -222,6 +222,9 @@ namespace REGoth
       void external_Npc_GetNextWP();
       void external_Npc_SetToFistMode();
       void external_Npc_KnowsInfo();
+      void external_InfoManager_HasFinished();
+      void external_AI_ProcessInfos();
+      void external_AI_StopProcessInfos();
 
       void fillSymbolStorage() override;
       void registerAllExternals() override;

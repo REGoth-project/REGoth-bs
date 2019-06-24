@@ -64,11 +64,11 @@ public:
 
     gGameUI()->subtitleBox()->open();
 
-    gGameUI()->choices()->addChoice({"Hello World!", "ScriptFn1"});
-    gGameUI()->choices()->addChoice({"This is a test!", "ScriptFn2"});
-    gGameUI()->choices()->addChoice({"What is this?", "ScriptFn3"});
-    gGameUI()->choices()->addChoice({"I'm hungry!", "ScriptFn4"});
-    gGameUI()->choices()->addChoice({"I'm not hungry!", "ScriptFn5"});
+    gGameUI()->choices()->addChoice({"Hello World!", 0});
+    gGameUI()->choices()->addChoice({"This is a test!", 0});
+    gGameUI()->choices()->addChoice({"What is this?", 0});
+    gGameUI()->choices()->addChoice({"I'm hungry!", 0});
+    gGameUI()->choices()->addChoice({"I'm not hungry!", 0});
 
     mMainCamera->SO()->setPosition(bs::Vector3(0, 1, 3));
   }

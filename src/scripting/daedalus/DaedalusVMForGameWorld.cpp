@@ -1,5 +1,4 @@
 #include "DaedalusVMForGameWorld.hpp"
-#include <components/StoryInformation.hpp>
 #include "DaedalusClassVarResolver.hpp"
 #include <RTTI/RTTI_DaedalusVMForGameWorld.hpp>
 #include <Scene/BsSceneObject.h>
@@ -11,9 +10,13 @@
 #include <components/GameClock.hpp>
 #include <components/GameWorld.hpp>
 #include <components/Item.hpp>
+#include <components/StoryInformation.hpp>
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
 #include <scripting/ScriptSymbolQueries.hpp>
+
+// TODO: Refactor, so we don't access deep into the UI code here for dialogues
+#include <components/GameUI.hpp>
 
 namespace REGoth
 {
@@ -161,7 +164,14 @@ namespace REGoth
     void DaedalusVMForGameWorld::runInfoFunction(SymbolIndex function, HCharacter self,
                                                  HCharacter other)
     {
-      bs::gDebug().logDebug("[DaedalusVMForGameWorld] Stub: runInfoFunction");
+      self->useAsSelf();
+      other->useAsOther();
+
+      mStack.clear();
+
+      const auto& functionSym = scriptSymbols().getSymbol<SymbolScriptFunction>(function);
+
+      executeScriptFunction(functionSym.address);
     }
 
     void DaedalusVMForGameWorld::runFunctionOnSelf(SymbolIndex function, HCharacter self)
@@ -456,6 +466,11 @@ namespace REGoth
       registerExternal("NPC_GETNEXTWP", (externalCallback)&This::external_Npc_GetNextWP);
       registerExternal("NPC_SETTOFISTMODE", (externalCallback)&This::external_Npc_SetToFistMode);
       registerExternal("NPC_KNOWSINFO", (externalCallback)&This::external_Npc_KnowsInfo);
+      registerExternal("AI_PROCESSINFOS", (externalCallback)&This::external_AI_ProcessInfos);
+      registerExternal("AI_STOPPROCESSINFOS", (externalCallback)&This::external_AI_StopProcessInfos);
+
+      registerExternal("INFOMANAGER_HASFINISHED",
+                       (externalCallback)&This::external_InfoManager_HasFinished);
     }
 
     void DaedalusVMForGameWorld::external_Print()
@@ -875,10 +890,10 @@ namespace REGoth
     void DaedalusVMForGameWorld::external_Npc_KnowsInfo()
     {
       bs::INT32 infoSymbolIndex = popIntValue();
-      HCharacter self = popCharacterInstance();
+      HCharacter self           = popCharacterInstance();
 
       const bs::String& infoName = scriptSymbols().getSymbolName(infoSymbolIndex);
-      auto information = self->SO()->getComponent<StoryInformation>();
+      auto information           = self->SO()->getComponent<StoryInformation>();
 
       if (information->knowsInfo(infoName))
       {
@@ -888,6 +903,38 @@ namespace REGoth
       {
         mStack.pushInt(0);
       }
+    }
+
+    void DaedalusVMForGameWorld::external_InfoManager_HasFinished()
+    {
+      // bs::gDebug().logWarning("[External] Using external stub: InfoManager_HasFinished");
+
+      if (gGameUI()->isDialogueInProgress())
+      {
+        mStack.pushInt(0);
+      }
+      else
+      {
+        mStack.pushInt(1);
+      }
+    }
+
+    void DaedalusVMForGameWorld::external_AI_ProcessInfos()
+    {
+      HCharacter self = popCharacterInstance();
+
+      auto storyInfo = self->SO()->getComponent<StoryInformation>();
+
+      storyInfo->startDialogueWith(other());
+    }
+
+    void DaedalusVMForGameWorld::external_AI_StopProcessInfos()
+    {
+      HCharacter self = popCharacterInstance();
+
+      auto storyInfo = self->SO()->getComponent<StoryInformation>();
+
+      storyInfo->stopDialogueWith(other());
     }
 
     void DaedalusVMForGameWorld::script_PrintPlus(const bs::String& text)

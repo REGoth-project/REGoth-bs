@@ -6,6 +6,10 @@
 #include <scripting/ScriptSymbolQueries.hpp>
 #include <scripting/ScriptVMForGameWorld.hpp>
 
+// TODO: Refactor, so we don't access deep into the UI code here for dialogues
+#include <components/GameUI.hpp>
+#include <components/UIDialogueChoice.hpp>
+
 namespace REGoth
 {
   StoryInformation::StoryInformation(const bs::HSceneObject& parent, HGameWorld gameWorld,
@@ -98,6 +102,59 @@ namespace REGoth
   void StoryInformation::giveKnowledgeAboutInfo(const bs::String& name)
   {
     mKnownInfos.insert(name);
+  }
+
+  void StoryInformation::startDialogueWith(HCharacter other)
+  {
+    gGameUI()->startDialogue();
+
+    for (auto info : gatherAvailableDialogueLines(other))
+    {
+      addChoice(info->name, info->choiceText, info->informationFunction);
+    }
+
+    gGameUI()->choices()->setOnChoiceCallback([this, other](const UIDialogueChoice::Choice& choice) {
+      bs::gDebug().logDebug("[StoryInformation] Choice taken: " + choice.text);
+
+      if (!choice.instanceName.empty())
+      {
+        HStoryInformation otherInfo = other->SO()->getComponent<StoryInformation>();
+
+        otherInfo->giveKnowledgeAboutInfo(choice.instanceName);
+      }
+
+      // Re-fill the choices window before executing the script because it may call
+      // `Info_ClearChoices` to supply some custom choices.
+      clearChoices();
+
+      for (auto info : gatherAvailableDialogueLines(other))
+      {
+        addChoice(info->name, info->choiceText, info->informationFunction);
+      }
+
+      mGameWorld->scriptVM().runInfoFunction(choice.scriptFunction, mSelf, other);
+    });
+  }
+
+  void StoryInformation::stopDialogueWith(HCharacter other)
+  {
+    gGameUI()->stopDialogue();
+  }
+
+  void StoryInformation::addChoice(const bs::String& instanceName, const bs::String& text,
+                                   Scripting::SymbolIndex infoFunction)
+  {
+    UIDialogueChoice::Choice c;
+    c.instanceName   = instanceName;
+    c.text           = text;
+    c.scriptFunction = infoFunction;
+
+    gGameUI()->choices()->addChoice(c);
+  }
+
+  void StoryInformation::clearChoices()
+  {
+    gGameUI()->choices()->clearChoices();
   }
 
   REGOTH_DEFINE_RTTI(StoryInformation)

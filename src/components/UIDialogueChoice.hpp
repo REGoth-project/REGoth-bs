@@ -1,6 +1,7 @@
 #pragma once
 #include "UIElement.hpp"
 #include <RTTI/RTTIUtil.hpp>
+#include <scripting/ScriptTypes.hpp>
 
 namespace REGoth
 {
@@ -21,14 +22,11 @@ namespace REGoth
    * Giving this class a list of choices would not work for the second case, as
    * scripts only add one choice in a single script function call.
    *
-   * To identify which choice has been taken by the user, we need something unique
-   * about the choice, like an index, so the calling code knows which choice the
-   * user has taken. However, an index would make handling choices dynamically added
-   * by scripts hard to handle. But all choices have one thing in common: A script
-   * function to call once they have been taken! This script function will run the
-   * dialogue script, so we would need to know it anyways once the choice as been made.
-   * Therefore the name of this script function is our identifier which this also given
-   * to the caller once a choice has been taken.
+   * To identify which choice has been taken by the user, the class also stores the
+   * name of the script instance the info originates from. Some choices are custom-
+   * built using `Info_AddChoice` inside the scripts and don't have any instance
+   * name. Because of these, the class also stores the function to execute once a choice
+   * has been taken.
    *
    * Once a choice has been taken by the user, the `onChoice`-callback is triggered.
    */
@@ -37,18 +35,28 @@ namespace REGoth
   public:
     struct Choice
     {
+      /** Name of the info inside the scripts */
+      bs::String instanceName;
+
       /** Text to display in the choice box. This is what the hero should say. */
       bs::String text;
 
       /** Script function to execute once this choice has been chosen. */
-      bs::String scriptFunction;
+      Scripting::SymbolIndex scriptFunction;
     };
 
     using OnChoiceCallback = std::function<void(const Choice&)>;
 
-    UIDialogueChoice(const bs::HSceneObject& parent, HUIElement parentUiElement,
-                     OnChoiceCallback onChoice);
+    UIDialogueChoice(const bs::HSceneObject& parent, HUIElement parentUiElement);
     virtual ~UIDialogueChoice();
+
+    /**
+     * Sets which callback to trigger once the user selected a choice
+     */
+    void setOnChoiceCallback(const OnChoiceCallback& onChoice)
+    {
+      mOnChoice = onChoice;
+    }
 
     /**
      * Adds an choice for the user to choose.

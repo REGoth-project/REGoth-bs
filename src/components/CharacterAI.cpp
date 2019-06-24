@@ -180,29 +180,6 @@ namespace REGoth
 
   bool CharacterAI::doAction()
   {
-    // TODO: Proper implementation of using focusable things
-    auto characters = mWorld->findCharactersInRange(2.0f, SO()->getTransform().pos());
-
-    if (!characters.empty())
-    {
-      for (HCharacter c : characters)
-      {
-        // Skip self
-        if (c->SO() == SO())
-          continue;
-
-        HStoryInformation info = c->SO()->getComponent<StoryInformation>();
-
-        auto availableInfos = info->gatherAvailableDialogueLines(SO()->getComponent<Character>());
-
-        bs::gDebug().logDebug("[CharacterAI] NPC " + c->SO()->getName() + ":");
-        for (auto& info : availableInfos)
-        {
-          bs::gDebug().logDebug("[CharacterAI]   - " + info->name + " - " + info->choiceText);
-        }
-      }
-    }
-
     return true;
   }
 

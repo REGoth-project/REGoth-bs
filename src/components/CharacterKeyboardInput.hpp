@@ -9,6 +9,12 @@ namespace REGoth
   class CharacterAI;
   using HCharacterAI = bs::GameObjectHandle<CharacterAI>;
 
+  class Character;
+  using HCharacter = bs::GameObjectHandle<Character>;
+
+  class CharacterEventQueue;
+  using HCharacterEventQueue = bs::GameObjectHandle<CharacterEventQueue>;
+
   /**
    * Component which queries keyboard input and makes the character it is attached to
    * move accordingly.
@@ -24,6 +30,7 @@ namespace REGoth
 
     /** Triggered once per frame. Allows the component to handle input and move. */
     void fixedUpdate() override;
+    void update() override;
     void onInitialized() override;
 
   private:
@@ -38,7 +45,9 @@ namespace REGoth
     bs::VirtualButton mAction;
 
     // Handle to the CharacterAI component attached to the scene object
+    HCharacter mCharacter;
     HCharacterAI mCharacterAI;
+    HCharacterEventQueue mEventQueue;
 
   public:
     REGOTH_DECLARE_RTTI(CharacterKeyboardInput);
