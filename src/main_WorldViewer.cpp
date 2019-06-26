@@ -56,7 +56,7 @@ public:
 
       HCharacter hero = world->insertCharacter("PC_HERO", "START");
       hero->useAsHero();
-      hero->SO()->addComponent<CharacterKeyboardInput>();
+      hero->SO()->addComponent<CharacterKeyboardInput>(world);
 
       // bs::HSceneObject diegoSO = world->insertCharacter("PC_THIEF", "WP_INTRO_FALL3")->SO();
 

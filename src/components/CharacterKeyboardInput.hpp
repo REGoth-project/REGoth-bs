@@ -15,6 +15,9 @@ namespace REGoth
   class CharacterEventQueue;
   using HCharacterEventQueue = bs::GameObjectHandle<CharacterEventQueue>;
 
+  class GameWorld;
+  using HGameWorld = bs::GameObjectHandle<GameWorld>;
+
   /**
    * Component which queries keyboard input and makes the character it is attached to
    * move accordingly.
@@ -22,7 +25,7 @@ namespace REGoth
   class CharacterKeyboardInput : public bs::Component
   {
   public:
-    CharacterKeyboardInput(const bs::HSceneObject& parent);
+    CharacterKeyboardInput(const bs::HSceneObject& parent, HGameWorld world);
     virtual ~CharacterKeyboardInput();
 
 
@@ -43,11 +46,13 @@ namespace REGoth
     bs::VirtualButton mMoveRight;
     bs::VirtualButton mFastMove;
     bs::VirtualButton mAction;
+    bs::VirtualButton mQuickSave;
 
     // Handle to the CharacterAI component attached to the scene object
     HCharacter mCharacter;
     HCharacterAI mCharacterAI;
     HCharacterEventQueue mEventQueue;
+    HGameWorld mWorld;
 
   public:
     REGOTH_DECLARE_RTTI(CharacterKeyboardInput);

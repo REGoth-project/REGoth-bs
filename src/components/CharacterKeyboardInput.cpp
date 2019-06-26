@@ -1,14 +1,16 @@
 #include "CharacterKeyboardInput.hpp"
-#include <components/Character.hpp>
+#include <components/GameWorld.hpp>
 #include <RTTI/RTTI_CharacterKeyboardInput.hpp>
-#include <components/CharacterEventQueue.hpp>
+#include <components/Character.hpp>
 #include <components/CharacterAI.hpp>
+#include <components/CharacterEventQueue.hpp>
 #include <exception/Throw.hpp>
 
 namespace REGoth
 {
-  CharacterKeyboardInput::CharacterKeyboardInput(const bs::HSceneObject& parent)
+  CharacterKeyboardInput::CharacterKeyboardInput(const bs::HSceneObject& parent, HGameWorld world)
       : bs::Component(parent)
+      , mWorld(world)
   {
     setName("CharacterKeyboardInput");
   }
@@ -27,8 +29,9 @@ namespace REGoth
     mMoveRight   = bs::VirtualButton("Right");
     mFastMove    = bs::VirtualButton("FastMove");
     mAction      = bs::VirtualButton("Action");
+    mQuickSave   = bs::VirtualButton("QuickSave");
 
-    mCharacter   = SO()->getComponent<Character>();
+    mCharacter = SO()->getComponent<Character>();
 
     if (mCharacter.isDestroyed())
     {
@@ -59,27 +62,30 @@ namespace REGoth
 
   void CharacterKeyboardInput::update()
   {
-    bool action = bs::gVirtualInput().isButtonDown(mAction);
-
-    if (action)
+    if (bs::gVirtualInput().isButtonDown(mAction))
     {
       auto thisCharacter = SO()->getComponent<Character>();
 
       // TODO: Proper implementation of using focusable things
       auto characters = mCharacter->findCharactersInRange(2.0f);
 
-        for (HCharacter c : characters)
-        {
-          // Skip self
-          if (c->SO() == SO()) continue;
+      for (HCharacter c : characters)
+      {
+        // Skip self
+        if (c->SO() == SO()) continue;
 
-          auto eventQueue = c->SO()->getComponent<CharacterEventQueue>();
+        auto eventQueue = c->SO()->getComponent<CharacterEventQueue>();
 
-          bs::gDebug().logDebug("[CharacterKeyboardInput] Talk to: " + c->SO()->getName());
-          eventQueue->clear(); // FIXME: Find out what's blocking the new message
-          eventQueue->pushTalkToCharacter(thisCharacter);
-          break;
-        }
+        bs::gDebug().logDebug("[CharacterKeyboardInput] Talk to: " + c->SO()->getName());
+        eventQueue->clear();  // FIXME: Find out what's blocking the new message
+        eventQueue->pushTalkToCharacter(thisCharacter);
+        break;
+      }
+    }
+
+    if (bs::gVirtualInput().isButtonDown(mQuickSave))
+    {
+      mWorld->save("WorldViewer-" + mWorld->worldName() + ".ZEN");
     }
   }
 
