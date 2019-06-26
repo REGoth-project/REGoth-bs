@@ -61,6 +61,10 @@ add_library(REGothEngine
   components/EventQueue.cpp
   components/CharacterEventQueue.hpp
   components/CharacterEventQueue.cpp
+  components/Sky.hpp
+  components/Sky.cpp
+  sky/SkyColoring.hpp
+  sky/SkyColoring.cpp
   AI/EventMessage.hpp
   AI/EventMessage.cpp
   AI/ScriptState.hpp
