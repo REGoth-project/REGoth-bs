@@ -16,7 +16,7 @@ namespace REGoth
 
   void VisualMorphMesh::setMesh(const bs::String& originalMeshFileName)
   {
-    auto mesh = gOriginalGameResources().staticMesh(originalMeshFileName);
+    auto mesh = gOriginalGameResources().morphMesh(originalMeshFileName);
 
     if (!mesh)
     {
