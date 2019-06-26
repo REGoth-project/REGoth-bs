@@ -11,7 +11,7 @@ namespace REGoth
   namespace Scripting
   {
     const bs::Set<bs::String> FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR = {
-        // "ZS_TALK",
+        "INFO_DIEGO_EXIT_GAMESTART_INFO",
         // "ZS_TALK_LOOP",
     };
 

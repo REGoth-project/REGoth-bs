@@ -26,7 +26,7 @@ namespace REGoth
 
     mChoices.push_back(choice);
 
-    auto button = mScrollArea->getLayout().addNewElement<bs::GUIButton>(bs::HString(choice.text));
+    auto button = mScrollArea->getLayout().addNewElement<bs::GUIButton>(bs::HString(choice.text + " - " + choice.instanceName));
     mChoiceButtons.push_back(button);
 
     button->onClick.connect([this, index]() { mOnChoice(mChoices[index]); });

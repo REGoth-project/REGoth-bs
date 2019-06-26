@@ -86,10 +86,10 @@ namespace REGoth
   {
     const auto& info = mAllInfos[index];
 
-    if (!info.isPermanent && otherInfo->knowsInfo(info.name))
-    {
-      return false;
-    }
+    //if (!info.isPermanent && otherInfo->knowsInfo(info.name))
+    //{
+    //  return false;
+    //}
 
     return mGameWorld->scriptVM().runInfoConditionFunction(info.conditionFunction, mSelf, other);
   }
@@ -114,7 +114,8 @@ namespace REGoth
     }
 
     gGameUI()->choices()->setOnChoiceCallback([this, other](const UIDialogueChoice::Choice& choice) {
-      bs::gDebug().logDebug("[StoryInformation] Choice taken: " + choice.text);
+      bs::gDebug().logDebug("[StoryInformation] Choice taken: " + choice.text + " (" +
+                            choice.instanceName + ")");
 
       if (!choice.instanceName.empty())
       {

@@ -266,32 +266,38 @@ namespace REGoth
     return b;
   }
 
-  float Character::getDistToPlayer()
+  float Character::getDistanceToHero() const
   {
-    bs::INT32 b;
+    HCharacter hero = gameWorld()->hero();
 
-    return b;
+    return getDistanceToObject(hero->SO());
   }
 
-  float Character::getDistToItem(bs::HSceneObject item)
+  float Character::getDistanceToWaypoint(const bs::String& waypoint) const
   {
-    bs::INT32 b;
+    HWaypoint wp = gameWorld()->waynet()->findWaypoint(waypoint);
 
-    return b;
+    if (!wp)
+    {
+      bs::gDebug().logWarning("[Character] Waypoint " + waypoint + " does not exist! (getDistanceToWaypoint)");
+      return -1.0f;
+    }
+
+    return getDistanceToObject(wp->SO());
   }
 
-  float Character::getDistToWaypoint(const bs::String& waypoint)
+  bool Character::isNearCharacter(HCharacter other) const
   {
-    bs::INT32 b;
-
-    return b;
+    // 3 meters is expected by the scripts, according to `externals.d`
+    return getDistanceToObject(other->SO()) < 3.0f;
   }
 
-  float Character::getDistToNPC(bs::HSceneObject to)
+  float Character::getDistanceToObject(bs::HSceneObject object) const
   {
-    bs::INT32 b;
+    auto& p1 = SO()->getTransform().pos();
+    auto& p2 = object->getTransform().pos();
 
-    return b;
+    return p1.distance(p2);
   }
 
   const bs::Vector<Scripting::ScriptObjectHandle>& Character::allInfosForThisCharacter() const

@@ -464,6 +464,11 @@ namespace REGoth
       registerExternal("AI_PLAYANI", (externalCallback)&This::external_AI_PlayAnimation);
       registerExternal("NPC_GETNEARESTWP", (externalCallback)&This::external_Npc_GetNearestWP);
       registerExternal("NPC_GETNEXTWP", (externalCallback)&This::external_Npc_GetNextWP);
+      registerExternal("NPC_GETDISTTOWP", (externalCallback)&This::external_Npc_GetDistToWP);
+      registerExternal("NPC_GETDISTTONPC", (externalCallback)&This::external_Npc_GetDistToNpc);
+      registerExternal("NPC_GETDISTTOITEM", (externalCallback)&This::external_Npc_GetDistToItem);
+      registerExternal("NPC_GETDISTTOPLAYER", (externalCallback)&This::external_Npc_GetDistToPlayer);
+      registerExternal("NPC_ISNEAR", (externalCallback)&This::external_Npc_IsNear);
       registerExternal("NPC_SETTOFISTMODE", (externalCallback)&This::external_Npc_SetToFistMode);
       registerExternal("NPC_KNOWSINFO", (externalCallback)&This::external_Npc_KnowsInfo);
       registerExternal("AI_PROCESSINFOS", (externalCallback)&This::external_AI_ProcessInfos);
@@ -876,6 +881,70 @@ namespace REGoth
       HCharacter self = popCharacterInstance();
 
       mStack.pushString(self->getNextWaypoint());
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_GetDistToWP()
+    {
+      bs::String waypoint = popStringValue();
+      HCharacter self     = popCharacterInstance();
+
+      float distanceMeters = self->getDistanceToWaypoint(waypoint);
+
+      if (distanceMeters < 0)
+      {
+        mStack.pushInt(INT32_MAX);
+      }
+      else
+      {
+        mStack.pushInt(distanceMeters * 100);
+      }
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_GetDistToNpc()
+    {
+      HCharacter other = popCharacterInstance();
+      HCharacter self  = popCharacterInstance();
+
+      // This is sometimes used with Npc_DetectNpc() which is supposed to set
+      // `other`. If that doesn't work we'll end up with an invalid handle here.
+      if (!other)
+      {
+        mStack.pushInt(INT32_MAX);
+      }
+      else
+      {
+        mStack.pushInt(self->getDistanceToObject(other->SO()) * 100);
+      }
+
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_GetDistToItem()
+    {
+      HItem item = popItemInstance();
+      HCharacter self  = popCharacterInstance();
+
+      mStack.pushInt(self->getDistanceToObject(item->SO()) * 100);
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_GetDistToPlayer()
+    {
+      HCharacter self = popCharacterInstance();
+
+      // I hope they don't mean the player controlled character but the hero.
+      // FIXME: Clarify, does this is supposed to check the distance to the hero?
+      //        Might as well fix this if we can easily get the reference to the player
+      //        controlled character here. For normal gameplay using the hero should work though.
+      mStack.pushInt(self->getDistanceToHero() * 100);
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_IsNear()
+    {
+      HCharacter other = popCharacterInstance();
+      HCharacter self  = popCharacterInstance();
+
+      bool isNear = self->isNearCharacter(other);
+
+      mStack.pushInt(isNear ? 1 : 0);
     }
 
     void DaedalusVMForGameWorld::external_Npc_SetToFistMode()

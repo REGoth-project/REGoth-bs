@@ -54,30 +54,26 @@ namespace REGoth
     bool isReady();
 
     /**
-     * @return Distance from this Character to the given other Character in meters.
-     *
-     * Throws if the given SO is not a character.
-     */
-    float getDistToNPC(bs::HSceneObject to);
-
-    /**
      * @return Distance from this Character to the given waypoint in meters.
-     *
-     * Throws if the given waypoint does not exist.
+     *         Returns -1.0f if the waypoint doesn't exist as Gothic 1 calls this
+     *         with non-existing waypoints sometimes.
      */
-    float getDistToWaypoint(const bs::String& waypoint);
+    float getDistanceToWaypoint(const bs::String& waypoint) const;
 
     /**
-     * @return Distance from this Character to the given item in meters.
-     *
-     * Throws if the given SO is not an item.
+     * @return Distance from this Character to the hero Character in meters.
      */
-    float getDistToItem(bs::HSceneObject item);
+    float getDistanceToHero() const;
 
     /**
-     * @return Distance from this Character to the players character in meters.
+     * @return Whether this character is closer than 3 meters to the other character.
      */
-    float getDistToPlayer();
+    bool isNearCharacter(HCharacter other) const;
+
+    /**
+     * @return Distance from this Character to the given object in meters.
+     */
+    float getDistanceToObject(bs::HSceneObject object) const;
 
     bs::INT32 getTrueGuild();
     bs::INT32 setTrueGuild(bs::INT32 guild);

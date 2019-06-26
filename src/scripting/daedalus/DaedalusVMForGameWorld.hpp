@@ -220,6 +220,11 @@ namespace REGoth
       void external_AI_PlayAnimation();
       void external_Npc_GetNearestWP();
       void external_Npc_GetNextWP();
+      void external_Npc_GetDistToWP();
+      void external_Npc_GetDistToNpc();
+      void external_Npc_GetDistToItem();
+      void external_Npc_GetDistToPlayer();
+      void external_Npc_IsNear();
       void external_Npc_SetToFistMode();
       void external_Npc_KnowsInfo();
       void external_InfoManager_HasFinished();
