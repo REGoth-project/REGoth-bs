@@ -66,14 +66,11 @@ namespace REGoth
     TID_REGOTH_UIElement                    = 600058,
     TID_REGOTH_UIFocusText                  = 600059,
     TID_REGOTH_Focusable                    = 600060,
-    TID_REGOTH_UIElement                    = 600061,
-    TID_REGOTH_UIFocusText                  = 600062,
-    TID_REGOTH_Focusable                    = 600063,
-    TID_REGOTH_UISubtitleBox                = 600064,
-    TID_REGOTH_UIDialogueChoice             = 600065,
-    TID_REGOTH_UIDialogue                   = 600066,
-    TID_REGOTH_GameUI                       = 600067,
-    TID_REGOTH_StoryInformation             = 600068,
+    TID_REGOTH_UISubtitleBox                = 600061,
+    TID_REGOTH_UIDialogueChoice             = 600062,
+    TID_REGOTH_UIDialogue                   = 600063,
+    TID_REGOTH_GameUI                       = 600064,
+    TID_REGOTH_StoryInformation             = 600065,
 
   };
 }  // namespace REGoth
