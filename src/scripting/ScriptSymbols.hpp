@@ -128,9 +128,9 @@ namespace REGoth
       static constexpr SymbolType TYPE = SymbolType::ExternalFunction;
 
       /**
-       * Since the mapping of external functions to native ones is done at VM-level, this
-       * struct is left empty.
+       * Function return type.
        */
+      ReturnType returnType;
 
       REGOTH_DECLARE_RTTI(SymbolExternalFunction)
     };

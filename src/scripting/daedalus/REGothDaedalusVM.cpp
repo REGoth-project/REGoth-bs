@@ -11,8 +11,10 @@ namespace REGoth
   namespace Scripting
   {
     const bs::Set<bs::String> FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR = {
+        "DIA_BAALPARVEZ_GOTOPSI_CONDITION",
+        "DIA_BAALPARVEZ_GOTOPSI_INFO",
         "INFO_DIEGO_EXIT_GAMESTART_INFO",
-        // "ZS_TALK_LOOP",
+        "INFO_DIEGO_EXIT_GAMESTART_CONDITION",
     };
 
     DaedalusVM::DaedalusVM(const bs::Vector<bs::UINT8>& datFileData)
@@ -89,7 +91,6 @@ namespace REGoth
             mIsDisassemblerEnabled = false;
           }
         }
-
       }
 
       if (mIsDisassemblerEnabled)
@@ -752,6 +753,27 @@ namespace REGoth
           }
           else
           {
+            auto& sym = mScriptSymbols.getSymbol<SymbolExternalFunction>(opcode.symbol);
+
+            // bs::gDebug().logDebug("[REGothDaedalusVM] External not implemented: " + sym.name);
+
+            // Put a dummy value onto the stack to get deterministic results
+            switch (sym.returnType)
+            {
+              case ReturnType::Int:
+                mStack.pushInt(0);
+                break;
+              case ReturnType::Float:
+                mStack.pushFloat(0.0f);
+                break;
+              case ReturnType::String:
+                mStack.pushString("");
+                break;
+              case ReturnType::Invalid:
+              case ReturnType::Void:
+                break;
+            }
+
             // REGOTH_THROW(
             //     NotImplementedException,
             //     "External not implemented: " +

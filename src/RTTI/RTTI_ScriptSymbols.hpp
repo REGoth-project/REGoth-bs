@@ -95,7 +95,7 @@ namespace REGoth
     class RTTI_SymbolExternalFunction : public bs::RTTIType<SymbolExternalFunction, SymbolBase, RTTI_SymbolExternalFunction>
     {
       BS_BEGIN_RTTI_MEMBERS
-      // None
+      BS_RTTI_MEMBER_PLAIN(returnType, 0)
       BS_END_RTTI_MEMBERS
 
       REGOTH_RTTI_SCRIPT_SYMBOL_GLUE(SymbolExternalFunction)
