@@ -1,13 +1,13 @@
 #include "CharacterAI.hpp"
-#include <components/Character.hpp>
-#include <components/StoryInformation.hpp>
 #include <Components/BsCCamera.h>
 #include <Components/BsCCharacterController.h>
 #include <RTTI/RTTI_CharacterAI.hpp>
 #include <Scene/BsSceneManager.h>
 #include <Scene/BsSceneObject.h>
 #include <animation/StateNaming.hpp>
+#include <components/Character.hpp>
 #include <components/GameWorld.hpp>
+#include <components/StoryInformation.hpp>
 #include <components/VisualCharacter.hpp>
 #include <exception/Throw.hpp>
 

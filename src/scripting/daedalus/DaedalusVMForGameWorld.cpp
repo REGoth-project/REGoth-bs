@@ -432,6 +432,7 @@ namespace REGoth
       using This = DaedalusVMForGameWorld;
 
       registerExternal("PRINT", (externalCallback)&This::external_Print);
+      registerExternal("PRINTDEBUGINSTCH", (externalCallback)&This::external_PrintDebugInstCh);
       registerExternal("HLP_RANDOM", (externalCallback)&This::external_HLP_Random);
       registerExternal("HLP_GETNPC", (externalCallback)&This::external_HLP_GetNpc);
       registerExternal("HLP_ISVALIDNPC", (externalCallback)&This::external_HLP_IsValidNpc);
@@ -471,6 +472,9 @@ namespace REGoth
       registerExternal("NPC_ISNEAR", (externalCallback)&This::external_Npc_IsNear);
       registerExternal("NPC_SETTOFISTMODE", (externalCallback)&This::external_Npc_SetToFistMode);
       registerExternal("NPC_KNOWSINFO", (externalCallback)&This::external_Npc_KnowsInfo);
+      registerExternal("NPC_REFUSETALK", (externalCallback)&This::external_Npc_RefuseTalk);
+      registerExternal("NPC_GETSTATETIME", (externalCallback)&This::external_Npc_GetStateTime);
+      registerExternal("NPC_GETBODYSTATE", (externalCallback)&This::external_Npc_GetBodyState);
       registerExternal("AI_PROCESSINFOS", (externalCallback)&This::external_AI_ProcessInfos);
       registerExternal("AI_STOPPROCESSINFOS", (externalCallback)&This::external_AI_StopProcessInfos);
 
@@ -481,6 +485,14 @@ namespace REGoth
     void DaedalusVMForGameWorld::external_Print()
     {
       bs::gDebug().logDebug("[ScriptVMInterface] [Print] " + popStringValue());
+    }
+
+    void DaedalusVMForGameWorld::external_PrintDebugInstCh()
+    {
+      bs::String text     = popStringValue();
+      bs::INT32 character = popIntValue();
+
+      // Don't need this. Just get the parameters off the stack.
     }
 
     void DaedalusVMForGameWorld::external_HLP_Random()
@@ -915,13 +927,12 @@ namespace REGoth
       {
         mStack.pushInt(self->getDistanceToObject(other->SO()) * 100);
       }
-
     }
 
     void DaedalusVMForGameWorld::external_Npc_GetDistToItem()
     {
-      HItem item = popItemInstance();
-      HCharacter self  = popCharacterInstance();
+      HItem item      = popItemInstance();
+      HCharacter self = popCharacterInstance();
 
       mStack.pushInt(self->getDistanceToObject(item->SO()) * 100);
     }
@@ -972,6 +983,40 @@ namespace REGoth
       {
         mStack.pushInt(0);
       }
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_RefuseTalk()
+    {
+      HCharacter self = popCharacterInstance();
+
+      bs::gDebug().logWarning("[External] Using external stub: NPC_RefuseTalk");
+
+      mStack.pushInt(0);
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_GetStateTime()
+    {
+      HCharacter self = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      // Scripts expect this value to be rounded down
+      mStack.pushInt((bs::INT32)eventQueue->getCurrentStateRunningTime());
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_Percenable()
+    {
+      HCharacter self = popCharacterInstance();
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_GetBodyState()
+    {
+      HCharacter self = popCharacterInstance();
+
+      // TODO: Implement this. There is no "stub"-debug log here because the function
+      //       is called so often and it would spam the terminal.
+
+      mStack.pushInt(0);
     }
 
     void DaedalusVMForGameWorld::external_InfoManager_HasFinished()

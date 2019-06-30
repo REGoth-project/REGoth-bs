@@ -504,5 +504,10 @@ namespace REGoth
     mScriptState->reinitRoutine();
   }
 
+  float CharacterEventQueue::getCurrentStateRunningTime() const
+  {
+    return mScriptState->getCurrentStateRunningTime();
+  }
+
   REGOTH_DEFINE_RTTI(CharacterEventQueue)
 }  // namespace REGoth

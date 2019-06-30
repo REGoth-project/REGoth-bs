@@ -186,7 +186,7 @@ namespace REGoth
       HItem getInstanceItem(SymbolIndex symbolIndex) const;
 
       void script_PrintPlus(const bs::String& text);
-
+      void external_PrintDebugInstCh();
       void external_Print();
       void external_HLP_Random();
       void external_HLP_GetNpc();
@@ -227,6 +227,10 @@ namespace REGoth
       void external_Npc_IsNear();
       void external_Npc_SetToFistMode();
       void external_Npc_KnowsInfo();
+      void external_Npc_RefuseTalk();
+      void external_Npc_GetStateTime();
+      void external_Npc_Percenable();
+      void external_Npc_GetBodyState();
       void external_InfoManager_HasFinished();
       void external_AI_ProcessInfos();
       void external_AI_StopProcessInfos();

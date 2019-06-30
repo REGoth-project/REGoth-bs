@@ -86,10 +86,10 @@ namespace REGoth
   {
     const auto& info = mAllInfos[index];
 
-    //if (!info.isPermanent && otherInfo->knowsInfo(info.name))
-    //{
-    //  return false;
-    //}
+    if (!info.isPermanent && otherInfo->knowsInfo(info.name))
+    {
+     return false;
+    }
 
     return mGameWorld->scriptVM().runInfoConditionFunction(info.conditionFunction, mSelf, other);
   }

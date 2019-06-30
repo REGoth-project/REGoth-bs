@@ -106,6 +106,11 @@ namespace REGoth
      */
     void reinitRoutine();
 
+    /**
+     * @return Time the current script state is running.
+     */
+    float getCurrentStateRunningTime() const;
+
   protected:
     void onInitialized() override;
 
