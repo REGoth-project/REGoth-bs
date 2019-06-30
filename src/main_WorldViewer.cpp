@@ -44,7 +44,7 @@ public:
   {
     using namespace REGoth;
 
-    const bs::String WORLD    = "OLDMINE.ZEN";
+    const bs::String WORLD    = "WORLD.ZEN";
     const bs::String SAVEGAME = "WorldViewer-" + WORLD;
 
     bs::HPrefab worldPrefab = GameWorld::load(SAVEGAME);
