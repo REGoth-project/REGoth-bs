@@ -488,6 +488,7 @@ namespace REGoth
       // Clear old routine
       mRoutine.routine.clear();
       mRoutine.activeRoutineIndex = 0;
+      mRoutine.shouldStartNewRoutine = true;
 
       if (!routine.empty())
       {

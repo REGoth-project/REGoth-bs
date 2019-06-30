@@ -167,6 +167,8 @@ namespace REGoth
 
       bs::String functionName = "RTN_" + newDailyRoutine + "_" + bs::toString(id);
 
+      bs::gDebug().logDebug("[Character] Set Routine of " + SO()->getName() + " to " + functionName);
+
       const auto& fn =
           scriptVM().scriptSymbols().getSymbol<Scripting::SymbolScriptFunction>(functionName);
 

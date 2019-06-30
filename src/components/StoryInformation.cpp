@@ -113,7 +113,7 @@ namespace REGoth
       addChoice(info->name, info->choiceText, info->informationFunction);
     }
 
-    gGameUI()->choices()->setOnChoiceCallback([this, other](const UIDialogueChoice::Choice& choice) {
+    gGameUI()->choices()->setOnChoiceCallback([this, other](UIDialogueChoice::Choice choice) {
       bs::gDebug().logDebug("[StoryInformation] Choice taken: " + choice.text + " (" +
                             choice.instanceName + ")");
 

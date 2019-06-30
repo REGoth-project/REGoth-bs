@@ -45,7 +45,9 @@ namespace REGoth
       Scripting::SymbolIndex scriptFunction;
     };
 
-    using OnChoiceCallback = std::function<void(const Choice&)>;
+    /** Passing Choice per value here since the user could decide to call clearChoices()
+        inside the callback which would make a const reference invalid. */
+    using OnChoiceCallback = std::function<void(Choice)>;
 
     UIDialogueChoice(const bs::HSceneObject& parent, HUIElement parentUiElement);
     virtual ~UIDialogueChoice();
