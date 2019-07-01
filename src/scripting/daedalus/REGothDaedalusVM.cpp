@@ -13,8 +13,14 @@ namespace REGoth
     const bs::Set<bs::String> FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR = {
         "DIA_BAALPARVEZ_GOTOPSI_CONDITION",
         "DIA_BAALPARVEZ_GOTOPSI_INFO",
-        "INFO_DIEGO_EXIT_GAMESTART_INFO",
+        "ZS_GUIDEPC_LOOP",
         "INFO_DIEGO_EXIT_GAMESTART_CONDITION",
+    };
+
+    const bs::Set<bs::String> FUNCTIONS_TO_HIDE_IN_DISASSEMBLY = {
+        "PRINTDEBUGNPC",
+        "PRINTGLOBALS",
+        "PRINTDEBUGINT",
     };
 
     DaedalusVM::DaedalusVM(const bs::Vector<bs::UINT8>& datFileData)
@@ -32,6 +38,18 @@ namespace REGoth
       registerAllExternals();
     }
 
+    bool DaedalusVM::shouldEnableDisassemblerForFunction(const bs::String& uppercaseName) const
+    {
+      return FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR.find(uppercaseName) !=
+             FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR.end();
+    }
+
+    bool DaedalusVM::shouldHideFunctionInDisassembly(const bs::String& uppercaseName) const
+    {
+      return FUNCTIONS_TO_HIDE_IN_DISASSEMBLY.find(uppercaseName) !=
+             FUNCTIONS_TO_HIDE_IN_DISASSEMBLY.end();
+    }
+
     void DaedalusVM::executeScriptFunction(const bs::String& name)
     {
       bs::String upper = name;
@@ -41,74 +59,51 @@ namespace REGoth
 
       mPC = symbol.address;
 
-      // TODO: Guard these by some configuration variable so they only run during development
-      if (mCallDepth == 0)
-      {
-        if (FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR.find(upper) !=
-            FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR.end())
-        {
-          mIsDisassemblerEnabled = true;
-        }
-        else
-        {
-          mIsDisassemblerEnabled = false;
-        }
-      }
-
-      if (mIsDisassemblerEnabled)
-      {
-        findFunctionAtAddressAndLog(mPC);
-      }
-
       executeUntilReturn();
-
-      if (mCallDepth == 0)
-      {
-        mIsDisassemblerEnabled = false;
-      }
     }
 
     void DaedalusVM::executeScriptFunction(bs::UINT32 address)
     {
       mPC = address;
 
-      // TODO: Guard these by some configuration variable so they only run during development
-      if (mCallDepth == 0)
-      {
-        auto symIndex = scriptSymbols().findFunctionByAddress(address);
-
-        if (symIndex != SYMBOL_INDEX_INVALID)
-        {
-          bs::String name = scriptSymbols().getSymbolName(symIndex);
-
-          if (FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR.find(name) !=
-              FUNCTIONS_TO_ACTIVATE_DISASSEMBLER_FOR.end())
-          {
-            mIsDisassemblerEnabled = true;
-          }
-          else
-          {
-            mIsDisassemblerEnabled = false;
-          }
-        }
-      }
-
-      if (mIsDisassemblerEnabled)
-      {
-        findFunctionAtAddressAndLog(mPC);
-      }
-
       executeUntilReturn();
     }
 
     void DaedalusVM::executeUntilReturn()
     {
+      bool wasDisassemblerEnabledBefore = mIsDisassemblerEnabled;
+
+      auto symIndex = scriptSymbols().findFunctionByAddress(mPC);
+
+      // TODO: Guard these by some configuration variable so they only run during development
+      if (symIndex != SYMBOL_INDEX_INVALID)
+      {
+        bs::String name = scriptSymbols().getSymbolName(symIndex);
+
+        if (shouldEnableDisassemblerForFunction(name))
+        {
+          mIsDisassemblerEnabled = true;
+        }
+
+        if (mIsDisassemblerEnabled && shouldHideFunctionInDisassembly(name))
+        {
+          mIsDisassemblerEnabled = false;
+        }
+
+        if (mIsDisassemblerEnabled)
+        {
+          findFunctionAtAddressAndLog(mPC);
+        }
+      }
+
       bool didNotReachReturn;
 
       do
       {
         didNotReachReturn = executeInstructionAtPC();
       } while (didNotReachReturn);
+
+      mIsDisassemblerEnabled = wasDisassemblerEnabledBefore;
     }
 
     bool DaedalusVM::executeInstructionAtPC()
@@ -1044,7 +1039,7 @@ namespace REGoth
         name = fnSymbol.name;
       }
 
-      bs::gDebug().logDebug(bs::StringUtil::format("[DaedalusVM] Exec: {0}Call {1} (From Engine)",
+      bs::gDebug().logDebug(bs::StringUtil::format("[DaedalusVM] Exec: {0}Call {1}",
                                                    makeCallDepthString(mCallDepth), name));
     }
 

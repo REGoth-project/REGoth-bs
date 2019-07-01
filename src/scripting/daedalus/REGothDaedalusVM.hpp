@@ -131,10 +131,21 @@ namespace REGoth
 
     private:
       /**
+       * Whether the disassembler should be turned on for the given function.
+       */
+      bool shouldEnableDisassemblerForFunction(const bs::String& uppercaseName) const;
+
+      /**
+       * Whether to hide the given function in the disassembler, it it is active.
+       */
+      bool shouldHideFunctionInDisassembly(const bs::String& uppercaseName) const;
+
+      /**
        * Disassembles and logs the given opcode in respect ti the call-depth.
        */
-      void disassembleAndLogOpcode(const Daedalus::PARStackOpCode& opcode, const bs::String& lhs = "",
-                                   const bs::String& rhs = "", const bs::String& res = "");
+      void disassembleAndLogOpcode(const Daedalus::PARStackOpCode& opcode,
+                                   const bs::String& lhs = "", const bs::String& rhs = "",
+                                   const bs::String& res = "");
 
       /**
        * Looks up the function at the given address and returns its name
