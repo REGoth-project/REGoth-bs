@@ -277,6 +277,11 @@ namespace REGoth
      */
     bool isClipLooping(bs::HAnimationClip clip);
 
+    /**
+     * @return Layer the clip should be played on.
+     */
+    bs::INT32 getClipLayer(bs::HAnimationClip clip);
+
     // Configuration ----------------------------------------------------------
 
     BsZenLib::Res::HModelScriptFile mModelScript; /**< Model-script of the displayed model */

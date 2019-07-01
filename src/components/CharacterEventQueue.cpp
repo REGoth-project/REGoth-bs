@@ -312,8 +312,6 @@ namespace REGoth
         break;
 
       default:
-        bs::gDebug().logWarning("[CharacterEventQueue] Unhandled StateMessage-Sub Type: " +
-                                bs::toString((int)message.subType));
         isDone = true;
         break;
     }
@@ -340,6 +338,9 @@ namespace REGoth
 
         if (message.isFirstRun)
         {
+          // bs::gDebug().logDebug(bs::StringUtil::format(
+          //     "[CharacterEventQueue] {0} - PlayAni start: {1}", SO()->getName(), message.animation));
+
           message.playingClip = mVisualCharacter->findAnimationClip(message.animation);
 
           if (message.playingClip)
@@ -354,6 +355,13 @@ namespace REGoth
         else
         {
           isDone = !mVisualCharacter->isAnimationPlaying(message.playingClip);
+
+          if (isDone)
+          {
+            // bs::gDebug().logDebug(
+            //     bs::StringUtil::format("[CharacterEventQueue] {0} - PlayAni done: {1}",
+            //                            SO()->getName(), message.animation));
+          }
         }
         break;
 

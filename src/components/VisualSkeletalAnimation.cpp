@@ -245,12 +245,11 @@ namespace REGoth
     bs::AnimationClipState state;
     mSubAnimation->getState(clip, state);
 
-    if (command == "LOOP")
+    if (command == "PLAYCLIP")
     {
-      // Handled when the animation was started by setting the animation wrapmode to "loop"
-    }
-    else if (command == "PLAYCLIP")
-    {
+      // gDebug().logDebug("[VisualSkeletalAnimation] " + SO()->getName() + " - " + clip->getName() +
+      //                   ": event PLAYCLIP: " + action);
+
       HAnimationClip clip = findAnimationClip(action);
 
       if (clip)
@@ -261,6 +260,14 @@ namespace REGoth
       {
         gDebug().logWarning("[VisualSkeletalAnimation] Unknown next animation: " + action);
       }
+    }
+    else if (command == "LOOP")
+    {
+      // Handled when the animation was started by setting the animation wrapmode to "loop"
+    }
+    else if (command == "LAYER")
+    {
+      // Handled when the animation was started
     }
     else
     {
@@ -285,11 +292,24 @@ namespace REGoth
         mSubAnimation->setWrapMode(bs::AnimWrapMode::Clamp);
       }
 
-      // bs::gDebug().logDebug(clip->getName());
-      mSubAnimation->play(clip);
+      bs::INT32 layer = getClipLayer(clip);
+
+      if (layer > 0)
+      {
+        // bs::gDebug().logDebug(bs::StringUtil::format(
+        //     "[VisualSkeletalAnimation] Layered animation {1} not implemented", clip->getName()));
+
+        // Commented out: Doesn't work yet
+        // mSubAnimation->blendAdditive(clip, 1.0f, 0.0f, (bs::UINT32)layer);
+      }
+      else
+      {
+        mSubAnimation->play(clip);
+      }
     }
     else
     {
+      bs::gDebug().logDebug("Stop");
       mSubAnimation->stopAll();
     }
   }
@@ -527,6 +547,22 @@ namespace REGoth
     }
 
     return false;
+  }
+
+  bs::INT32 VisualSkeletalAnimation::getClipLayer(bs::HAnimationClip clip)
+  {
+    // The layer is encoded as a simple event. The time it fires doesn't matter.
+    for (const auto& event : clip->getEvents())
+    {
+      if (bs::StringUtil::startsWith(event.name, "LAYER:", false))
+      {
+        bs::String nr = event.name.substr(6);
+
+        return bs::parseINT32(nr);
+      }
+    }
+
+    return 0;
   }
 
   void VisualSkeletalAnimation::setDebugAnimationSpeedFactor(float factor)
