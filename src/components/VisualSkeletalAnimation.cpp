@@ -505,8 +505,11 @@ namespace REGoth
       if (now < then)
       {
         // Animation wrapped
-        motion += AnimationState::getRootMotionSince(clipNow, 0.0f, now);
-        motion += AnimationState::getRootMotionSince(clipNow, then, clipNow->getLength());
+        // FIXME: Commented out because it doesn't work yet. These lines cause NPCs with
+        //        static animations to slide around. Some non-looped animations produce
+        //        weird jumps (ie. T_JUMPB).
+        // motion += AnimationState::getRootMotionSince(clipNow, 0.0f, now);
+        // motion += AnimationState::getRootMotionSince(clipNow, then, clipNow->getLength());
       }
       else
       {
