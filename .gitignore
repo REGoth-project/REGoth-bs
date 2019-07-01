@@ -1,5 +1,18 @@
 # CMake
-build/
+/*build/
+
+# Language Server
+.ccls-cache
+.cquery-cache
+
+# Visual Studio Code
+.vscode
+
+# bsf crash reports
+CrashReports/
+
+# REGoth Cache files
+/cache/
 
 # Prerequisites
 *.d
