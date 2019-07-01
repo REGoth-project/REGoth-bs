@@ -8,10 +8,10 @@
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
 
-static const float MAX_SIDE_DIFFERENCE_TO_REACH_POSITION     = 0.5f;  // Meters
-static const float MAX_HEIGHT_DIFFERENCE_TO_REACH_POSITION   = 2.0f;  // Meters
-static const float MAX_TARGET_ENTITY_MOVEMENT_BEFORE_REROUTE = 5.0f;  // Meters
-static const float MAX_POINT_DISTANCE_FOR_CLEANUP            = 5.0f;  // Meters
+static const float MAX_SIDE_DIFFERENCE_TO_REACH_POSITION     = 1.0f;  // Meters
+static const float MAX_HEIGHT_DIFFERENCE_TO_REACH_POSITION   = 2.0f;   // Meters
+static const float MAX_TARGET_ENTITY_MOVEMENT_BEFORE_REROUTE = 5.0f;   // Meters
+static const float MAX_POINT_DISTANCE_FOR_CLEANUP            = 5.0f;   // Meters
 
 namespace REGoth
 {
