@@ -114,14 +114,16 @@ void REGothEngine::setupInput()
   auto inputConfig = gVirtualInput().getConfiguration();
 
   // Camera controls for buttons (digital 0-1 input, e.g. keyboard or gamepad button)
-  inputConfig->registerButton("Forward", BC_W);
-  inputConfig->registerButton("Back", BC_S);
-  inputConfig->registerButton("Left", BC_A);
-  inputConfig->registerButton("Right", BC_D);
-  inputConfig->registerButton("Forward", BC_UP);
-  inputConfig->registerButton("Back", BC_DOWN);
-  inputConfig->registerButton("RotateLeft", BC_LEFT);
-  inputConfig->registerButton("RotateRight", BC_RIGHT);
+  inputConfig->registerButton("MoveForward", BC_W);
+  inputConfig->registerButton("MoveBack", BC_S);
+  inputConfig->registerButton("MoveForward", BC_UP);
+  inputConfig->registerButton("MoveBack", BC_DOWN);
+  inputConfig->registerButton("StrafeLeft", BC_Q);
+  inputConfig->registerButton("StrafeRight", BC_E);
+  inputConfig->registerButton("TurnLeft", BC_A);
+  inputConfig->registerButton("TurnRight", BC_D);
+  inputConfig->registerButton("TurnLeft", BC_LEFT);
+  inputConfig->registerButton("TurnRight", BC_RIGHT);
   inputConfig->registerButton("FastMove", BC_LSHIFT);
   inputConfig->registerButton("Rotate", BC_MOUSE_LEFT);
   inputConfig->registerButton("ToggleMeleeWeapon", BC_1);

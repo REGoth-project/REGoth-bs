@@ -1,9 +1,9 @@
 #include "CharacterKeyboardInput.hpp"
-#include <components/GameWorld.hpp>
 #include <RTTI/RTTI_CharacterKeyboardInput.hpp>
 #include <components/Character.hpp>
 #include <components/CharacterAI.hpp>
 #include <components/CharacterEventQueue.hpp>
+#include <components/GameWorld.hpp>
 #include <exception/Throw.hpp>
 
 namespace REGoth
@@ -23,10 +23,12 @@ namespace REGoth
   {
     bs::Component::onInitialized();
 
-    mMoveForward = bs::VirtualButton("Forward");
-    mMoveBack    = bs::VirtualButton("Back");
-    mMoveLeft    = bs::VirtualButton("Left");
-    mMoveRight   = bs::VirtualButton("Right");
+    mMoveForward = bs::VirtualButton("MoveForward");
+    mMoveBack    = bs::VirtualButton("MoveBack");
+    mStrafeLeft  = bs::VirtualButton("StrafeLeft");
+    mStrafeRight = bs::VirtualButton("StrafeRight");
+    mTurnLeft    = bs::VirtualButton("TurnLeft");
+    mTurnRight   = bs::VirtualButton("TurnRight");
     mFastMove    = bs::VirtualButton("FastMove");
     mAction      = bs::VirtualButton("Action");
     mQuickSave   = bs::VirtualButton("QuickSave");
@@ -91,20 +93,14 @@ namespace REGoth
 
   void CharacterKeyboardInput::fixedUpdate()
   {
-    bool goingForward = bs::gVirtualInput().isButtonHeld(mMoveForward);
-    bool goingBack    = bs::gVirtualInput().isButtonHeld(mMoveBack);
-    bool goingLeft    = bs::gVirtualInput().isButtonHeld(mMoveLeft);
-    bool goingRight   = bs::gVirtualInput().isButtonHeld(mMoveRight);
-    bool fastMove     = bs::gVirtualInput().isButtonHeld(mFastMove);
-
     // Always keep the user controllers physics active
     mCharacterAI->activatePhysics();
 
-    if (goingForward)
+    if (bs::gVirtualInput().isButtonHeld(mMoveForward))
     {
       mCharacterAI->goForward();
     }
-    else if (goingBack)
+    else if (bs::gVirtualInput().isButtonHeld(mMoveBack))
     {
       mCharacterAI->goBackward();
     }
@@ -113,11 +109,11 @@ namespace REGoth
       mCharacterAI->stopMoving();
     }
 
-    if (goingLeft)
+    if (bs::gVirtualInput().isButtonHeld(mTurnLeft))
     {
       mCharacterAI->turnLeft();
     }
-    else if (goingRight)
+    else if (bs::gVirtualInput().isButtonHeld(mTurnRight))
     {
       mCharacterAI->turnRight();
     }
@@ -126,7 +122,7 @@ namespace REGoth
       mCharacterAI->stopTurning();
     }
 
-    if (fastMove)
+    if (bs::gVirtualInput().isButtonHeld(mFastMove))
     {
       mCharacterAI->fastMove(4.0f);
     }
