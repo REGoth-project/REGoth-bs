@@ -104,6 +104,16 @@ namespace REGoth
     {
       mCharacterAI->goBackward();
     }
+    else if (bs::gVirtualInput().isButtonHeld(mStrafeLeft))
+    {
+      // FIXME: Should be strafeLeft, but has to be strafeRight here since the world is mirrored
+      mCharacterAI->strafeRight();
+    }
+    else if (bs::gVirtualInput().isButtonHeld(mStrafeRight))
+    {
+      // FIXME: Should be strafeRight, but has to be strafeLeft here since the world is mirrored
+      mCharacterAI->strafeLeft();
+    }
     else
     {
       mCharacterAI->stopMoving();
@@ -111,11 +121,13 @@ namespace REGoth
 
     if (bs::gVirtualInput().isButtonHeld(mTurnLeft))
     {
-      mCharacterAI->turnLeft();
+      // FIXME: Should be turnLeft, but has to be turnRight here since the world is mirrored
+      mCharacterAI->turnRight();
     }
     else if (bs::gVirtualInput().isButtonHeld(mTurnRight))
     {
-      mCharacterAI->turnRight();
+      // FIXME: Should be turnRight, but has to be turnLeft here since the world is mirrored
+      mCharacterAI->turnLeft();
     }
     else
     {

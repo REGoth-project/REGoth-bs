@@ -131,18 +131,34 @@ namespace REGoth
   {
     if (!isStateSwitchAllowed()) return false;
 
-    // TODO: Implement
-
-    return true;
+    switch (mWalkMode)
+    {
+      case AI::WalkMode::Run:
+        return mVisual->tryPlayTransitionAnimationTo("T_RUNSTRAFEL");
+      case AI::WalkMode::Walk:
+        return mVisual->tryPlayTransitionAnimationTo("T_WALKSTRAFEL");
+      case AI::WalkMode::Sneak:
+        return mVisual->tryPlayTransitionAnimationTo("T_SNEAKSTRAFEL");
+      default:
+        return false;
+    }
   }
 
   bool CharacterAI::strafeRight()
   {
     if (!isStateSwitchAllowed()) return false;
 
-    // TODO: Implement
-
-    return true;
+    switch (mWalkMode)
+    {
+      case AI::WalkMode::Run:
+        return mVisual->tryPlayTransitionAnimationTo("T_RUNSTRAFER");
+      case AI::WalkMode::Walk:
+        return mVisual->tryPlayTransitionAnimationTo("T_WALKSTRAFER");
+      case AI::WalkMode::Sneak:
+        return mVisual->tryPlayTransitionAnimationTo("T_SNEAKSTRAFER");
+      default:
+        return false;
+    }
   }
 
   bool CharacterAI::turnLeft()
@@ -281,11 +297,11 @@ namespace REGoth
         break;
 
       case TurnDirection::Left:
-        frameTurn = TURN_SPEED_NORMAL;
+        frameTurn = -TURN_SPEED_NORMAL;
         break;
 
       case TurnDirection::Right:
-        frameTurn = -TURN_SPEED_NORMAL;
+        frameTurn = TURN_SPEED_NORMAL;
         break;
     }
 
