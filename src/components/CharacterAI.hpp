@@ -162,7 +162,7 @@ namespace REGoth
     void tryToggleWalking();
 
     /**
-     * Functionality attached to the "Toggle Sneak"-Button game by default).
+     * Functionality attached to the "Toggle Sneak"-Button.
      * Toggling between running and walking is only possible if the character is
      * currently not swimming, diving or some other state that is not "on foot".
      * If the current state is neither Running, nor Sneaking, the Running state
@@ -171,11 +171,17 @@ namespace REGoth
     void tryToggleSneaking();
 
     /**
+     * Functionality attached to the "Toggle Melee Weapon"-Button (1 in the original
+     * game). If no weapon is equipped, this will make the character go into fist mode.
+     */
+    void tryToggleMeleeWeapon();
+
+    /**
      * Sets the kind of weapon this character should pull. Monsters need to have
      * this set to "fist" or they won't be able to move since all their animations
      * are for that mode only.
      */
-    void setWeaponMode(AI::WeaponMode mode);
+    bool changeWeaponMode(AI::WeaponMode mode);
 
   private:
     /**

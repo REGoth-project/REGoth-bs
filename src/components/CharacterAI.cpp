@@ -404,9 +404,32 @@ namespace REGoth
     return wasAllowed;
   }
 
-  void CharacterAI::setWeaponMode(AI::WeaponMode mode)
+  bool CharacterAI::changeWeaponMode(AI::WeaponMode mode)
   {
-    mWeaponMode = mode;
+    bs::String stateTarget = AnimationState::constructStateAnimationName(mode, mWalkMode, "");
+
+    bool wasAllowed = mVisual->tryPlayTransitionAnimationTo(stateTarget);
+
+    if (wasAllowed)
+    {
+      mWeaponMode = mode;
+    }
+
+    if (!wasAllowed)
+    {
+      // FIXME: We're missing some aniAliases, for example, "T_RUN_2_SNEAK" exists,
+      //        and "T_SNEAK_2_RUN" is just the same animation but in reverse. This
+      //        is defined using an aniAlias, which does not seem to be implemented.
+      bs::HAnimationClip c = mVisual->findAnimationClip(stateTarget);
+
+      if (c)
+      {
+        mVisual->playAnimation(c);
+        mWeaponMode = mode;
+      }
+    }
+
+    return wasAllowed;
   }
 
   void CharacterAI::tryToggleWalking()
@@ -450,6 +473,20 @@ namespace REGoth
       default:
         // Keep current Walk-Mode
         break;
+    }
+  }
+
+  void CharacterAI::tryToggleMeleeWeapon()
+  {
+    switch (mWeaponMode)
+    {
+    case AI::WeaponMode::None:
+      changeWeaponMode(AI::WeaponMode::Fist);
+      break;
+
+    default:
+      changeWeaponMode(AI::WeaponMode::None);
+      break;
     }
   }
 

@@ -23,17 +23,18 @@ namespace REGoth
   {
     bs::Component::onInitialized();
 
-    mMoveForward    = bs::VirtualButton("MoveForward");
-    mMoveBack       = bs::VirtualButton("MoveBack");
-    mStrafeLeft     = bs::VirtualButton("StrafeLeft");
-    mStrafeRight    = bs::VirtualButton("StrafeRight");
-    mTurnLeft       = bs::VirtualButton("TurnLeft");
-    mTurnRight      = bs::VirtualButton("TurnRight");
-    mFastMove       = bs::VirtualButton("FastMove");
-    mToggleWalking  = bs::VirtualButton("ToggleWalking");
-    mToggleSneaking = bs::VirtualButton("ToggleSneaking");
-    mAction         = bs::VirtualButton("Action");
-    mQuickSave      = bs::VirtualButton("QuickSave");
+    mMoveForward       = bs::VirtualButton("MoveForward");
+    mMoveBack          = bs::VirtualButton("MoveBack");
+    mStrafeLeft        = bs::VirtualButton("StrafeLeft");
+    mStrafeRight       = bs::VirtualButton("StrafeRight");
+    mTurnLeft          = bs::VirtualButton("TurnLeft");
+    mTurnRight         = bs::VirtualButton("TurnRight");
+    mFastMove          = bs::VirtualButton("FastMove");
+    mToggleWalking     = bs::VirtualButton("ToggleWalking");
+    mToggleSneaking    = bs::VirtualButton("ToggleSneaking");
+    mToggleMeleeWeapon = bs::VirtualButton("ToggleMeleeWeapon");
+    mAction            = bs::VirtualButton("Action");
+    mQuickSave         = bs::VirtualButton("QuickSave");
 
     mCharacter = SO()->getComponent<Character>();
 
@@ -95,6 +96,11 @@ namespace REGoth
     if (bs::gVirtualInput().isButtonDown(mToggleSneaking))
     {
       mCharacterAI->tryToggleSneaking();
+    }
+
+    if (bs::gVirtualInput().isButtonDown(mToggleMeleeWeapon))
+    {
+      mCharacterAI->tryToggleMeleeWeapon();
     }
 
     if (bs::gVirtualInput().isButtonDown(mQuickSave))

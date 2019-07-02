@@ -174,7 +174,7 @@ namespace REGoth
     switch ((AI::WeaponMessage::WeaponSubType)message.subType)
     {
       case AI::WeaponMessage::ST_ChooseWeapon:
-        mCharacterAI->setWeaponMode(message.targetMode);
+        mCharacterAI->changeWeaponMode(message.targetMode);
         isDone = true;
         break;
       default:
