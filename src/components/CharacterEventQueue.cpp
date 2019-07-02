@@ -229,7 +229,7 @@ namespace REGoth
         break;
 
       case AI::MovementMessage::ST_SetWalkMode:
-        mCharacterAI->setWalkMode(message.walkMode);
+        mCharacterAI->changeWalkMode(message.walkMode);
         isDone = true;
         break;
 

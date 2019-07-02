@@ -147,8 +147,28 @@ namespace REGoth
 
     /**
      * Sets how this character should move, like walking, running, sneaking.
+     *
+     * @return Whether the state change was possible
      */
-    void setWalkMode(AI::WalkMode walkMode);
+    bool changeWalkMode(AI::WalkMode walkMode);
+
+    /**
+     * Functionality attached to the "Toggle Walking"-Button (Shift in the original
+     * game by default). Toggling between running and walking is only possible if
+     * the character is currently not swimming, diving or some other state that is
+     * not "on foot". If the current state is neither Running, nor Walking, the
+     * Running state is entered.
+     */
+    void tryToggleWalking();
+
+    /**
+     * Functionality attached to the "Toggle Sneak"-Button game by default).
+     * Toggling between running and walking is only possible if the character is
+     * currently not swimming, diving or some other state that is not "on foot".
+     * If the current state is neither Running, nor Sneaking, the Running state
+     * is entered.
+     */
+    void tryToggleSneaking();
 
     /**
      * Sets the kind of weapon this character should pull. Monsters need to have

@@ -125,6 +125,8 @@ void REGothEngine::setupInput()
   inputConfig->registerButton("TurnLeft", BC_LEFT);
   inputConfig->registerButton("TurnRight", BC_RIGHT);
   inputConfig->registerButton("FastMove", BC_LSHIFT);
+  inputConfig->registerButton("ToggleWalking", BC_RSHIFT);
+  inputConfig->registerButton("ToggleSneaking", BC_X);
   inputConfig->registerButton("Rotate", BC_MOUSE_LEFT);
   inputConfig->registerButton("ToggleMeleeWeapon", BC_1);
   inputConfig->registerButton("Action", BC_LCONTROL);

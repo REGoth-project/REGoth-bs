@@ -23,15 +23,17 @@ namespace REGoth
   {
     bs::Component::onInitialized();
 
-    mMoveForward = bs::VirtualButton("MoveForward");
-    mMoveBack    = bs::VirtualButton("MoveBack");
-    mStrafeLeft  = bs::VirtualButton("StrafeLeft");
-    mStrafeRight = bs::VirtualButton("StrafeRight");
-    mTurnLeft    = bs::VirtualButton("TurnLeft");
-    mTurnRight   = bs::VirtualButton("TurnRight");
-    mFastMove    = bs::VirtualButton("FastMove");
-    mAction      = bs::VirtualButton("Action");
-    mQuickSave   = bs::VirtualButton("QuickSave");
+    mMoveForward    = bs::VirtualButton("MoveForward");
+    mMoveBack       = bs::VirtualButton("MoveBack");
+    mStrafeLeft     = bs::VirtualButton("StrafeLeft");
+    mStrafeRight    = bs::VirtualButton("StrafeRight");
+    mTurnLeft       = bs::VirtualButton("TurnLeft");
+    mTurnRight      = bs::VirtualButton("TurnRight");
+    mFastMove       = bs::VirtualButton("FastMove");
+    mToggleWalking  = bs::VirtualButton("ToggleWalking");
+    mToggleSneaking = bs::VirtualButton("ToggleSneaking");
+    mAction         = bs::VirtualButton("Action");
+    mQuickSave      = bs::VirtualButton("QuickSave");
 
     mCharacter = SO()->getComponent<Character>();
 
@@ -83,6 +85,16 @@ namespace REGoth
         eventQueue->pushTalkToCharacter(thisCharacter);
         break;
       }
+    }
+
+    if (bs::gVirtualInput().isButtonDown(mToggleWalking))
+    {
+      mCharacterAI->tryToggleWalking();
+    }
+
+    if (bs::gVirtualInput().isButtonDown(mToggleSneaking))
+    {
+      mCharacterAI->tryToggleSneaking();
     }
 
     if (bs::gVirtualInput().isButtonDown(mQuickSave))
