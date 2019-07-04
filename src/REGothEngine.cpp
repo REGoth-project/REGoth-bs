@@ -190,6 +190,11 @@ void REGothEngine::setShaders()
 
 void REGothEngine::run()
 {
+  // FIXME: This is a workaround for the camera not being able to move caused by
+  //        making bs::SceneManager::findComponent work in the zen loader.
+  mMainCamera->SO()->setActive(false);
+  mMainCamera->SO()->setActive(true);
+
   bs::gDebug().logDebug("[REGothEngine] Running mainloop now!");
 
   bs::Application::instance().runMainLoop();
