@@ -1,3 +1,4 @@
+#pragma once
 #include "RTTIUtil.hpp"
 #include <components/EventQueue.hpp>
 

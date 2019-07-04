@@ -1,3 +1,4 @@
+#pragma once
 #include <AI/EventMessage.hpp>
 #include <RTTI/RTTIUtil.hpp>
 
