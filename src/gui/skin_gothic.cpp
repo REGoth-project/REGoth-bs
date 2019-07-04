@@ -96,7 +96,7 @@ namespace REGoth
 
     bs::GUIElementStyle subtitleBox = baseStyle;
     subtitleBox.normal.texture      = gOriginalGameResources().sprite("DLG_CHOICE.TGA");
-    skin->setStyle("GothicDialogueBoxBackground", labelLargeHighlighted);
+    skin->setStyle("GothicDialogueBoxBackground", subtitleBox);
 
     skin->setStyle("GothicSubtitleBoxCharacterName", labelDefaultHighlighted);
     skin->setStyle("GothicSubtitleBoxText", labelDefault);

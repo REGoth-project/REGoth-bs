@@ -17,11 +17,9 @@ namespace REGoth
   {
     setName("UISubtitleBox");
 
-    mBackgroundBox =
-        layout().addNewElement<bs::GUITexture>(gOriginalGameResources().sprite("DLG_CHOICE.TGA"));
+    mBackgroundBox = layout().addNewElement<bs::GUITexture>("GothicDialogueBoxBackground");
 
-    mText =
-        layout().addNewElement<bs::GUILabel>(bs::HString("Hello World!"));
+    mText = layout().addNewElement<bs::GUILabel>(bs::HString("Hello World!"));
   }
 
   UISubtitleBox::~UISubtitleBox()
