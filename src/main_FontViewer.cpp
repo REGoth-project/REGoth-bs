@@ -34,7 +34,7 @@ public:
     bs::HGUIWidget gui = guiSO->addComponent<bs::CGUIWidget>(mMainCamera);
 
     // gui->setSkin(bs::BuiltinResources::instance().getGUISkin());
-    gui->setSkin(REGoth::GUI::createSkin_Gothic());
+    gui->setSkin(REGoth::GUI::getGothicStyleSkin());
 
     bs::GUIPanel* mainPanel = gui->getPanel();
     bs::GUILayoutY* layoutY = mainPanel->addNewElement<bs::GUILayoutY>();

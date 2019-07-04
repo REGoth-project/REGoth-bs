@@ -10,6 +10,6 @@ namespace REGoth
      *
      * See the internals for a list of all skins registered by this function.
      */
-    bs::HGUISkin createSkin_Gothic();
+    bs::HGUISkin getGothicStyleSkin();
   }
 }

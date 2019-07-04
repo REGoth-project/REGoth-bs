@@ -41,7 +41,7 @@ namespace REGoth
     return newSkin;
   }
 
-  bs::HGUISkin GUI::createSkin_Gothic()
+  bs::HGUISkin GUI::getGothicStyleSkin()
   {
     if (s_SkinGothic)
     {

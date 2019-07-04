@@ -15,7 +15,7 @@ namespace REGoth
     setName("UIElement");
 
     auto guiWidget = SO()->addComponent<bs::CGUIWidget>(camera);
-    guiWidget->setSkin(REGoth::GUI::createSkin_Gothic());
+    guiWidget->setSkin(REGoth::GUI::getGothicStyleSkin());
 
     mGuiLayout = guiWidget->getPanel();
   }
