@@ -28,6 +28,19 @@ namespace REGoth
     }
   }
 
+  static bs::HGUISkin cloneGuiSkin(bs::HGUISkin skin)
+  {
+    auto styleNames = skin->getStyleNames();
+    auto newSkin = bs::GUISkin::create();
+
+    for (const bs::String& n : styleNames)
+    {
+      newSkin->setStyle(n, *skin->getStyle(n));
+    }
+
+    return newSkin;
+  }
+
   bs::HGUISkin GUI::createSkin_Gothic()
   {
     if (s_SkinGothic)
@@ -36,7 +49,7 @@ namespace REGoth
       return s_SkinGothic;
     }
 
-    bs::HGUISkin skin = bs::GUISkin::create();
+    bs::HGUISkin skin = cloneGuiSkin(bs::gBuiltinResources().getGUISkin());
 
     bs::HFont fontGothicDefault      = loadFont("FONT_DEFAULT.FNT");
     bs::HFont fontGothic10Book       = loadFont("FONT_10_BOOK.FNT");
@@ -88,12 +101,14 @@ namespace REGoth
     skin->setStyle("GothicSubtitleBoxCharacterName", labelDefaultHighlighted);
     skin->setStyle("GothicSubtitleBoxText", labelDefault);
 
-    // skin->setStyle("Button", const GUIElementStyle &style)
+    auto button = *skin->getStyle("Button");
+    button.font = fontGothicOld10WhiteHi;
+    button.fontSize = 17;
+    skin->setStyle("Button", button);
 
     // Cache the skin for later use
     s_SkinGothic = skin;
 
-    return bs::BuiltinResources::instance().getGUISkin();
-    // return skin;
+    return skin;
   }
 }  // namespace REGoth
