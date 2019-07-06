@@ -117,14 +117,14 @@ namespace REGoth
 
     bs::String anim = AnimationState::constructStateAnimationName(mWeaponMode, mWalkMode, "L");
 
-    return mVisual->tryPlayTransitionAnimationTo(anim);
+    return tryPlayTransitionAnimationTo(anim);
   }
 
   bool CharacterAI::goBackward()
   {
     if (!isStateSwitchAllowed()) return false;
 
-    return mVisual->tryPlayTransitionAnimationTo("T_JUMPB");
+    return tryPlayTransitionAnimationTo("T_JUMPB");
   }
 
   bool CharacterAI::strafeLeft()
@@ -134,11 +134,11 @@ namespace REGoth
     switch (mWalkMode)
     {
       case AI::WalkMode::Run:
-        return mVisual->tryPlayTransitionAnimationTo("T_RUNSTRAFEL");
+        return tryPlayTransitionAnimationTo("T_RUNSTRAFEL");
       case AI::WalkMode::Walk:
-        return mVisual->tryPlayTransitionAnimationTo("T_WALKSTRAFEL");
+        return tryPlayTransitionAnimationTo("T_WALKSTRAFEL");
       case AI::WalkMode::Sneak:
-        return mVisual->tryPlayTransitionAnimationTo("T_SNEAKSTRAFEL");
+        return tryPlayTransitionAnimationTo("T_SNEAKSTRAFEL");
       default:
         return false;
     }
@@ -151,11 +151,11 @@ namespace REGoth
     switch (mWalkMode)
     {
       case AI::WalkMode::Run:
-        return mVisual->tryPlayTransitionAnimationTo("T_RUNSTRAFER");
+        return tryPlayTransitionAnimationTo("T_RUNSTRAFER");
       case AI::WalkMode::Walk:
-        return mVisual->tryPlayTransitionAnimationTo("T_WALKSTRAFER");
+        return tryPlayTransitionAnimationTo("T_WALKSTRAFER");
       case AI::WalkMode::Sneak:
-        return mVisual->tryPlayTransitionAnimationTo("T_SNEAKSTRAFER");
+        return tryPlayTransitionAnimationTo("T_SNEAKSTRAFER");
       default:
         return false;
     }
@@ -184,13 +184,11 @@ namespace REGoth
 
     bs::String anim = AnimationState::constructStateAnimationName(mWeaponMode, mWalkMode, "");
 
-    if(mVisual->tryPlayTransitionAnimationTo(anim))
-      return true;
+    if (tryPlayTransitionAnimationTo(anim)) return true;
 
     // The "STAND" state doesn't really exist but some animation reference it, like
     // the animation "T_JUMP_2_STAND".
-    if (mVisual->tryPlayTransitionAnimationTo("S_STAND"))
-      return true;
+    if (tryPlayTransitionAnimationTo("S_STAND")) return true;
 
     return false;
   }
@@ -211,7 +209,54 @@ namespace REGoth
   {
     if (!isStateSwitchAllowed()) return false;
 
-    return mVisual->tryPlayTransitionAnimationTo("S_JUMP");
+    return tryPlayTransitionAnimationTo("S_JUMP");
+  }
+
+  bool CharacterAI::tryPlayTransitionAnimationTo(const bs::String& state)
+  {
+    bs::String playingNow = mVisual->getPlayingAnimationName();
+    auto clipPlayingNow   = mVisual->findAnimationClip(playingNow);
+
+    bs::String animToPlay = mVisual->findAnimationToTransitionTo(state);
+    auto clip             = mVisual->findAnimationClip(animToPlay);
+
+    // Already in target state
+    if (clip == clipPlayingNow) return true;
+
+    // If there is no clip, then the transition isn't meant to be possible.
+    // That also includes the empty string.
+    if (!clip)
+    {
+      // However, some animations refer to a special "Stand" state, which doesn't exist
+      // but rather means the current idle animation, if the character is in running
+      // or walking mode.
+      if (isStanding())
+      {
+        animToPlay = mVisual->findAnimationToTransitionTo("S_STAND", state);
+        clip       = mVisual->findAnimationClip(animToPlay);
+      }
+    }
+
+    if (!clip) return false;
+
+    if (!mVisual->isAnimationPlaying(clip))
+    {
+      mVisual->playAnimationClip(clip);
+    }
+
+    return true;
+  }
+
+  bool CharacterAI::isStanding() const
+  {
+    bs::String currentAnimation = mVisual->getPlayingAnimationName();
+    bs::String currentState     = AnimationState::getStateName(currentAnimation);
+
+    if (currentState == "RUN") return true;
+
+    if (currentState == "WALK") return true;
+
+    return false;
   }
 
   bool CharacterAI::isStateSwitchAllowed()
@@ -395,7 +440,7 @@ namespace REGoth
   {
     bs::String stateTarget = AnimationState::constructStateAnimationName(mWeaponMode, walkMode, "");
 
-    bool wasAllowed = mVisual->tryPlayTransitionAnimationTo(stateTarget);
+    bool wasAllowed = tryPlayTransitionAnimationTo(stateTarget);
 
     if (wasAllowed)
     {
@@ -423,7 +468,7 @@ namespace REGoth
   {
     bs::String stateTarget = AnimationState::constructStateAnimationName(mode, mWalkMode, "");
 
-    bool wasAllowed = mVisual->tryPlayTransitionAnimationTo(stateTarget);
+    bool wasAllowed = tryPlayTransitionAnimationTo(stateTarget);
 
     if (wasAllowed)
     {

@@ -184,6 +184,12 @@ namespace REGoth
      */
     bool changeWeaponMode(AI::WeaponMode mode);
 
+    /**
+     * @return Whether the character is currently standing and idling. Only possible during
+     *         the walkmodes "RUN" or "WALK".
+     */
+    bool isStanding() const;
+
   private:
     /**
      * Checks whether the character is so far away from the player that it should
@@ -219,6 +225,15 @@ namespace REGoth
      * Expected to be called inside fixedUpdate().
      */
     void handleTurning();
+
+    /**
+     * Tries to transition to the given animation name.
+     *
+     * @param  Animation to transition to, eg `S_RUNL` or `T_JUMPB`.
+     *
+     * @return true, if the transition was possible.
+     */
+    bool tryPlayTransitionAnimationTo(const bs::String& state);
 
     // Visual attached to this character
     HVisualCharacter mVisual;

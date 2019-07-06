@@ -120,13 +120,24 @@ namespace REGoth
     void playDefaultIdleAnimation();
 
     /**
-     * Tries to transition to the given animation name.
+     * Finds the correct animation to play now which will get the visual from the
+     * state it is currently in into the given target state.
      *
-     * @param  Animation to transition to, eg `S_RUNL` or `T_JUMPB`.
+     * For example, given the visual is currently in state `S_RUN` and is requested
+     * to got to state `S_RUNL`, then this method will return `T_RUN_2_RUNL`.
      *
-     * @return true, if the transition was possible.
+     * If there is no valid transition animation for going into the requested target
+     * state, an empty string is returned. This means it's impossible for the visual
+     * right now to go to that state, e.g. because it's falling and needs to land first.
+     *
+     * Some animations do not need any transitions, or maybe no animation is currently
+     * being played, for which the target states animation name is returned.
+     *
+     * @return Name of the animation to play to reach the given state. Empty string
+     *         if the transition is not possible.
      */
-    bool tryPlayTransitionAnimationTo(const bs::String& state);
+    bs::String findAnimationToTransitionTo(const bs::String& stateAnim) const;
+    bs::String findAnimationToTransitionTo(const bs::String& fromAnim, const bs::String& toAnim) const;
 
     /**
      * @return Whether the given animation is currently playing
@@ -217,25 +228,6 @@ namespace REGoth
      * @return Whether the given mesh is registered inside the currently set model script
      */
     bool isMeshRegisteredInModelScript(BsZenLib::Res::HMeshWithMaterials mesh);
-
-    /**
-     * Finds the correct animation to play now which will get the visual from the
-     * state it is currently in into the given target state.
-     *
-     * For example, given the visual is currently in state `S_RUN` and is requested
-     * to got to state `S_RUNL`, then this method will return `T_RUN_2_RUNL`.
-     *
-     * If there is no valid transition animation for going into the requested target
-     * state, an empty string is returned. This means it's impossible for the visual
-     * right now to go to that state, e.g. because it's falling and needs to land first.
-     *
-     * Some animations do not need any transitions, or maybe no animation is currently
-     * being played, for which the target states animation name is returned.
-     *
-     * @return Name of the animation to play to reach the given state. Empty string
-     *         if the transition is not possible.
-     */
-    bs::String findAnimationToTransitionToState(const bs::String& state);
 
     /**
      * Deletes all sub objects created by this component (ie. for rendering)

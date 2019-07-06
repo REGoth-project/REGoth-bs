@@ -333,60 +333,39 @@ namespace REGoth
     return {};
   }
 
-  bool VisualSkeletalAnimation::tryPlayTransitionAnimationTo(const bs::String& state)
+  bs::String VisualSkeletalAnimation::findAnimationToTransitionTo(const bs::String& stateAnim) const
   {
-    throwIfNotReadyForRendering();
+    bs::String stateNow = getStateFromPlayingAnimation();
 
-    bs::String animToPlay   = findAnimationToTransitionToState(state);
-    auto clip = findAnimationClip(animToPlay);
-
-    // If there is no clip, then the transition isn't meant to be possible
-    // That also includes the empty string.
-    if (!clip)
+    // getStateFromPlayingAnimation returns a string without the leading S_ 
+    if (!stateNow.empty())
     {
-      return false;
+      stateNow = "S_" + stateNow;
     }
 
-    if (!isAnimationPlaying(clip))
-    {
-      playAnimationClip(clip);
-    }
-
-    return true;
+    return findAnimationToTransitionTo(stateNow, stateAnim);
   }
 
-  bs::String VisualSkeletalAnimation::findAnimationToTransitionToState(const bs::String& state)
+  bs::String VisualSkeletalAnimation::findAnimationToTransitionTo(const bs::String& fromAnim,
+                                                                  const bs::String& toAnim) const
   {
     // No animation being played should not happen during normal operation, but if it does,
     // don't hang up the visual here. I've only see this happen after deserialization but that
     // might have been an other issue.
     if (!mSubAnimation->isPlaying())
     {
-      return state;
+      return toAnim;
     }
 
     // Some animations are directly reachable, like S_RUN -> T_JUMPB. Whether the transition makes
     // sense has to be checked elsewhere.
-    if (!AnimationState::isTransitionNeeded(state))
+    if (!AnimationState::isTransitionNeeded(toAnim))
     {
-      return state;
+      return toAnim;
     }
 
-    bs::String from = getStateFromPlayingAnimation();
-
-    // Can't transition if not currently in any state. Might be inside a transition.
-    if (from.empty())
-    {
-      return "";
-    }
-
-    bs::String to = AnimationState::getStateName(state);
-
-    // Target animation is not a state name?
-    if (to.empty())
-    {
-      return "";
-    }
+    bs::String from = AnimationState::getStateName(fromAnim);
+    bs::String to   = AnimationState::getStateName(toAnim);
 
     bs::String transition =
         AnimationState::constructTransitionAnimationName(AI::WeaponMode::None, from, to);
