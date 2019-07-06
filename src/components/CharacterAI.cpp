@@ -184,7 +184,15 @@ namespace REGoth
 
     bs::String anim = AnimationState::constructStateAnimationName(mWeaponMode, mWalkMode, "");
 
-    return mVisual->tryPlayTransitionAnimationTo(anim);
+    if(mVisual->tryPlayTransitionAnimationTo(anim))
+      return true;
+
+    // The "STAND" state doesn't really exist but some animation reference it, like
+    // the animation "T_JUMP_2_STAND".
+    if (mVisual->tryPlayTransitionAnimationTo("S_STAND"))
+      return true;
+
+    return false;
   }
 
   bool CharacterAI::stopTurning()

@@ -245,7 +245,11 @@ namespace REGoth
     bs::AnimationClipState state;
     mSubAnimation->getState(clip, state);
 
-    if (command == "PLAYCLIP")
+    if (command == "STOP")
+    {
+      playAnimationClip({});
+    }
+    else if (command == "PLAYCLIP")
     {
       // gDebug().logDebug("[VisualSkeletalAnimation] " + SO()->getName() + " - " + clip->getName() +
       //                   ": event PLAYCLIP: " + action);
@@ -301,7 +305,6 @@ namespace REGoth
     }
     else
     {
-      bs::gDebug().logDebug("Stop");
       mSubAnimation->stopAll();
     }
   }
