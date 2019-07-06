@@ -7,7 +7,7 @@
 #include <components/CharacterAI.hpp>
 #include <components/CharacterEventQueue.hpp>
 #include <components/CharacterKeyboardInput.hpp>
-#include <components/GameUI.hpp>
+#include <components/GameplayUI.hpp>
 #include <components/GameWorld.hpp>
 #include <components/ThirdPersonCamera.hpp>
 #include <exception/Throw.hpp>
@@ -82,7 +82,7 @@ public:
 
     mThirdPersonCamera->follow(hero);
 
-    REGoth::GameUI::createGlobal(mMainCamera);
+    REGoth::GameplayUI::createGlobal(mMainCamera);
   }
 
 protected:

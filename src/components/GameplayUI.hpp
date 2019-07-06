@@ -13,8 +13,8 @@ namespace REGoth
   class UIFocusText;
   using HUIFocusText = bs::GameObjectHandle<UIFocusText>;
 
-  class GameUI;
-  using HGameUI = bs::GameObjectHandle<GameUI>;
+  class GameplayUI;
+  using HGameplayUI = bs::GameObjectHandle<GameplayUI>;
 
   /**
    * Gameplay UI
@@ -38,11 +38,11 @@ namespace REGoth
    *
    * Each of those specialized UI components is then attached to a new scene
    * object to build a tree-like structure with the scene object holding the
-   * GameUI as base.
+   * GameplayUI as base.
    *
    * The structure could look as follows (this is only an example):
    *
-   *      +-- GameUI
+   *      +-- GameplayUI
    *          |
    *          +-- HUD
    *          |   +-- Bar (Health)
@@ -56,20 +56,20 @@ namespace REGoth
    * While being a separation of concerns, this structure makes it possible to
    * use some UIs in different contexts. For example, the ingame menu is also
    * the main menu you see when you have just started the game. Then, no world
-   * is loaded and no gameplay session exists, thus there is no GameUI.
+   * is loaded and no gameplay session exists, thus there is no GameplayUI.
    *
    */
-  class GameUI : public UIElement
+  class GameplayUI : public UIElement
   {
   public:
-    GameUI(const bs::HSceneObject& parent, bs::HCamera camera);
-    virtual ~GameUI();
+    GameplayUI(const bs::HSceneObject& parent, bs::HCamera camera);
+    virtual ~GameplayUI();
 
     /**
-     * Create the global GameUI-object. After this has been called,
+     * Create the global GameplayUI-object. After this has been called,
      * the handle returned by gGameUI() will be valid.
      *
-     * Throws if the GameUI has been created before.
+     * Throws if the GameplayUI has been created before.
      */
     static void createGlobal(bs::HCamera camera);
 
@@ -106,19 +106,19 @@ namespace REGoth
 
   private:
   public:
-    REGOTH_DECLARE_RTTI(GameUI)
+    REGOTH_DECLARE_RTTI(GameplayUI)
 
   protected:
-    GameUI() = default;  // For RTTI
+    GameplayUI() = default;  // For RTTI
   };
 
   /**
-   * Global access to the GameUI. While this is global, it should not be accessed
+   * Global access to the GameplayUI. While this is global, it should not be accessed
    * directly from within game logic code where possible.
    *
-   * Only valid after GameUI::createGlobal() has been called.
+   * Only valid after GameplayUI::createGlobal() has been called.
    *
-   * Throws, if GameUI::createGlobal() has not been called.
+   * Throws, if GameplayUI::createGlobal() has not been called.
    */
-  HGameUI gGameUI();
+  HGameplayUI gGameplayUI();
 }  // namespace REGoth

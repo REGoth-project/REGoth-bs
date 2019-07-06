@@ -6,7 +6,7 @@
 #include <Resources/BsBuiltinResources.h>
 #include <Scene/BsSceneObject.h>
 #include <components/Focusable.hpp>
-#include <components/GameUI.hpp>
+#include <components/GameplayUI.hpp>
 #include <components/GameWorld.hpp>
 #include <components/Item.hpp>
 #include <components/UIDialogueChoice.hpp>
@@ -57,18 +57,18 @@ public:
     item1->SO()->setPosition(bs::Vector3(1, 0.2, 0));
     item2->SO()->setPosition(bs::Vector3(-1, 0, 0));
 
-    GameUI::createGlobal(mMainCamera);
+    GameplayUI::createGlobal(mMainCamera);
 
-    gGameUI()->focusText()->putTextAbove(item1->SO()->getComponent<REGoth::Focusable>(),
+    gGameplayUI()->focusText()->putTextAbove(item1->SO()->getComponent<REGoth::Focusable>(),
                                          "Hello Focus!");
 
-    gGameUI()->subtitleBox()->open();
+    gGameplayUI()->subtitleBox()->open();
 
-    gGameUI()->choices()->addChoice({"X", "Hello World!", 0});
-    gGameUI()->choices()->addChoice({"X", "This is a test!", 0});
-    gGameUI()->choices()->addChoice({"X", "What is this?", 0});
-    gGameUI()->choices()->addChoice({"X", "I'm hungry!", 0});
-    gGameUI()->choices()->addChoice({"X", "I'm not hungry!", 0});
+    gGameplayUI()->choices()->addChoice({"X", "Hello World!", 0});
+    gGameplayUI()->choices()->addChoice({"X", "This is a test!", 0});
+    gGameplayUI()->choices()->addChoice({"X", "What is this?", 0});
+    gGameplayUI()->choices()->addChoice({"X", "I'm hungry!", 0});
+    gGameplayUI()->choices()->addChoice({"X", "I'm not hungry!", 0});
 
     mMainCamera->SO()->setPosition(bs::Vector3(0, 1, 3));
   }

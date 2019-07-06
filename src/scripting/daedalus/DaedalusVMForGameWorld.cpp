@@ -16,7 +16,7 @@
 #include <scripting/ScriptSymbolQueries.hpp>
 
 // TODO: Refactor, so we don't access deep into the UI code here for dialogues
-#include <components/GameUI.hpp>
+#include <components/GameplayUI.hpp>
 
 namespace REGoth
 {
@@ -1023,7 +1023,7 @@ namespace REGoth
     {
       // bs::gDebug().logWarning("[External] Using external stub: InfoManager_HasFinished");
 
-      if (gGameUI()->isDialogueInProgress())
+      if (gGameplayUI()->isDialogueInProgress())
       {
         mStack.pushInt(0);
       }

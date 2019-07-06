@@ -69,8 +69,8 @@ add_library(REGothEngine
   components/Focusable.cpp
   components/StoryInformation.hpp
   components/StoryInformation.cpp
-  components/GameUI.hpp
-  components/GameUI.cpp
+  components/GameplayUI.hpp
+  components/GameplayUI.cpp
   components/UIElement.hpp
   components/UIElement.cpp
   components/UIFocusText.hpp

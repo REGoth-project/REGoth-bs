@@ -7,7 +7,7 @@
 #include <scripting/ScriptVMForGameWorld.hpp>
 
 // TODO: Refactor, so we don't access deep into the UI code here for dialogues
-#include <components/GameUI.hpp>
+#include <components/GameplayUI.hpp>
 #include <components/UIDialogueChoice.hpp>
 
 namespace REGoth
@@ -106,14 +106,14 @@ namespace REGoth
 
   void StoryInformation::startDialogueWith(HCharacter other)
   {
-    gGameUI()->startDialogue();
+    gGameplayUI()->startDialogue();
 
     for (auto info : gatherAvailableDialogueLines(other))
     {
       addChoice(info->name, info->choiceText, info->informationFunction);
     }
 
-    gGameUI()->choices()->setOnChoiceCallback([this, other](UIDialogueChoice::Choice choice) {
+    gGameplayUI()->choices()->setOnChoiceCallback([this, other](UIDialogueChoice::Choice choice) {
       bs::gDebug().logDebug("[StoryInformation] Choice taken: " + choice.text + " (" +
                             choice.instanceName + ")");
 
@@ -139,7 +139,7 @@ namespace REGoth
 
   void StoryInformation::stopDialogueWith(HCharacter other)
   {
-    gGameUI()->stopDialogue();
+    gGameplayUI()->stopDialogue();
   }
 
   void StoryInformation::addChoice(const bs::String& instanceName, const bs::String& text,
@@ -150,12 +150,12 @@ namespace REGoth
     c.text           = text;
     c.scriptFunction = infoFunction;
 
-    gGameUI()->choices()->addChoice(c);
+    gGameplayUI()->choices()->addChoice(c);
   }
 
   void StoryInformation::clearChoices()
   {
-    gGameUI()->choices()->clearChoices();
+    gGameplayUI()->choices()->clearChoices();
   }
 
   REGOTH_DEFINE_RTTI(StoryInformation)

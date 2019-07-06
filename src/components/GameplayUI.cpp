@@ -1,9 +1,9 @@
-#include "GameUI.hpp"
+#include "GameplayUI.hpp"
 #include <GUI/BsGUIButton.h>
 #include <GUI/BsGUILabel.h>
 #include <GUI/BsGUILayoutY.h>
 #include <GUI/BsGUIScrollArea.h>
-#include <RTTI/RTTI_GameUI.hpp>
+#include <RTTI/RTTI_GameplayUI.hpp>
 #include <components/UIDialogueChoice.hpp>
 #include <components/UIFocusText.hpp>
 #include <components/UISubtitleBox.hpp>
@@ -11,19 +11,19 @@
 
 namespace REGoth
 {
-  static HGameUI s_GameUI;
+  static HGameplayUI s_GameplayUI;
 
-  GameUI::GameUI(const bs::HSceneObject& parent, bs::HCamera camera)
+  GameplayUI::GameplayUI(const bs::HSceneObject& parent, bs::HCamera camera)
       : UIElement(parent, camera)
   {
-    setName("GameUI");
+    setName("GameplayUI");
   }
 
-  GameUI::~GameUI()
+  GameplayUI::~GameplayUI()
   {
   }
 
-  void GameUI::onInitialized()
+  void GameplayUI::onInitialized()
   {
     UIElement::onInitialized();
 
@@ -44,44 +44,44 @@ namespace REGoth
     }
   }
 
-  void GameUI::createGlobal(bs::HCamera camera)
+  void GameplayUI::createGlobal(bs::HCamera camera)
   {
-    if (s_GameUI)
+    if (s_GameplayUI)
     {
-      REGOTH_THROW(InvalidStateException, "GameUI has already been created!");
+      REGOTH_THROW(InvalidStateException, "GameplayUI has already been created!");
     }
 
-    auto so = bs::SceneObject::create("GameUI");
+    auto so = bs::SceneObject::create("GameplayUI");
 
-    s_GameUI = so->addComponent<GameUI>(camera);
+    s_GameplayUI = so->addComponent<GameplayUI>(camera);
   }
 
-  void GameUI::startDialogue()
+  void GameplayUI::startDialogue()
   {
     choices()->SO()->setActive(true);
     choices()->clearChoices();
   }
 
-  bool GameUI::isDialogueInProgress() const
+  bool GameplayUI::isDialogueInProgress() const
   {
     return choices()->SO()->getActive();
   }
 
-  void GameUI::stopDialogue()
+  void GameplayUI::stopDialogue()
   {
     choices()->SO()->setActive(false);
     choices()->clearChoices();
   }
 
-  HGameUI gGameUI()
+  HGameplayUI gGameplayUI()
   {
-    if (!s_GameUI)
+    if (!s_GameplayUI)
     {
-      REGOTH_THROW(InvalidStateException, "GameUI::createGlobal() has not been called before!");
+      REGOTH_THROW(InvalidStateException, "GameplayUI::createGlobal() has not been called before!");
     }
 
-    return s_GameUI;
+    return s_GameplayUI;
   }
 
-  REGOTH_DEFINE_RTTI(GameUI)
+  REGOTH_DEFINE_RTTI(GameplayUI)
 }  // namespace REGoth
