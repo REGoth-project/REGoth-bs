@@ -77,6 +77,7 @@ public:
     }
 
     REGoth::HCharacter character = world->insertCharacter("PC_HERO", wpName);
+    character->useAsHero();
     character->SO()->addComponent<REGoth::CharacterKeyboardInput>(world);
     mThirdPersonCamera->follow(character);
   }
