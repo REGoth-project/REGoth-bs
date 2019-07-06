@@ -297,6 +297,7 @@ namespace REGoth
 
         // Commented out: Doesn't work yet
         // mSubAnimation->blendAdditive(clip, 1.0f, 0.0f, (bs::UINT32)layer);
+        mSubAnimation->play(clip->mClip);
       }
       else
       {
