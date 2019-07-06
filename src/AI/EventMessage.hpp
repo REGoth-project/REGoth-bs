@@ -7,6 +7,14 @@
 #include <RTTI/RTTIUtil.hpp>
 #include <scripting/ScriptTypes.hpp>
 
+namespace BsZenLib
+{
+  namespace Res
+  {
+    struct ZAnimationClip;
+  }
+}
+
 namespace REGoth
 {
   class Waypoint;
@@ -17,6 +25,8 @@ namespace REGoth
 
   class Item;
   using HItem = bs::GameObjectHandle<Item>;
+
+  using HZAnimationClip = bs::ResourceHandle<BsZenLib::Res::ZAnimationClip>;
 
   namespace AI
   {
@@ -541,7 +551,7 @@ namespace REGoth
       /**
        * Only valid while the message is being processed. Clip matching the given animation name.
        */
-      bs::HAnimationClip playingClip;
+      HZAnimationClip playingClip;
 
       /**
        * Animation name to be used. If empty, index will be checked.

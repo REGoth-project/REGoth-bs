@@ -13,6 +13,7 @@ namespace REGoth
   class RTTI_VisualSkeletalAnimation;
   class NodeVisuals;
   using HNodeVisuals = bs::GameObjectHandle<NodeVisuals>;
+  using HZAnimationClip = BsZenLib::Res::HZAnimation;
 
   /**
    * Component for rendering an object animated using skeletal animation (Player, NPC, Monster).
@@ -99,12 +100,12 @@ namespace REGoth
      *
      * @return Animation clip for the given animation name. Invalid if not found.
      */
-    bs::HAnimationClip findAnimationClip(const bs::String& name) const;
+    HZAnimationClip findAnimationClip(const bs::String& name) const;
 
     /**
      * Plays the given animation clip.
      */
-    void playAnimation(bs::HAnimationClip clip);
+    void playAnimationClip(HZAnimationClip clip);
 
     /**
      * Searches for the default idle animation for this character and plays it.
@@ -130,7 +131,7 @@ namespace REGoth
     /**
      * @return Whether the given animation is currently playing
      */
-    bool isAnimationPlaying(bs::HAnimationClip clip) const;
+    bool isAnimationPlaying(HZAnimationClip clip) const;
 
     /**
      * @return Name of the currently playing animation. Empty string if none.
@@ -208,7 +209,7 @@ namespace REGoth
   private:
 
     /**
-     * Fills mAnimationClips.
+     * Fills mAnimations.
      */
     void createAnimationMap();
 
@@ -275,12 +276,12 @@ namespace REGoth
      * Whether the given clip should be played as looping. If not, it will likely
      * switch to a different animation when it's done.
      */
-    bool isClipLooping(bs::HAnimationClip clip);
+    bool isClipLooping(HZAnimationClip clip) const;
 
     /**
      * @return Layer the clip should be played on.
      */
-    bs::INT32 getClipLayer(bs::HAnimationClip clip);
+    bs::UINT32 getClipLayer(HZAnimationClip clip) const;
 
     // Configuration ----------------------------------------------------------
 
@@ -295,7 +296,7 @@ namespace REGoth
     HNodeVisuals mSubNodeVisuals;   /**< The NodeVisuals-Component created inside a sub object */
 
     // Animation --------------------------------------------------------------
-    bs::Map<bs::String, bs::HAnimationClip> mAnimationClips; /**< Animation names -> clip */
+    bs::Map<bs::String, HZAnimationClip> mAnimationClips; /**< Animation names -> Clip */
     bs::HAnimationClip mRootMotionLastClip; /**< Last clip we got the root motion from */
     float mRootMotionLastTime = 0.0f; /**< Last time the animation was queried for root motion */
 

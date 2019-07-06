@@ -345,7 +345,7 @@ namespace REGoth
 
           if (message.playingClip)
           {
-            mVisualCharacter->playAnimation(message.playingClip);
+            mVisualCharacter->playAnimationClip(message.playingClip);
           }
           else
           {

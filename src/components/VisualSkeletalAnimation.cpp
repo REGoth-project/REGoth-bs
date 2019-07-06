@@ -70,9 +70,9 @@ namespace REGoth
       REGOTH_THROW(InvalidStateException, "No model script set!");
     }
 
-    for (bs::HAnimationClip clip : mModelScript->getAnimationClips())
+    for (auto anim : mModelScript->getAnimations())
     {
-      mAnimationClips[clip->getName()] = clip;
+      mAnimationClips[anim->getName()] = anim;
     }
   }
 
@@ -250,11 +250,11 @@ namespace REGoth
       // gDebug().logDebug("[VisualSkeletalAnimation] " + SO()->getName() + " - " + clip->getName() +
       //                   ": event PLAYCLIP: " + action);
 
-      HAnimationClip clip = findAnimationClip(action);
+      auto clip = findAnimationClip(action);
 
       if (clip)
       {
-        playAnimation(clip);
+        playAnimationClip(clip);
       }
       else
       {
@@ -275,7 +275,7 @@ namespace REGoth
     }
   }
 
-  void VisualSkeletalAnimation::playAnimation(bs::HAnimationClip clip)
+  void VisualSkeletalAnimation::playAnimationClip(HZAnimationClip clip)
   {
     using namespace bs;
 
@@ -304,7 +304,7 @@ namespace REGoth
       }
       else
       {
-        mSubAnimation->play(clip);
+        mSubAnimation->play(clip->mClip);
       }
     }
     else
@@ -320,17 +320,17 @@ namespace REGoth
 
     for (auto anim : possibleAnims)
     {
-      bs::HAnimationClip clip = findAnimationClip(anim);
+      auto clip = findAnimationClip(anim);
 
       if (clip)
       {
-        playAnimation(clip);
+        playAnimationClip(clip);
         return;
       }
     }
 
     // No animation found, stop all animations instead
-    playAnimation({});
+    playAnimationClip({});
   }
 
   bs::Vector<bs::String> VisualSkeletalAnimation::listPossibleDefaultAnimations() const
@@ -343,7 +343,7 @@ namespace REGoth
     throwIfNotReadyForRendering();
 
     bs::String animToPlay   = findAnimationToTransitionToState(state);
-    bs::HAnimationClip clip = findAnimationClip(animToPlay);
+    auto clip = findAnimationClip(animToPlay);
 
     // If there is no clip, then the transition isn't meant to be possible
     // That also includes the empty string.
@@ -354,7 +354,7 @@ namespace REGoth
 
     if (!isAnimationPlaying(clip))
     {
-      playAnimation(clip);
+      playAnimationClip(clip);
     }
 
     return true;
@@ -405,7 +405,7 @@ namespace REGoth
     return transition;
   }
 
-  bs::HAnimationClip VisualSkeletalAnimation::findAnimationClip(const bs::String& name) const
+  HZAnimationClip VisualSkeletalAnimation::findAnimationClip(const bs::String& name) const
   {
     using namespace bs;
 
@@ -418,7 +418,7 @@ namespace REGoth
     return result->second;
   }
 
-  bool VisualSkeletalAnimation::isAnimationPlaying(bs::HAnimationClip clip) const
+  bool VisualSkeletalAnimation::isAnimationPlaying(HZAnimationClip clip) const
   {
     throwIfNotReadyForRendering();
 
@@ -536,36 +536,14 @@ namespace REGoth
     }
   }
 
-  bool VisualSkeletalAnimation::isClipLooping(bs::HAnimationClip clip)
+  bool VisualSkeletalAnimation::isClipLooping(HZAnimationClip clip) const
   {
-    // If the clip is supposed to loop, it will have a "LOOP" event at its very end.
-    // Since it makes no sense to have multiple "LOOP" events in there, we just
-    // check whether one exists at all and don't care about the time.
-    for (const auto& event : clip->getEvents())
-    {
-      if (event.name == "LOOP")
-      {
-        return true;
-      }
-    }
-
-    return false;
+    return clip->mIsLooping;
   }
 
-  bs::INT32 VisualSkeletalAnimation::getClipLayer(bs::HAnimationClip clip)
+  bs::UINT32 VisualSkeletalAnimation::getClipLayer(HZAnimationClip clip) const
   {
-    // The layer is encoded as a simple event. The time it fires doesn't matter.
-    for (const auto& event : clip->getEvents())
-    {
-      if (bs::StringUtil::startsWith(event.name, "LAYER:", false))
-      {
-        bs::String nr = event.name.substr(6);
-
-        return bs::parseINT32(nr);
-      }
-    }
-
-    return 0;
+    return clip->mLayer;
   }
 
   void VisualSkeletalAnimation::setDebugAnimationSpeedFactor(float factor)

@@ -392,11 +392,11 @@ namespace REGoth
       // FIXME: We're missing some aniAliases, for example, "T_RUN_2_SNEAK" exists,
       //        and "T_SNEAK_2_RUN" is just the same animation but in reverse. This
       //        is defined using an aniAlias, which does not seem to be implemented.
-      bs::HAnimationClip c = mVisual->findAnimationClip(stateTarget);
+      auto c = mVisual->findAnimationClip(stateTarget);
 
       if (c)
       {
-        mVisual->playAnimation(c);
+        mVisual->playAnimationClip(c);
         mWalkMode = walkMode;
       }
     }
@@ -420,11 +420,11 @@ namespace REGoth
       // FIXME: We're missing some aniAliases, for example, "T_RUN_2_SNEAK" exists,
       //        and "T_SNEAK_2_RUN" is just the same animation but in reverse. This
       //        is defined using an aniAlias, which does not seem to be implemented.
-      bs::HAnimationClip c = mVisual->findAnimationClip(stateTarget);
+      auto c = mVisual->findAnimationClip(stateTarget);
 
       if (c)
       {
-        mVisual->playAnimation(c);
+        mVisual->playAnimationClip(c);
         mWeaponMode = mode;
       }
     }
