@@ -199,6 +199,13 @@ namespace REGoth
     return true;
   }
 
+  bool CharacterAI::jump()
+  {
+    if (!isStateSwitchAllowed()) return false;
+
+    return mVisual->tryPlayTransitionAnimationTo("S_JUMP");
+  }
+
   bool CharacterAI::isStateSwitchAllowed()
   {
     mVisual                = SO()->getComponent<VisualCharacter>();
@@ -480,13 +487,13 @@ namespace REGoth
   {
     switch (mWeaponMode)
     {
-    case AI::WeaponMode::None:
-      changeWeaponMode(AI::WeaponMode::Fist);
-      break;
+      case AI::WeaponMode::None:
+        changeWeaponMode(AI::WeaponMode::Fist);
+        break;
 
-    default:
-      changeWeaponMode(AI::WeaponMode::None);
-      break;
+      default:
+        changeWeaponMode(AI::WeaponMode::None);
+        break;
     }
   }
 

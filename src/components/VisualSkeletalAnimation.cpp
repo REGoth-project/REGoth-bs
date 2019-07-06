@@ -261,14 +261,6 @@ namespace REGoth
         gDebug().logWarning("[VisualSkeletalAnimation] Unknown next animation: " + action);
       }
     }
-    else if (command == "LOOP")
-    {
-      // Handled when the animation was started by setting the animation wrapmode to "loop"
-    }
-    else if (command == "LAYER")
-    {
-      // Handled when the animation was started
-    }
     else
     {
       gDebug().logWarning("[VisualSkeletalAnimation] Unknown animation event: " + string);

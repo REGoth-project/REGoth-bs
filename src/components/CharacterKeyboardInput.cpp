@@ -33,6 +33,7 @@ namespace REGoth
     mToggleWalking     = bs::VirtualButton("ToggleWalking");
     mToggleSneaking    = bs::VirtualButton("ToggleSneaking");
     mToggleMeleeWeapon = bs::VirtualButton("ToggleMeleeWeapon");
+    mJump              = bs::VirtualButton("Jump");
     mAction            = bs::VirtualButton("Action");
     mQuickSave         = bs::VirtualButton("QuickSave");
 
@@ -101,6 +102,11 @@ namespace REGoth
     if (bs::gVirtualInput().isButtonDown(mToggleMeleeWeapon))
     {
       mCharacterAI->tryToggleMeleeWeapon();
+    }
+
+    if (bs::gVirtualInput().isButtonDown(mJump))
+    {
+      mCharacterAI->jump();
     }
 
     if (bs::gVirtualInput().isButtonDown(mQuickSave))

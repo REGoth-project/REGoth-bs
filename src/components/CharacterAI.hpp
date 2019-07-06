@@ -65,6 +65,7 @@ namespace REGoth
     bool turnRight();
     bool stopTurning();
     bool doAction();
+    bool jump();
 
     /**
      * Determines whether the character is allowed to switch to an other animation state,
