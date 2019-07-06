@@ -105,7 +105,10 @@ namespace REGoth
 
     auto item = itemSO->addComponent<Item>(instance, thisWorld);
 
-    itemSO->addComponent<Focusable>();
+    auto focusable = itemSO->addComponent<Focusable>();
+
+    // TODO: Figure out the correct name to use for the focus text
+    focusable->setText(instance);
 
     mAllItems.push_back(item);
 

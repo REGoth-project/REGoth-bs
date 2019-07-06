@@ -20,11 +20,11 @@ namespace REGoth
   {
   }
 
-  void UIFocusText::putTextAbove(HFocusable focusable, bs::String text)
+  void UIFocusText::putTextAbove(HFocusable focusable)
   {
     mFocusedObject = focusable;
 
-    mLabelAboveObject->setContent(bs::GUIContent(bs::HString(text)));
+    mLabelAboveObject->setContent(bs::GUIContent(bs::HString(focusable->getText())));
   }
 
   void UIFocusText::setMaximumDistance(float maximumDistanceInMeters)

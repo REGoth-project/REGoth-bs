@@ -59,8 +59,7 @@ public:
 
     GameplayUI::createGlobal(mMainCamera);
 
-    gGameplayUI()->focusText()->putTextAbove(item1->SO()->getComponent<REGoth::Focusable>(),
-                                         "Hello Focus!");
+    gGameplayUI()->focusText()->putTextAbove(item1->SO()->getComponent<REGoth::Focusable>());
 
     gGameplayUI()->subtitleBox()->open();
 

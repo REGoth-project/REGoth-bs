@@ -28,7 +28,7 @@ namespace REGoth
     /**
      * Displays the given text above the given scene object.
      */
-    void putTextAbove(HFocusable focusable, bs::String text);
+    void putTextAbove(HFocusable focusable);
 
     /**
      * Set the maximum distance to which the label in front of the camera is drawn.
