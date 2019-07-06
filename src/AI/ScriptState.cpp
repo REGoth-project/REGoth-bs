@@ -142,17 +142,29 @@ namespace REGoth
         const auto& symbol = symbols.getSymbol<Scripting::SymbolScriptFunction>(end);
         mNextState.symEnd  = symbol.index;
       }
+      else
+      {
+        mNextState.symEnd = Scripting::SYMBOL_INDEX_INVALID;
+      }
 
       if (symbols.hasSymbolWithName(loop))
       {
         const auto& symbol = symbols.getSymbol<Scripting::SymbolScriptFunction>(loop);
         mNextState.symLoop = symbol.index;
       }
+      else
+      {
+        mNextState.symLoop = Scripting::SYMBOL_INDEX_INVALID;
+      }
 
       if (symbols.hasSymbolWithName(interrupt))
       {
         const auto& symbol      = symbols.getSymbol<Scripting::SymbolScriptFunction>(interrupt);
         mNextState.symInterrupt = symbol.index;
+      }
+      else
+      {
+        mNextState.symInterrupt = Scripting::SYMBOL_INDEX_INVALID;
       }
     }
 
