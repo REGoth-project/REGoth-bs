@@ -17,7 +17,47 @@ namespace REGoth
   using HGameUI = bs::GameObjectHandle<GameUI>;
 
   /**
-   * TODO: Documentation of GameUI
+   * Gameplay UI
+   * ===========
+   *
+   * This is the base for all gameplay UI related things, including:
+   *
+   *  - Health-bars
+   *  - Mana-bar
+   *  - Dialogue
+   *  - related
+   *  - GUI
+   *  - Stats-screen
+   *  - Log-screen
+   *  - In-game main menu
+   *
+   * Rather than implementing the UI code of those functionalities here, each of
+   * those functions is implemented as a component: For example, the dialogue
+   * choice box will have its own component, as well es the dialogue subtitle
+   * box.
+   *
+   * Each of those specialized UI components is then attached to a new scene
+   * object to build a tree-like structure with the scene object holding the
+   * GameUI as base.
+   *
+   * The structure could look as follows (this is only an example):
+   *
+   *      +-- GameUI
+   *          |
+   *          +-- HUD
+   *          |   +-- Bar (Health)
+   *          |   +-- Bar (Mana)
+   *          |   +-- Bar (Enemy Health)
+   *          |
+   *          +-- Dialogue UI
+   *              +-- Subtitle Box
+   *              +-- Choices
+   *
+   * While being a separation of concerns, this structure makes it possible to
+   * use some UIs in different contexts. For example, the ingame menu is also
+   * the main menu you see when you have just started the game. Then, no world
+   * is loaded and no gameplay session exists, thus there is no GameUI.
+   *
    */
   class GameUI : public UIElement
   {
