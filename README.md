@@ -26,7 +26,7 @@ https://regoth-project.github.io/REGoth-bs/index.html
 
 # Download
 
-While there has not been an official release yet, you can nightly builds for Windows.
+While there has not been an official release yet, you can download nightly builds for Windows.
 
 <p align="center">
   <b>
