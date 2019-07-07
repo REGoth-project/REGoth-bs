@@ -24,6 +24,27 @@ We have an active Chatroom on [Gitter](https://gitter.im/REGoth/Lobby)! If you w
 
 https://regoth-project.github.io/REGoth-bs/index.html
 
+# Download
+
+While there has not been an official release yet, you can nightly builds for Windows.
+
+<p align="center">
+  <b>
+    <a href="https://dev.azure.com/ataulien/REGoth/_build?definitionId=1&view=buildsHistory">Latest Nightly Builds</a>
+  </b>
+</p>
+
+Select on the build you are interested in and click on the blue "Artifacts" Button in the top right corner to download the build: 
+
+---------------------------
+<p align="center">
+  <a href="https://dev.azure.com/ataulien/REGoth/_build?definitionId=1&view=buildsHistory">
+    <img src="https://user-images.githubusercontent.com/11406580/60770103-c7ae1c00-a0d7-11e9-98a9-d401cb3c88d4.png" />
+  </a>
+</p>
+
+---------------------------
+
 # Building
 
 ## Engine
