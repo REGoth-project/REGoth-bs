@@ -100,6 +100,8 @@ namespace REGoth
       if (shouldDisablePhysics())
       {
         deactivatePhysics();
+
+        bs::gDebug().logDebug("[CharacterAI] Deactivate physics on " + SO()->getName());
       }
     }
     else
@@ -107,6 +109,8 @@ namespace REGoth
       if (shouldEnablePhysics())
       {
         activatePhysics();
+
+        bs::gDebug().logDebug("[CharacterAI]   Activate physics on " + SO()->getName());
       }
     }
   }
@@ -328,22 +332,19 @@ namespace REGoth
 
     bs::Vector3 rootMotion = mVisual->resolveFrameRootMotion();
 
-    bs::Vector3 rootMotionRotated = SO()->getTransform().getRotation().rotate(rootMotion);
-
-    // For some reason this is inverted
-    rootMotionRotated *= -1.0;
+    // Rotate by the scene objects rotation
+    rootMotion = SO()->getTransform().getRotation().rotate(rootMotion);
 
     // No need to multiply rootMotion by the frame delta since it is the actual movement since
-    // last time we queried it.
-    mCharacterController->move(rootMotionRotated);
+    // last time we queried it. For some reason this is inverted though.
+    rootMotion *= -1.0;
 
-    // Note: Gravity is acceleration, but since the walker doesn't support falling, just apply it as
-    // a velocity
-    // FIXME: Actual gravity!
+    // Note: Gravity is acceleration, but since the walker doesn't support falling, just apply it
+    // as a velocity FIXME: Actual gravity!
     const float frameDelta = bs::gTime().getFixedFrameDelta();
-    bs::Vector3 gravity    = bs::Vector3(0, -9.81, 0);  // gPhysics().getGravity();
+    bs::Vector3 gravity    = bs::Vector3(0, -9.81f, 0);  // gPhysics().getGravity();
 
-    mCharacterController->move(gravity * frameDelta);
+    mCharacterController->move(rootMotion + gravity * frameDelta);
   }
 
   void CharacterAI::handleTurning()
