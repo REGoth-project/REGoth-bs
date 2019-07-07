@@ -45,6 +45,14 @@ Select on the build you are interested in and click on the blue "Artifacts" Butt
 
 ---------------------------
 
+Unpack the downloaded archive. All REGoth executables must be called with the path to a gothic installation as parameter, like so:
+
+```sh
+REGothWorldViewer.exe D:/Games/Gothic1
+```
+
+On the first run, the *Cache* will be created in the `cache/` folder. Some samples will save the current world into `cache/worlds`. To re-import a world, it is sufficient to delete the `cache/world` folder. To re-import everything, you can delete the whole `cache/` folder.
+
 # Building
 
 ## Engine
