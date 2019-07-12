@@ -58,7 +58,7 @@ On the first run, the *Cache* will be created in the `cache/` folder. Some sampl
 ## Get the Code
 
 ```sh
-git clone --recurse-submodules https://github.com/REGoth-project/REGoth-bs.git
+git clone --recursive https://github.com/REGoth-project/REGoth-bs.git
 ```
 
 Or, if you have already cloned the repository, run this in the project root folder:
