@@ -55,20 +55,39 @@ On the first run, the *Cache* will be created in the `cache/` folder. Some sampl
 
 # Building
 
+## Get the Code
+
+```sh
+git clone --recurse-submodules https://github.com/REGoth-project/REGoth-bs.git
+```
+
+Or, if you have already cloned the repository, run this in the project root folder:
+
+```sh
+git submodule update --init --recursive
+```
+
 ## Engine
 
 The project is built via CMake. You will need at least CMake 3.9.0.
 
 ### Linux
 
-To build the project for Linux, 
-run the following commands from within the directory where you cloned REGoth:
+For Debian and its derivatives, install the following packages:
+
+```sh
+sudo apt install libx11-dev libxcursor-dev libxi-dev libicu-dev libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev libphysfs-dev libsquish-dev
+```
+
+For other distributions, just look up the corresponding package names for these libraries (and please make a PR complementing these information).
+
+To build the project for Linux, run the following commands from within the directory where you cloned REGoth:
 
 ```sh
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
-cmake --build . --parallel 8
+cmake --build . --parallel $(nproc)
 ```
 
 **Note**: If you get complains about missing `.so` files when you try to run an executable,
