@@ -1,10 +1,10 @@
 #include "skin_gothic.hpp"
 #include <BsZenLib/ImportFont.hpp>
-#include <Resources/BsBuiltinResources.h>
 #include <BsZenLib/ImportTexture.hpp>
 #include <GUI/BsGUISkin.h>
 #include <GUI/BsGUITexture.h>
 #include <Importer/BsImporter.h>
+#include <Resources/BsBuiltinResources.h>
 #include <Text/BsFont.h>
 #include <original-content/OriginalGameResources.hpp>
 
@@ -31,7 +31,7 @@ namespace REGoth
   static bs::HGUISkin cloneGuiSkin(bs::HGUISkin skin)
   {
     auto styleNames = skin->getStyleNames();
-    auto newSkin = bs::GUISkin::create();
+    auto newSkin    = bs::GUISkin::create();
 
     for (const bs::String& n : styleNames)
     {
@@ -101,8 +101,8 @@ namespace REGoth
     skin->setStyle("GothicSubtitleBoxCharacterName", labelDefaultHighlighted);
     skin->setStyle("GothicSubtitleBoxText", labelDefault);
 
-    auto button = *skin->getStyle("Button");
-    button.font = fontGothicOld10WhiteHi;
+    auto button     = *skin->getStyle("Button");
+    button.font     = fontGothicOld10WhiteHi;
     button.fontSize = 17;
     skin->setStyle("Button", button);
 

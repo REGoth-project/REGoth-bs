@@ -49,11 +49,11 @@ void VirtualFileSystem::mountDirectory(const bs::Path& path)
     REGOTH_THROW(InvalidStateException, "Cannot mount directories on finalized file index.");
   }
 
-  bs::gDebug().logDebug("[VDFS] Mounting directory: " + path.toString() + " (recursive):");
+  BS_LOG(Info, Uncategorized, "[VDFS] Mounting directory: " + path.toString() + " (recursive):");
 
   auto onDirectory = [&](const bs::Path& p) {
     bs::Path relative = p.getRelative(path);
-    bs::gDebug().logDebug("[VDFS]  - " + relative.toString());
+    BS_LOG(Info, Uncategorized, "[VDFS]  - " + relative.toString());
 
     mInternal->fileIndex.mountFolder(p.toString().c_str());
 
@@ -110,7 +110,7 @@ bs::Vector<bs::String> REGoth::VirtualFileSystem::listByExtension(const bs::Stri
   enum
   {
     RespectCase = false,
-    LowerCase  = true,
+    LowerCase   = true,
   };
 
   bs::Vector<bs::String> result;

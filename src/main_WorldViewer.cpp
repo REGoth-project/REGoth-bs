@@ -23,13 +23,13 @@ public:
 
     // for (auto p : files.allModPackages())
     // {
-    //   bs::gDebug().logDebug("[WorldViewer] Loading Mod: " + p.toString());
+    //   BS_LOG(Info, Uncategorized, "[WorldViewer] Loading Mod: " + p.toString());
     //   gVirtualFileSystem().loadPackage(p);
     // }
 
     // for (auto zen : gVirtualFileSystem().listByExtension(".ZEN"))
     // {
-    //   bs::gDebug().logDebug("[WorldViewer] Found ZEN: " + zen);
+    //   BS_LOG(Info, Uncategorized, "[WorldViewer] Found ZEN: " + zen);
     // }
   }
 

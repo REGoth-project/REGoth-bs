@@ -42,7 +42,7 @@ namespace REGoth
 
     if (!hasLoadedZEN)
     {
-      bs::gDebug().logWarning("[ConstructFromZEN] Failed to read zen-file: " + zenFile);
+      BS_LOG(Warning, Uncategorized, "[ConstructFromZEN] Failed to read zen-file: " + zenFile);
       return {};
     }
 
@@ -63,7 +63,7 @@ namespace REGoth
 
     if (!hasLoadedZEN)
     {
-      bs::gDebug().logWarning("[ConstructFromZEN] Failed to read zen-file: " + zenFile);
+      BS_LOG(Warning, Uncategorized, "[ConstructFromZEN] Failed to read zen-file: " + zenFile);
       return {};
     }
 
@@ -128,8 +128,8 @@ namespace REGoth
       // This shouldn't be needed, but sometimes the worldmesh in mesh->getMesh() seems to get lost?
       if (!mesh.isLoaded())
       {
-        bs::gDebug().logWarning("Failed to load cached world mesh of zen " + zen.fileName +
-                                "- rechaching it!");
+        BS_LOG(Warning, Uncategorized,
+               "Failed to load cached world mesh of zen " + zen.fileName + "- rechaching it!");
         mesh = BsZenLib::ImportAndCacheStaticMesh(meshFileName, zen.worldMesh,
                                                   gVirtualFileSystem().getFileIndex());
       }
@@ -154,7 +154,7 @@ namespace REGoth
 
     if (!actualMesh->getCachedData())
     {
-      bs::gDebug().logError("Cannot extract world mesh for physics, no mesh data available!");
+      BS_LOG(Error, Uncategorized, "Cannot extract world mesh for physics, no mesh data available!");
     }
     else
     {

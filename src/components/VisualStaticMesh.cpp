@@ -1,9 +1,9 @@
 #include "VisualStaticMesh.hpp"
 #include <Components/BsCRenderable.h>
-#include <Scene/BsSceneObject.h>
-#include <original-content/VirtualFileSystem.hpp>
 #include <RTTI/RTTI_VisualStaticMesh.hpp>
+#include <Scene/BsSceneObject.h>
 #include <original-content/OriginalGameResources.hpp>
+#include <original-content/VirtualFileSystem.hpp>
 
 namespace REGoth
 {
@@ -19,7 +19,8 @@ namespace REGoth
 
     if (!mesh)
     {
-      bs::gDebug().logWarning("[VisualStaticMesh] Failed to load mesh: " + originalMeshFileName);
+      BS_LOG(Warning, Uncategorized,
+             "[VisualStaticMesh] Failed to load mesh: " + originalMeshFileName);
       return;
     }
 

@@ -102,14 +102,15 @@ endif()
 
 # Installs a new copy of Vcpkg or updates an existing one
 macro(vcpkg_bootstrap)
-
-    _install_or_update_vcpkg()
-    
-    if(NOT DEFINED ${CMAKE_TOOLCHAIN_FILE})
+    if(NOT AUTOMATE_VCPKG_USE_SYSTEM_VCPKG)
+        _install_or_update_vcpkg()
+        
         set(CMAKE_TOOLCHAIN_FILE ${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake CACHE STRING "")
 
         # Just setting vcpkg.cmake as toolchain file does not seem to actually pull in the code
         include(${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
+    else()
+        message(STATUS "Automate VCPKG using System VCPKG installation.")
     endif()
 
     message(STATUS "Automate VCPKG status:")

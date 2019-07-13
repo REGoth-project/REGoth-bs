@@ -87,8 +87,8 @@ namespace REGoth
 
     void ScriptState::startScriptAIState(const bs::String& state)
     {
-      bs::gDebug().logDebug("[ScriptState] Starting state " + state + " on npc " +
-                            mHostCharacter->SO()->getName());
+      BS_LOG(Info, Uncategorized,
+             "[ScriptState] Starting state " + state + " on npc " + mHostCharacter->SO()->getName());
 
       // Save script variables used by the state
       mStateOther  = scriptVM().otherInstance();

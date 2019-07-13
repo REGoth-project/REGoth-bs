@@ -52,8 +52,8 @@ namespace REGoth
     {
       clearNodeAttachment(node);
 
-      bs::gDebug().logWarning("[NodeVisuals] Failed to attach visual '" + visual + "' to node '" +
-                              node + "'");
+      BS_LOG(Warning, Uncategorized,
+             "[NodeVisuals] Failed to attach visual '" + visual + "' to node '" + node + "'");
     }
   }
 

@@ -37,7 +37,7 @@ namespace REGoth
     }
 
     // Those sometimes come with file extension.
-    bs::String bodyMeshNoExt = bodyMesh.substr(0, bodyMesh.find_last_of('.'));
+    bs::String bodyMeshNoExt                = bodyMesh.substr(0, bodyMesh.find_last_of('.'));
     BsZenLib::Res::HMeshWithMaterials hmesh = modelScript()->getMeshByName(bodyMeshNoExt);
 
     if (hmesh)
@@ -52,10 +52,11 @@ namespace REGoth
     }
     else
     {
-      bs::gDebug().logWarning(bs::StringUtil::format(
-          "[VisualCharacter] Did not find body mesh {0}  in model script "
-          "'{1}'', defaulting to first one: {2}",
-          bodyMeshNoExt, modelScript()->getName(), modelScript()->getMeshes()[0]->getName()));
+      BS_LOG(Warning, Uncategorized,
+             bs::StringUtil::format("[VisualCharacter] Did not find body mesh {0}  in model script "
+                                    "'{1}'', defaulting to first one: {2}",
+                                    bodyMeshNoExt, modelScript()->getName(),
+                                    modelScript()->getMeshes()[0]->getName()));
 
       setMesh(modelScript()->getMeshes()[0]);
     }

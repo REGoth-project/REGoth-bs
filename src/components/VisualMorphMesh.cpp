@@ -20,7 +20,8 @@ namespace REGoth
 
     if (!mesh)
     {
-      bs::gDebug().logWarning("[VisualMorphMesh] Failed to load mesh: " + originalMeshFileName);
+      BS_LOG(Warning, Uncategorized,
+             "[VisualMorphMesh] Failed to load mesh: " + originalMeshFileName);
       return;
     }
 

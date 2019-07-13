@@ -750,7 +750,7 @@ namespace REGoth
           {
             auto& sym = mScriptSymbols.getSymbol<SymbolExternalFunction>(opcode.symbol);
 
-            // bs::gDebug().logDebug("[REGothDaedalusVM] External not implemented: " + sym.name);
+            // BS_LOG(Info, Uncategorized, "[REGothDaedalusVM] External not implemented: " + sym.name);
 
             // Put a dummy value onto the stack to get deterministic results
             switch (sym.returnType)
@@ -1018,9 +1018,9 @@ namespace REGoth
                                              const bs::String& lhs, const bs::String& rhs,
                                              const bs::String& res)
     {
-      bs::gDebug().logDebug(
-          bs::StringUtil::format("[DaedalusVM] Exec: {0}{1}", makeCallDepthString(mCallDepth),
-                                 disassembleOpcode(opcode, mScriptSymbols, lhs, rhs, res)));
+      BS_LOG(Info, Uncategorized,
+             bs::StringUtil::format("[DaedalusVM] Exec: {0}{1}", makeCallDepthString(mCallDepth),
+                                    disassembleOpcode(opcode, mScriptSymbols, lhs, rhs, res)));
     }
 
     void DaedalusVM::findFunctionAtAddressAndLog(bs::UINT32 address)
@@ -1039,8 +1039,9 @@ namespace REGoth
         name = fnSymbol.name;
       }
 
-      bs::gDebug().logDebug(bs::StringUtil::format("[DaedalusVM] Exec: {0}Call {1}",
-                                                   makeCallDepthString(mCallDepth), name));
+      BS_LOG(Info, Uncategorized,
+             bs::StringUtil::format("[DaedalusVM] Exec: {0}Call {1}",
+                                    makeCallDepthString(mCallDepth), name));
     }
 
     REGOTH_DEFINE_RTTI(DaedalusVM);

@@ -56,7 +56,7 @@ public:
 
     for (auto s : gVirtualFileSystem().listAllFiles())
     {
-      gDebug().logDebug(s);
+      BS_LOG(Info, Uncategorized, s);
     }
 
     HGameWorld world = GameWorld::createEmpty();

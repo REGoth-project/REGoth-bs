@@ -59,7 +59,7 @@ namespace REGoth
 
       mAllInfos.emplace_back(info);
 
-      bs::gDebug().logDebug("[StoryInformation] Info " + info.name + " for " + mSelf->getName());
+      BS_LOG(Info, Uncategorized, "[StoryInformation] Info " + info.name + " for " + mSelf->getName());
     }
   }
 
@@ -114,7 +114,7 @@ namespace REGoth
     }
 
     gGameplayUI()->choices()->setOnChoiceCallback([this, other](UIDialogueChoice::Choice choice) {
-      bs::gDebug().logDebug("[StoryInformation] Choice taken: " + choice.text + " (" +
+      BS_LOG(Info, Uncategorized, "[StoryInformation] Choice taken: " + choice.text + " (" +
                             choice.instanceName + ")");
 
       if (!choice.instanceName.empty())

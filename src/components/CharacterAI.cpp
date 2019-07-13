@@ -101,7 +101,7 @@ namespace REGoth
       {
         deactivatePhysics();
 
-        bs::gDebug().logDebug("[CharacterAI] Deactivate physics on " + SO()->getName());
+        BS_LOG(Info, Uncategorized, "[CharacterAI] Deactivate physics on " + SO()->getName());
       }
     }
     else
@@ -110,7 +110,7 @@ namespace REGoth
       {
         activatePhysics();
 
-        bs::gDebug().logDebug("[CharacterAI]   Activate physics on " + SO()->getName());
+        BS_LOG(Info, Uncategorized, "[CharacterAI]   Activate physics on " + SO()->getName());
       }
     }
   }
@@ -381,7 +381,8 @@ namespace REGoth
       // Usually we would throw here, but Gothic has some invalid waypoints inside it's scripts
       // so we would break the original games if we did that. Resort to a warning for those,
       // better than nothing, I guess.
-      bs::gDebug().logWarning("[CharacterAI] Teleport failed, waypoint doesn't exist: " + waypoint);
+      BS_LOG(Warning, Uncategorized,
+             "[CharacterAI] Teleport failed, waypoint doesn't exist: " + waypoint);
       return;
     }
 

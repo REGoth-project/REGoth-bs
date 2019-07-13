@@ -80,7 +80,7 @@ namespace REGoth
 
     if (!t)
     {
-      bs::gDebug().logWarning("[UIElement] Failed to load texture: " + originalFileName);
+      BS_LOG(Warning, Uncategorized, "[UIElement] Failed to load texture: " + originalFileName);
 
       return {};
     }

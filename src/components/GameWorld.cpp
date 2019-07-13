@@ -1,5 +1,4 @@
 #include "GameWorld.hpp"
-#include <components/Sky.hpp>
 #include <BsZenLib/ImportPath.hpp>
 #include <RTTI/RTTI_GameWorld.hpp>
 #include <Resources/BsResources.h>
@@ -9,6 +8,7 @@
 #include <components/Focusable.hpp>
 #include <components/GameClock.hpp>
 #include <components/Item.hpp>
+#include <components/Sky.hpp>
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
 #include <daedalus/DATFile.h>
@@ -180,7 +180,7 @@ namespace REGoth
     transform.move(
         bs::Vector3(0, 0.5f, 0));  // FIXME: Can we move the center to the feet somehow instead?
 
-    bs::gDebug().logDebug("[GameWorld] Insert Character " + instance + " at " + spawnPoint);
+    BS_LOG(Info, Uncategorized, "[GameWorld] Insert Character " + instance + " at " + spawnPoint);
 
     return insertCharacter(instance, transform);
   }

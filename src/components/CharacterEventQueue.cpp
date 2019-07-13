@@ -135,8 +135,9 @@ namespace REGoth
         break;
 
       default:
-        bs::gDebug().logWarning("[CharacterEventQueue] Unhandled Event Type: " +
-                                bs::toString((int)message->messageType));
+        BS_LOG(Warning, Uncategorized,
+               "[CharacterEventQueue] Unhandled Event Type: " +
+                   bs::toString((int)message->messageType));
         done = true;
         break;
     }
@@ -178,8 +179,9 @@ namespace REGoth
         isDone = true;
         break;
       default:
-        bs::gDebug().logWarning("[CharacterEventQueue] Unhandled WeaponMode-Sub Type: " +
-                                bs::toString((int)message.subType));
+        BS_LOG(Warning, Uncategorized,
+               "[CharacterEventQueue] Unhandled WeaponMode-Sub Type: " +
+                   bs::toString((int)message.subType));
         isDone = true;
         break;
     }
@@ -234,8 +236,9 @@ namespace REGoth
         break;
 
       default:
-        bs::gDebug().logWarning("[CharacterEventQueue] Unhandled MovementMessage-Sub Type: " +
-                                bs::toString((int)message.subType));
+        BS_LOG(Warning, Uncategorized,
+               "[CharacterEventQueue] Unhandled MovementMessage-Sub Type: " +
+                   bs::toString((int)message.subType));
         isDone = true;
         break;
     }
@@ -312,6 +315,9 @@ namespace REGoth
         break;
 
       default:
+        BS_LOG(Warning, Uncategorized,
+               "[CharacterEventQueue] Unhandled StateMessage-Sub Type: " +
+                   bs::toString((int)message.subType));
         isDone = true;
         break;
     }
@@ -338,8 +344,9 @@ namespace REGoth
 
         if (message.isFirstRun)
         {
-          // bs::gDebug().logDebug(bs::StringUtil::format(
-          //     "[CharacterEventQueue] {0} - PlayAni start: {1}", SO()->getName(), message.animation));
+          // BS_LOG(Info, Uncategorized, bs::StringUtil::format(
+          //     "[CharacterEventQueue] {0} - PlayAni start: {1}", SO()->getName(),
+          //     message.animation));
 
           message.playingClip = mVisualCharacter->findAnimationClip(message.animation);
 
@@ -358,7 +365,7 @@ namespace REGoth
 
           if (isDone)
           {
-            // bs::gDebug().logDebug(
+            // BS_LOG(Info, Uncategorized, 
             //     bs::StringUtil::format("[CharacterEventQueue] {0} - PlayAni done: {1}",
             //                            SO()->getName(), message.animation));
           }
@@ -366,8 +373,9 @@ namespace REGoth
         break;
 
       default:
-        bs::gDebug().logWarning("[CharacterEventQueue] Unhandled Conversation-Sub Type: " +
-                                bs::toString((int)message.subType));
+        BS_LOG(Warning, Uncategorized,
+               "[CharacterEventQueue] Unhandled Conversation-Sub Type: " +
+                   bs::toString((int)message.subType));
         isDone = true;
         break;
     }

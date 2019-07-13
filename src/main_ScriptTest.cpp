@@ -1,11 +1,11 @@
 #include "REGothEngine.hpp"
 #include <Components/BsCCamera.h>
 #include <Scene/BsSceneObject.h>
+#include <components/GameWorld.hpp>
 #include <components/Item.hpp>
 #include <daedalus/DATFile.h>
 #include <original-content/VirtualFileSystem.hpp>
 #include <scripting/ScriptSymbolStorage.hpp>
-#include <components/GameWorld.hpp>
 
 class REGothScriptTester : public REGoth::REGothEngine
 {
@@ -27,7 +27,7 @@ public:
 
     // ScriptObject& apple = REGoth::gGameScript().scriptObjects().get(appleHandle);
 
-    // bs::gDebug().logDebug("Apple's visual: " + apple.stringValue("VISUAL"));
+    // BS_LOG(Info, Uncategorized, "Apple's visual: " + apple.stringValue("VISUAL"));
 
     // gGameScript().script_PrintPlus("Hello World!");
     // gGameScript().script_PrintPlus("This is printed by Daedalus!");

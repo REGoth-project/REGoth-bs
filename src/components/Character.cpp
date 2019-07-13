@@ -167,7 +167,8 @@ namespace REGoth
 
       bs::String functionName = "RTN_" + newDailyRoutine + "_" + bs::toString(id);
 
-      bs::gDebug().logDebug("[Character] Set Routine of " + SO()->getName() + " to " + functionName);
+      BS_LOG(Info, Uncategorized,
+             "[Character] Set Routine of " + SO()->getName() + " to " + functionName);
 
       const auto& fn =
           scriptVM().scriptSymbols().getSymbol<Scripting::SymbolScriptFunction>(functionName);
@@ -281,7 +282,8 @@ namespace REGoth
 
     if (!wp)
     {
-      bs::gDebug().logWarning("[Character] Waypoint " + waypoint + " does not exist! (getDistanceToWaypoint)");
+      BS_LOG(Warning, Uncategorized,
+             "[Character] Waypoint " + waypoint + " does not exist! (getDistanceToWaypoint)");
       return -1.0f;
     }
 

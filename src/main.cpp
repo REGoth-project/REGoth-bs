@@ -44,17 +44,17 @@ int main(int argc, char** argv)
   regoth.initializeBsf();
   regoth.setupInput();
 
-  gDebug().logDebug("[Main] Starting REGoth");
+  BS_LOG(Info, Uncategorized, "[Main] Starting REGoth");
 
   const String engineExecutablePath = argv[0];
-  const String gameDirectory = argv[1];
-  const String zenFile = argv[2];
+  const String gameDirectory        = argv[1];
+  const String zenFile              = argv[2];
 
-  gDebug().logDebug("[Main]  - Engine executable: " + engineExecutablePath);
-  gDebug().logDebug("[Main]  - Game directory:    " + gameDirectory);
-  gDebug().logDebug("[Main]  - Startup ZEN:       " + zenFile);
+  BS_LOG(Info, Uncategorized, "[Main]  - Engine executable: " + engineExecutablePath);
+  BS_LOG(Info, Uncategorized, "[Main]  - Game directory:    " + gameDirectory);
+  BS_LOG(Info, Uncategorized, "[Main]  - Startup ZEN:       " + zenFile);
 
-  gDebug().logDebug("[Main] Loading original game packages");
+  BS_LOG(Info, Uncategorized, "[Main] Loading original game packages");
   regoth.loadGamePackages(engineExecutablePath, gameDirectory);
 
   if (!regoth.hasFoundGameFiles())
@@ -65,21 +65,21 @@ int main(int argc, char** argv)
 
   regoth.loadCachedResourceManifests();
 
-  gDebug().logDebug("[Main] Setting up scene");
+  BS_LOG(Info, Uncategorized, "[Main] Setting up scene");
 
   // Add a scene object containing a camera component
   HSceneObject sceneCameraSO = SceneObject::create("SceneCamera");
-  HCamera sceneCamera = sceneCameraSO->addComponent<CCamera>();
+  HCamera sceneCamera        = sceneCameraSO->addComponent<CCamera>();
   sceneCamera->setMain(true);
   sceneCamera->setMSAACount(1);
 
-  HSceneObject playerSO = SceneObject::create("Player");
+  HSceneObject playerSO                 = SceneObject::create("Player");
   REGoth::HVisualCharacter playerVisual = playerSO->addComponent<REGoth::VisualCharacter>();
 
   // Load a model and its animations
   BsZenLib::Res::HModelScriptFile model;
 
-  const String file = "HUMANS.MDS";
+  const String file   = "HUMANS.MDS";
   const String visual = "HUM_BODY_NAKED0.ASC";
 
   if (BsZenLib::HasCachedMDS(file))
@@ -93,16 +93,16 @@ int main(int argc, char** argv)
 
   if (!model || model->getMeshes().empty())
   {
-    gDebug().logError("Failed to load model or animations: " + file + "/" + visual);
+    BS_LOG(Error, Uncategorized, "Failed to load model or animations: " + file + "/" + visual);
     return -1;
   }
 
-  gDebug().logDebug("Num Meshes: " + bs::toString(model->getMeshes().size()));
+  BS_LOG(Info, Uncategorized, "Num Meshes: " + bs::toString(model->getMeshes().size()));
 
   for (const auto& h : model->getMeshes())
   {
     // h.blockUntilLoaded();
-    gDebug().logDebug(h->getName());
+    BS_LOG(Info, Uncategorized, h->getName());
   }
 
   playerVisual->setModelScript(model);
@@ -114,11 +114,11 @@ int main(int argc, char** argv)
   auto rs = sceneCamera->getRenderSettings();
 
   rs->screenSpaceReflections.enabled = false;
-  rs->ambientOcclusion.enabled = false;
-  rs->enableIndirectLighting = true;
-  rs->enableFXAA = false;
-  rs->enableHDR = false;
-  rs->enableTonemapping = false;
+  rs->ambientOcclusion.enabled       = false;
+  rs->enableIndirectLighting         = true;
+  rs->enableFXAA                     = false;
+  rs->enableHDR                      = false;
+  rs->enableTonemapping              = false;
 
   sceneCamera->setRenderSettings(rs);
 
@@ -131,7 +131,7 @@ int main(int argc, char** argv)
 
     if (!worldPrefab)
     {
-      gDebug().logError("Failed to load cached ZEN: " + zenFile);
+      BS_LOG(Error, Uncategorized, "Failed to load cached ZEN: " + zenFile);
       return -1;
     }
 
@@ -146,7 +146,7 @@ int main(int argc, char** argv)
 
     if (!worldSO)
     {
-      gDebug().logError("Failed to load uncached ZEN: " + zenFile);
+      BS_LOG(Error, Uncategorized, "Failed to load uncached ZEN: " + zenFile);
       return -1;
     }
   }
@@ -154,7 +154,7 @@ int main(int argc, char** argv)
   HSceneObject startSO = worldSO->findChild("zCVobStartpoint:zCVob");
 
   Vector3 startPosition = startSO ? startSO->getTransform().getPosition() : Vector3(bs::BsZero);
-  Vector3 startLookAt = startSO ? startSO->getTransform().getForward() : Vector3(1.0, 0.0, 0.0);
+  Vector3 startLookAt   = startSO ? startSO->getTransform().getForward() : Vector3(1.0, 0.0, 0.0);
 
   // Position the camera
   sceneCameraSO->setParent(playerSO);
@@ -199,7 +199,7 @@ int main(int argc, char** argv)
     auto rs = sceneCamera->getRenderSettings();
 
     rs->cullDistance = value;
-    gDebug().logDebug("Set CullDistance to: " + toString(value));
+    BS_LOG(Info, Uncategorized, "Set CullDistance to: " + toString(value));
 
     sceneCamera->setRenderSettings(rs);
   });

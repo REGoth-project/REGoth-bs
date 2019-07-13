@@ -484,7 +484,7 @@ namespace REGoth
 
     void DaedalusVMForGameWorld::external_Print()
     {
-      bs::gDebug().logDebug("[ScriptVMInterface] [Print] " + popStringValue());
+      BS_LOG(Info, Uncategorized, "[ScriptVMInterface] [Print] " + popStringValue());
     }
 
     void DaedalusVMForGameWorld::external_PrintDebugInstCh()
@@ -614,7 +614,7 @@ namespace REGoth
       bs::INT32 talent     = popIntValue();
       HCharacter character = popCharacterInstance();
 
-      bs::gDebug().logWarning("[External] Using external stub: NPC_SetTalentSkill");
+      BS_LOG(Warning, Uncategorized, "[External] Using external stub: NPC_SetTalentSkill");
     }
 
     void DaedalusVMForGameWorld::external_NPC_EquipItem()
@@ -989,7 +989,7 @@ namespace REGoth
     {
       HCharacter self = popCharacterInstance();
 
-      bs::gDebug().logWarning("[External] Using external stub: NPC_RefuseTalk");
+      BS_LOG(Warning, Uncategorized, "[External] Using external stub: NPC_RefuseTalk");
 
       mStack.pushInt(0);
     }
@@ -1021,7 +1021,7 @@ namespace REGoth
 
     void DaedalusVMForGameWorld::external_InfoManager_HasFinished()
     {
-      // bs::gDebug().logWarning("[External] Using external stub: InfoManager_HasFinished");
+      // BS_LOG(Warning, Uncategorized, "[External] Using external stub: InfoManager_HasFinished");
 
       if (gGameplayUI()->isDialogueInProgress())
       {

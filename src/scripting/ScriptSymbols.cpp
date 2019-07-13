@@ -76,7 +76,7 @@ namespace REGoth
       {
       }
 
-      bs::gDebug().logDebug(line);
+      BS_LOG(Info, Uncategorized, line);
     }
 
     REGOTH_DEFINE_RTTI(SymbolBase)

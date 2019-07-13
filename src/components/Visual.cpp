@@ -65,8 +65,8 @@ namespace REGoth
     }
     else
     {
-      bs::gDebug().logWarning("[Visual] Unsupported visual type (" + bs::toString((int)kind) +
-                              ") of " + visual);
+      BS_LOG(Warning, Uncategorized,
+             "[Visual] Unsupported visual type (" + bs::toString((int)kind) + ") of " + visual);
       return false;
     }
   }

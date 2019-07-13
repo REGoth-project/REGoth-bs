@@ -256,9 +256,10 @@ namespace REGoth
         // via the waynet, just exit here.
         mActiveRoute.isTargetUnreachable = true;
 
-        bs::gDebug().logDebug(bs::StringUtil::format("[Pathfinder] No path from {0} to {1}",
-                                                     nearestWpToStart->SO()->getName(),
-                                                     nearestWpToTarget->SO()->getName()));
+        BS_LOG(Info, Uncategorized,
+               bs::StringUtil::format("[Pathfinder] No path from {0} to {1}",
+                                      nearestWpToStart->SO()->getName(),
+                                      nearestWpToTarget->SO()->getName()));
         return;
       }
 

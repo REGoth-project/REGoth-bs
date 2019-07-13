@@ -82,7 +82,7 @@ namespace REGoth
 
         auto eventQueue = c->SO()->getComponent<CharacterEventQueue>();
 
-        bs::gDebug().logDebug("[CharacterKeyboardInput] Talk to: " + c->SO()->getName());
+        BS_LOG(Info, Uncategorized, "[CharacterKeyboardInput] Talk to: " + c->SO()->getName());
         eventQueue->clear();  // FIXME: Find out what's blocking the new message
         eventQueue->pushTalkToCharacter(thisCharacter);
         break;

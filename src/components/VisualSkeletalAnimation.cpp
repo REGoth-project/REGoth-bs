@@ -262,12 +262,13 @@ namespace REGoth
       }
       else
       {
-        gDebug().logWarning("[VisualSkeletalAnimation] Unknown next animation: " + action);
+        BS_LOG(Warning, Uncategorized,
+               "[VisualSkeletalAnimation] Unknown next animation: " + action);
       }
     }
     else
     {
-      gDebug().logWarning("[VisualSkeletalAnimation] Unknown animation event: " + string);
+      BS_LOG(Warning, Uncategorized, "[VisualSkeletalAnimation] Unknown animation event: " + string);
     }
   }
 
@@ -292,7 +293,7 @@ namespace REGoth
 
       if (layer > 0)
       {
-        // bs::gDebug().logDebug(bs::StringUtil::format(
+        // BS_LOG(Info, Uncategorized, bs::StringUtil::format(
         //     "[VisualSkeletalAnimation] Layered animation {1} not implemented", clip->getName()));
 
         // Commented out: Doesn't work yet
@@ -338,7 +339,7 @@ namespace REGoth
   {
     bs::String stateNow = getStateFromPlayingAnimation();
 
-    // getStateFromPlayingAnimation returns a string without the leading S_ 
+    // getStateFromPlayingAnimation returns a string without the leading S_
     if (!stateNow.empty())
     {
       stateNow = "S_" + stateNow;
@@ -491,7 +492,7 @@ namespace REGoth
         motion += AnimationState::getRootMotionSince(clipNow, then, now);
       }
 
-      // bs::gDebug().logDebug(bs::StringUtil::format("RootMotion {0} -> {1}: {2}", then, now,
+      // BS_LOG(Info, Uncategorized, bs::StringUtil::format("RootMotion {0} -> {1}: {2}", then, now,
       // bs::toString(motion)));
     }
 

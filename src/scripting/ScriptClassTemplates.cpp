@@ -43,23 +43,23 @@ namespace REGoth
         {
           auto num = ((SymbolInt&)memberSymbol).ints.size();
 
-          obj.ints[name].resize(num);
+          obj.ints[name].resize(num, 0);
         }
         else if (memberSymbol.type == SymbolType::Float)
         {
           auto num = ((SymbolFloat&)memberSymbol).floats.size();
 
-          obj.floats[name].resize(num);
+          obj.floats[name].resize(num, 0.0f);
         }
         else if (memberSymbol.type == SymbolType::String)
         {
           auto num = ((SymbolString&)memberSymbol).strings.size();
 
-          obj.strings[name].resize(num);
+          obj.strings[name].resize(num, "");
         }
         else if (memberSymbol.type == SymbolType::ScriptFunction)
         {
-          obj.functionPointers[name] = SYMBOL_INDEX_INVALID;
+          obj.functionPointers[name] = 0;
         }
         else
         {

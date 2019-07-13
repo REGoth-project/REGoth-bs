@@ -16,21 +16,21 @@ namespace REGoth
     {
       bs::Path result;
 
-      bs::gDebug().logDebug("[FindEngineContent] Trying current working directory");
+      BS_LOG(Info, Uncategorized, "[FindEngineContent] Trying current working directory");
       result = findEngineContentAtWorkingDirectory();
 
       if (result != bs::Path::BLANK) return result;
 
       // Most of the time, this should be equal to the current working directory
       // but it may be not, so check here again...
-      bs::gDebug().logDebug("[FindEngineContent] Trying executable path");
+      BS_LOG(Info, Uncategorized, "[FindEngineContent] Trying executable path");
 
       result = findEngineContentNextToExecutable(executablePath.getDirectory());
 
       if (result != bs::Path::BLANK) return result;
 
       // We could be also running inside the repositry, so search upwards
-      bs::gDebug().logDebug("[FindEngineContent] Trying to search the directory tree upwards");
+      BS_LOG(Info, Uncategorized, "[FindEngineContent] Trying to search the directory tree upwards");
 
       result = findEngineContentUpFromExecutable(executablePath.getDirectory());
 
@@ -79,7 +79,7 @@ namespace REGoth
 
     static bool isContentDirectory(const bs::Path& path)
     {
-      bs::gDebug().logDebug("[FindEngineContent]   Looking at: " + path.toString());
+      BS_LOG(Info, Uncategorized, "[FindEngineContent]   Looking at: " + path.toString());
 
       if (path.getTail() != REGOTH_CONTENT_DIR_NAME) return false;
       if (!bs::FileSystem::isDirectory(path)) return false;
