@@ -256,6 +256,9 @@ namespace REGoth
     // Whether Physics is being processed for this character
     bool mIsPhysicsActive = true;
 
+    // Whether this character is standing on solid ground, like the world mesh or a static vob
+    bool isStandingOnSolidGround = false;
+
     // Whether the character is running, sneaking, etc
     AI::WalkMode mWalkMode = AI::WalkMode::Run;
 

@@ -330,21 +330,32 @@ namespace REGoth
       handleTurning();
     }
 
-    bs::Vector3 rootMotion = mVisual->resolveFrameRootMotion();
+    bs::Vector3 rootMotion = bs::Vector3::ZERO;
 
-    // Rotate by the scene objects rotation
-    rootMotion = SO()->getTransform().getRotation().rotate(rootMotion);
+    if (!mVisual->isPlayingIdleAnimation())
+    {
+      rootMotion = mVisual->resolveFrameRootMotion();
 
-    // No need to multiply rootMotion by the frame delta since it is the actual movement since
-    // last time we queried it. For some reason this is inverted though.
-    rootMotion *= -1.0;
+      // Rotate by the scene objects rotation
+      rootMotion = SO()->getTransform().getRotation().rotate(rootMotion);
 
-    // Note: Gravity is acceleration, but since the walker doesn't support falling, just apply it
-    // as a velocity FIXME: Actual gravity!
-    const float frameDelta = bs::gTime().getFixedFrameDelta();
-    bs::Vector3 gravity    = bs::Vector3(0, -9.81f, 0);  // gPhysics().getGravity();
+      // No need to multiply rootMotion by the frame delta since it is the actual movement since
+      // last time we queried it. For some reason this is inverted though.
+      rootMotion *= -1.0;
+    }
 
-    mCharacterController->move(rootMotion + gravity * frameDelta);
+    if (!isStandingOnSolidGround || rootMotion.squaredLength() > 0)
+    {
+      // Note: Gravity is acceleration, but since the walker doesn't support falling, just apply it
+      // as a velocity FIXME: Actual gravity!
+      const float frameDelta = bs::gTime().getFixedFrameDelta();
+      bs::Vector3 gravity    = bs::Vector3(0, -9.81f, 0);  // gPhysics().getGravity();
+
+      auto flags = mCharacterController->move(rootMotion + gravity * frameDelta);
+
+      // TODO: Check if the character is standing on a dynamic object, which is NOT solid ground!
+      isStandingOnSolidGround = flags.isSet(bs::CharacterCollisionFlag::Down);
+    }
   }
 
   void CharacterAI::handleTurning()

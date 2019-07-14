@@ -19,6 +19,7 @@ namespace REGoth
     BS_RTTI_MEMBER_REFL(mSubNodeVisuals, 5)
     BS_RTTI_MEMBER_REFL(mRootMotionLastClip, 6)
     BS_RTTI_MEMBER_PLAIN(mRootMotionLastTime, 7)
+    BS_RTTI_MEMBER_REFL(mPlayingMainAnimation, 8)
     BS_END_RTTI_MEMBERS
 
   public:

@@ -299,15 +299,20 @@ namespace REGoth
         // Commented out: Doesn't work yet
         // mSubAnimation->blendAdditive(clip, 1.0f, 0.0f, (bs::UINT32)layer);
         mSubAnimation->play(clip->mClip);
+
+        // TODO: Once blending is implemented, these won't be the main animation clips anymore
+        mPlayingMainAnimation = clip;
       }
       else
       {
         mSubAnimation->play(clip->mClip);
+        mPlayingMainAnimation = clip;
       }
     }
     else
     {
       mSubAnimation->stopAll();
+      mPlayingMainAnimation = {};
     }
   }
 
@@ -500,6 +505,13 @@ namespace REGoth
     mRootMotionLastClip = clipNow;
 
     return motion;
+  }
+
+  bool VisualSkeletalAnimation::isPlayingIdleAnimation() const
+  {
+    if (!mPlayingMainAnimation) return false;
+
+    return mPlayingMainAnimation->mIsIdleAnimation;
   }
 
   void VisualSkeletalAnimation::addDefaultAttachments()

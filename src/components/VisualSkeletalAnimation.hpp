@@ -12,7 +12,7 @@ namespace REGoth
 {
   class RTTI_VisualSkeletalAnimation;
   class NodeVisuals;
-  using HNodeVisuals = bs::GameObjectHandle<NodeVisuals>;
+  using HNodeVisuals    = bs::GameObjectHandle<NodeVisuals>;
   using HZAnimationClip = BsZenLib::Res::HZAnimation;
 
   /**
@@ -88,6 +88,15 @@ namespace REGoth
     bs::Vector3 resolveFrameRootMotion();
 
     /**
+     * @return True, if the main animation has the "Idle"-flag set.
+     *
+     * An Animation that is flagged as "Idle" will only do slight movements
+     * which can be simply turned off when viewed from far away. This is only
+     * for optimizing the performance.
+     */
+    bool isPlayingIdleAnimation() const;
+
+    /**
      * @return The bounds of the underlaying renderable
      */
     bs::Bounds getBounds() const;
@@ -137,7 +146,8 @@ namespace REGoth
      *         if the transition is not possible.
      */
     bs::String findAnimationToTransitionTo(const bs::String& stateAnim) const;
-    bs::String findAnimationToTransitionTo(const bs::String& fromAnim, const bs::String& toAnim) const;
+    bs::String findAnimationToTransitionTo(const bs::String& fromAnim,
+                                           const bs::String& toAnim) const;
 
     /**
      * @return Whether the given animation is currently playing
@@ -173,7 +183,6 @@ namespace REGoth
     void setDebugAnimationSpeedFactor(float factor);
 
   protected:
-
     void onInitialized() override;
 
     /**
@@ -218,7 +227,6 @@ namespace REGoth
     void throwIfNotReadyForRendering() const;
 
   private:
-
     /**
      * Fills mAnimations.
      */
@@ -292,11 +300,14 @@ namespace REGoth
     bs::HAnimationClip mRootMotionLastClip; /**< Last clip we got the root motion from */
     float mRootMotionLastTime = 0.0f; /**< Last time the animation was queried for root motion */
 
+    HZAnimationClip mPlayingMainAnimation; /**< Handle of the currently playing main animation. May
+                                              be invalid. */
+
   public:
     REGOTH_DECLARE_RTTI(VisualSkeletalAnimation)
 
   protected:
-    VisualSkeletalAnimation() = default; // For RTTI
+    VisualSkeletalAnimation() = default;  // For RTTI
   };
 
   using HVisualSkeletalAnimation = bs::GameObjectHandle<VisualSkeletalAnimation>;
