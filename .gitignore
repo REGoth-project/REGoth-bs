@@ -1,6 +1,6 @@
 # CMake
 /*build/
-/*build-debug/
+/*build-*/
 
 # Language Server
 .ccls-cache
