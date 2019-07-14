@@ -70,6 +70,74 @@ namespace REGoth
     return filterFilesInDirectoryByExtRecursive(modDirectory(), ".mod");
   }
 
+  bs::Path OriginalGameFiles::system() const
+  {
+    return findCaseSensitivePathOf("system/");
+  }
+
+  OriginalGameFiles::GameType OriginalGameFiles::gameType() const
+  {
+    if (findCaseSensitivePathOf("system/gothic.exe") != bs::Path::BLANK)
+    {
+      return GameType::Gothic1;
+    }
+    else if (findCaseSensitivePathOf("system/gothic2.exe") != bs::Path::BLANK)
+    {
+      return GameType::Gothic1;
+    }
+    else
+    {
+      return GameType::Custom;
+    }
+  }
+
+  bool OriginalGameFiles::isGameRoot(const bs::Path& path)
+  {
+    if (!bs::FileSystem::isDirectory(path)) return false;
+
+    bs::Vector<bs::Path> files;
+    bs::Vector<bs::Path> dirs;
+
+    bs::FileSystem::getChildren(path, files, dirs);
+
+    bool foundData   = false;
+    bool foundSystem = false;
+    bool foundWork   = false;
+
+    for (const bs::Path& p : dirs)
+    {
+      bs::String lowercaseDir = p.getTail();
+      bs::StringUtil::toLowerCase(lowercaseDir);
+
+      if (lowercaseDir == "_work") foundWork = true;
+      if (lowercaseDir == "system") foundSystem = true;
+      if (lowercaseDir == "data") foundData = true;
+    }
+
+    if (!foundData) return false;
+    if (!foundSystem) return false;
+    if (!foundWork) return false;
+
+    return true;
+  }
+
+  bs::Path OriginalGameFiles::findGameFilesRoot(const bs::Path& from)
+  {
+    bs::Path cwd = from;
+
+    for (bs::UINT32 i = 0; i < cwd.getNumDirectories(); i++)
+    {
+      cwd = cwd.getParent();
+
+      if (isGameRoot(cwd))
+      {
+        return cwd.makeAbsolute(from);
+      }
+    }
+
+    return bs::Path::BLANK;
+  }
+
   bs::Path OriginalGameFiles::findCaseSensitivePathOf(const bs::Path& path) const
   {
     bs::Path actual = mRoot;

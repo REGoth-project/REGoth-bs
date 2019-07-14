@@ -55,7 +55,45 @@ namespace REGoth
      */
     bs::Path vdfsFileEntryPoint() const;
 
+    /**
+     * @return Absolute path of the original games `system`-directory.
+     */
+    bs::Path system() const;
+
+    enum class GameType
+    {
+      /** Used if a Gothic.exe exists */
+      Gothic1,
+
+      /** Used if a Gothic2.exe exists */
+      Gothic2,
+
+      /** Used if the game files don't contain Gothic.exe or Gothic2.exe */
+      Custom,
+    };
+
+    /**
+     * @return Which game REGoth is currently running. (e.g. Gothic I or Gothic II)
+     */
+    GameType gameType() const;
+
+    /**
+     * Given a path that is somewhere in an original gothic installation, this function
+     * finds the root-directory of those game files, ie. the one which contains `_work`,
+     * `data`, `system`, and so on. If the given path was found to be within a gothic
+     * installation, the root of it is returned.
+     *
+     * If the path was NOT found to be part of a gothic installation, bs::Path::BLANK
+     * is returned.
+     */
+    static bs::Path findGameFilesRoot(const bs::Path& from);
+
   private:
+    /**
+     * @return Whether the path given is a somewhat valid gothic installation root directory.
+     */
+    static bool isGameRoot(const bs::Path& path);
+
     /**
      * Outputs all files found in the given directory which match the given extension.
      *

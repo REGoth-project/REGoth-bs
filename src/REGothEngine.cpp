@@ -225,14 +225,46 @@ int ::REGoth::main(REGothEngine& regoth, int argc, char** argv)
 {
   regoth.initializeBsf();
 
+  bs::Path engineExecutablePath = bs::Path(argv[0]);
+  bs::Path gameDirectory;
+
+  // No game path supplied. Check whether we are running from within a game directory.
   if (argc < 2)
   {
-    std::cout << "Usage: REGoth <path/to/game>" << std::endl;
-    return -1;
+    std::cout << "Trying to find game installation root from engine executable upwards..."
+              << std::endl;
+
+    gameDirectory = OriginalGameFiles::findGameFilesRoot(engineExecutablePath);
+
+    if (gameDirectory == bs::Path::BLANK &&
+        engineExecutablePath != bs::FileSystem::getWorkingDirectoryPath())
+    {
+      std::cout << "Trying to find game installation root from working directory..." << std::endl;
+
+      gameDirectory =
+          OriginalGameFiles::findGameFilesRoot(bs::FileSystem::getWorkingDirectoryPath());
+    }
+  }
+  else
+  {
+    gameDirectory = bs::Path(argv[1]);
   }
 
-  bs::Path engineExecutablePath = bs::Path(argv[0]);
-  bs::Path gameDirectory        = bs::Path(argv[1]);
+  if (gameDirectory == bs::Path::BLANK)
+  {
+    std::cout << "Could not find game installation!" << std::endl;
+    std::cout << "Try to supply one by calling REGoth like this:" << std::endl;
+    std::cout << "" << std::endl;
+    std::cout << "    REGoth <path/to/game>" << std::endl;
+    std::cout << "" << std::endl;
+    std::cout << "Or place REGoth in a subdirectory of your game installation." << std::endl;
+
+    return -1;
+  }
+  else
+  {
+    std::cout << "Using game installation at: " << gameDirectory.toString() << std::endl;
+  }
 
   engineExecutablePath.makeAbsolute(bs::FileSystem::getWorkingDirectoryPath());
   gameDirectory.makeAbsolute(bs::FileSystem::getWorkingDirectoryPath());
