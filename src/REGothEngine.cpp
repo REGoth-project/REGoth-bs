@@ -11,6 +11,7 @@
 #include <Scene/BsSceneObject.h>
 #include <engine-content/EngineContent.hpp>
 #include <exception/Throw.hpp>
+#include <log/logging.hpp>
 #include <original-content/OriginalGameFiles.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
@@ -31,11 +32,11 @@ void REGothEngine::loadGamePackages(const bs::Path& executablePath, const bs::Pa
 
   gVirtualFileSystem().setPathToEngineExecutable(executablePath.toString());
 
-  BS_LOG(Info, Uncategorized, "[VDFS] Indexing packages: ");
+  REGOTH_LOG(Info, Uncategorized, "[VDFS] Indexing packages: ");
 
   for (auto p : files.allVdfsPackages())
   {
-    BS_LOG(Info, Uncategorized, "[VDFS]  - " + p.getFilename());
+    REGOTH_LOG(Info, Uncategorized, "[VDFS]  - {0}", p.getFilename());
     gVirtualFileSystem().loadPackage(p);
   }
 
@@ -51,9 +52,9 @@ void REGothEngine::loadModPackages(const OriginalGameFiles& files)
 
 void REGothEngine::saveCachedResourceManifests()
 {
-  BS_LOG(Info, Uncategorized, "[REGothEngine] Saving resource manifests:");
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Saving resource manifests:");
 
-  BS_LOG(Info, Uncategorized, "[REGothEngine]   - Gothic Cache");
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine]   - Gothic Cache");
   BsZenLib::SaveResourceManifest();
 
   // REGothEngine-Content manifest is saved after every resource load since
@@ -75,8 +76,7 @@ void REGothEngine::findEngineContent(const bs::Path& executablePath)
     REGOTH_THROW(InvalidStateException, "Did not find REGoth content directory!");
   }
 
-  BS_LOG(Info, Uncategorized,
-         "[REGothEngine] Found REGoth-content directory at: " +
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Found REGoth-content directory at: {0}",
              mEngineContent->contentPath().toString());
 }
 
@@ -93,7 +93,7 @@ void REGothEngine::loadCachedResourceManifests()
 {
   using namespace bs;
 
-  BS_LOG(Info, Uncategorized, "[REGothEngine] Loading cached resource manifests");
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Loading cached resource manifests");
 
   if (!mEngineContent)
   {
@@ -101,10 +101,10 @@ void REGothEngine::loadCachedResourceManifests()
                  "Engine Content not initialized, has findEngineContent() been called?");
   }
 
-  BS_LOG(Info, Uncategorized, "[REGothEngine]   - REGoth Assets");
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine]   - REGoth Assets");
   mEngineContent->loadResourceManifest();
 
-  BS_LOG(Info, Uncategorized, "[REGothEngine]   - Original Gothic Assets");
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine]   - Original Gothic Assets");
   BsZenLib::LoadResourceManifest();
 }
 
@@ -172,7 +172,7 @@ void REGothEngine::setupMainCamera()
 
 void REGothEngine::setupScene()
 {
-  BS_LOG(Info, Uncategorized, "[REGothEngine] Setting up scene");
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Setting up scene");
 }
 
 void REGothEngine::setShaders()
@@ -201,7 +201,7 @@ void REGothEngine::run()
   mMainCamera->SO()->setActive(false);
   mMainCamera->SO()->setActive(true);
 
-  BS_LOG(Info, Uncategorized, "[REGothEngine] Running mainloop now!");
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Running mainloop now!");
 
   bs::Application::instance().runMainLoop();
 }
@@ -210,14 +210,14 @@ void REGothEngine::shutdown()
 {
   if (bs::Application::isStarted())
   {
-    BS_LOG(Info, Uncategorized, "[REGothEngine] Shutting down bs::f");
+    REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Shutting down bs::f");
 
     bs::Application::shutDown();
   }
   else
   {
-    BS_LOG(Warning, Uncategorized,
-           "[REGothEngine] Received shutdown request, but bs::f is not running!");
+    REGOTH_LOG(Warning, Uncategorized,
+               "[REGothEngine] Received shutdown request, but bs::f is not running!");
   }
 }
 
@@ -269,14 +269,15 @@ int ::REGoth::main(REGothEngine& regoth, int argc, char** argv)
   engineExecutablePath.makeAbsolute(bs::FileSystem::getWorkingDirectoryPath());
   gameDirectory.makeAbsolute(bs::FileSystem::getWorkingDirectoryPath());
 
-  BS_LOG(Info, Uncategorized, "[Main] Running REGothEngine");
-  BS_LOG(Info, Uncategorized, "[Main]  - Engine executable: " + engineExecutablePath.toString());
-  BS_LOG(Info, Uncategorized, "[Main]  - Game directory:    " + gameDirectory.toString());
+  REGOTH_LOG(Info, Uncategorized, "[Main] Running REGothEngine");
+  REGOTH_LOG(Info, Uncategorized, "[Main]  - Engine executable: {0}",
+             engineExecutablePath.toString());
+  REGOTH_LOG(Info, Uncategorized, "[Main]  - Game directory:    {0}", gameDirectory.toString());
 
-  BS_LOG(Info, Uncategorized, "[Main] Finding REGoth content-directory");
+  REGOTH_LOG(Info, Uncategorized, "[Main] Finding REGoth content-directory");
   regoth.findEngineContent(engineExecutablePath);
 
-  BS_LOG(Info, Uncategorized, "[Main] Loading original game packages");
+  REGOTH_LOG(Info, Uncategorized, "[Main] Loading original game packages");
   regoth.loadGamePackages(engineExecutablePath, gameDirectory);
 
   if (!regoth.hasFoundGameFiles())
@@ -287,16 +288,16 @@ int ::REGoth::main(REGothEngine& regoth, int argc, char** argv)
 
   regoth.loadCachedResourceManifests();
 
-  BS_LOG(Info, Uncategorized, "[REGothEngine] Loading Shaders");
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Loading Shaders");
 
   regoth.setShaders();
   regoth.setupInput();
 
-  BS_LOG(Info, Uncategorized, "[REGothEngine] Setting up Main Camera");
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Setting up Main Camera");
 
   regoth.setupMainCamera();
 
-  BS_LOG(Info, Uncategorized, "[REGothEngine] Setting up Scene");
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Setting up Scene");
 
   regoth.setupScene();
 

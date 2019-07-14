@@ -14,6 +14,7 @@
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
 #include <exception/Throw.hpp>
+#include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 #include <zenload/zCMesh.h>
 #include <zenload/zenParser.h>
@@ -42,7 +43,7 @@ namespace REGoth
 
     if (!hasLoadedZEN)
     {
-      BS_LOG(Warning, Uncategorized, "[ConstructFromZEN] Failed to read zen-file: " + zenFile);
+      REGOTH_LOG(Warning, Uncategorized, "[ConstructFromZEN] Failed to read zen-file: {0}", zenFile);
       return {};
     }
 
@@ -63,7 +64,7 @@ namespace REGoth
 
     if (!hasLoadedZEN)
     {
-      BS_LOG(Warning, Uncategorized, "[ConstructFromZEN] Failed to read zen-file: " + zenFile);
+      REGOTH_LOG(Warning, Uncategorized, "[ConstructFromZEN] Failed to read zen-file: {0}", zenFile);
       return {};
     }
 
@@ -128,8 +129,8 @@ namespace REGoth
       // This shouldn't be needed, but sometimes the worldmesh in mesh->getMesh() seems to get lost?
       if (!mesh.isLoaded())
       {
-        BS_LOG(Warning, Uncategorized,
-               "Failed to load cached world mesh of zen " + zen.fileName + "- rechaching it!");
+        REGOTH_LOG(Warning, Uncategorized,
+                   "Failed to load cached world mesh of zen {0} - rechaching it!", zen.fileName);
         mesh = BsZenLib::ImportAndCacheStaticMesh(meshFileName, zen.worldMesh,
                                                   gVirtualFileSystem().getFileIndex());
       }
@@ -154,7 +155,8 @@ namespace REGoth
 
     if (!actualMesh->getCachedData())
     {
-      BS_LOG(Error, Uncategorized, "Cannot extract world mesh for physics, no mesh data available!");
+      REGOTH_LOG(Error, Uncategorized,
+                 "Cannot extract world mesh for physics, no mesh data available!");
     }
     else
     {

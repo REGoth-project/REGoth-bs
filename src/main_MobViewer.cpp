@@ -4,6 +4,7 @@
 #include <Components/BsCCamera.h>
 #include <Scene/BsSceneObject.h>
 #include <components/VisualInteractiveObject.hpp>
+#include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
 class REGothMobViewer : public REGoth::REGothEngine
@@ -22,7 +23,7 @@ public:
 
     for (auto s : gVirtualFileSystem().listAllFiles())
     {
-      BS_LOG(Info, Uncategorized, s);
+      REGOTH_LOG(Info, Uncategorized, s);
     }
 
     bs::HSceneObject mobSO = bs::SceneObject::create("Mob");
@@ -34,7 +35,7 @@ public:
 
     // for (auto s : mds->getMeshes())
     // {
-    //   BS_LOG(Info, Uncategorized, s->getName());
+    //   REGOTH_LOG(Info, Uncategorized, s->getName());
     // }
 
     mobVis->setVisual("CHESTBIG_OCCHESTMEDIUM.MDS");

@@ -13,6 +13,7 @@
 #include <animation/StateNaming.hpp>
 #include <components/NodeVisuals.hpp>
 #include <exception/Throw.hpp>
+#include <log/logging.hpp>
 
 const bs::String MODEL_NODE_NAME_R_HAND    = "BIP01 R HAND";
 const bs::String MODEL_NODE_NAME_L_HAND    = "BIP01 L HAND";
@@ -52,11 +53,10 @@ namespace REGoth
     }
     else
     {
-      BS_LOG(Warning, Uncategorized,
-             bs::StringUtil::format("[VisualCharacter] Did not find body mesh {0}  in model script "
-                                    "'{1}'', defaulting to first one: {2}",
-                                    bodyMeshNoExt, modelScript()->getName(),
-                                    modelScript()->getMeshes()[0]->getName()));
+      REGOTH_LOG(Warning, Uncategorized,
+                 "[VisualCharacter] Did not find body mesh {0}  in model script "
+                 "'{1}'', defaulting to first one: {2}",
+                 bodyMeshNoExt, modelScript()->getName(), modelScript()->getMeshes()[0]->getName());
 
       setMesh(modelScript()->getMeshes()[0]);
     }

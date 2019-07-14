@@ -9,6 +9,7 @@
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
+#include <log/logging.hpp>
 #include <scripting/ScriptVMForGameWorld.hpp>
 
 namespace REGoth
@@ -167,8 +168,8 @@ namespace REGoth
 
       bs::String functionName = "RTN_" + newDailyRoutine + "_" + bs::toString(id);
 
-      BS_LOG(Info, Uncategorized,
-             "[Character] Set Routine of " + SO()->getName() + " to " + functionName);
+      REGOTH_LOG(Info, Uncategorized, "[Character] Set Routine of {0} to {1}", SO()->getName(),
+                 functionName);
 
       const auto& fn =
           scriptVM().scriptSymbols().getSymbol<Scripting::SymbolScriptFunction>(functionName);
@@ -282,8 +283,8 @@ namespace REGoth
 
     if (!wp)
     {
-      BS_LOG(Warning, Uncategorized,
-             "[Character] Waypoint " + waypoint + " does not exist! (getDistanceToWaypoint)");
+      REGOTH_LOG(Warning, Uncategorized,
+                 "[Character] Waypoint {0} does not exist! (getDistanceToWaypoint)", waypoint);
       return -1.0f;
     }
 

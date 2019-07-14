@@ -11,6 +11,7 @@
 #include <animation/StateNaming.hpp>
 #include <components/NodeVisuals.hpp>
 #include <exception/Throw.hpp>
+#include <log/logging.hpp>
 #include <original-content/OriginalGameResources.hpp>
 
 namespace REGoth
@@ -262,13 +263,14 @@ namespace REGoth
       }
       else
       {
-        BS_LOG(Warning, Uncategorized,
-               "[VisualSkeletalAnimation] Unknown next animation: " + action);
+        REGOTH_LOG(Warning, Uncategorized, "[VisualSkeletalAnimation] Unknown next animation: {0}",
+                   action);
       }
     }
     else
     {
-      BS_LOG(Warning, Uncategorized, "[VisualSkeletalAnimation] Unknown animation event: " + string);
+      REGOTH_LOG(Warning, Uncategorized, "[VisualSkeletalAnimation] Unknown animation event: {0}",
+                 string);
     }
   }
 
@@ -293,7 +295,7 @@ namespace REGoth
 
       if (layer > 0)
       {
-        // BS_LOG(Info, Uncategorized, bs::StringUtil::format(
+        // REGOTH_LOG(Info, Uncategorized, bs::StringUtil::format(
         //     "[VisualSkeletalAnimation] Layered animation {1} not implemented", clip->getName()));
 
         // Commented out: Doesn't work yet
@@ -497,8 +499,8 @@ namespace REGoth
         motion += AnimationState::getRootMotionSince(clipNow, then, now);
       }
 
-      // BS_LOG(Info, Uncategorized, bs::StringUtil::format("RootMotion {0} -> {1}: {2}", then, now,
-      // bs::toString(motion)));
+      // REGOTH_LOG(Info, Uncategorized, bs::StringUtil::format("RootMotion {0} -> {1}: {2}",
+      // then, now, bs::toString(motion)));
     }
 
     mRootMotionLastTime = state.time;

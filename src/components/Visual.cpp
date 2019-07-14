@@ -3,6 +3,7 @@
 #include "VisualMorphMesh.hpp"
 #include "VisualStaticMesh.hpp"
 #include <Scene/BsSceneObject.h>
+#include <log/logging.hpp>
 
 namespace REGoth
 {
@@ -65,8 +66,8 @@ namespace REGoth
     }
     else
     {
-      BS_LOG(Warning, Uncategorized,
-             "[Visual] Unsupported visual type (" + bs::toString((int)kind) + ") of " + visual);
+      REGOTH_LOG(Warning, Uncategorized, "[Visual] Unsupported visual type ({0}) of {1}", (int)kind,
+                 visual);
       return false;
     }
   }

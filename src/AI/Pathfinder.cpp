@@ -7,11 +7,12 @@
 #include <components/GameWorld.hpp>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
+#include <log/logging.hpp>
 
 static const float MAX_SIDE_DIFFERENCE_TO_REACH_POSITION     = 1.0f;  // Meters
-static const float MAX_HEIGHT_DIFFERENCE_TO_REACH_POSITION   = 2.0f;   // Meters
-static const float MAX_TARGET_ENTITY_MOVEMENT_BEFORE_REROUTE = 5.0f;   // Meters
-static const float MAX_POINT_DISTANCE_FOR_CLEANUP            = 5.0f;   // Meters
+static const float MAX_HEIGHT_DIFFERENCE_TO_REACH_POSITION   = 2.0f;  // Meters
+static const float MAX_TARGET_ENTITY_MOVEMENT_BEFORE_REROUTE = 5.0f;  // Meters
+static const float MAX_POINT_DISTANCE_FOR_CLEANUP            = 5.0f;  // Meters
 
 namespace REGoth
 {
@@ -256,10 +257,8 @@ namespace REGoth
         // via the waynet, just exit here.
         mActiveRoute.isTargetUnreachable = true;
 
-        BS_LOG(Info, Uncategorized,
-               bs::StringUtil::format("[Pathfinder] No path from {0} to {1}",
-                                      nearestWpToStart->SO()->getName(),
-                                      nearestWpToTarget->SO()->getName()));
+        REGOTH_LOG(Info, Uncategorized, "[Pathfinder] No path from {0} to {1}",
+                   nearestWpToStart->SO()->getName(), nearestWpToTarget->SO()->getName());
         return;
       }
 

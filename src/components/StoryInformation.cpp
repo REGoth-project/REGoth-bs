@@ -3,6 +3,7 @@
 #include <components/Character.hpp>
 #include <components/GameWorld.hpp>
 #include <exception/Throw.hpp>
+#include <log/logging.hpp>
 #include <scripting/ScriptSymbolQueries.hpp>
 #include <scripting/ScriptVMForGameWorld.hpp>
 
@@ -59,7 +60,8 @@ namespace REGoth
 
       mAllInfos.emplace_back(info);
 
-      BS_LOG(Info, Uncategorized, "[StoryInformation] Info " + info.name + " for " + mSelf->getName());
+      REGOTH_LOG(Info, Uncategorized, "[StoryInformation] Info {0} for {1}", info.name,
+                 mSelf->getName());
     }
   }
 
@@ -88,7 +90,7 @@ namespace REGoth
 
     if (!info.isPermanent && otherInfo->knowsInfo(info.name))
     {
-     return false;
+      return false;
     }
 
     return mGameWorld->scriptVM().runInfoConditionFunction(info.conditionFunction, mSelf, other);
@@ -114,8 +116,8 @@ namespace REGoth
     }
 
     gGameplayUI()->choices()->setOnChoiceCallback([this, other](UIDialogueChoice::Choice choice) {
-      BS_LOG(Info, Uncategorized, "[StoryInformation] Choice taken: " + choice.text + " (" +
-                            choice.instanceName + ")");
+      REGOTH_LOG(Info, Uncategorized, "[StoryInformation] Choice taken: {0} ({1})", choice.text,
+                 choice.instanceName);
 
       if (!choice.instanceName.empty())
       {

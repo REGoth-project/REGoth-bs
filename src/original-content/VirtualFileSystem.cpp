@@ -1,6 +1,7 @@
 #include "VirtualFileSystem.hpp"
 #include <FileSystem/BsFileSystem.h>
 #include <exception/Throw.hpp>
+#include <log/logging.hpp>
 #include <vdfs/fileIndex.h>
 
 using namespace REGoth;
@@ -49,11 +50,11 @@ void VirtualFileSystem::mountDirectory(const bs::Path& path)
     REGOTH_THROW(InvalidStateException, "Cannot mount directories on finalized file index.");
   }
 
-  BS_LOG(Info, Uncategorized, "[VDFS] Mounting directory: " + path.toString() + " (recursive):");
+  REGOTH_LOG(Info, Uncategorized, "[VDFS] Mounting directory (recursive): {0}", path.toString());
 
   auto onDirectory = [&](const bs::Path& p) {
     bs::Path relative = p.getRelative(path);
-    BS_LOG(Info, Uncategorized, "[VDFS]  - " + relative.toString());
+    REGOTH_LOG(Info, Uncategorized, "[VDFS]  - {0}", relative.toString());
 
     mInternal->fileIndex.mountFolder(p.toString().c_str());
 

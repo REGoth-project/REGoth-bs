@@ -6,6 +6,7 @@
 #include <components/CharacterEventQueue.hpp>
 #include <components/GameClock.hpp>
 #include <components/GameWorld.hpp>
+#include <log/logging.hpp>
 #include <scripting/ScriptVMForGameWorld.hpp>
 
 namespace REGoth
@@ -87,8 +88,8 @@ namespace REGoth
 
     void ScriptState::startScriptAIState(const bs::String& state)
     {
-      BS_LOG(Info, Uncategorized,
-             "[ScriptState] Starting state " + state + " on npc " + mHostCharacter->SO()->getName());
+      REGOTH_LOG(Info, Uncategorized, "[ScriptState] Starting state {0} on npc {1}", state,
+                 mHostCharacter->SO()->getName());
 
       // Save script variables used by the state
       mStateOther  = scriptVM().otherInstance();
@@ -499,7 +500,7 @@ namespace REGoth
 
       // Clear old routine
       mRoutine.routine.clear();
-      mRoutine.activeRoutineIndex = 0;
+      mRoutine.activeRoutineIndex    = 0;
       mRoutine.shouldStartNewRoutine = true;
 
       if (!routine.empty())

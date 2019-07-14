@@ -10,6 +10,7 @@
 #include <components/StoryInformation.hpp>
 #include <components/VisualCharacter.hpp>
 #include <exception/Throw.hpp>
+#include <log/logging.hpp>
 
 namespace REGoth
 {
@@ -101,7 +102,7 @@ namespace REGoth
       {
         deactivatePhysics();
 
-        BS_LOG(Info, Uncategorized, "[CharacterAI] Deactivate physics on " + SO()->getName());
+        REGOTH_LOG(Info, Uncategorized, "[CharacterAI] Deactivate physics on {0}", SO()->getName());
       }
     }
     else
@@ -110,7 +111,7 @@ namespace REGoth
       {
         activatePhysics();
 
-        BS_LOG(Info, Uncategorized, "[CharacterAI]   Activate physics on " + SO()->getName());
+        REGOTH_LOG(Info, Uncategorized, "[CharacterAI]   Activate physics on {0}", SO()->getName());
       }
     }
   }
@@ -392,8 +393,8 @@ namespace REGoth
       // Usually we would throw here, but Gothic has some invalid waypoints inside it's scripts
       // so we would break the original games if we did that. Resort to a warning for those,
       // better than nothing, I guess.
-      BS_LOG(Warning, Uncategorized,
-             "[CharacterAI] Teleport failed, waypoint doesn't exist: " + waypoint);
+      REGOTH_LOG(Warning, Uncategorized,
+                 "[CharacterAI] Teleport failed, waypoint doesn't exist: {0}", waypoint);
       return;
     }
 

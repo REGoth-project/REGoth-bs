@@ -14,6 +14,7 @@
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
 #include <scripting/ScriptSymbolQueries.hpp>
+#include <log/logging.hpp>
 
 // TODO: Refactor, so we don't access deep into the UI code here for dialogues
 #include <components/GameplayUI.hpp>
@@ -484,7 +485,7 @@ namespace REGoth
 
     void DaedalusVMForGameWorld::external_Print()
     {
-      BS_LOG(Info, Uncategorized, "[ScriptVMInterface] [Print] " + popStringValue());
+      REGOTH_LOG(Info, Uncategorized, "[ScriptVMInterface] [Print] " + popStringValue());
     }
 
     void DaedalusVMForGameWorld::external_PrintDebugInstCh()
@@ -614,7 +615,7 @@ namespace REGoth
       bs::INT32 talent     = popIntValue();
       HCharacter character = popCharacterInstance();
 
-      BS_LOG(Warning, Uncategorized, "[External] Using external stub: NPC_SetTalentSkill");
+      REGOTH_LOG(Warning, Uncategorized, "[External] Using external stub: NPC_SetTalentSkill");
     }
 
     void DaedalusVMForGameWorld::external_NPC_EquipItem()
@@ -989,7 +990,7 @@ namespace REGoth
     {
       HCharacter self = popCharacterInstance();
 
-      BS_LOG(Warning, Uncategorized, "[External] Using external stub: NPC_RefuseTalk");
+      REGOTH_LOG(Warning, Uncategorized, "[External] Using external stub: NPC_RefuseTalk");
 
       mStack.pushInt(0);
     }
@@ -1021,7 +1022,7 @@ namespace REGoth
 
     void DaedalusVMForGameWorld::external_InfoManager_HasFinished()
     {
-      // BS_LOG(Warning, Uncategorized, "[External] Using external stub: InfoManager_HasFinished");
+      // REGOTH_LOG(Warning, Uncategorized, "[External] Using external stub: InfoManager_HasFinished");
 
       if (gGameplayUI()->isDialogueInProgress())
       {

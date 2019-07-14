@@ -5,6 +5,7 @@
 #include <components/CharacterEventQueue.hpp>
 #include <components/GameWorld.hpp>
 #include <exception/Throw.hpp>
+#include <log/logging.hpp>
 
 namespace REGoth
 {
@@ -82,7 +83,7 @@ namespace REGoth
 
         auto eventQueue = c->SO()->getComponent<CharacterEventQueue>();
 
-        BS_LOG(Info, Uncategorized, "[CharacterKeyboardInput] Talk to: " + c->SO()->getName());
+        REGOTH_LOG(Info, Uncategorized, "[CharacterKeyboardInput] Talk to: {0}", c->SO()->getName());
         eventQueue->clear();  // FIXME: Find out what's blocking the new message
         eventQueue->pushTalkToCharacter(thisCharacter);
         break;

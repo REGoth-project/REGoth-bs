@@ -15,6 +15,7 @@
 #include <components/Waypoint.hpp>
 #include <daedalus/DATFile.h>
 #include <exception/Throw.hpp>
+#include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
 class REGothWorldCacheTest : public REGoth::REGothEngine
@@ -36,17 +37,19 @@ public:
 
     if (!bs::FileSystem::exists(BsZenLib::GothicPathToCachedWorld(saveGame)))
     {
-      BS_LOG(Info, Uncategorized, "[REGothWorldCacheTest] Importing and caching ZEN: " + world);
+      REGOTH_LOG(Info, Uncategorized, "[REGothWorldCacheTest] Importing and caching ZEN: {0}",
+                 world);
 
       HGameWorld gameWorld = GameWorld::importZEN(world);
 
-      BS_LOG(Info, Uncategorized, "[REGothWorldCacheTest] Saving world...");
+      REGOTH_LOG(Info, Uncategorized, "[REGothWorldCacheTest] Saving world...");
 
       gameWorld->save(saveGame);
     }
     else
     {
-      BS_LOG(Info, Uncategorized, "[REGothWorldCacheTest] Loading world from SaveGame: " + world);
+      REGOTH_LOG(Info, Uncategorized, "[REGothWorldCacheTest] Loading world from SaveGame: {0}",
+                 world);
 
       bs::HPrefab world = GameWorld::load(saveGame);
       world->instantiate();

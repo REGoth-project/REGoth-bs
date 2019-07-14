@@ -7,6 +7,7 @@
 #include <Scene/BsSceneObject.h>
 #include <components/Visual.hpp>
 #include <components/VisualStaticMesh.hpp>
+#include <log/logging.hpp>
 
 namespace REGoth
 {
@@ -52,8 +53,8 @@ namespace REGoth
     {
       clearNodeAttachment(node);
 
-      BS_LOG(Warning, Uncategorized,
-             "[NodeVisuals] Failed to attach visual '" + visual + "' to node '" + node + "'");
+      REGOTH_LOG(Warning, Uncategorized, "[NodeVisuals] Failed to attach visual '{0}' to node '{1}'",
+                 visual, node);
     }
   }
 

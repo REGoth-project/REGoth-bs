@@ -4,6 +4,7 @@
 #include <Components/BsCRenderable.h>
 #include <RTTI/RTTI_VisualMorphMesh.hpp>
 #include <Scene/BsSceneObject.h>
+#include <log/logging.hpp>
 #include <original-content/OriginalGameResources.hpp>
 
 namespace REGoth
@@ -20,8 +21,8 @@ namespace REGoth
 
     if (!mesh)
     {
-      BS_LOG(Warning, Uncategorized,
-             "[VisualMorphMesh] Failed to load mesh: " + originalMeshFileName);
+      REGOTH_LOG(Warning, Uncategorized, "[VisualMorphMesh] Failed to load mesh: {0}",
+                 originalMeshFileName);
       return;
     }
 

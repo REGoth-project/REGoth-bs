@@ -13,6 +13,7 @@
 #include <components/Waynet.hpp>
 #include <daedalus/DATFile.h>
 #include <exception/Throw.hpp>
+#include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 #include <scripting/ScriptVMForGameWorld.hpp>
 #include <world/internals/ConstructFromZEN.hpp>
@@ -180,7 +181,7 @@ namespace REGoth
     transform.move(
         bs::Vector3(0, 0.5f, 0));  // FIXME: Can we move the center to the feet somehow instead?
 
-    BS_LOG(Info, Uncategorized, "[GameWorld] Insert Character " + instance + " at " + spawnPoint);
+    REGOTH_LOG(Info, Uncategorized, "[GameWorld] Insert Character {0} at {1}", instance, spawnPoint);
 
     return insertCharacter(instance, transform);
   }

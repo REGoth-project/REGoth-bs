@@ -5,6 +5,7 @@
 #include <RTTI/RTTI_UIElement.hpp>
 #include <exception/Throw.hpp>
 #include <gui/skin_gothic.hpp>
+#include <log/logging.hpp>
 #include <original-content/OriginalGameResources.hpp>
 
 namespace REGoth
@@ -101,7 +102,7 @@ namespace REGoth
 
     if (!t)
     {
-      BS_LOG(Warning, Uncategorized, "[UIElement] Failed to load texture: " + texture);
+      REGOTH_LOG(Warning, Uncategorized, "[UIElement] Failed to load texture: {0}", texture);
 
       return {};
     }

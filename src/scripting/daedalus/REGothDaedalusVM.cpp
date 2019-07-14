@@ -5,6 +5,7 @@
 #include <RTTI/RTTI_REGothDaedalusVM.hpp>
 #include <daedalus/DATFile.h>
 #include <exception/Throw.hpp>
+#include <log/logging.hpp>
 
 namespace REGoth
 {
@@ -750,7 +751,7 @@ namespace REGoth
           {
             auto& sym = mScriptSymbols.getSymbol<SymbolExternalFunction>(opcode.symbol);
 
-            // BS_LOG(Info, Uncategorized, "[REGothDaedalusVM] External not implemented: " + sym.name);
+            // REGOTH_LOG(Info, Uncategorized, "[REGothDaedalusVM] External not implemented: " + sym.name);
 
             // Put a dummy value onto the stack to get deterministic results
             switch (sym.returnType)
@@ -1018,7 +1019,7 @@ namespace REGoth
                                              const bs::String& lhs, const bs::String& rhs,
                                              const bs::String& res)
     {
-      BS_LOG(Info, Uncategorized,
+      REGOTH_LOG(Info, Uncategorized,
              bs::StringUtil::format("[DaedalusVM] Exec: {0}{1}", makeCallDepthString(mCallDepth),
                                     disassembleOpcode(opcode, mScriptSymbols, lhs, rhs, res)));
     }
@@ -1039,7 +1040,7 @@ namespace REGoth
         name = fnSymbol.name;
       }
 
-      BS_LOG(Info, Uncategorized,
+      REGOTH_LOG(Info, Uncategorized,
              bs::StringUtil::format("[DaedalusVM] Exec: {0}Call {1}",
                                     makeCallDepthString(mCallDepth), name));
     }

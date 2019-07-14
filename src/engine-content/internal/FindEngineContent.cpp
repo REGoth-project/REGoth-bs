@@ -1,5 +1,6 @@
 #include "FindEngineContent.hpp"
 #include <FileSystem/BsFileSystem.h>
+#include <log/logging.hpp>
 
 const bs::String REGOTH_CONTENT_DIR_NAME = "content";
 
@@ -16,21 +17,22 @@ namespace REGoth
     {
       bs::Path result;
 
-      BS_LOG(Info, Uncategorized, "[FindEngineContent] Trying current working directory");
+      REGOTH_LOG(Info, Uncategorized, "[FindEngineContent] Trying current working directory");
       result = findEngineContentAtWorkingDirectory();
 
       if (result != bs::Path::BLANK) return result;
 
       // Most of the time, this should be equal to the current working directory
       // but it may be not, so check here again...
-      BS_LOG(Info, Uncategorized, "[FindEngineContent] Trying executable path");
+      REGOTH_LOG(Info, Uncategorized, "[FindEngineContent] Trying executable path");
 
       result = findEngineContentNextToExecutable(executablePath.getDirectory());
 
       if (result != bs::Path::BLANK) return result;
 
       // We could be also running inside the repositry, so search upwards
-      BS_LOG(Info, Uncategorized, "[FindEngineContent] Trying to search the directory tree upwards");
+      REGOTH_LOG(Info, Uncategorized,
+                 "[FindEngineContent] Trying to search the directory tree upwards");
 
       result = findEngineContentUpFromExecutable(executablePath.getDirectory());
 
@@ -79,7 +81,7 @@ namespace REGoth
 
     static bool isContentDirectory(const bs::Path& path)
     {
-      BS_LOG(Info, Uncategorized, "[FindEngineContent]   Looking at: " + path.toString());
+      REGOTH_LOG(Info, Uncategorized, "[FindEngineContent]   Looking at: {0}", path.toString());
 
       if (path.getTail() != REGOTH_CONTENT_DIR_NAME) return false;
       if (!bs::FileSystem::isDirectory(path)) return false;

@@ -1,5 +1,6 @@
 #include "ScriptSymbols.hpp"
 #include <RTTI/RTTI_ScriptSymbols.hpp>
+#include <log/logging.hpp>
 
 namespace REGoth
 {
@@ -76,7 +77,7 @@ namespace REGoth
       {
       }
 
-      BS_LOG(Info, Uncategorized, line);
+      REGOTH_LOG(Info, Uncategorized, line);
     }
 
     REGOTH_DEFINE_RTTI(SymbolBase)

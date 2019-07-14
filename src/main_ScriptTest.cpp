@@ -27,7 +27,7 @@ public:
 
     // ScriptObject& apple = REGoth::gGameScript().scriptObjects().get(appleHandle);
 
-    // BS_LOG(Info, Uncategorized, "Apple's visual: " + apple.stringValue("VISUAL"));
+    // REGOTH_LOG(Info, Uncategorized, "Apple's visual: " + apple.stringValue("VISUAL"));
 
     // gGameScript().script_PrintPlus("Hello World!");
     // gGameScript().script_PrintPlus("This is printed by Daedalus!");

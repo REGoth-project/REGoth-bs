@@ -1,10 +1,11 @@
 #include "OriginalGameResources.hpp"
-#include <Image/BsSpriteTexture.h>
 #include <BsZenLib/ImportFont.hpp>
 #include <BsZenLib/ImportMorphMesh.hpp>
 #include <BsZenLib/ImportSkeletalMesh.hpp>
 #include <BsZenLib/ImportStaticMesh.hpp>
 #include <BsZenLib/ImportTexture.hpp>
+#include <Image/BsSpriteTexture.h>
+#include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
 namespace REGoth
@@ -80,7 +81,8 @@ namespace REGoth
 
     if (!t)
     {
-      BS_LOG(Warning, Uncategorized, "[UIElement] Failed to load texture: " + originalFileName);
+      REGOTH_LOG(Warning, Uncategorized, "[UIElement] Failed to load texture: {0}",
+                 originalFileName);
 
       return {};
     }

@@ -28,6 +28,7 @@
 #include <Resources/BsResources.h>
 #include <Scene/BsPrefab.h>
 #include <Scene/BsSceneObject.h>
+#include <log/logging.hpp>
 
 int main(int argc, char** argv)
 {
@@ -44,17 +45,17 @@ int main(int argc, char** argv)
   regoth.initializeBsf();
   regoth.setupInput();
 
-  BS_LOG(Info, Uncategorized, "[Main] Starting REGoth");
+  REGOTH_LOG(Info, Uncategorized, "[Main] Starting REGoth");
 
   const String engineExecutablePath = argv[0];
   const String gameDirectory        = argv[1];
   const String zenFile              = argv[2];
 
-  BS_LOG(Info, Uncategorized, "[Main]  - Engine executable: " + engineExecutablePath);
-  BS_LOG(Info, Uncategorized, "[Main]  - Game directory:    " + gameDirectory);
-  BS_LOG(Info, Uncategorized, "[Main]  - Startup ZEN:       " + zenFile);
+  REGOTH_LOG(Info, Uncategorized, "[Main]  - Engine executable: " + engineExecutablePath);
+  REGOTH_LOG(Info, Uncategorized, "[Main]  - Game directory:    " + gameDirectory);
+  REGOTH_LOG(Info, Uncategorized, "[Main]  - Startup ZEN:       " + zenFile);
 
-  BS_LOG(Info, Uncategorized, "[Main] Loading original game packages");
+  REGOTH_LOG(Info, Uncategorized, "[Main] Loading original game packages");
   regoth.loadGamePackages(engineExecutablePath, gameDirectory);
 
   if (!regoth.hasFoundGameFiles())
@@ -65,7 +66,7 @@ int main(int argc, char** argv)
 
   regoth.loadCachedResourceManifests();
 
-  BS_LOG(Info, Uncategorized, "[Main] Setting up scene");
+  REGOTH_LOG(Info, Uncategorized, "[Main] Setting up scene");
 
   // Add a scene object containing a camera component
   HSceneObject sceneCameraSO = SceneObject::create("SceneCamera");
@@ -93,16 +94,17 @@ int main(int argc, char** argv)
 
   if (!model || model->getMeshes().empty())
   {
-    BS_LOG(Error, Uncategorized, "Failed to load model or animations: " + file + "/" + visual);
+    REGOTH_LOG(Error, Uncategorized, "Fa
+                   "Failed to load model or animations: " + file + "/" + visual);
     return -1;
   }
 
-  BS_LOG(Info, Uncategorized, "Num Meshes: " + bs::toString(model->getMeshes().size()));
+  REGOTH_LOG(Info, Uncategorized, "Num Meshes: " + bs::toString(model->getMeshes().size()));
 
   for (const auto& h : model->getMeshes())
   {
     // h.blockUntilLoaded();
-    BS_LOG(Info, Uncategorized, h->getName());
+    REGOTH_LOG(Info, Uncategorized, h->getName());
   }
 
   playerVisual->setModelScript(model);
@@ -131,7 +133,7 @@ int main(int argc, char** argv)
 
     if (!worldPrefab)
     {
-      BS_LOG(Error, Uncategorized, "Failed to load cached ZEN: " + zenFile);
+      REGOTH_LOG(Error, Uncategorized, "Failed to load cached ZEN: " + zenFile);
       return -1;
     }
 
@@ -146,7 +148,7 @@ int main(int argc, char** argv)
 
     if (!worldSO)
     {
-      BS_LOG(Error, Uncategorized, "Failed to load uncached ZEN: " + zenFile);
+      REGOTH_LOG(Error, Uncategorized, "Failed to load uncached ZEN: " + zenFile);
       return -1;
     }
   }
@@ -199,7 +201,7 @@ int main(int argc, char** argv)
     auto rs = sceneCamera->getRenderSettings();
 
     rs->cullDistance = value;
-    BS_LOG(Info, Uncategorized, "Set CullDistance to: " + toString(value));
+    REGOTH_LOG(Info, Uncategorized, "Set CullDistance to: " + toString(value));
 
     sceneCamera->setRenderSettings(rs);
   });
