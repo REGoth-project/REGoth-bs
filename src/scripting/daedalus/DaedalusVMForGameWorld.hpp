@@ -28,7 +28,7 @@ namespace REGoth
       /**
        * Initializes the ScriptVM. To be called after the object is constructed.
        */
-      virtual void initialize();
+      void initialize() override;
 
       ScriptObjectHandle instanciateClass(const bs::String& className,
                                           const bs::String& instanceName,
@@ -118,7 +118,6 @@ namespace REGoth
       const bs::Vector<ScriptObjectHandle>& allInfosOfNpc(const bs::String& instanceName) const;
 
     protected:
-
       /**
        * Fills mAllInformationInstances. This is done here at one place because otherwise
        * every single created NPC would need to loop through all symbols every time, find

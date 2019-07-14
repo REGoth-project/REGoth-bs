@@ -1,6 +1,6 @@
 #include "BsFPSCamera.h"
 #include "REGothEngine.hpp"
-#include "components/AnchoredTextLabels.h"
+#include "components/AnchoredTextLabels.hpp"
 #include <BsZenLib/ImportPath.hpp>
 #include <Components/BsCCamera.h>
 #include <FileSystem/BsFileSystem.h>

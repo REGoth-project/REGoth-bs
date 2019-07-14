@@ -1,4 +1,4 @@
-#include "components/AnchoredTextLabels.h"
+#include "components/AnchoredTextLabels.hpp"
 #include <GUI/BsCGUIWidget.h>
 #include <components/GameWorld.hpp>
 #include "BsFPSCamera.h"

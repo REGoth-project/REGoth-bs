@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.12.0)
+cmake_minimum_required (VERSION 3.13.0)
 
 
 ###############################################################################
@@ -43,7 +43,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
     add_compile_options(-fno-rtti)
 
     # So that REGoth-Symbols will show up in the bs:f-crash handler
-    add_compile_options(-rdynamic)
+    add_link_options(-rdynamic)
 endif()
 
 ###############################################################################

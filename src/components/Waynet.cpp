@@ -2,7 +2,7 @@
 #include <Debug/BsDebugDraw.h>
 #include <RTTI/RTTI_Waynet.hpp>
 #include <Scene/BsSceneObject.h>
-#include <components/AnchoredTextLabels.h>
+#include <components/AnchoredTextLabels.hpp>
 #include <components/Freepoint.hpp>
 #include <components/Waypoint.hpp>
 
