@@ -13,6 +13,9 @@ namespace REGoth
   class UIFocusText;
   using HUIFocusText = bs::GameObjectHandle<UIFocusText>;
 
+  class UIConsole;
+  using HUIConsole = bs::GameObjectHandle<UIConsole>;
+
   class GameplayUI;
   using HGameplayUI = bs::GameObjectHandle<GameplayUI>;
 
@@ -103,6 +106,7 @@ namespace REGoth
     HUIDialogueChoice mChoices;
     HUISubtitleBox mSubtitleBox;
     HUIFocusText mFocusText;
+    HUIConsole mConsole;
 
   private:
   public:

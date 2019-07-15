@@ -4,6 +4,7 @@
 #include <GUI/BsGUILayoutY.h>
 #include <GUI/BsGUIScrollArea.h>
 #include <RTTI/RTTI_GameplayUI.hpp>
+#include <components/UIConsole.hpp>
 #include <components/UIDialogueChoice.hpp>
 #include <components/UIFocusText.hpp>
 #include <components/UISubtitleBox.hpp>
@@ -41,6 +42,11 @@ namespace REGoth
     if (!mFocusText)
     {
       mFocusText = addChildElement<UIFocusText>("UIFocusText");
+    }
+
+    if (!mConsole)
+    {
+      mConsole = addChildElement<UIConsole>("UIConsole");
     }
   }
 

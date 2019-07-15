@@ -133,6 +133,8 @@ void REGothEngine::setupInput()
   inputConfig->registerButton("ToggleMeleeWeapon", BC_1);
   inputConfig->registerButton("Action", BC_LCONTROL);
   inputConfig->registerButton("QuickSave", BC_F5);
+  inputConfig->registerButton("ToggleConsole", BC_F2);
+  inputConfig->registerButton("Confirm", BC_RETURN);
 
   // Camera controls for axes (analog input, e.g. mouse or gamepad thumbstick)
   // These return values in [-1.0, 1.0] range.

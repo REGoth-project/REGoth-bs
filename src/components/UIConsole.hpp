@@ -1,5 +1,6 @@
 #pragma once
 #include "UIElement.hpp"
+#include <Input/BsVirtualInput.h>
 #include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
@@ -16,9 +17,24 @@ namespace REGoth
     UIConsole(const bs::HSceneObject& parent, HUIElement parentUiElement);
     virtual ~UIConsole();
 
+    /** Triggered once per frame. Allows the component to handle input and move. */
+    void update() override;
+
+  protected:
+    void onInitialized() override;
+    enum class State
+    {
+      Closed,
+      Open,
+    };
+
   private:
-    bs::GUITexture* mBackgroundBox = nullptr;
-    bs::GUILabel* mText            = nullptr;
+    bs::GUITexture* mBackground    = nullptr;
+    bs::GUIScrollArea* mScrollArea = nullptr;
+    bs::GUIInputBox* mInputBox     = nullptr;
+    bs::VirtualButton mToggleConsole;
+    bs::VirtualButton mConfirm;
+    State mState = State::Closed;
 
   public:
     REGOTH_DECLARE_RTTI(UIConsole)
