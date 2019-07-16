@@ -29,6 +29,12 @@ namespace REGoth
     };
 
   private:
+    typedef bs::String (UIConsole::*commandCallback)(bs::Vector<bs::String>);
+    bs::Map<bs::String, commandCallback> mCommands;
+    bs::String command_Dummy(bs::Vector<bs::String> args);
+    void registerCommand(const bs::String& name, commandCallback callback);
+    void registerAllCommand();
+
     bs::GUITexture* mBackground    = nullptr;
     bs::GUIScrollArea* mScrollArea = nullptr;
     bs::GUIInputBox* mInputBox     = nullptr;
