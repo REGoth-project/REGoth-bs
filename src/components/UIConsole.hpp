@@ -30,9 +30,18 @@ namespace REGoth
 
   private:
     typedef bs::String (UIConsole::*commandCallback)(bs::Vector<bs::String>);
-    bs::Map<bs::String, commandCallback> mCommands;
+    struct Command
+    {
+      commandCallback callback;
+      size_t num_of_args;
+      bs::String usage;
+      bs::String help;
+    };
+    bs::Map<bs::String, Command> mCommands;
     bs::String command_Dummy(bs::Vector<bs::String> args);
-    void registerCommand(const bs::String& name, commandCallback callback);
+    bs::String command_List(bs::Vector<bs::String> args);
+    bs::String command_Help(bs::Vector<bs::String> args);
+    void registerCommand(const bs::String& name, Command command);
     void registerAllCommand();
 
     bs::GUITexture* mBackground    = nullptr;

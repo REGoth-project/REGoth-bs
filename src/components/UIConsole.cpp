@@ -28,6 +28,8 @@ namespace REGoth
 
     mInputBox = layoutY->addNewElement<bs::GUIInputBox>(false, "GothicConsoleInputBox");
     mInputBox->setText("I am a console!");
+
+    registerAllCommand();
   }
 
   UIConsole::~UIConsole()
@@ -83,10 +85,10 @@ namespace REGoth
         // Process
         bs::String input = mInputBox->getText();
         bs::StringUtil::trim(input);
-        bs::Vector<bs::String> args = bs::StringUtil::split(input, bs::HString(" "));
+        // bs::Vector<bs::String> args = bs::StringUtil::split(input, bs::HString(" "));
 
-        bs::String command = args.at(0);
-        args.erase(args.begin());
+        // bs::String command = args.at(0);
+        // args.erase(args.begin());
 
         // TODO:
         // We can now call command(args I guess?)
@@ -96,14 +98,50 @@ namespace REGoth
         // loop through keys and try starts with on trimmed string
         // remove that key from string and do the callback
 
-        auto it = mCommands.find(command);  // TODO: This always returns end for some reason
-        if (it != mCommands.end())
+        for (auto it = mCommands.begin(); it != mCommands.end(); it++)
         {
-          bs::gDebug().logDebug("[Console] " + command + " triggered");
-          bs::String output = (this->*it->second)(args);
-          mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString("test"));
+          bs::String command = it->first;
+          if (bs::StringUtil::startsWith(input, command))
+          {
+            bs::gDebug().logDebug("[Console] " + command + " triggered");
+            input                       = bs::StringUtil::replaceAll(input, command, "");
+            bs::Vector<bs::String> args = bs::StringUtil::split(input, " ");
+            size_t num_of_args          = it->second.num_of_args;
+            /* TODO: I just want to get rid of empty strings :) */
+            /* TODO: first arg is skipped here or something ? */
+            for (auto sit = args.begin(); sit != args.end();)
+            {
+              if ((*sit).empty())
+              {
+                args.erase(sit);
+                continue;
+              }
+              sit++;
+              bs::gDebug().logDebug("[Console] args: " + *sit);
+            }
+            if (args.size() == num_of_args)
+            {
+              bs::String output = (this->*it->second.callback)(args);
+              mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(output));
+            }
+            else
+            {
+              bs::String usage = it->second.usage;
+              mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(usage));
+            }
+            break;
+          }
         }
 
+        /*
+              auto it = mCommands.find(command);
+              if (it != mCommands.end())
+              {
+                bs::gDebug().logDebug("[Console] " + command + " triggered");
+                bs::String output = (this->*it->second)(args);
+                mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(output));
+              }
+      */
         // Clear
         mInputBox->setText("");
       }
@@ -115,35 +153,91 @@ namespace REGoth
     return bs::String("lol");
   }
 
-  void UIConsole::registerCommand(const bs::String& name, commandCallback callback)
+  bs::String UIConsole::command_List(bs::Vector<bs::String> args)
   {
-    mCommands[name] = callback;
+    mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString("List of all commands:"));
+    for (auto it = mCommands.begin(); it != mCommands.end(); it++)
+    {
+      bs::String command = it->first;
+
+      mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(command));
+    }
+    return bs::String("lol");
+  }
+
+  bs::String UIConsole::command_Help(bs::Vector<bs::String> args)
+  {
+    bs::String& command = args.front();
+    auto it             = mCommands.find(command);
+    if (it == mCommands.end())
+    {
+      return "Unkown command: " + command;
+    }
+    else
+    {
+      bs::String usage = it->second.usage;
+      mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(usage));
+      bs::String help = it->second.help;
+      mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(help));
+      return "lol";
+    }
+  }
+
+  void UIConsole::registerCommand(const bs::String& name, Command command)
+  {
+    mCommands[name] = command;
   }
 
   void UIConsole::registerAllCommand()
   {
     using This = UIConsole;
+    Command command;
 
-    registerCommand("cheat full", (commandCallback)&This::command_Dummy);
-    registerCommand("cheat god", (commandCallback)&This::command_Dummy);
-    registerCommand("insert", (commandCallback)&This::command_Dummy);
-    registerCommand("spawnmass", (commandCallback)&This::command_Dummy); /* giga? */
-    registerCommand("kill", (commandCallback)&This::command_Dummy);
-    registerCommand("edit abilities", (commandCallback)&This::command_Dummy);
-    registerCommand("edit focus", (commandCallback)&This::command_Dummy);
-    registerCommand("set time", (commandCallback)&This::command_Dummy);
-    registerCommand("goto waypoint", (commandCallback)&This::command_Dummy);
-    registerCommand("aigoto", (commandCallback)&This::command_Dummy);
-    registerCommand("goto camera", (commandCallback)&This::command_Dummy);
-    registerCommand("goto pos", (commandCallback)&This::command_Dummy);
-    registerCommand("set clippingfactor", (commandCallback)&This::command_Dummy);
-    registerCommand("zfogzone", (commandCallback)&This::command_Dummy);
-    registerCommand("toggle console", (commandCallback)&This::command_Dummy);
-    registerCommand("toggle frame", (commandCallback)&This::command_Dummy);
-    registerCommand("toggle waynet", (commandCallback)&This::command_Dummy);
-    registerCommand("firstperson", (commandCallback)&This::command_Dummy);
-    registerCommand("hero export", (commandCallback)&This::command_Dummy);
-    registerCommand("hero import", (commandCallback)&This::command_Dummy);
+    command = {(commandCallback)&This::command_List, 0, "Usage: list", "Lists all commands."};
+    registerCommand("list", command);
+    command = {(commandCallback)&This::command_Help, 1, "Usage: help [command]",
+               "Prints out helpful information about the given command."};
+    registerCommand("help", command);
+    command = {(commandCallback)&This::command_Dummy, 0, "Usage: cheat full", ""};
+    registerCommand("cheat full", command);
+    command = {(commandCallback)&This::command_Dummy, 0, "Usage: cheat god", ""};
+    registerCommand("cheat god", command);
+    command = {(commandCallback)&This::command_Dummy, 1, "Usage: insert [name]", ""};
+    registerCommand("insert", command);
+    command = {(commandCallback)&This::command_Dummy, 1, "Usage: spawnmass {giga} [amount]", ""};
+    registerCommand("spawnmass", command);
+    command = {(commandCallback)&This::command_Dummy, 0, "Usage: kill", ""};
+    registerCommand("kill", command);
+    command = {(commandCallback)&This::command_Dummy, 0, "Usage: edit abilities", ""};
+    registerCommand("edit abilities", command);
+    command = {(commandCallback)&This::command_Dummy, 0, "Usage: edit focus", ""};
+    registerCommand("edit focus", command);
+    command = {(commandCallback)&This::command_Dummy, 2, "Usage: set time [hh] [mm]", ""};
+    registerCommand("set time", command);
+    command = {(commandCallback)&This::command_Dummy, 1, "Usage: goto waypoint [waypoint]", ""};
+    registerCommand("goto waypoint", command);
+    command = {(commandCallback)&This::command_Dummy, 1, "Usage: aigoto [waypoint]", ""};
+    registerCommand("aigoto", command);
+    command = {(commandCallback)&This::command_Dummy, 0, "Usage: goto camera", ""};
+    registerCommand("goto camera", command);
+    command = {(commandCallback)&This::command_Dummy, 3, "Usage: goto pos [x] [y] [z]", ""};
+    registerCommand("goto pos", command);
+    command = {(commandCallback)&This::command_Dummy, 0, "Usage: set clippingfactor [f]", ""};
+    registerCommand("set clippingfactor", command);
+    command = {(commandCallback)&This::command_Dummy, 0, "Usage: zfogzone", ""};
+    registerCommand("zfogzone", command);
+    command = {(commandCallback)&This::command_Dummy, 0, "Usage: toggle console", ""};
+    registerCommand("toggle console", command);
+    command = {(commandCallback)&This::command_Dummy, 0, "Usage: toggle frame", ""};
+    registerCommand("toggle frame", command);
+    command = {(commandCallback)&This::command_Dummy, 0, "Usage: toggle waynet", ""};
+    registerCommand("toggle waynet", command);
+    command = {(commandCallback)&This::command_Dummy, 0, "Usage: firstperson", ""};
+    registerCommand("firstperson", command);
+    command = {(commandCallback)&This::command_Dummy, 1, "Usage: hero export [filename]", ""};
+    registerCommand("hero export", command);
+    command = {(commandCallback)&This::command_Dummy, 1, "Usage: hero import [filename]", ""};
+    registerCommand("hero import", command);
   }
 
   REGOTH_DEFINE_RTTI(UIConsole)
