@@ -4,8 +4,8 @@ rm -rf build
 mkdir build
 cd build
 
-curl -O https://dilborceisv8p.cloudfront.net/bsf_2019.06.07_win64.zip
-unzip bsf_2019.06.07_win64.zip -d bsf
+curl -O https://dilborceisv8p.cloudfront.net/bsf_2019.07.18_win64.zip
+unzip bsf_*.zip -d bsf
 
 vcpkg update
 vcpkg install libsquish physfs --triplet x64-windows

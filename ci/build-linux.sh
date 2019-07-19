@@ -4,10 +4,10 @@ rm -rf build
 mkdir build
 cd build
 
-wget https://dilborceisv8p.cloudfront.net/bsf_2019.06.06_linux.tar.gz
+wget https://dilborceisv8p.cloudfront.net/bsf_2019.07.18_linux.tar.gz
 
 mkdir bsf
-tar -xf bsf_2019.06.06_linux.tar.gz -C bsf
+tar -xf bsf_*.tar.gz -C bsf
 
 vcpkg update
 vcpkg install libsquish physfs --triplet x64-linux
