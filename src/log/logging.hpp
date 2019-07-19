@@ -1,5 +1,5 @@
 #pragma once
-#include <debug/BsDebug.h>
+#include <Debug/BsDebug.h>
 
 /**
  * Wrapper around bs::gDebug().log(...), similar to BS_LOG, which is a bit too verbose.

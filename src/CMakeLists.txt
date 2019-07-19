@@ -12,7 +12,7 @@ add_library(samples-common
 target_include_directories(samples-common PUBLIC common)
 target_link_libraries(samples-common PUBLIC bsf)
 
-add_library(REGothEngine SHARED
+add_library(REGothEngine STATIC
   REGothEngine.hpp
   REGothEngine.cpp
   components/AnchoredTextLabels.h
