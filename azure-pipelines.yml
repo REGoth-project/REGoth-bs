@@ -29,8 +29,7 @@ jobs:
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
           sudo apt-get install uuid-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev gcc-8 g++-8
           #cmake
-          sudo apt-get purge cmake
-          #sudo rm /usr/local/bin/ccmake /usr/local/bin/cmake /usr/local/bin/cmake-gui /usr/local/bin/cpack /usr/local/bin/ctest
+          sudo rm /usr/local/bin/ccmake* /usr/local/bin/cmake* /usr/local/bin/cpack* /usr/local/bin/ctest*
           sudo apt-get install apt-transport-https ca-certificates gnupg software-properties-common wget
           wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
           sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ xenial main'
