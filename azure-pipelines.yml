@@ -27,6 +27,12 @@ jobs:
           set -e
           sudo apt-get update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          #cmake
+          sudo apt-get install apt-transport-https ca-certificates gnupg software-properties-common wget
+          wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
+          sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ xenial main'
+          sudo apt-get update
+          sudo apt-get install cmake
           sudo apt-get install uuid-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev gcc-8 g++-8
     
     - task: Bash@3
