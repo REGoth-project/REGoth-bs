@@ -86,19 +86,9 @@ namespace REGoth
         // Process
         bs::String input = mInputBox->getText();
         bs::StringUtil::trim(input);
-        // bs::Vector<bs::String> args = bs::StringUtil::split(input, bs::HString(" "));
 
-        // bs::String command = args.at(0);
-        // args.erase(args.begin());
-
-        // TODO:
-        // We can now call command(args I guess?)
-        // maybe instead of this lets try startswith/match +replaceAll to match to the commands
-        // instead?
-        // command,callback map
-        // loop through keys and try starts with on trimmed string
-        // remove that key from string and do the callback
-
+#if 0
+        // O(n) solution, dont need map for this
         for (auto it = mCommands.begin(); it != mCommands.end(); it++)
         {
           bs::String command = it->first;
@@ -133,16 +123,44 @@ namespace REGoth
             break;
           }
         }
+#endif
 
-        /*
-              auto it = mCommands.find(command);
-              if (it != mCommands.end())
-              {
-                bs::gDebug().logDebug("[Console] " + command + " triggered");
-                bs::String output = (this->*it->second)(args);
-                mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(output));
-              }
-      */
+#if 1
+        // 2*O(1) solution, I dont know
+        bs::Vector<bs::String> args = bs::StringUtil::split(input, bs::HString(" "));
+        bs::String command          = args.at(0);
+        bs::String output;
+
+        // first pass for single word commands
+        auto it = mCommands.find(command);
+        if (it != mCommands.end())
+        {
+          args.erase(args.begin());
+          BS_LOG(Info, Uncategorized, "[Console] {0} triggered!", command);
+          output = (this->*it->second.callback)(args);
+          mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(output));
+        }
+        // second pass for two word commands
+        else if (args.size() >= 2)
+        {
+          command = command + " " + args.at(1);
+          args.erase(args.begin(), args.begin() + 2);
+
+          it = mCommands.find(command);
+          if (it != mCommands.end())
+          {
+            BS_LOG(Info, Uncategorized, "[Console] {0} triggered!", command);
+            output = (this->*it->second.callback)(args);
+            mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(output));
+          }
+        }
+
+        if (output.empty())
+        {
+          BS_LOG(Info, Uncategorized, "[Console] Unknown command: {0} !", input);
+        }
+#endif
+
         // Clear
         mInputBox->setText("");
       }
