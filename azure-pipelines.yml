@@ -29,6 +29,7 @@ jobs:
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
           sudo apt-get install uuid-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev gcc-8 g++-8
           #cmake
+          #TODO: remove if newer cmake version is available upstream. See: https://github.com/microsoft/azure-pipelines-image-generation/issues/1097
           sudo rm /usr/local/bin/ccmake* /usr/local/bin/cmake* /usr/local/bin/cpack* /usr/local/bin/ctest*
           sudo apt-get install apt-transport-https ca-certificates gnupg software-properties-common wget
           wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
