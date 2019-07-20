@@ -824,7 +824,18 @@ namespace REGoth
       }
       else
       {
-        return mStack.popFloat();
+        bs::INT32 asInt = popIntValue();
+
+        // TODO: Daedalus bytecode uses PushInt to push floats encoded as integers.
+        //       Since REGoth has it's own stack for floats, this is a problem!
+        //       We also cannot just scrap the float-stack and put everything onto
+        //       the integer stack instead, as that would not work with float-variables!
+        //       Maybe we should just scrap the notion of "float" alltogether and encode them as
+        //       integers all the time.
+        //
+        //       Luckily, floats are only rarely used. 
+        return *reinterpret_cast<float*>(&asInt);
+        //return mStack.popFloat();
       }
     }
 
