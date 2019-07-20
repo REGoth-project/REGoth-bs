@@ -7,6 +7,7 @@
 #include <GUI/BsGUITexture.h>
 #include <RTTI/RTTI_UIConsole.hpp>
 #include <String/BsString.h>
+#include <log/logging.hpp>
 #include <original-content/OriginalGameResources.hpp>
 
 namespace REGoth
@@ -103,7 +104,7 @@ namespace REGoth
           bs::String command = it->first;
           if (bs::StringUtil::startsWith(input, command))
           {
-            bs::gDebug().logDebug("[Console] " + command + " triggered");
+            BS_LOG(Info, Uncategorized, "[Console] {0} triggered!", command);
             input                       = bs::StringUtil::replaceAll(input, command, "");
             bs::Vector<bs::String> args = bs::StringUtil::split(input, " ");
             size_t num_of_args          = it->second.num_of_args;
@@ -117,7 +118,7 @@ namespace REGoth
                 continue;
               }
               sit++;
-              bs::gDebug().logDebug("[Console] args: " + *sit);
+              BS_LOG(Info, Uncategorized, "[Console] args: {0} !", *sit);
             }
             if (args.size() == num_of_args)
             {
