@@ -1,4 +1,5 @@
 #include "Character.hpp"
+#include <components/Inventory.hpp>
 #include <Components/BsCCharacterController.h>
 #include <RTTI/RTTI_Character.hpp>
 #include <Scene/BsSceneObject.h>
@@ -34,8 +35,9 @@ namespace REGoth
       controller->setRadius(0.35f);
       controller->setHeight(0.5f);
 
-      auto visual = SO()->addComponent<VisualCharacter>();
-      auto ai     = SO()->addComponent<CharacterAI>(gameWorld());
+      auto visual    = SO()->addComponent<VisualCharacter>();
+      auto ai        = SO()->addComponent<CharacterAI>(gameWorld());
+      auto inventory = SO()->addComponent<Inventory>();
 
       auto eventQueue =
           SO()->addComponent<CharacterEventQueue>(thisCharacter, ai, visual, gameWorld());

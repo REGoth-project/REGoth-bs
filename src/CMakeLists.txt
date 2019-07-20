@@ -72,6 +72,8 @@ add_library(REGothEngine STATIC
   core/ParseArguments.tpp
   core/RunEngine.hpp
   core/RunEngine.cpp
+  components/Inventory.hpp
+  components/Inventory.cpp
   sky/SkyColoring.hpp
   sky/SkyColoring.cpp
   components/Focusable.hpp
@@ -164,6 +166,7 @@ add_library(REGothEngine STATIC
   RTTI/RTTI_UIElement.hpp
   RTTI/RTTI_UIFocusText.hpp
   RTTI/RTTI_StoryInformation.hpp
+  RTTI/RTTI_Inventory.hpp
   )
 
 target_link_libraries(REGothEngine PUBLIC bsf BsZenLib)
