@@ -83,7 +83,7 @@ namespace REGoth
     }
     else if (findCaseSensitivePathOf("system/gothic2.exe") != bs::Path::BLANK)
     {
-      return GameType::Gothic1;
+      return GameType::Gothic2;
     }
     else
     {
