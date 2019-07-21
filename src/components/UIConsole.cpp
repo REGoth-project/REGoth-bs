@@ -30,6 +30,11 @@ namespace REGoth
     mInputBox = layoutY->addNewElement<bs::GUIInputBox>(false, "GothicConsoleInputBox");
     mInputBox->setText("I am a console!");
 
+    auto handleValueChanged = [&](const bs::String& change) {
+      BS_LOG(Info, Uncategorized, "[Console] Input changed! Current input: {0}!", change);
+    };
+    mInputBox->onValueChanged.connect(handleValueChanged);
+
     registerAllCommand();
   }
 
@@ -66,13 +71,14 @@ namespace REGoth
         mBackground->setVisible(false);
         mScrollArea->setVisible(false);
         mInputBox->setVisible(false);
+        mInputBox->setFocus(false);
         break;
 
       case State::Open:
         mBackground->setVisible(true);
         mScrollArea->setVisible(true);
         mInputBox->setVisible(true);
-        mInputBox->setFocus(true);  // TODO: Keep this?
+        mInputBox->setFocus(true);
         break;
     }
 
@@ -94,7 +100,6 @@ namespace REGoth
           bs::String command = it->first;
           if (bs::StringUtil::startsWith(input, command))
           {
-            BS_LOG(Info, Uncategorized, "[Console] {0} triggered!", command);
             input                       = bs::StringUtil::replaceAll(input, command, "");
             bs::Vector<bs::String> args = bs::StringUtil::split(input, " ");
             size_t num_of_args          = it->second.num_of_args;
@@ -112,8 +117,7 @@ namespace REGoth
             }
             if (args.size() == num_of_args)
             {
-              bs::String output = (this->*it->second.callback)(args);
-              mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(output));
+              (this->*it->second.callback)(args);;
             }
             else
             {
@@ -129,16 +133,13 @@ namespace REGoth
         // 2*O(1) solution, I dont know
         bs::Vector<bs::String> args = bs::StringUtil::split(input, bs::HString(" "));
         bs::String command          = args.at(0);
-        bs::String output;
 
         // first pass for single word commands
         auto it = mCommands.find(command);
         if (it != mCommands.end())
         {
           args.erase(args.begin());
-          BS_LOG(Info, Uncategorized, "[Console] {0} triggered!", command);
-          output = (this->*it->second.callback)(args);
-          mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(output));
+          (this->*it->second.callback)(args);
         }
         // second pass for two word commands
         else if (args.size() >= 2)
@@ -149,15 +150,8 @@ namespace REGoth
           it = mCommands.find(command);
           if (it != mCommands.end())
           {
-            BS_LOG(Info, Uncategorized, "[Console] {0} triggered!", command);
-            output = (this->*it->second.callback)(args);
-            mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(output));
+            (this->*it->second.callback)(args);
           }
-        }
-
-        if (output.empty())
-        {
-          BS_LOG(Info, Uncategorized, "[Console] Unknown command: {0} !", input);
         }
 #endif
 
@@ -167,13 +161,10 @@ namespace REGoth
     }
   }
 
-  bs::String UIConsole::command_Dummy(bs::Vector<bs::String> args)
+  void UIConsole::command_List(bs::Vector<bs::String> args)
   {
-    return bs::String("lol");
-  }
+    REGOTH_LOG(Info, Uncategorized, "[Console] Command 'list' executed!");
 
-  bs::String UIConsole::command_List(bs::Vector<bs::String> args)
-  {
     mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString("List of all commands:"));
     for (auto it = mCommands.begin(); it != mCommands.end(); it++)
     {
@@ -181,16 +172,18 @@ namespace REGoth
 
       mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(command));
     }
-    return bs::String("lol");
   }
 
-  bs::String UIConsole::command_Help(bs::Vector<bs::String> args)
+  void UIConsole::command_Help(bs::Vector<bs::String> args)
   {
+    REGOTH_LOG(Info, Uncategorized, "[Console] Command 'help' executed!");
+
     bs::String& command = args.front();
     auto it             = mCommands.find(command);
     if (it == mCommands.end())
     {
-      return "Unkown command: " + command;
+      mScrollArea->getLayout().addNewElement<bs::GUILabel>(
+          bs::HString("Unkown command: " + command));
     }
     else
     {
@@ -198,8 +191,128 @@ namespace REGoth
       mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(usage));
       bs::String help = it->second.help;
       mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(help));
-      return "lol";
     }
+  }
+
+  void UIConsole::command_CheatFull(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'cheat full' is not implemented yet!");
+  }
+
+  void UIConsole::command_CheatGod(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'cheat god' is not implemented yet!");
+  }
+
+  void UIConsole::command_Insert(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'insert' is not implemented yet!");
+  }
+
+  void UIConsole::command_Spawnmass(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'spawnmass' is not implemented yet!");
+  }
+
+  void UIConsole::command_Kill(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'kill' is not implemented yet!");
+  }
+
+  void UIConsole::command_EditAbilities(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'edit abilities' is not implemented yet!");
+  }
+
+  void UIConsole::command_EditFocus(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'edit focus' is not implemented yet!");
+  }
+
+  void UIConsole::command_SetTime(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'set time' is not implemented yet!");
+  }
+
+  void UIConsole::command_GotoWaypoint(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'goto waypoint' is not implemented yet!");
+  }
+
+  void UIConsole::command_GotoCamera(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'goto camera' is not implemented yet!");
+  }
+
+  void UIConsole::command_GotoPos(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'goto pos' is not implemented yet!");
+  }
+
+  void UIConsole::command_AIGoto(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'aigoto' is not implemented yet!");
+  }
+
+  void UIConsole::command_SetClippingfactor(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized,
+               "[Console] Command 'set clippingfactor' is not implemented yet!");
+  }
+
+  void UIConsole::command_ZFogZone(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'zfogzone' is not implemented yet!");
+  }
+
+  void UIConsole::command_ToggleConsole(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'toggle console' is not implemented yet!");
+  }
+
+  void UIConsole::command_ToggleFrame(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'toggle frame' is not implemented yet!");
+  }
+
+  void UIConsole::command_ToggleWaynet(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'toggle waynet' is not implemented yet!");
+  }
+
+  void UIConsole::command_Firstperson(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'firstperson' is not implemented yet!");
+  }
+
+  void UIConsole::command_HeroExport(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'hero export' is not implemented yet!");
+  }
+
+  void UIConsole::command_HeroImport(bs::Vector<bs::String> args)
+  {
+    // TODO: implement
+    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'hero import' is not implemented yet!");
   }
 
   void UIConsole::registerCommand(const bs::String& name, Command command)
@@ -217,45 +330,47 @@ namespace REGoth
     command = {(commandCallback)&This::command_Help, 1, "Usage: help [command]",
                "Prints out helpful information about the given command."};
     registerCommand("help", command);
-    command = {(commandCallback)&This::command_Dummy, 0, "Usage: cheat full", ""};
+    command = {(commandCallback)&This::command_CheatFull, 0, "Usage: cheat full", ""};
     registerCommand("cheat full", command);
-    command = {(commandCallback)&This::command_Dummy, 0, "Usage: cheat god", ""};
+    command = {(commandCallback)&This::command_CheatGod, 0, "Usage: cheat god", ""};
     registerCommand("cheat god", command);
-    command = {(commandCallback)&This::command_Dummy, 1, "Usage: insert [name]", ""};
+    command = {(commandCallback)&This::command_Insert, 1, "Usage: insert [name]", ""};
     registerCommand("insert", command);
-    command = {(commandCallback)&This::command_Dummy, 1, "Usage: spawnmass {giga} [amount]", ""};
+    command = {(commandCallback)&This::command_Spawnmass, 1, "Usage: spawnmass {giga} [amount]", ""};
     registerCommand("spawnmass", command);
-    command = {(commandCallback)&This::command_Dummy, 0, "Usage: kill", ""};
+    command = {(commandCallback)&This::command_Kill, 0, "Usage: kill", ""};
     registerCommand("kill", command);
-    command = {(commandCallback)&This::command_Dummy, 0, "Usage: edit abilities", ""};
+    command = {(commandCallback)&This::command_EditAbilities, 0, "Usage: edit abilities", ""};
     registerCommand("edit abilities", command);
-    command = {(commandCallback)&This::command_Dummy, 0, "Usage: edit focus", ""};
+    command = {(commandCallback)&This::command_EditFocus, 0, "Usage: edit focus", ""};
     registerCommand("edit focus", command);
-    command = {(commandCallback)&This::command_Dummy, 2, "Usage: set time [hh] [mm]", ""};
+    command = {(commandCallback)&This::command_SetTime, 2, "Usage: set time [hh] [mm]", ""};
     registerCommand("set time", command);
-    command = {(commandCallback)&This::command_Dummy, 1, "Usage: goto waypoint [waypoint]", ""};
+    command = {(commandCallback)&This::command_GotoWaypoint, 1, "Usage: goto waypoint [waypoint]",
+               ""};
     registerCommand("goto waypoint", command);
-    command = {(commandCallback)&This::command_Dummy, 1, "Usage: aigoto [waypoint]", ""};
-    registerCommand("aigoto", command);
-    command = {(commandCallback)&This::command_Dummy, 0, "Usage: goto camera", ""};
+    command = {(commandCallback)&This::command_GotoCamera, 0, "Usage: goto camera", ""};
     registerCommand("goto camera", command);
-    command = {(commandCallback)&This::command_Dummy, 3, "Usage: goto pos [x] [y] [z]", ""};
+    command = {(commandCallback)&This::command_GotoPos, 3, "Usage: goto pos [x] [y] [z]", ""};
     registerCommand("goto pos", command);
-    command = {(commandCallback)&This::command_Dummy, 0, "Usage: set clippingfactor [f]", ""};
+    command = {(commandCallback)&This::command_AIGoto, 1, "Usage: aigoto [waypoint]", ""};
+    registerCommand("aigoto", command);
+    command = {(commandCallback)&This::command_SetClippingfactor, 0, "Usage: set clippingfactor [f]",
+               ""};
     registerCommand("set clippingfactor", command);
-    command = {(commandCallback)&This::command_Dummy, 0, "Usage: zfogzone", ""};
+    command = {(commandCallback)&This::command_ZFogZone, 0, "Usage: zfogzone", ""};
     registerCommand("zfogzone", command);
-    command = {(commandCallback)&This::command_Dummy, 0, "Usage: toggle console", ""};
+    command = {(commandCallback)&This::command_ToggleConsole, 0, "Usage: toggle console", ""};
     registerCommand("toggle console", command);
-    command = {(commandCallback)&This::command_Dummy, 0, "Usage: toggle frame", ""};
+    command = {(commandCallback)&This::command_ToggleFrame, 0, "Usage: toggle frame", ""};
     registerCommand("toggle frame", command);
-    command = {(commandCallback)&This::command_Dummy, 0, "Usage: toggle waynet", ""};
+    command = {(commandCallback)&This::command_ToggleWaynet, 0, "Usage: toggle waynet", ""};
     registerCommand("toggle waynet", command);
-    command = {(commandCallback)&This::command_Dummy, 0, "Usage: firstperson", ""};
+    command = {(commandCallback)&This::command_Firstperson, 0, "Usage: firstperson", ""};
     registerCommand("firstperson", command);
-    command = {(commandCallback)&This::command_Dummy, 1, "Usage: hero export [filename]", ""};
+    command = {(commandCallback)&This::command_HeroExport, 1, "Usage: hero export [filename]", ""};
     registerCommand("hero export", command);
-    command = {(commandCallback)&This::command_Dummy, 1, "Usage: hero import [filename]", ""};
+    command = {(commandCallback)&This::command_HeroImport, 1, "Usage: hero import [filename]", ""};
     registerCommand("hero import", command);
   }
 
