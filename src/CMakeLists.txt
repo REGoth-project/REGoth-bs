@@ -81,6 +81,8 @@ add_library(REGothEngine STATIC
   components/UIDialogueChoice.cpp
   components/UIConsole.hpp
   components/UIConsole.cpp
+  components/Console.hpp
+  components/Console.cpp
   AI/EventMessage.hpp
   AI/EventMessage.cpp
   AI/ScriptState.hpp
@@ -158,6 +160,7 @@ add_library(REGothEngine STATIC
   RTTI/RTTI_UIFocusText.hpp
   RTTI/RTTI_StoryInformation.hpp
   RTTI/RTTI_UIConsole.hpp
+  RTTI/RTTI_Console.hpp
   )
 
 target_link_libraries(REGothEngine PUBLIC bsf BsZenLib)

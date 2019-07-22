@@ -30,8 +30,7 @@ namespace REGoth
 
     if (!mChoices)
     {
-      mChoices = addChildElement<UIDialogueChoice>(
-          "UIDialogueChoice");
+      mChoices = addChildElement<UIDialogueChoice>("UIDialogueChoice");
     }
 
     if (!mSubtitleBox)
@@ -44,9 +43,9 @@ namespace REGoth
       mFocusText = addChildElement<UIFocusText>("UIFocusText");
     }
 
-    if (!mConsole)
+    if (!mConsoleBox)
     {
-      mConsole = addChildElement<UIConsole>("UIConsole");
+      mConsoleBox = addChildElement<UIConsole>("UIConsole");
     }
   }
 

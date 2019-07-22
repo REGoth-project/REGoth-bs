@@ -99,14 +99,18 @@ namespace REGoth
       return mFocusText;
     }
 
-  protected:
+    HUIConsole consoleBox() const
+    {
+      return mConsoleBox;
+    }
 
+  protected:
     void onInitialized() override;
 
     HUIDialogueChoice mChoices;
     HUISubtitleBox mSubtitleBox;
     HUIFocusText mFocusText;
-    HUIConsole mConsole;
+    HUIConsole mConsoleBox;
 
   private:
   public:
