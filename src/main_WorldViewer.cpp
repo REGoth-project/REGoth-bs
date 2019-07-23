@@ -85,8 +85,6 @@ public:
     mThirdPersonCamera->follow(hero);
 
     REGoth::GameplayUI::createGlobal(mMainCamera);
-
-    world->SO()->addComponent<Console>();
   }
 
 protected:

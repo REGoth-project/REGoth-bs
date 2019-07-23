@@ -3,9 +3,6 @@
 
 namespace REGoth
 {
-  class UIConsole;
-  using HUIConsole = bs::GameObjectHandle<UIConsole>;
-
   class Console;
   using HConsole = bs::GameObjectHandle<Console>;
 
@@ -17,12 +14,10 @@ namespace REGoth
 
     void onInitialized() override;
     void onInputChanged(const bs::String& input);
-    void onCommandConfirmed();
+    bs::Vector<bs::String> onCommandConfirmed(bs::String input);
 
   private:
-    HUIConsole mConsoleBox;
-
-    typedef void (Console::*commandCallback)(bs::Vector<bs::String>);
+    typedef bs::Vector<bs::String> (Console::*commandCallback)(bs::Vector<bs::String>);
     struct Command
     {
       commandCallback callback;
@@ -31,28 +26,28 @@ namespace REGoth
       bs::String help;
     };
     bs::Map<bs::String, Command> mCommands;
-    void command_List(bs::Vector<bs::String> args);
-    void command_Help(bs::Vector<bs::String> args);
-    void command_CheatFull(bs::Vector<bs::String> args);
-    void command_CheatGod(bs::Vector<bs::String> args);
-    void command_Insert(bs::Vector<bs::String> args);
-    void command_Spawnmass(bs::Vector<bs::String> args);
-    void command_Kill(bs::Vector<bs::String> args);
-    void command_EditAbilities(bs::Vector<bs::String> args);
-    void command_EditFocus(bs::Vector<bs::String> args);
-    void command_SetTime(bs::Vector<bs::String> args);
-    void command_GotoWaypoint(bs::Vector<bs::String> args);
-    void command_GotoCamera(bs::Vector<bs::String> args);
-    void command_GotoPos(bs::Vector<bs::String> args);
-    void command_AIGoto(bs::Vector<bs::String> args);
-    void command_SetClippingfactor(bs::Vector<bs::String> args);
-    void command_ZFogZone(bs::Vector<bs::String> args);
-    void command_ToggleConsole(bs::Vector<bs::String> args);
-    void command_ToggleFrame(bs::Vector<bs::String> args);
-    void command_ToggleWaynet(bs::Vector<bs::String> args);
-    void command_Firstperson(bs::Vector<bs::String> args);
-    void command_HeroExport(bs::Vector<bs::String> args);
-    void command_HeroImport(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_List(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_Help(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_CheatFull(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_CheatGod(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_Insert(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_Spawnmass(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_Kill(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_EditAbilities(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_EditFocus(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_SetTime(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_GotoWaypoint(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_GotoCamera(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_GotoPos(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_AIGoto(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_SetClippingfactor(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_ZFogZone(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_ToggleConsole(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_ToggleFrame(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_ToggleWaynet(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_Firstperson(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_HeroExport(bs::Vector<bs::String> args);
+    bs::Vector<bs::String> command_HeroImport(bs::Vector<bs::String> args);
     void registerCommand(const bs::String& name, Command command);
     void registerAllCommand();
 

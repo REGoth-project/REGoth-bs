@@ -7,6 +7,8 @@
 #include <GUI/BsGUITexture.h>
 #include <RTTI/RTTI_UIConsole.hpp>
 #include <String/BsString.h>
+#include <components/Console.hpp>
+#include <components/GameWorld.hpp>
 #include <log/logging.hpp>
 #include <original-content/OriginalGameResources.hpp>
 
@@ -29,6 +31,8 @@ namespace REGoth
 
     mInputBox = layoutY->addNewElement<bs::GUIInputBox>(false, "GothicConsoleInputBox");
     mInputBox->setText("I am a console!");
+
+    mConsole = SO()->addComponent<Console>();  // TODO: init this in world/session, somewhere else
   }
 
   UIConsole::~UIConsole()
@@ -37,6 +41,18 @@ namespace REGoth
 
   void UIConsole::onInitialized()
   {
+    auto valueChangedCallback = [&](const bs::String& input) { mConsole->onInputChanged(input); };
+    mInputBox->onValueChanged.connect(valueChangedCallback);
+
+    auto confirmCallback = [this]() {
+      bs::Vector<bs::String> outputs;
+      bs::String input = mInputBox->getText();
+      outputs          = mConsole->onCommandConfirmed(input);
+      this->setOutput(outputs);
+      this->clearInput();
+    };
+    mInputBox->onConfirm.connect(confirmCallback);
+
     mToggleConsole = bs::VirtualButton("ToggleConsole");
     mConfirm       = bs::VirtualButton("Confirm");
   }
@@ -79,11 +95,6 @@ namespace REGoth
     {
       // Input Handling
     }
-  }
-
-  bs::String UIConsole::getInput()
-  {
-    return mInputBox->getText();
   }
 
   void UIConsole::clearInput()

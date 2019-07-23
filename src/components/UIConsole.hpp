@@ -9,6 +9,9 @@ namespace REGoth
   class UIConsole;
   using HUIConsole = bs::GameObjectHandle<UIConsole>;
 
+  class Console;
+  using HConsole = bs::GameObjectHandle<Console>;
+
   class UIConsole : public UIElement
   {
   public:
@@ -16,19 +19,9 @@ namespace REGoth
     virtual ~UIConsole();
     void update() override;
 
-    bs::String getInput();
     void clearInput();
     void setOutput(bs::Vector<bs::String> outputs);
     void setOutput(bs::String output);
-
-    bs::Event<void()>& onConfirmEvent()
-    {
-      return mInputBox->onConfirm;
-    }
-    bs::Event<void(const bs::String&)>& onValueChangedEvent()
-    {
-      return mInputBox->onValueChanged;
-    }
 
   protected:
     void onInitialized() override;
@@ -39,6 +32,8 @@ namespace REGoth
     };
 
   private:
+    HConsole mConsole;
+
     bs::GUITexture* mBackground    = nullptr;
     bs::GUIScrollArea* mScrollArea = nullptr;
     bs::GUIInputBox* mInputBox     = nullptr;
