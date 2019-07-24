@@ -12,6 +12,8 @@ namespace REGoth
   {
     setName("Console");
 
+    mAutotrie = Trie();
+
     registerAllCommand();
   }
 
@@ -321,60 +323,169 @@ namespace REGoth
 
   void Console::registerCommand(const bs::String& name, Command command)
   {
+    /* Do some autocompletion/suggestion stuff with name */
+    mAutotrie.insert(name);
     mCommands[name] = command;
   }
 
   void Console::registerAllCommand()
   {
     using This = Console;
+    CommandBuilder builder;
     Command command;
 
-    command = {(commandCallback)&This::command_List, 0, "Usage: list", "Lists all commands."};
+    command = builder.callback((commandCallback)&This::command_List)
+                  .num_of_args(0)
+                  .usage("Usage: list")
+                  .help("Lists all commands.")
+                  .build();
     registerCommand("list", command);
-    command = {(commandCallback)&This::command_Help, 1, "Usage: help [command]",
-               "Prints out helpful information about the given command."};
+
+    command = builder.callback((commandCallback)&This::command_Help)
+                  .num_of_args(1)
+                  .usage("Usage: help [command]")
+                  .help("Prints out helpful information about the given command.")
+                  .build();
     registerCommand("help", command);
-    command = {(commandCallback)&This::command_CheatFull, 0, "Usage: cheat full", ""};
+
+    command = builder.callback((commandCallback)&This::command_CheatFull)
+                  .num_of_args(0)
+                  .usage("Usage: cheat full")
+                  .help("")
+                  .build();
     registerCommand("cheat full", command);
-    command = {(commandCallback)&This::command_CheatGod, 0, "Usage: cheat god", ""};
+
+    command = builder.callback((commandCallback)&This::command_CheatGod)
+                  .num_of_args(0)
+                  .usage("Usage: cheat god")
+                  .help("")
+                  .build();
     registerCommand("cheat god", command);
-    command = {(commandCallback)&This::command_Insert, 1, "Usage: insert [name]", ""};
+
+    command = builder.callback((commandCallback)&This::command_Insert)
+                  .num_of_args(1)
+                  .usage("Usage: insert [name]")
+                  .help("")
+                  .build();
     registerCommand("insert", command);
-    command = {(commandCallback)&This::command_Spawnmass, 1, "Usage: spawnmass {giga} [amount]", ""};
+
+    command = builder.callback((commandCallback)&This::command_Spawnmass)
+                  .num_of_args(1)
+                  .usage("Usage: spawnmass {giga} [amount]")
+                  .help("")
+                  .build();
     registerCommand("spawnmass", command);
-    command = {(commandCallback)&This::command_Kill, 0, "Usage: kill", ""};
+
+    command = builder.callback((commandCallback)&This::command_Kill)
+                  .num_of_args(0)
+                  .usage("Usage: kill")
+                  .help("")
+                  .build();
     registerCommand("kill", command);
-    command = {(commandCallback)&This::command_EditAbilities, 0, "Usage: edit abilities", ""};
+
+    command = builder.callback((commandCallback)&This::command_EditAbilities)
+                  .num_of_args(0)
+                  .usage("Usage: edit abilities")
+                  .help("")
+                  .build();
     registerCommand("edit abilities", command);
-    command = {(commandCallback)&This::command_EditFocus, 0, "Usage: edit focus", ""};
+
+    command = builder.callback((commandCallback)&This::command_EditFocus)
+                  .num_of_args(0)
+                  .usage("Usage: edit focus")
+                  .help("")
+                  .build();
     registerCommand("edit focus", command);
-    command = {(commandCallback)&This::command_SetTime, 2, "Usage: set time [hh] [mm]", ""};
+
+    command = builder.callback((commandCallback)&This::command_SetTime)
+                  .num_of_args(2)
+                  .usage("Usage: set time [hh] [mm]")
+                  .help("")
+                  .build();
     registerCommand("set time", command);
-    command = {(commandCallback)&This::command_GotoWaypoint, 1, "Usage: goto waypoint [waypoint]",
-               ""};
+
+    command = builder.callback((commandCallback)&This::command_GotoWaypoint)
+                  .num_of_args(1)
+                  .usage("Usage: goto waypoint [waypoint]")
+                  .help("")
+                  .build();
     registerCommand("goto waypoint", command);
-    command = {(commandCallback)&This::command_GotoCamera, 0, "Usage: goto camera", ""};
+
+    command = builder.callback((commandCallback)&This::command_GotoCamera)
+                  .num_of_args(0)
+                  .usage("Usage: goto camera")
+                  .help("")
+                  .build();
     registerCommand("goto camera", command);
-    command = {(commandCallback)&This::command_GotoPos, 3, "Usage: goto pos [x] [y] [z]", ""};
+
+    command = builder.callback((commandCallback)&This::command_GotoPos)
+                  .num_of_args(3)
+                  .usage("Usage: goto pos [x] [y] [z]")
+                  .help("")
+                  .build();
     registerCommand("goto pos", command);
-    command = {(commandCallback)&This::command_AIGoto, 1, "Usage: aigoto [waypoint]", ""};
+
+    command = builder.callback((commandCallback)&This::command_AIGoto)
+                  .num_of_args(1)
+                  .usage("Usage: aigoto [waypoint]")
+                  .help("")
+                  .build();
     registerCommand("aigoto", command);
-    command = {(commandCallback)&This::command_SetClippingfactor, 0, "Usage: set clippingfactor [f]",
-               ""};
+
+    command = builder.callback((commandCallback)&This::command_SetClippingfactor)
+                  .num_of_args(0)
+                  .usage("Usage: set clippingfactor [f]")
+                  .help("")
+                  .build();
     registerCommand("set clippingfactor", command);
-    command = {(commandCallback)&This::command_ZFogZone, 0, "Usage: zfogzone", ""};
+
+    command = builder.callback((commandCallback)&This::command_ZFogZone)
+                  .num_of_args(0)
+                  .usage("Usage: zfogzone")
+                  .help("")
+                  .build();
     registerCommand("zfogzone", command);
-    command = {(commandCallback)&This::command_ToggleConsole, 0, "Usage: toggle console", ""};
+
+    command = builder.callback((commandCallback)&This::command_ToggleConsole)
+                  .num_of_args(0)
+                  .usage("Usage: toggle console")
+                  .help("")
+                  .build();
     registerCommand("toggle console", command);
-    command = {(commandCallback)&This::command_ToggleFrame, 0, "Usage: toggle frame", ""};
+
+    command = builder.callback((commandCallback)&This::command_ToggleFrame)
+                  .num_of_args(0)
+                  .usage("Usage: toggle frame")
+                  .help("")
+                  .build();
     registerCommand("toggle frame", command);
-    command = {(commandCallback)&This::command_ToggleWaynet, 0, "Usage: toggle waynet", ""};
+
+    command = builder.callback((commandCallback)&This::command_ToggleWaynet)
+                  .num_of_args(0)
+                  .usage("Usage: toggle waynet")
+                  .help("")
+                  .build();
     registerCommand("toggle waynet", command);
-    command = {(commandCallback)&This::command_Firstperson, 0, "Usage: firstperson", ""};
+
+    command = builder.callback((commandCallback)&This::command_Firstperson)
+                  .num_of_args(0)
+                  .usage("Usage: firstperson")
+                  .help("")
+                  .build();
     registerCommand("firstperson", command);
-    command = {(commandCallback)&This::command_HeroExport, 1, "Usage: hero export [filename]", ""};
+
+    command = builder.callback((commandCallback)&This::command_HeroExport)
+                  .num_of_args(1)
+                  .usage("Usage: hero export [filename]")
+                  .help("")
+                  .build();
     registerCommand("hero export", command);
-    command = {(commandCallback)&This::command_HeroImport, 1, "Usage: hero import [filename]", ""};
+
+    command = builder.callback((commandCallback)&This::command_HeroImport)
+                  .num_of_args(1)
+                  .usage("Usage: hero import [filename]")
+                  .help("")
+                  .build();
     registerCommand("hero import", command);
   }
 

@@ -17,6 +17,7 @@ namespace REGoth
     bs::Vector<bs::String> onCommandConfirmed(bs::String input);
 
   private:
+    /* Command stuff */
     typedef bs::Vector<bs::String> (Console::*commandCallback)(bs::Vector<bs::String>);
     struct Command
     {
@@ -24,6 +25,37 @@ namespace REGoth
       size_t num_of_args;
       bs::String usage;
       bs::String help;
+    };
+    class CommandBuilder
+    {
+    public:
+      CommandBuilder& callback(commandCallback callback)
+      {
+        cmd.callback = callback;
+        return *this;
+      }
+      CommandBuilder& num_of_args(size_t num_of_args)
+      {
+        cmd.num_of_args = num_of_args;
+        return *this;
+      }
+      CommandBuilder& usage(bs::String usage)
+      {
+        cmd.usage = usage;
+        return *this;
+      }
+      CommandBuilder& help(bs::String help)
+      {
+        cmd.help = help;
+        return *this;
+      }
+      Command build()
+      {
+        return cmd;
+      }
+
+    private:
+      Command cmd;
     };
     bs::Map<bs::String, Command> mCommands;
     bs::Vector<bs::String> command_List(bs::Vector<bs::String> args);
@@ -50,6 +82,47 @@ namespace REGoth
     bs::Vector<bs::String> command_HeroImport(bs::Vector<bs::String> args);
     void registerCommand(const bs::String& name, Command command);
     void registerAllCommand();
+
+    /* Trie stuff */
+  private:
+    class Trie
+    {
+    public:
+      Trie()
+      {
+        root.endOfWord = false;
+        root.subWord   = "";
+      }
+
+      void insert(const bs::String& word)
+      {
+        Node curr = root;
+
+        for (int i = 0; i < word.size(); i++)
+        {
+          char c = word.at(i);
+          if (curr.children.find(c) == curr.children.end())
+          {
+            Node newNode;
+            newNode.endOfWord = false;
+            newNode.subWord   = curr.subWord + c;
+            curr.children[c]  = newNode;
+          }
+          curr = curr.children[c];
+        }
+        curr.endOfWord = true;
+      }
+
+    private:
+      struct Node
+      {
+        bs::Map<char, Node> children;
+        bool endOfWord;
+        bs::String subWord;
+      };
+      Node root;
+    };
+    Trie mAutotrie;
 
   public:
     REGOTH_DECLARE_RTTI(Console)
