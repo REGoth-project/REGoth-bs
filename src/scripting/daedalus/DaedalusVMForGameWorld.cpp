@@ -9,12 +9,13 @@
 #include <components/Freepoint.hpp>
 #include <components/GameClock.hpp>
 #include <components/GameWorld.hpp>
+#include <components/Inventory.hpp>
 #include <components/Item.hpp>
 #include <components/StoryInformation.hpp>
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
-#include <scripting/ScriptSymbolQueries.hpp>
 #include <log/logging.hpp>
+#include <scripting/ScriptSymbolQueries.hpp>
 
 // TODO: Refactor, so we don't access deep into the UI code here for dialogues
 #include <components/GameplayUI.hpp>
@@ -447,8 +448,6 @@ namespace REGoth
       registerExternal("WLD_INSERTITEM", (externalCallback)&This::external_WLD_InsertItem);
       registerExternal("NPC_SETTALENTSKILL", (externalCallback)&This::external_NPC_SetTalentSkill);
       registerExternal("EQUIPITEM", (externalCallback)&This::external_NPC_EquipItem);
-      registerExternal("CREATEINVITEMS", (externalCallback)&This::external_NPC_CreateInventoryItems);
-      registerExternal("CREATEINVITEM", (externalCallback)&This::external_NPC_CreateInventoryItem);
       registerExternal("MDL_SETVISUAL", (externalCallback)&This::external_MDL_SetVisual);
       registerExternal("MDL_SETVISUALBODY", (externalCallback)&This::external_MDL_SetVisualBody);
       registerExternal("WLD_GETDAY", (externalCallback)&This::external_WLD_GetDay);
@@ -478,7 +477,14 @@ namespace REGoth
       registerExternal("NPC_GETBODYSTATE", (externalCallback)&This::external_Npc_GetBodyState);
       registerExternal("AI_PROCESSINFOS", (externalCallback)&This::external_AI_ProcessInfos);
       registerExternal("AI_STOPPROCESSINFOS", (externalCallback)&This::external_AI_StopProcessInfos);
+      registerExternal("CREATEINVITEMS", (externalCallback)&This::external_NPC_CreateInventoryItems);
+      registerExternal("CREATEINVITEM", (externalCallback)&This::external_NPC_CreateInventoryItem);
+      registerExternal("NPC_HASITEMS", (externalCallback)&This::external_Npc_HasItems);
+      registerExternal("NPC_REMOVEINVITEM", (externalCallback)&This::external_Npc_RemoveInvItem);
+      registerExternal("NPC_REMOVEINVITEMS", (externalCallback)&This::external_Npc_RemoveInvItems);
 
+      registerExternal("NPC_GETINVITEMBYSLOT",
+                       (externalCallback)&This::external_Npc_GetInvItemBySlot);
       registerExternal("INFOMANAGER_HASFINISHED",
                        (externalCallback)&This::external_InfoManager_HasFinished);
     }
@@ -616,30 +622,6 @@ namespace REGoth
       HCharacter character = popCharacterInstance();
 
       REGOTH_LOG(Warning, Uncategorized, "[External] Using external stub: NPC_SetTalentSkill");
-    }
-
-    void DaedalusVMForGameWorld::external_NPC_EquipItem()
-    {
-      bs::String instance  = popStringValue();
-      HCharacter character = popCharacterInstance();
-
-      character->equipItem(instance);
-    }
-    void DaedalusVMForGameWorld::external_NPC_CreateInventoryItems()
-    {
-      bs::INT32 num        = popIntValue();
-      bs::String instance  = popStringValue();
-      HCharacter character = popCharacterInstance();
-
-      character->createInventoryItem(instance, num);
-    }
-
-    void DaedalusVMForGameWorld::external_NPC_CreateInventoryItem()
-    {
-      bs::String instance  = popStringValue();
-      HCharacter character = popCharacterInstance();
-
-      character->createInventoryItem(instance, 1);
     }
 
     void DaedalusVMForGameWorld::external_MDL_SetVisual()
@@ -1022,7 +1004,8 @@ namespace REGoth
 
     void DaedalusVMForGameWorld::external_InfoManager_HasFinished()
     {
-      // REGOTH_LOG(Warning, Uncategorized, "[External] Using external stub: InfoManager_HasFinished");
+      // REGOTH_LOG(Warning, Uncategorized, "[External] Using external stub:
+      // InfoManager_HasFinished");
 
       if (gGameplayUI()->isDialogueInProgress())
       {
@@ -1050,6 +1033,92 @@ namespace REGoth
       auto storyInfo = self->SO()->getComponent<StoryInformation>();
 
       storyInfo->stopDialogueWith(other());
+    }
+
+    void DaedalusVMForGameWorld::external_NPC_EquipItem()
+    {
+      bs::String instance  = popStringValue();
+      HCharacter character = popCharacterInstance();
+
+      character->equipItem(instance);
+    }
+
+    void DaedalusVMForGameWorld::external_NPC_CreateInventoryItems()
+    {
+      bs::INT32 num        = popIntValue();
+      bs::String instance  = popStringValue();
+      HCharacter character = popCharacterInstance();
+
+      character->createInventoryItem(instance, num);
+    }
+
+    void DaedalusVMForGameWorld::external_NPC_CreateInventoryItem()
+    {
+      bs::String instance  = popStringValue();
+      HCharacter character = popCharacterInstance();
+
+      character->createInventoryItem(instance, 1);
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_HasItems()
+    {
+      bs::INT32 instance   = popIntValue();
+      HCharacter character = popCharacterInstance();
+
+      const bs::String& instanceName = scriptSymbols().getSymbolName(instance);
+
+      auto inventory = character->SO()->getComponent<Inventory>();
+
+      if (inventory->hasItem(instanceName))
+      {
+        mStack.pushInt(1);
+      }
+      else
+      {
+        mStack.pushInt(0);
+      }
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_GetInvItemBySlot()
+    {
+      bs::INT32 slotNumber = popIntValue();
+      bs::INT32 category   = popIntValue();
+      HCharacter character = popCharacterInstance();
+
+      REGOTH_LOG(Warning, Uncategorized, "[External] Using external stub: Npc_GetInvItemBySlot");
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_RemoveInvItem()
+    {
+      bs::INT32 instance   = popIntValue();
+      HCharacter character = popCharacterInstance();
+
+      const bs::String& instanceName = scriptSymbols().getSymbolName(instance);
+
+      auto inventory = character->SO()->getComponent<Inventory>();
+
+      if (inventory->hasItem(instanceName))
+      {
+        inventory->removeItem(instanceName);
+      }
+    }
+
+    void DaedalusVMForGameWorld::external_Npc_RemoveInvItems()
+    {
+      bs::INT32 count      = popIntValue();
+      bs::INT32 instance   = popIntValue();
+      HCharacter character = popCharacterInstance();
+
+      const bs::String& instanceName = scriptSymbols().getSymbolName(instance);
+
+      auto inventory = character->SO()->getComponent<Inventory>();
+
+      if (inventory->hasItem(instanceName))
+      {
+        bs::INT32 actualCount = inventory->itemCount(instanceName);
+
+        inventory->removeItem(instanceName, bs::Math::min(actualCount, count));
+      }
     }
 
     void DaedalusVMForGameWorld::script_PrintPlus(const bs::String& text)

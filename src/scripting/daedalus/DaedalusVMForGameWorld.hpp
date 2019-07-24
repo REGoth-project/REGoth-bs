@@ -202,9 +202,6 @@ namespace REGoth
       void external_WLD_SetTime();
       void external_NPC_IsPlayer();
       void external_NPC_SetTalentSkill();
-      void external_NPC_EquipItem();
-      void external_NPC_CreateInventoryItems();
-      void external_NPC_CreateInventoryItem();
       void external_MDL_SetVisual();
       void external_MDL_SetVisualBody();
       void external_AI_GotoWaypoint();
@@ -233,6 +230,13 @@ namespace REGoth
       void external_InfoManager_HasFinished();
       void external_AI_ProcessInfos();
       void external_AI_StopProcessInfos();
+      void external_NPC_EquipItem();
+      void external_NPC_CreateInventoryItems();
+      void external_NPC_CreateInventoryItem();
+      void external_Npc_HasItems();
+      void external_Npc_GetInvItemBySlot();
+      void external_Npc_RemoveInvItem();
+      void external_Npc_RemoveInvItems();
 
       void fillSymbolStorage() override;
       void registerAllExternals() override;
