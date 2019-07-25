@@ -46,7 +46,7 @@ namespace REGoth
       {
         input                       = bs::StringUtil::replaceAll(input, command, "");
         bs::Vector<bs::String> args = bs::StringUtil::split(input, " ");
-        size_t num_of_args          = it->second.num_of_args;
+        size_t num_of_args          = it->second.args.size();
         /* TODO: I just want to get rid of empty strings :) */
         /* TODO: first arg is skipped here or something ? */
         for (auto sit = args.begin(); sit != args.end();)
@@ -335,154 +335,144 @@ namespace REGoth
     Command command;
 
     command = builder.callback((commandCallback)&This::command_List)
-                  .num_of_args(0)
                   .usage("Usage: list")
                   .help("Lists all commands.")
                   .build();
     registerCommand("list", command);
 
     command = builder.callback((commandCallback)&This::command_Help)
-                  .num_of_args(1)
+                  .arg(TokenType::Command)
                   .usage("Usage: help [command]")
                   .help("Prints out helpful information about the given command.")
                   .build();
     registerCommand("help", command);
 
     command = builder.callback((commandCallback)&This::command_CheatFull)
-                  .num_of_args(0)
                   .usage("Usage: cheat full")
                   .help("")
                   .build();
     registerCommand("cheat full", command);
 
     command = builder.callback((commandCallback)&This::command_CheatGod)
-                  .num_of_args(0)
                   .usage("Usage: cheat god")
                   .help("")
                   .build();
     registerCommand("cheat god", command);
 
     command = builder.callback((commandCallback)&This::command_Insert)
-                  .num_of_args(1)
+                  .arg(TokenType::Instance)
                   .usage("Usage: insert [name]")
                   .help("")
                   .build();
     registerCommand("insert", command);
 
     command = builder.callback((commandCallback)&This::command_Spawnmass)
-                  .num_of_args(1)
+                  .arg(TokenType::Literal)
                   .usage("Usage: spawnmass {giga} [amount]")
                   .help("")
                   .build();
     registerCommand("spawnmass", command);
 
     command = builder.callback((commandCallback)&This::command_Kill)
-                  .num_of_args(0)
                   .usage("Usage: kill")
-                  .help("")
+                  .help("Kill the NPC you have currently in focus")
                   .build();
     registerCommand("kill", command);
 
     command = builder.callback((commandCallback)&This::command_EditAbilities)
-                  .num_of_args(0)
                   .usage("Usage: edit abilities")
                   .help("")
                   .build();
     registerCommand("edit abilities", command);
 
     command = builder.callback((commandCallback)&This::command_EditFocus)
-                  .num_of_args(0)
                   .usage("Usage: edit focus")
                   .help("")
                   .build();
     registerCommand("edit focus", command);
 
     command = builder.callback((commandCallback)&This::command_SetTime)
-                  .num_of_args(2)
+                  .arg(TokenType::Literal)
+                  .arg(TokenType::Literal)
                   .usage("Usage: set time [hh] [mm]")
                   .help("")
                   .build();
     registerCommand("set time", command);
 
     command = builder.callback((commandCallback)&This::command_GotoWaypoint)
-                  .num_of_args(1)
+                  .arg(TokenType::Waypoint)
                   .usage("Usage: goto waypoint [waypoint]")
                   .help("")
                   .build();
     registerCommand("goto waypoint", command);
 
     command = builder.callback((commandCallback)&This::command_GotoCamera)
-                  .num_of_args(0)
                   .usage("Usage: goto camera")
                   .help("")
                   .build();
     registerCommand("goto camera", command);
 
     command = builder.callback((commandCallback)&This::command_GotoPos)
-                  .num_of_args(3)
+                  .arg(TokenType::Literal)
+                  .arg(TokenType::Literal)
+                  .arg(TokenType::Literal)
                   .usage("Usage: goto pos [x] [y] [z]")
                   .help("")
                   .build();
     registerCommand("goto pos", command);
 
     command = builder.callback((commandCallback)&This::command_AIGoto)
-                  .num_of_args(1)
+                  .arg(TokenType::Waypoint)
                   .usage("Usage: aigoto [waypoint]")
                   .help("")
                   .build();
     registerCommand("aigoto", command);
 
     command = builder.callback((commandCallback)&This::command_SetClippingfactor)
-                  .num_of_args(0)
                   .usage("Usage: set clippingfactor [f]")
                   .help("")
                   .build();
     registerCommand("set clippingfactor", command);
 
     command = builder.callback((commandCallback)&This::command_ZFogZone)
-                  .num_of_args(0)
                   .usage("Usage: zfogzone")
                   .help("")
                   .build();
     registerCommand("zfogzone", command);
 
     command = builder.callback((commandCallback)&This::command_ToggleConsole)
-                  .num_of_args(0)
                   .usage("Usage: toggle console")
                   .help("")
                   .build();
     registerCommand("toggle console", command);
 
     command = builder.callback((commandCallback)&This::command_ToggleFrame)
-                  .num_of_args(0)
                   .usage("Usage: toggle frame")
                   .help("")
                   .build();
     registerCommand("toggle frame", command);
 
     command = builder.callback((commandCallback)&This::command_ToggleWaynet)
-                  .num_of_args(0)
                   .usage("Usage: toggle waynet")
                   .help("")
                   .build();
     registerCommand("toggle waynet", command);
 
     command = builder.callback((commandCallback)&This::command_Firstperson)
-                  .num_of_args(0)
                   .usage("Usage: firstperson")
                   .help("")
                   .build();
     registerCommand("firstperson", command);
 
     command = builder.callback((commandCallback)&This::command_HeroExport)
-                  .num_of_args(1)
+                  .arg(TokenType::Literal)
                   .usage("Usage: hero export [filename]")
                   .help("")
                   .build();
     registerCommand("hero export", command);
 
     command = builder.callback((commandCallback)&This::command_HeroImport)
-                  .num_of_args(1)
+                  .arg(TokenType::Literal)
                   .usage("Usage: hero import [filename]")
                   .help("")
                   .build();

@@ -17,12 +17,20 @@ namespace REGoth
     bs::Vector<bs::String> onCommandConfirmed(bs::String input);
 
   private:
+    enum class TokenType
+    {
+      Literal,
+      Command,
+      Instance,  // TODO: Yeah I am not so sure about this in relation to the original commands
+      Waypoint,
+      Freepoint,
+    };
     /* Command stuff */
     typedef bs::Vector<bs::String> (Console::*commandCallback)(bs::Vector<bs::String>);
     struct Command
     {
       commandCallback callback;
-      size_t num_of_args;
+      bs::Vector<TokenType> args = {};
       bs::String usage;
       bs::String help;
     };
@@ -34,9 +42,9 @@ namespace REGoth
         cmd.callback = callback;
         return *this;
       }
-      CommandBuilder& num_of_args(size_t num_of_args)
+      CommandBuilder& arg(TokenType arg)
       {
-        cmd.num_of_args = num_of_args;
+        cmd.args.push_back(arg);
         return *this;
       }
       CommandBuilder& usage(bs::String usage)
@@ -51,7 +59,9 @@ namespace REGoth
       }
       Command build()
       {
-        return cmd;
+        Command ret = cmd;
+        cmd         = {};
+        return ret;
       }
 
     private:
@@ -83,7 +93,7 @@ namespace REGoth
     void registerCommand(const bs::String& name, Command command);
     void registerAllCommand();
 
-    /* Trie stuff */
+    /* Suggestion stuff */
   private:
     class Trie
     {
