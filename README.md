@@ -80,6 +80,15 @@ For Debian and its derivatives, install the following packages:
 sudo apt install libx11-dev libxcursor-dev libxi-dev libicu-dev libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev libphysfs-dev libsquish-dev
 ```
 
+For Fedora install the following packages: 
+
+```sh
+sudo dnf install libX11-devel libXcursor-devel libXi-devel libicu-devel mesa-libGL-devel mesa-libGLU freeglut-devel physfs-devel libsquish-devel
+
+# If you get 'Could not find XRandR library' error on compilation install: 
+sudo dnf install libXrandr-devel 
+```
+
 For other distributions, just look up the corresponding package names for these libraries (and please make a PR complementing these information).
 
 To build the project for Linux, run the following commands from within the directory where you cloned REGoth:
