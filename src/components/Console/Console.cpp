@@ -12,8 +12,6 @@ namespace REGoth
   {
     setName("Console");
 
-    mAutotrie = Trie();
-
     registerAllCommand();
   }
 
@@ -28,6 +26,13 @@ namespace REGoth
   void Console::onInputChanged(const bs::String& input)
   {
     BS_LOG(Info, Uncategorized, "[UIConsole] Input changed! Current input: {0}!", input);
+
+    bs::Vector<bs::String> suggestions = mAutoTries[TokenType::Command].findSuggestions(input);
+    BS_LOG(Info, Uncategorized, "[UIConsole] Following Suggestions were found:");
+    for (bs::String s : suggestions)
+    {
+      BS_LOG(Info, Uncategorized, "[UIConsole] Suggestion: {0}!", s);
+    }
   }
 
   bs::Vector<bs::String> Console::onCommandConfirmed(bs::String input)
@@ -324,74 +329,83 @@ namespace REGoth
   void Console::registerCommand(const bs::String& name, Command command)
   {
     /* Do some autocompletion/suggestion stuff with name */
-    mAutotrie.insert(name);
+    mAutoTries[TokenType::Command].insert(name);
     mCommands[name] = command;
   }
 
   void Console::registerAllCommand()
   {
     using This = Console;
-    CommandBuilder builder;
     Command command;
 
-    command = builder.callback((commandCallback)&This::command_List)
+    command = CommandBuilder()
+                  .callback((commandCallback)&This::command_List)
                   .usage("Usage: list")
                   .help("Lists all commands.")
                   .build();
     registerCommand("list", command);
 
-    command = builder.callback((commandCallback)&This::command_Help)
+    command = CommandBuilder()
+                  .callback(&This::command_Help)
                   .arg(TokenType::Command)
                   .usage("Usage: help [command]")
                   .help("Prints out helpful information about the given command.")
                   .build();
     registerCommand("help", command);
 
-    command = builder.callback((commandCallback)&This::command_CheatFull)
+    command = CommandBuilder()
+                  .callback(&This::command_CheatFull)
                   .usage("Usage: cheat full")
                   .help("")
                   .build();
     registerCommand("cheat full", command);
 
-    command = builder.callback((commandCallback)&This::command_CheatGod)
+    command = CommandBuilder()
+                  .callback(&This::command_CheatGod)
                   .usage("Usage: cheat god")
                   .help("")
                   .build();
     registerCommand("cheat god", command);
 
-    command = builder.callback((commandCallback)&This::command_Insert)
+    command = CommandBuilder()
+                  .callback(&This::command_Insert)
                   .arg(TokenType::Instance)
                   .usage("Usage: insert [name]")
                   .help("")
                   .build();
     registerCommand("insert", command);
 
-    command = builder.callback((commandCallback)&This::command_Spawnmass)
+    command = CommandBuilder()
+                  .callback(&This::command_Spawnmass)
                   .arg(TokenType::Literal)
                   .usage("Usage: spawnmass {giga} [amount]")
                   .help("")
                   .build();
     registerCommand("spawnmass", command);
 
-    command = builder.callback((commandCallback)&This::command_Kill)
+    command = CommandBuilder()
+                  .callback(&This::command_Kill)
                   .usage("Usage: kill")
                   .help("Kill the NPC you have currently in focus")
                   .build();
     registerCommand("kill", command);
 
-    command = builder.callback((commandCallback)&This::command_EditAbilities)
+    command = CommandBuilder()
+                  .callback(&This::command_EditAbilities)
                   .usage("Usage: edit abilities")
                   .help("")
                   .build();
     registerCommand("edit abilities", command);
 
-    command = builder.callback((commandCallback)&This::command_EditFocus)
+    command = CommandBuilder()
+                  .callback(&This::command_EditFocus)
                   .usage("Usage: edit focus")
                   .help("")
                   .build();
     registerCommand("edit focus", command);
 
-    command = builder.callback((commandCallback)&This::command_SetTime)
+    command = CommandBuilder()
+                  .callback(&This::command_SetTime)
                   .arg(TokenType::Literal)
                   .arg(TokenType::Literal)
                   .usage("Usage: set time [hh] [mm]")
@@ -399,20 +413,23 @@ namespace REGoth
                   .build();
     registerCommand("set time", command);
 
-    command = builder.callback((commandCallback)&This::command_GotoWaypoint)
+    command = CommandBuilder()
+                  .callback(&This::command_GotoWaypoint)
                   .arg(TokenType::Waypoint)
                   .usage("Usage: goto waypoint [waypoint]")
                   .help("")
                   .build();
     registerCommand("goto waypoint", command);
 
-    command = builder.callback((commandCallback)&This::command_GotoCamera)
+    command = CommandBuilder()
+                  .callback(&This::command_GotoCamera)
                   .usage("Usage: goto camera")
                   .help("")
                   .build();
     registerCommand("goto camera", command);
 
-    command = builder.callback((commandCallback)&This::command_GotoPos)
+    command = CommandBuilder()
+                  .callback(&This::command_GotoPos)
                   .arg(TokenType::Literal)
                   .arg(TokenType::Literal)
                   .arg(TokenType::Literal)
@@ -421,57 +438,66 @@ namespace REGoth
                   .build();
     registerCommand("goto pos", command);
 
-    command = builder.callback((commandCallback)&This::command_AIGoto)
+    command = CommandBuilder()
+                  .callback(&This::command_AIGoto)
                   .arg(TokenType::Waypoint)
                   .usage("Usage: aigoto [waypoint]")
                   .help("")
                   .build();
     registerCommand("aigoto", command);
 
-    command = builder.callback((commandCallback)&This::command_SetClippingfactor)
+    command = CommandBuilder()
+                  .callback(&This::command_SetClippingfactor)
                   .usage("Usage: set clippingfactor [f]")
                   .help("")
                   .build();
     registerCommand("set clippingfactor", command);
 
-    command = builder.callback((commandCallback)&This::command_ZFogZone)
+    command = CommandBuilder()
+                  .callback(&This::command_ZFogZone)
                   .usage("Usage: zfogzone")
-                  .help("")
+                  .help("Some Fogzone stuff")
                   .build();
     registerCommand("zfogzone", command);
 
-    command = builder.callback((commandCallback)&This::command_ToggleConsole)
+    command = CommandBuilder()
+                  .callback(&This::command_ToggleConsole)
                   .usage("Usage: toggle console")
                   .help("")
                   .build();
     registerCommand("toggle console", command);
 
-    command = builder.callback((commandCallback)&This::command_ToggleFrame)
+    command = CommandBuilder()
+                  .callback(&This::command_ToggleFrame)
                   .usage("Usage: toggle frame")
                   .help("")
                   .build();
     registerCommand("toggle frame", command);
 
-    command = builder.callback((commandCallback)&This::command_ToggleWaynet)
+    command = CommandBuilder()
+                  .callback(&This::command_ToggleWaynet)
                   .usage("Usage: toggle waynet")
                   .help("")
                   .build();
     registerCommand("toggle waynet", command);
 
-    command = builder.callback((commandCallback)&This::command_Firstperson)
+    command = CommandBuilder()
+                  .callback(&This::command_Firstperson)
                   .usage("Usage: firstperson")
                   .help("")
                   .build();
     registerCommand("firstperson", command);
 
-    command = builder.callback((commandCallback)&This::command_HeroExport)
+    command = CommandBuilder()
+                  .callback(&This::command_HeroExport)
                   .arg(TokenType::Literal)
                   .usage("Usage: hero export [filename]")
                   .help("")
                   .build();
     registerCommand("hero export", command);
 
-    command = builder.callback((commandCallback)&This::command_HeroImport)
+    command = CommandBuilder()
+                  .callback(&This::command_HeroImport)
                   .arg(TokenType::Literal)
                   .usage("Usage: hero import [filename]")
                   .help("")

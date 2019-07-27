@@ -7,7 +7,7 @@
 #include <GUI/BsGUITexture.h>
 #include <RTTI/RTTI_UIConsole.hpp>
 #include <String/BsString.h>
-#include <components/Console.hpp>
+#include <components/Console/Console.hpp>
 #include <components/GameWorld.hpp>
 #include <log/logging.hpp>
 #include <original-content/OriginalGameResources.hpp>

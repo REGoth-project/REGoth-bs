@@ -1,4 +1,7 @@
 #pragma once
+#include "Command.hpp"
+#include "TokenType.hpp"
+#include "Trie.hpp"
 #include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
@@ -17,56 +20,6 @@ namespace REGoth
     bs::Vector<bs::String> onCommandConfirmed(bs::String input);
 
   private:
-    enum class TokenType
-    {
-      Literal,
-      Command,
-      Instance,  // TODO: Yeah I am not so sure about this in relation to the original commands
-      Waypoint,
-      Freepoint,
-    };
-    /* Command stuff */
-    typedef bs::Vector<bs::String> (Console::*commandCallback)(bs::Vector<bs::String>);
-    struct Command
-    {
-      commandCallback callback;
-      bs::Vector<TokenType> args = {};
-      bs::String usage;
-      bs::String help;
-    };
-    class CommandBuilder
-    {
-    public:
-      CommandBuilder& callback(commandCallback callback)
-      {
-        cmd.callback = callback;
-        return *this;
-      }
-      CommandBuilder& arg(TokenType arg)
-      {
-        cmd.args.push_back(arg);
-        return *this;
-      }
-      CommandBuilder& usage(bs::String usage)
-      {
-        cmd.usage = usage;
-        return *this;
-      }
-      CommandBuilder& help(bs::String help)
-      {
-        cmd.help = help;
-        return *this;
-      }
-      Command build()
-      {
-        Command ret = cmd;
-        cmd         = {};
-        return ret;
-      }
-
-    private:
-      Command cmd;
-    };
     bs::Map<bs::String, Command> mCommands;
     bs::Vector<bs::String> command_List(bs::Vector<bs::String> args);
     bs::Vector<bs::String> command_Help(bs::Vector<bs::String> args);
@@ -95,44 +48,7 @@ namespace REGoth
 
     /* Suggestion stuff */
   private:
-    class Trie
-    {
-    public:
-      Trie()
-      {
-        root.endOfWord = false;
-        root.subWord   = "";
-      }
-
-      void insert(const bs::String& word)
-      {
-        Node curr = root;
-
-        for (int i = 0; i < word.size(); i++)
-        {
-          char c = word.at(i);
-          if (curr.children.find(c) == curr.children.end())
-          {
-            Node newNode;
-            newNode.endOfWord = false;
-            newNode.subWord   = curr.subWord + c;
-            curr.children[c]  = newNode;
-          }
-          curr = curr.children[c];
-        }
-        curr.endOfWord = true;
-      }
-
-    private:
-      struct Node
-      {
-        bs::Map<char, Node> children;
-        bool endOfWord;
-        bs::String subWord;
-      };
-      Node root;
-    };
-    Trie mAutotrie;
+    bs::Map<TokenType, Trie> mAutoTries;
 
   public:
     REGOTH_DECLARE_RTTI(Console)

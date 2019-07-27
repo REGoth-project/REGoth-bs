@@ -1,6 +1,6 @@
 #pragma once
 #include "RTTIUtil.hpp"
-#include <components/Console.hpp>
+#include <components/Console/Console.hpp>
 
 namespace REGoth
 {

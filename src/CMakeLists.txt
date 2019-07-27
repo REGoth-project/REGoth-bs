@@ -81,8 +81,11 @@ add_library(REGothEngine STATIC
   components/UIDialogueChoice.cpp
   components/UIConsole.hpp
   components/UIConsole.cpp
-  components/Console.hpp
-  components/Console.cpp
+  components/Console/Command.hpp
+  components/Console/TokenType.hpp
+  components/Console/Trie.hpp
+  components/Console/Console.hpp
+  components/Console/Console.cpp
   AI/EventMessage.hpp
   AI/EventMessage.cpp
   AI/ScriptState.hpp

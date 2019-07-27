@@ -7,7 +7,6 @@
 #include <components/CharacterAI.hpp>
 #include <components/CharacterEventQueue.hpp>
 #include <components/CharacterKeyboardInput.hpp>
-#include <components/Console.hpp>
 #include <components/GameWorld.hpp>
 #include <components/GameplayUI.hpp>
 #include <components/ThirdPersonCamera.hpp>
