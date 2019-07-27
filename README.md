@@ -1,4 +1,5 @@
 [![Built with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg)](http://spacemacs.org)
+[![Build Status](https://dev.azure.com/ataulien/REGoth/_apis/build/status/REGoth-project.REGoth-bs?branchName=master)](https://dev.azure.com/ataulien/REGoth/_build/latest?definitionId=1&branchName=master)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/REGoth/Lobby)
 
 
