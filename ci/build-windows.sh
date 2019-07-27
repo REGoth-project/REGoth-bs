@@ -4,7 +4,7 @@ rm -rf build
 mkdir build
 cd build
 
-curl -O https://dilborceisv8p.cloudfront.net/bsf_2019.07.18_win64.zip
+curl -O https://dilborceisv8p.cloudfront.net/bsf_2019.07.27_win64.zip
 unzip bsf_*.zip -d bsf
 
 vcpkg update
