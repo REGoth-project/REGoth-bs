@@ -83,10 +83,7 @@ sudo apt install libx11-dev libxcursor-dev libxi-dev libicu-dev libgl1-mesa-dev 
 For Fedora install the following packages: 
 
 ```sh
-sudo dnf install libX11-devel libXcursor-devel libXi-devel libicu-devel mesa-libGL-devel mesa-libGLU freeglut-devel physfs-devel libsquish-devel
-
-# If you get 'Could not find XRandR library' error on compilation install: 
-sudo dnf install libXrandr-devel 
+sudo dnf install libX11-devel libXcursor-devel libXi-devel libicu-devel mesa-libGL-devel mesa-libGLU freeglut-devel physfs-devel libsquish-devel libXrandr-devel
 ```
 
 For other distributions, just look up the corresponding package names for these libraries (and please make a PR complementing these information).
