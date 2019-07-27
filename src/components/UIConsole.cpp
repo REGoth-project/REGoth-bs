@@ -19,16 +19,17 @@ namespace REGoth
   {
     setName("UIConsole");
 
-    // TODO: Proper back/foreground, does not seem to work for mInputBox at all
-    bs::GUIPanel* backgroundPanel = layout().addNewElement<bs::GUIPanel>(1);
+    bs::GUILayoutY* layoutY = layout().addNewElement<bs::GUILayoutY>();
+
+    bs::GUIPanel* topPanel        = layoutY->addNewElement<bs::GUIPanel>();
+    bs::GUIPanel* backgroundPanel = topPanel->addNewElement<bs::GUIPanel>(1);
     mBackground = backgroundPanel->addNewElement<bs::GUITexture>("GothicConsoleBackground");
 
-    bs::GUIPanel* foregroundPanel = layout().addNewElement<bs::GUIPanel>(0);
-    bs::GUILayoutY* layoutY       = foregroundPanel->addNewElement<bs::GUILayoutY>();
-
-    mScrollArea = layoutY->addNewElement<bs::GUIScrollArea>();
+    bs::GUIPanel* foregroundPanel = topPanel->addNewElement<bs::GUIPanel>(0);
+    mScrollArea                   = foregroundPanel->addNewElement<bs::GUIScrollArea>();
     mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString("test"));
 
+    // TODO: Input box does appear properly ontop of the texture so i moved it below everything
     mInputBox = layoutY->addNewElement<bs::GUIInputBox>(false, "GothicConsoleInputBox");
     mInputBox->setText("I am a console!");
 
@@ -41,15 +42,26 @@ namespace REGoth
 
   void UIConsole::onInitialized()
   {
-    auto valueChangedCallback = [&](const bs::String& input) { mConsole->onInputChanged(input); };
+    auto valueChangedCallback = [&](const bs::String& input) {
+      bs::Vector<bs::String> suggestions = mConsole->onInputChanged(input);
+
+// Auto-Autocomplete if there is only one suggestion
+// This only makes sense if we can detect when we delete characters
+#if 0
+      if (suggestions.size() == 1)
+      {
+        mInputBox->setText(suggestions[0]);
+      }
+#endif
+    };
     mInputBox->onValueChanged.connect(valueChangedCallback);
 
     auto confirmCallback = [this]() {
       bs::Vector<bs::String> outputs;
       bs::String input = mInputBox->getText();
       outputs          = mConsole->onCommandConfirmed(input);
-      this->setOutput(outputs);
-      this->clearInput();
+      setOutput(outputs);
+      clearInput();
     };
     mInputBox->onConfirm.connect(confirmCallback);
 
@@ -64,10 +76,11 @@ namespace REGoth
     bs::Rect2I parentBounds = parentLayout().getBounds();
 
     layout().setPosition(0, 0);
+    // TODO: Consider whole screen for this layout because of suggestion box and edit box
     layout().setWidth(parentBounds.width);
     layout().setHeight(parentBounds.height * 0.2);
 
-    // Activation Handling
+    // Activation Input Handling
     if (bs::gVirtualInput().isButtonDown(mToggleConsole))
     {
       mState = (mState == State::Closed) ? State::Open : State::Closed;
@@ -94,6 +107,8 @@ namespace REGoth
     if (mState == State::Open)
     {
       // Input Handling
+      // TODO: Tab? for suggestions?
+      // anything else?
     }
   }
 

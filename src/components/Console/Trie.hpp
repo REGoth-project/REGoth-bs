@@ -14,23 +14,21 @@ namespace REGoth
 
     void insert(const bs::String& word)
     {
-      BS_LOG(Info, Uncategorized, "[Console/Trie] Inserting {0}!", word);
-      Node& curr = root;
+      Node* curr = &root;
 
       for (int i = 0; i < word.size(); i++)
       {
         char c = word.at(i);
-        if (curr.children.find(c) == curr.children.end())
+        if (curr->children.find(c) == curr->children.end())
         {
-          BS_LOG(Info, Uncategorized, "[Console/Trie] Inserting Node for char {0}!", c);
           Node newNode;
           newNode.endOfWord = false;
-          newNode.subWord   = curr.subWord + c;
-          curr.children[c]  = newNode;
+          newNode.subWord   = curr->subWord + c;
+          curr->children[c] = newNode;
         }
-        curr = curr.children[c];  // am I copying it here?, but it is a reference right now
+        curr = &curr->children[c];
       }
-      curr.endOfWord = true;
+      curr->endOfWord = true;
     }
 
     bs::Vector<bs::String> findSuggestions(const bs::String& word)
@@ -44,8 +42,6 @@ namespace REGoth
 
         if (curr.children.find(c) == curr.children.end())
         {
-          // TODO: Does not find the node?
-          BS_LOG(Info, Uncategorized, "[Console/Trie] Did not find Node with char {0}!", c);
           // Leave early as there are not reference for this word
           return ret;
         }
@@ -56,7 +52,6 @@ namespace REGoth
       // Check every node (curr and below) to see if subWord==true)
       ret = traverse(curr);
 
-      ret.push_back("lol");
       return ret;
     }
 
@@ -72,8 +67,6 @@ namespace REGoth
     bs::Vector<bs::String> traverse(Node node)
     {
       bs::Vector<bs::String> ret;
-      BS_LOG(Info, Uncategorized, "[Console/Trie] Traversing to Node with subword {0}!",
-             node.subWord);
       if (node.endOfWord)
       {
         ret.push_back(node.subWord);

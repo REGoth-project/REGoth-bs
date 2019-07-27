@@ -23,16 +23,14 @@ namespace REGoth
   {
   }
 
-  void Console::onInputChanged(const bs::String& input)
+  bs::Vector<bs::String> Console::onInputChanged(const bs::String& input)
   {
-    BS_LOG(Info, Uncategorized, "[UIConsole] Input changed! Current input: {0}!", input);
-
     bs::Vector<bs::String> suggestions = mAutoTries[TokenType::Command].findSuggestions(input);
-    BS_LOG(Info, Uncategorized, "[UIConsole] Following Suggestions were found:");
-    for (bs::String s : suggestions)
-    {
-      BS_LOG(Info, Uncategorized, "[UIConsole] Suggestion: {0}!", s);
-    }
+    bs::String s;
+    for (const auto& sugst : suggestions) s += sugst + " , ";
+    BS_LOG(Info, Uncategorized, "[UIConsole] Following Suggestions were found: {0}", s);
+
+    return suggestions;
   }
 
   bs::Vector<bs::String> Console::onCommandConfirmed(bs::String input)
@@ -52,8 +50,10 @@ namespace REGoth
         input                       = bs::StringUtil::replaceAll(input, command, "");
         bs::Vector<bs::String> args = bs::StringUtil::split(input, " ");
         size_t num_of_args          = it->second.args.size();
+
         /* TODO: I just want to get rid of empty strings :) */
         /* TODO: first arg is skipped here or something ? */
+        /*
         for (auto sit = args.begin(); sit != args.end();)
         {
           if ((*sit).empty())
@@ -64,6 +64,7 @@ namespace REGoth
           sit++;
           BS_LOG(Info, Uncategorized, "[Console] args: {0} !", *sit);
         }
+        */
         if (args.size() == num_of_args)
         {
           outputs = (this->*it->second.callback)(args);

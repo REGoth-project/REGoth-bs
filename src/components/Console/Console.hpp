@@ -16,7 +16,7 @@ namespace REGoth
     virtual ~Console();
 
     void onInitialized() override;
-    void onInputChanged(const bs::String& input);
+    bs::Vector<bs::String> onInputChanged(const bs::String& input);
     bs::Vector<bs::String> onCommandConfirmed(bs::String input);
 
   private:
