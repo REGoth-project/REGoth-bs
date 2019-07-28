@@ -64,7 +64,7 @@ namespace REGoth
           sit++;
           REGOTH_LOG(Info, Uncategorized, "[Console] args: {0} !", *sit);
         }
-        */
+
         if (args.size() == num_of_args)
         {
           outputs = (this->*it->second.callback)(args);
@@ -74,6 +74,8 @@ namespace REGoth
           bs::String usage = it->second.usage;
           outputs.push_back(usage);
         }
+        */
+        outputs = (this->*it->second.callback)(args);
         break;
       }
     }

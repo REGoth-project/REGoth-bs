@@ -27,9 +27,9 @@ namespace REGoth
 
     bs::GUIPanel* foregroundPanel = topPanel->addNewElement<bs::GUIPanel>(0);
     mScrollArea                   = foregroundPanel->addNewElement<bs::GUIScrollArea>();
-    mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString("test"));
+    setOutput("Welcome to the REGoth Console :)");
 
-    // TODO: Input box does appear properly ontop of the texture so i moved it below everything
+    // TODO: Input box does not appear properly ontop of the texture so i moved it below everything
     mInputBox = layoutY->addNewElement<bs::GUIInputBox>(false, "GothicConsoleInputBox");
     mInputBox->setText("I am a console!");
 
@@ -127,7 +127,10 @@ namespace REGoth
 
   void UIConsole::setOutput(bs::String output)
   {
-    mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(output));
+    auto element = mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(output));
+    element->setHeight(20);
+    mScrollArea->scrollDownPct(1.0);  // Move scrollbar to the very bottom ; TODO: Does not work
+                                      // correctly
   }
 
   REGOTH_DEFINE_RTTI(UIConsole)
