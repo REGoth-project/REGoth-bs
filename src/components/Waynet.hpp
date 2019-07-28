@@ -131,7 +131,7 @@ namespace REGoth
     /**
      * Finds a way between two waypoints in the given waypoint instance
      *
-     * @return List of all waypoints that need to be visited. Will be empty if none was found.
+     * @return List of all waypoints that need to be visited. Will be empty if no path was found.
      */
     bs::Vector<HWaypoint> findWay(HWaypoint from, HWaypoint to);
 

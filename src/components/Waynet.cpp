@@ -139,6 +139,14 @@ namespace REGoth
 
   bs::Vector<HWaypoint> Waynet::findWay(HWaypoint from, HWaypoint to)
   {
+    if (!hasCachedWaypointPositions())
+    {
+      populateWaypointPositionCache();
+    }
+
+    if (!from || !to)
+      return {};
+
     // FIXME: This is not a very fast implementation. Improve!
     // FIXME: The FIXME above is as old as old REGoth. And now part of REGoth-bs! Wohoo!
     //        Please please, somebody, improve this. This code is absolutely bat-shit ugly.
@@ -149,16 +157,28 @@ namespace REGoth
 
     // Simple Dijkstra-Implementation. Totally non-optimized.
 
+    constexpr size_t NO_NODE = SIZE_MAX;
+
     // Give all other nodes a distance of infinity // PM: What other nodes?!
     std::vector<float> distances(mWaypoints.size(), FLT_MAX);
-    std::vector<size_t> prev(mWaypoints.size(), static_cast<size_t>(-1));
+    std::vector<size_t> prev(mWaypoints.size(), NO_NODE);
+
     std::set<size_t> unvisitedSet;
 
-    // Fill a set with 0..n, all nodes are unvisited right now
-    for (size_t i = 0; i < mWaypoints.size(); i++)
+    // PM: Remember a complete set of all waypoints for speed. Waypoints are not
+    //     supposed to be created during gamplay.
+    static std::set<size_t> unvisitedSetCached;
+
+    if (unvisitedSetCached.empty())
     {
-      unvisitedSet.insert(i);
+      // Fill a set with 0..n, all nodes are unvisited right now
+      for (size_t i = 0; i < mWaypoints.size(); i++)
+      {
+        unvisitedSetCached.insert(i);
+      }
     }
+
+    unvisitedSet = unvisitedSetCached;
 
     // Init startnode with a distance of 0
     distances[from->mIndex] = 0.0f;
@@ -206,17 +226,17 @@ namespace REGoth
 
       // PM: Now that's a condition. Good look figuring that out, ouch. Look, we even have a
       // unsigned -1 in there! I love unsigned negative numbers!
-    } while (unvisitedSet.find(to->mIndex) != unvisitedSet.end() && cn != static_cast<size_t>(-1) &&
+    } while (unvisitedSet.find(to->mIndex) != unvisitedSet.end() && cn != NO_NODE &&
              cn != to->mIndex);
 
     // No path found
-    if (cn == static_cast<size_t>(-1)) return {};
+    if (cn == NO_NODE) return {};
 
     // Put path together
     bs::Vector<HWaypoint> path;
     cn = to->mIndex;
 
-    while (prev[cn] != static_cast<size_t>(-1))
+    while (prev[cn] != NO_NODE)
     {
       path.push_back(mWaypoints[cn]);
       cn = prev[cn];
