@@ -80,7 +80,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building from Source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setting-up-app.html">Setting up a Test-Application</a></li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
 <li class="toctree-l1"><a class="reference internal" href="waynet.html">Waynet</a></li>
@@ -98,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="case-study-scene-structure.html">Case-Study: Scene Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case-study-character-statemachine.html">Case-Study: Character Statemachine</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case-study-daedalus-vm.html">Case-Study: Daedalus VM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
 </ul>
 
             
@@ -236,7 +237,8 @@ and templates to use.</p>
 <div class="section" id="rtti-file">
 <h2>RTTI File<a class="headerlink" href="#rtti-file" title="Permalink to this headline">¶</a></h2>
 <p>Use the following template for <code class="docutils literal notranslate"><span class="pre">RTTI_NewThing.hpp</span></code>:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;RTTIUtil.hpp&quot;</span><span class="cp"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&quot;RTTIUtil.hpp&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;components/NewThing.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">REGoth</span>
@@ -270,14 +272,10 @@ and templates to use.</p>
 
   <span class="n">TID_REGOTH_ScriptObjectMapping</span>          <span class="o">=</span> <span class="mi">600036</span><span class="p">,</span>
   <span class="n">TID_REGOTH_GameClock</span>                    <span class="o">=</span> <span class="mi">600037</span><span class="p">,</span>
+  <span class="n">TID_REGOTH_NewThing</span>                     <span class="o">=</span> <span class="mi">600038</span><span class="p">,</span>
+<span class="p">};</span>
 </pre></div>
 </div>
-<dl class="docutils">
-<dt>&lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream</dt>
-<dd>TID_REGOTH_MyThing                      = 600038,</dd>
-</dl>
-<blockquote>
-<div>};</div></blockquote>
 </div>
 <div class="section" id="cmake">
 <h2>CMake<a class="headerlink" href="#cmake" title="Permalink to this headline">¶</a></h2>

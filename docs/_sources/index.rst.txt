@@ -10,7 +10,8 @@ Welcome to REGoth's documentation!
    :maxdepth: 2
    :caption: Contents:
    
-   content/extending-docs
+   content/building
+   content/running
    content/setting-up-app
    content/world
    content/waynet
@@ -20,6 +21,7 @@ Welcome to REGoth's documentation!
    content/case-study-scene-structure
    content/case-study-character-statemachine
    content/case-study-daedalus-vm
+   content/extending-docs
 
 
 

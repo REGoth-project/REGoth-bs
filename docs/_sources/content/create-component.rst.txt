@@ -86,6 +86,7 @@ Use the following template for ``RTTI_NewThing.hpp``:
 
 .. code-block:: cpp
 
+   #pragma once
    #include "RTTIUtil.hpp"
    #include <components/NewThing.hpp>
    
@@ -124,11 +125,7 @@ As a last step, add the RTTI-Types ID to ``src/RTTI/RTTI_TypeIDs.hpp``:
 
      TID_REGOTH_ScriptObjectMapping          = 600036,
      TID_REGOTH_GameClock                    = 600037,
-<<<<<<< Updated upstream
-     TID_REGOTH_MyThing                      = 600038,
-=======
      TID_REGOTH_NewThing                     = 600038,
->>>>>>> Stashed changes
    };
 
 CMake
