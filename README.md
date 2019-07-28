@@ -35,16 +35,7 @@ While there has not been an official release yet, you can download nightly build
   </b>
 </p>
 
-Select on the build you are interested in and click on the blue "Artifacts" Button in the top right corner to download the build: 
-
----------------------------
-<p align="center">
-  <a href="https://dev.azure.com/ataulien/REGoth/_build?definitionId=1&view=buildsHistory">
-    <img src="https://user-images.githubusercontent.com/11406580/60770103-c7ae1c00-a0d7-11e9-98a9-d401cb3c88d4.png" />
-  </a>
-</p>
-
----------------------------
+Select on the build you are interested in and click on the blue "Artifacts" Button in the top right corner to download the build.
 
 See the documentation on how to run REGoth: 
 https://regoth-project.github.io/REGoth-bs/content/running.html
