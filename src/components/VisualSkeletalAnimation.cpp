@@ -267,6 +267,11 @@ namespace REGoth
                    action);
       }
     }
+    else if (command == "MORPHMESHANI")
+    {
+      REGOTH_LOG(Warning, Uncategorized,
+                 "[VisualSkeletalAnimation] Unimplemented morph-mesh ani: {0}", action);
+    }
     else
     {
       REGOTH_LOG(Warning, Uncategorized, "[VisualSkeletalAnimation] Unknown animation event: {0}",
@@ -277,6 +282,7 @@ namespace REGoth
   void VisualSkeletalAnimation::playAnimationClip(HZAnimationClip clip)
   {
     using namespace bs;
+    using ZAnimationClip = BsZenLib::Res::ZAnimationClip;
 
     throwIfNotReadyForRendering();
 
