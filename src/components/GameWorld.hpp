@@ -20,6 +20,9 @@ namespace REGoth
   class GameWorld;
   using HGameWorld = bs::GameObjectHandle<GameWorld>;
 
+  class Waypoint;
+  using HWaypoint = bs::GameObjectHandle<Waypoint>;
+
   extern const char* const WORLD_STARTPOINT;
 
   namespace Scripting
@@ -288,6 +291,18 @@ namespace REGoth
      * Finds all items which are in the given range around the given location.
      */
     bs::Vector<HItem> findItemsInRange(float rangeInMeters, const bs::Vector3& around) const;
+
+    /**
+     * Finds a way between two locations given by name.
+     *
+     * For both names, the method first determines whether they belong to a freepoint. If not,
+     * all objects are searched for one with that name, which includes freepoints and other
+     * objects.
+     *
+     * @return List of all waypoints that need to be visited. Will be empty if no path was found.
+     */
+    bs::Vector<HWaypoint> findWay(const bs::String& from, const bs::String& to);
+    bs::Vector<HWaypoint> findWay(const bs::Vector3& from, const bs::Vector3& to);
 
   protected:
     void onInitialized() override;

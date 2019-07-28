@@ -344,6 +344,47 @@ namespace REGoth
     return result;
   }
 
+  bs::Vector<HWaypoint> GameWorld::findWay(const bs::Vector3& from, const bs::Vector3& to)
+  {
+    HWaypoint waypointFrom = waynet()->findClosestWaypointTo(from).closest;
+    HWaypoint waypointTo   = waynet()->findClosestWaypointTo(to).closest;
+
+    return waynet()->findWay(waypointFrom, waypointTo);
+  }
+
+  bs::Vector<HWaypoint> GameWorld::findWay(const bs::String& from, const bs::String& to)
+  {
+    HWaypoint waypointFrom = waynet()->findWaypoint(from);
+    HWaypoint waypointTo   = waynet()->findWaypoint(to);
+
+    if (!waypointFrom)
+    {
+      auto offWaynetFrom = findObjectByName(from);
+
+      if (!offWaynetFrom) return {};
+
+      const auto& positionFrom = offWaynetFrom->getTransform().pos();
+
+      waypointFrom = waynet()->findClosestWaypointTo(positionFrom).closest;
+    }
+
+    if (!waypointTo)
+    {
+      auto offWaynetTo = findObjectByName(to);
+
+      if (!offWaynetTo) return {};
+
+      const auto& positionTo = offWaynetTo->getTransform().pos();
+
+      waypointTo = waynet()->findClosestWaypointTo(positionTo).closest;
+    }
+
+    if (!waypointFrom) return {};
+    if (!waypointTo) return {};
+
+    return waynet()->findWay(waypointFrom, waypointTo);
+  }
+
   void GameWorld::save(const bs::String& saveName)
   {
     bs::HPrefab cached = bs::Prefab::create(SO());
