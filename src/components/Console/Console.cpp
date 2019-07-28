@@ -28,7 +28,7 @@ namespace REGoth
     bs::Vector<bs::String> suggestions = mAutoTries[TokenType::Command].findSuggestions(input);
     bs::String s;
     for (const auto& sugst : suggestions) s += sugst + " , ";
-    BS_LOG(Info, Uncategorized, "[UIConsole] Following Suggestions were found: {0}", s);
+    REGOTH_LOG(Info, Uncategorized, "[UIConsole] Following Suggestions were found: {0}", s);
 
     return suggestions;
   }
@@ -62,7 +62,7 @@ namespace REGoth
             continue;
           }
           sit++;
-          BS_LOG(Info, Uncategorized, "[Console] args: {0} !", *sit);
+          REGOTH_LOG(Info, Uncategorized, "[Console] args: {0} !", *sit);
         }
         */
         if (args.size() == num_of_args)

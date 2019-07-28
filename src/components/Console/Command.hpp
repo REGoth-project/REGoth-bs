@@ -1,11 +1,19 @@
 #pragma once
-#include "TokenType.hpp"
 #include <BsPrerequisites.h>
 
 namespace REGoth
 {
   class Console;
   typedef bs::Vector<bs::String> (Console::*commandCallback)(bs::Vector<bs::String>);
+
+  enum class TokenType
+  {
+    Literal,
+    Command,
+    Instance,  // TODO: Yeah I am not so sure about this in relation to the original commands
+    Waypoint,
+    Freepoint,
+  };
 
   struct Command
   {

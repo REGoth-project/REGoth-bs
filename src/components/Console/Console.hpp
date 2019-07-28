@@ -1,6 +1,5 @@
 #pragma once
 #include "Command.hpp"
-#include "TokenType.hpp"
 #include "Trie.hpp"
 #include <RTTI/RTTIUtil.hpp>
 

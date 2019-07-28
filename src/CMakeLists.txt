@@ -82,7 +82,6 @@ add_library(REGothEngine STATIC
   components/UIConsole.hpp
   components/UIConsole.cpp
   components/Console/Command.hpp
-  components/Console/TokenType.hpp
   components/Console/Trie.hpp
   components/Console/Console.hpp
   components/Console/Console.cpp
