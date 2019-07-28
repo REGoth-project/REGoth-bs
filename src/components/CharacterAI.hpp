@@ -233,7 +233,32 @@ namespace REGoth
      *
      * @return true, if the transition was possible.
      */
-    bool tryPlayTransitionAnimationTo(const bs::String& state);
+    bool tryPlayTransitionAnimationTo(const bs::String& anim);
+
+    /**
+     * Tries to play a transition to reach the given state.
+     *
+     * @param Name of the state, e.g. "L"
+     *
+     * @return True, if the transition was possible.
+     */
+    bool tryTransitionToState(const bs::String& state);
+
+    /**
+     * Checks whether the given state exists for the current combination
+     * of weapon and walk-mode. For example, Sneaking and Walking have a
+     * state for moving backwards, while during the *Running* state, there
+     * is no state for moving backwards but a single animation `T_JUMPB` is
+     * played which just returns to the idle state.
+     *
+     * @param  state  State name to check, e.g. "L"
+     *
+     * @return Whether there are animations for the given state. For instance,
+     *         if the character is *Walking* and holding a 1-hand weapon and the
+     *         state *L* is queried, an animation with the name `S_1HWALKK` would
+     *         be searched.
+     */
+    bool doesStateExist(const bs::String& state) const;
 
     // Visual attached to this character
     HVisualCharacter mVisual;

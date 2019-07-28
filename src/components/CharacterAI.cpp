@@ -118,18 +118,27 @@ namespace REGoth
 
   bool CharacterAI::goForward()
   {
-    if (!isStateSwitchAllowed()) return false;
-
     bs::String anim = AnimationState::constructStateAnimationName(mWeaponMode, mWalkMode, "L");
 
-    return tryPlayTransitionAnimationTo(anim);
+    return tryTransitionToState("L");
   }
 
   bool CharacterAI::goBackward()
   {
-    if (!isStateSwitchAllowed()) return false;
+    // Some movement states have an explict state for moving back. The default
+    // running state does not.
+    if (doesStateExist("BL"))
+    {
+      return tryTransitionToState("BL");
+    }
+    else
+    {
+      if (!isStateSwitchAllowed()) return false;
 
-    return tryPlayTransitionAnimationTo("T_JUMPB");
+      return tryPlayTransitionAnimationTo("T_JUMPB");
+    }
+
+    return false;
   }
 
   bool CharacterAI::strafeLeft()
@@ -185,11 +194,7 @@ namespace REGoth
 
   bool CharacterAI::stopMoving()
   {
-    if (!isStateSwitchAllowed()) return false;
-
-    bs::String anim = AnimationState::constructStateAnimationName(mWeaponMode, mWalkMode, "");
-
-    if (tryPlayTransitionAnimationTo(anim)) return true;
+    if (tryTransitionToState("")) return true;
 
     // The "STAND" state doesn't really exist but some animation reference it, like
     // the animation "T_JUMP_2_STAND".
@@ -212,32 +217,30 @@ namespace REGoth
 
   bool CharacterAI::jump()
   {
-    if (!isStateSwitchAllowed()) return false;
-
-    return tryPlayTransitionAnimationTo("S_JUMP");
+    return tryTransitionToState("");
   }
 
-  bool CharacterAI::tryPlayTransitionAnimationTo(const bs::String& state)
+  bool CharacterAI::tryPlayTransitionAnimationTo(const bs::String& anim)
   {
     bs::String playingNow = mVisual->getPlayingAnimationName();
     auto clipPlayingNow   = mVisual->findAnimationClip(playingNow);
 
-    bs::String animToPlay = mVisual->findAnimationToTransitionTo(state);
+    bs::String animToPlay = mVisual->findAnimationToTransitionTo(anim);
     auto clip             = mVisual->findAnimationClip(animToPlay);
 
-    // Already in target state
+    // Already in target anim
     if (clip == clipPlayingNow) return true;
 
     // If there is no clip, then the transition isn't meant to be possible.
     // That also includes the empty string.
     if (!clip)
     {
-      // However, some animations refer to a special "Stand" state, which doesn't exist
+      // However, some animations refer to a special "Stand" anim, which doesn't exist
       // but rather means the current idle animation, if the character is in running
       // or walking mode.
       if (isStanding())
       {
-        animToPlay = mVisual->findAnimationToTransitionTo("S_STAND", state);
+        animToPlay = mVisual->findAnimationToTransitionTo("S_STAND", anim);
         clip       = mVisual->findAnimationClip(animToPlay);
       }
     }
@@ -250,6 +253,22 @@ namespace REGoth
     }
 
     return true;
+  }
+
+  bool CharacterAI::tryTransitionToState(const bs::String& state)
+  {
+    if (!isStateSwitchAllowed()) return false;
+
+    bs::String anim = AnimationState::constructStateAnimationName(mWeaponMode, mWalkMode, state);
+
+    return tryPlayTransitionAnimationTo(anim);
+  }
+
+  bool CharacterAI::doesStateExist(const bs::String& state) const
+  {
+    bs::String anim = AnimationState::constructStateAnimationName(mWeaponMode, mWalkMode, state);
+
+    return mVisual->findAnimationClip(anim);
   }
 
   bool CharacterAI::isStanding() const
