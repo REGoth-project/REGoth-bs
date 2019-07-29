@@ -29,11 +29,11 @@ namespace REGoth
     mScrollArea                   = foregroundPanel->addNewElement<bs::GUIScrollArea>();
     setOutput("Welcome to the REGoth Console :)");
 
-    // TODO: Input box does not appear properly ontop of the texture so i moved it below everything
+    // FIXME: Input box does not appear properly ontop of the texture so i moved it below everything
     mInputBox = layoutY->addNewElement<bs::GUIInputBox>(false, "GothicConsoleInputBox");
     mInputBox->setText("I am a console!");
 
-    mConsole = SO()->addComponent<Console>();  // TODO: init this in world/session, somewhere else
+    mConsole = SO()->addComponent<Console>();  // FIXME: init this in world/session, somewhere else
   }
 
   UIConsole::~UIConsole()
@@ -129,7 +129,7 @@ namespace REGoth
   {
     auto element = mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(output));
     element->setHeight(20);
-    mScrollArea->scrollDownPct(1.0);  // Move scrollbar to the very bottom ; TODO: Does not work
+    mScrollArea->scrollDownPct(1.0);  // Move scrollbar to the very bottom ; FIXME: Does not work
                                       // correctly
   }
 

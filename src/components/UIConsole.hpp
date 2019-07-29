@@ -72,6 +72,7 @@ namespace REGoth
     bs::GUITexture* mBackground    = nullptr;
     bs::GUIScrollArea* mScrollArea = nullptr;
     bs::GUIInputBox* mInputBox     = nullptr;
+    // TODO: SuggestionBox
     bs::VirtualButton mToggleConsole;
     bs::VirtualButton mConfirm;
 

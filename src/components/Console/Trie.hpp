@@ -3,6 +3,13 @@
 
 namespace REGoth
 {
+  /**
+   * This class is an efficient search-tree for strings.
+   * You can insert words that are transformed into character streams and then broken up into nodes
+   * identified by the respective character.
+   *
+   * Currently used for generating auto-complete suggestions for the Console component.
+   */
   class Trie
   {
   public:
@@ -12,6 +19,13 @@ namespace REGoth
       root.subWord   = "";
     }
 
+    /**
+     * Insert the given word into the Trie by splitting it into its characters and inserting nodes
+     * for each one.
+     *
+     * @param  word
+     *            Word that shall be inserted.
+     */
     void insert(const bs::String& word)
     {
       Node* curr = &root;
@@ -23,7 +37,8 @@ namespace REGoth
         {
           Node newNode;
           newNode.endOfWord = false;
-          newNode.subWord   = curr->subWord + c;
+          newNode.subWord = curr->subWord + c;  // TODO: We realistically only need to save the whole
+                                                // word were endOfWord will be set to true?
           curr->children[c] = newNode;
         }
         curr = &curr->children[c];
@@ -31,6 +46,12 @@ namespace REGoth
       curr->endOfWord = true;
     }
 
+    /**
+     * @return A vector of words that are auto-complete suggestions for the given word(-prefix).
+     *
+     * @param  word
+     *            String to which to find all auto-complete suggestions in the Trie.
+     */
     bs::Vector<bs::String> findSuggestions(const bs::String& word)
     {
       bs::Vector<bs::String> ret;
@@ -63,7 +84,14 @@ namespace REGoth
       bs::String subWord;
     };
 
-    // recursive function
+    /**
+     * @return A vector of words that are auto-complete suggestions for the given node.
+     *         Traversing all children of the given node, checking wether isEndOfWord==true and
+     *         adding the full word saved at that node to the return list.
+     *
+     * @param  node
+     *            Start node to traverse downwards from.
+     */
     bs::Vector<bs::String> traverse(Node node)
     {
       bs::Vector<bs::String> ret;
