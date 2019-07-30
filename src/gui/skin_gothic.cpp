@@ -102,8 +102,10 @@ namespace REGoth
     skin->setStyle("GothicSubtitleBoxText", labelDefault);
 
     auto button     = *skin->getStyle("Button");
-    button.font     = fontGothicOld10WhiteHi;
-    button.fontSize = 17;
+
+    // Commented out: That font is hard to read
+    // button.font     = fontGothicOld10WhiteHi;
+    // button.fontSize = 17;
     skin->setStyle("Button", button);
 
     // Cache the skin for later use

@@ -6,6 +6,7 @@
 #include <RTTI/RTTI_GameplayUI.hpp>
 #include <components/UIDialogueChoice.hpp>
 #include <components/UIFocusText.hpp>
+#include <components/UIInventory.hpp>
 #include <components/UISubtitleBox.hpp>
 #include <exception/Throw.hpp>
 
@@ -29,8 +30,7 @@ namespace REGoth
 
     if (!mChoices)
     {
-      mChoices = addChildElement<UIDialogueChoice>(
-          "UIDialogueChoice");
+      mChoices = addChildElement<UIDialogueChoice>("UIDialogueChoice");
     }
 
     if (!mSubtitleBox)
@@ -41,6 +41,11 @@ namespace REGoth
     if (!mFocusText)
     {
       mFocusText = addChildElement<UIFocusText>("UIFocusText");
+    }
+
+    if (!mInventory)
+    {
+      mInventory = addChildElement<UIInventory>("UIInventory");
     }
   }
 

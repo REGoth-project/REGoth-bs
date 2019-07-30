@@ -13,6 +13,9 @@ namespace REGoth
   class UIFocusText;
   using HUIFocusText = bs::GameObjectHandle<UIFocusText>;
 
+  class UIInventory;
+  using HUIInventory = bs::GameObjectHandle<UIInventory>;
+
   class GameplayUI;
   using HGameplayUI = bs::GameObjectHandle<GameplayUI>;
 
@@ -96,13 +99,18 @@ namespace REGoth
       return mFocusText;
     }
 
-  protected:
+    HUIInventory inventory() const
+    {
+      return mInventory;
+    }
 
+  protected:
     void onInitialized() override;
 
     HUIDialogueChoice mChoices;
     HUISubtitleBox mSubtitleBox;
     HUIFocusText mFocusText;
+    HUIInventory mInventory;
 
   private:
   public:

@@ -1,5 +1,6 @@
 #include "Inventory.hpp"
 #include <RTTI/RTTI_Inventory.hpp>
+#include <log/logging.hpp>
 
 namespace REGoth
 {
@@ -35,7 +36,12 @@ namespace REGoth
   {
     throwIfNotUpperCase(instance);
 
+    REGOTH_LOG(Info, Uncategorized, "[Inventory] Add {0}x item {1} to Inventory of {2}", count,
+               instance, SO()->getName());
+
     mInventory[instance] += 1;
+
+    OnItemChanged(instance);
   }
 
   void Inventory::removeItem(const bs::String& instance, bs::UINT32 count)
@@ -66,6 +72,18 @@ namespace REGoth
     {
       mInventory.erase(it);
     }
+
+    OnItemChanged(instance);
+  }
+
+  const bs::Map<bs::String, bs::UINT32>& Inventory::allItems() const
+  {
+    return mInventory;
+  }
+
+  HInventory Inventory::thisHandle() const
+  {
+    return bs::static_object_cast<Inventory>(getHandle());
   }
 
   void Inventory::throwIfNotUpperCase(const bs::String& instance) const

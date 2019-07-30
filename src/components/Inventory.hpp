@@ -1,9 +1,13 @@
 #pragma once
 #include <RTTI/RTTIUtil.hpp>
 #include <Scene/BsComponent.h>
+#include <Utility/BsEvent.h>
 
 namespace REGoth
 {
+  class Inventory;
+  using HInventory = bs::GameObjectHandle<Inventory>;
+
   /**
    * This component represents a characters inventory.
    *
@@ -62,7 +66,21 @@ namespace REGoth
      */
     void removeItem(const bs::String& instance, bs::UINT32 count = 1);
 
+    /**
+     * @return All item instances held by this inventory. Does not contain any
+     *         count information. All instances of which there is at least one
+     *         item of in the inventory will be included.
+     */
+    const bs::Map<bs::String, bs::UINT32>& allItems() const;
+
+    using OnItemCallback = void(const bs::String& instance);
+ 
+    /** Events triggered when items got added or removed */
+    bs::Event<OnItemCallback> OnItemChanged;
+
   private:
+
+    HInventory thisHandle() const;
     void throwIfNotUpperCase(const bs::String& instance) const;
 
     /**

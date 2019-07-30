@@ -90,6 +90,8 @@ add_library(REGothEngine STATIC
   components/UISubtitleBox.cpp
   components/UIDialogueChoice.hpp
   components/UIDialogueChoice.cpp
+  components/UIInventory.hpp
+  components/UIInventory.cpp
   AI/EventMessage.hpp
   AI/EventMessage.cpp
   AI/ScriptState.hpp

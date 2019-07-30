@@ -1,13 +1,11 @@
 #include <memory>
 #include <string>
 
-#include <BsFPSCamera.h>
+#include "BsFPSCamera.h"
 #include <Components/BsCCamera.h>
 #include <Scene/BsPrefab.h>
 #include <Scene/BsSceneObject.h>
 #include <String/BsString.h>
-
-#include <cxxopts.hpp>
 
 #include <core.hpp>
 #include <components/Character.hpp>
@@ -16,7 +14,9 @@
 #include <components/CharacterKeyboardInput.hpp>
 #include <components/GameWorld.hpp>
 #include <components/GameplayUI.hpp>
+#include <components/Inventory.hpp>
 #include <components/ThirdPersonCamera.hpp>
+#include <components/UIInventory.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 #include <original-content/OriginalGameFiles.hpp>
@@ -129,6 +129,19 @@ public:
     mThirdPersonCamera->follow(hero);
 
     REGoth::GameplayUI::createGlobal(mMainCamera);
+
+    auto inventory = hero->SO()->getComponent<Inventory>();
+
+    inventory->giveItem("ITFOAPPLE");
+    inventory->giveItem("ITFOAPPLE");
+    inventory->giveItem("ITFOAPPLE");
+    inventory->giveItem("ITFOAPPLE");
+    inventory->giveItem("ITFOAPPLE");
+
+    inventory->giveItem("ITARSCROLLSHRINK");
+    inventory->giveItem("ITARSCROLLSHRINK");
+
+    gGameplayUI()->inventory()->setViewedInventory(inventory);
   }
 
 protected:
