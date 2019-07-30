@@ -1046,18 +1046,26 @@ namespace REGoth
     void DaedalusVMForGameWorld::external_NPC_CreateInventoryItems()
     {
       bs::INT32 num        = popIntValue();
-      bs::String instance  = popStringValue();
+      bs::INT32 instance   = popIntValue();
       HCharacter character = popCharacterInstance();
 
-      character->createInventoryItem(instance, num);
+      const bs::String& instanceName = scriptSymbols().getSymbolName(instance);
+
+      auto inventory = character->SO()->getComponent<Inventory>();
+
+      inventory->giveItem(instanceName, num);
     }
 
     void DaedalusVMForGameWorld::external_NPC_CreateInventoryItem()
     {
-      bs::String instance  = popStringValue();
+      bs::INT32 instance   = popIntValue();
       HCharacter character = popCharacterInstance();
 
-      character->createInventoryItem(instance, 1);
+      const bs::String& instanceName = scriptSymbols().getSymbolName(instance);
+
+      auto inventory = character->SO()->getComponent<Inventory>();
+
+      inventory->giveItem(instanceName);
     }
 
     void DaedalusVMForGameWorld::external_Npc_HasItems()
@@ -1094,8 +1102,7 @@ namespace REGoth
       HCharacter character = popCharacterInstance();
 
       const bs::String& instanceName = scriptSymbols().getSymbolName(instance);
-
-      auto inventory = character->SO()->getComponent<Inventory>();
+      auto inventory                 = character->SO()->getComponent<Inventory>();
 
       if (inventory->hasItem(instanceName))
       {
