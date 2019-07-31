@@ -13,8 +13,6 @@ target_include_directories(samples-common PUBLIC common)
 target_link_libraries(samples-common PUBLIC bsf)
 
 add_library(REGothEngine STATIC
-  REGothEngine.hpp
-  REGothEngine.cpp
   components/AnchoredTextLabels.hpp
   components/AnchoredTextLabels.cpp
   components/CharacterState.hpp
@@ -63,6 +61,16 @@ add_library(REGothEngine STATIC
   components/CharacterEventQueue.cpp
   components/Sky.hpp
   components/Sky.cpp
+  core.hpp
+  core/AbstractEngine.hpp
+  core/AbstractEngine.cpp
+  core/Engine.hpp
+  core/Engine.cpp
+  core/EngineConfig.hpp
+  core/EngineConfig.cpp
+  core/functions.hpp
+  core/functions.tpp
+  core/functions.cpp
   sky/SkyColoring.hpp
   sky/SkyColoring.cpp
   components/Focusable.hpp

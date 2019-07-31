@@ -1,4 +1,4 @@
-#include "REGothEngine.hpp"
+#include <core/AbstractEngine.hpp>
 
 #include <cassert>
 #include <iostream>
@@ -25,22 +25,17 @@
 
 using namespace REGoth;
 
-std::stringstream& operator>>(std::stringstream& str, bs::Path& path)
-{
-  path.assign(bs::Path{str.str().c_str()});
-  return str;
-}
-
 /**
  * Name of REGoth's own content directory
  */
 const bs::String REGOTH_CONTENT_DIR_NAME = "content";
 
-REGothEngine::~REGothEngine()
+AbstractEngine::~AbstractEngine()
 {
+  // pass
 }
 
-void REGothEngine::loadGamePackages()
+void AbstractEngine::loadGamePackages()
 {
   OriginalGameFiles files = OriginalGameFiles(config()->originalAssetsPath);
 
@@ -59,29 +54,29 @@ void REGothEngine::loadGamePackages()
   loadModPackages(files);
 }
 
-void REGothEngine::loadModPackages(const OriginalGameFiles& /* files */)
+void AbstractEngine::loadModPackages(const OriginalGameFiles& /* files */)
 {
   // Don't load mod-files by defaults
 }
 
-void REGothEngine::saveCachedResourceManifests()
+void AbstractEngine::saveCachedResourceManifests()
 {
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Saving resource manifests:");
+  REGOTH_LOG(Info, Uncategorized, "[Engine] Saving resource manifests:");
 
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine]   - Gothic Cache");
+  REGOTH_LOG(Info, Uncategorized, "[Engine]   - Gothic Cache");
   BsZenLib::SaveResourceManifest();
 
-  // REGothEngine-Content manifest is saved after every resource load since
+  // Engine-Content manifest is saved after every resource load since
   // there are only a few resources to handle. If that ever takes too long
   // the manifest should be saved here.
 }
 
-bool REGothEngine::hasFoundGameFiles()
+bool AbstractEngine::hasFoundGameFiles()
 {
   return gVirtualFileSystem().hasFoundGameFiles();
 }
 
-void REGothEngine::findEngineContent()
+void AbstractEngine::findEngineContent()
 {
   mEngineContent = bs::bs_shared_ptr_new<EngineContent>(config()->engineExecutablePath);
 
@@ -90,11 +85,11 @@ void REGothEngine::findEngineContent()
     REGOTH_THROW(InvalidStateException, "Did not find REGoth content directory!");
   }
 
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Found REGoth-content directory at: {0}",
+  REGOTH_LOG(Info, Uncategorized, "[Engine] Found REGoth-content directory at: {0}",
              mEngineContent->contentPath().toString());
 }
 
-void REGothEngine::initializeBsf()
+void AbstractEngine::initializeBsf()
 {
   using namespace bs;
 
@@ -102,11 +97,11 @@ void REGothEngine::initializeBsf()
   Application::startUp(videoMode, "REGoth", config()->isFullscreen);
 }
 
-void REGothEngine::loadCachedResourceManifests()
+void AbstractEngine::loadCachedResourceManifests()
 {
   using namespace bs;
 
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Loading cached resource manifests");
+  REGOTH_LOG(Info, Uncategorized, "[Engine] Loading cached resource manifests");
 
   if (!mEngineContent)
   {
@@ -114,14 +109,14 @@ void REGothEngine::loadCachedResourceManifests()
                  "Engine Content not initialized, has findEngineContent() been called?");
   }
 
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine]   - REGoth Assets");
+  REGOTH_LOG(Info, Uncategorized, "[Engine]   - REGoth Assets");
   mEngineContent->loadResourceManifest();
 
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine]   - Original Gothic Assets");
+  REGOTH_LOG(Info, Uncategorized, "[Engine]   - Original Gothic Assets");
   BsZenLib::LoadResourceManifest();
 }
 
-void REGothEngine::setupInput()
+void AbstractEngine::setupInput()
 {
   using namespace bs;
 
@@ -153,7 +148,7 @@ void REGothEngine::setupInput()
   inputConfig->registerAxis("Vertical", VIRTUAL_AXIS_DESC(static_cast<UINT32>(InputAxis::MouseY)));
 }
 
-void REGothEngine::setupMainCamera()
+void AbstractEngine::setupMainCamera()
 {
   using namespace bs;
 
@@ -183,12 +178,12 @@ void REGothEngine::setupMainCamera()
   mMainCamera = sceneCamera;
 }
 
-void REGothEngine::setupScene()
+void AbstractEngine::setupScene()
 {
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Setting up scene");
+  REGOTH_LOG(Info, Uncategorized, "[Engine] Setting up scene");
 }
 
-void REGothEngine::setShaders()
+void AbstractEngine::setShaders()
 {
   if (!mEngineContent)
   {
@@ -207,93 +202,29 @@ void REGothEngine::setShaders()
   BsZenLib::SetShaderFor(BsZenLib::ShaderKind::Transparent, shaders.opaque);
 }
 
-void REGothEngine::run()
+void AbstractEngine::run()
 {
   // FIXME: This is a workaround for the camera not being able to move caused by
   //        making bs::SceneManager::findComponent work in the zen loader.
   mMainCamera->SO()->setActive(false);
   mMainCamera->SO()->setActive(true);
 
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Running mainloop now!");
+  REGOTH_LOG(Info, Uncategorized, "[Engine] Running mainloop now!");
 
   bs::Application::instance().runMainLoop();
 }
 
-void REGothEngine::shutdown()
+void AbstractEngine::shutdown()
 {
   if (bs::Application::isStarted())
   {
-    REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Shutting down bs::f");
+    REGOTH_LOG(Info, Uncategorized, "[Engine] Shutting down bs::f");
 
     bs::Application::shutDown();
   }
   else
   {
     REGOTH_LOG(Warning, Uncategorized,
-               "[REGothEngine] Received shutdown request, but bs::f is not running!");
+               "[Engine] Received shutdown request, but bs::f is not running!");
   }
-}
-
-REGothEngineDefaultConfig::REGothEngineDefaultConfig(std::unique_ptr<const EngineConfig>&& config)
-    : mConfig{std::move(config)}
-{
-  // pass
-}
-
-const EngineConfig* REGothEngineDefaultConfig::config() const
-{
-  return mConfig.get();
-}
-
-int ::REGoth::runEngine(REGothEngine& engine)
-{
-  engine.initializeBsf();
-
-  REGOTH_LOG(Info, Uncategorized, "[Main] Running REGothEngine");
-  REGOTH_LOG(Info, Uncategorized, "[Main]  - Engine executable: {0}",
-             engine.config()->engineExecutablePath.toString());
-  REGOTH_LOG(Info, Uncategorized, "[Main]  - Game directory:    {0}",
-             engine.config()->originalAssetsPath.toString());
-
-  REGOTH_LOG(Info, Uncategorized, "[Main] Finding REGoth content-directory");
-  engine.findEngineContent();
-
-  REGOTH_LOG(Info, Uncategorized, "[Main] Loading original game packages");
-  engine.loadGamePackages();
-
-  if (!engine.hasFoundGameFiles())
-  {
-    REGOTH_LOG(Fatal, Uncategorized,
-               "No files loaded into the VDFS - is the game assets path correct?");
-    return EXIT_FAILURE;
-  }
-
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Load cached resource manifests");
-  engine.loadCachedResourceManifests();
-
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Loading Shaders");
-  engine.setShaders();
-
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Setting up input");
-  engine.setupInput();
-
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Setting up Main Camera");
-  engine.setupMainCamera();
-
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Setting up Scene");
-  engine.setupScene();
-
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Save cached resource manifests");
-  engine.saveCachedResourceManifests();
-
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Run");
-  engine.run();
-
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Save cached resource manifests");
-  engine.saveCachedResourceManifests();
-
-  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Shutdown");
-  engine.shutdown();
-
-  return EXIT_SUCCESS;
 }
