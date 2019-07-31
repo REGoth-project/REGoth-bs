@@ -1,16 +1,9 @@
-#include "BsCameraZoomer.h"
-#include "BsFPSCamera.h"
-#include "BsFPSWalker.h"
-#include "BsObjectRotator.h"
-#include "REGothEngine.hpp"
-#include "Utility/BsTime.h"
-#include "animation/StateNaming.hpp"
-#include "components/VisualCharacter.hpp"
-#include <BsZenLib/ImportAnimation.hpp>
-#include <BsZenLib/ImportMorphMesh.hpp>
-#include <BsZenLib/ImportPath.hpp>
-#include <BsZenLib/ImportSkeletalMesh.hpp>
-#include <BsZenLib/ImportZEN.hpp>
+#include <memory>
+
+#include <BsCameraZoomer.h>
+#include <BsFPSCamera.h>
+#include <BsFPSWalker.h>
+#include <BsObjectRotator.h>
 #include <Components/BsCCamera.h>
 #include <Components/BsCCharacterController.h>
 #include <Components/BsCRenderable.h>
@@ -18,22 +11,33 @@
 #include <Input/BsVirtualInput.h>
 #include <Math/BsVector3.h>
 #include <Scene/BsSceneObject.h>
+#include <Utility/BsTime.h>
+
+#include <BsZenLib/ImportAnimation.hpp>
+#include <BsZenLib/ImportMorphMesh.hpp>
+#include <BsZenLib/ImportPath.hpp>
+#include <BsZenLib/ImportSkeletalMesh.hpp>
+#include <BsZenLib/ImportZEN.hpp>
+#include <daedalus/DATFile.h>
+
+#include <animation/StateNaming.hpp>
 #include <components/Character.hpp>
 #include <components/GameWorld.hpp>
+#include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
-#include <daedalus/DATFile.h>
+#include <core/Engine.hpp>
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothCharacterViewer : public REGoth::REGothEngineDefaultConfig
+class REGothCharacterViewer : public REGoth::Engine
 {
 public:
-  using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+  using REGoth::Engine::Engine;
 
   void setupMainCamera() override
   {
-    REGoth::REGothEngine::setupMainCamera();
+    REGoth::AbstractEngine::setupMainCamera();
 
     // mFPSCamera = mMainCamera->SO()->addComponent<bs::FPSCamera>();
     mMainCamera->SO()->addComponent<bs::CameraZoomer>();
@@ -43,7 +47,7 @@ public:
   {
     using namespace bs;
 
-    REGoth::REGothEngine::setupInput();
+    REGoth::AbstractEngine::setupInput();
 
     auto inputConfig = gVirtualInput().getConfiguration();
 

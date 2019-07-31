@@ -1,10 +1,12 @@
-#include "BsFPSCamera.h"
-#include "REGothEngine.hpp"
+#include <memory>
+
+#include <BsFPSCamera.h>
 #include <Components/BsCCamera.h>
 #include <Components/BsCRenderable.h>
 #include <Material/BsMaterial.h>
 #include <Resources/BsBuiltinResources.h>
 #include <Scene/BsSceneObject.h>
+
 #include <components/Focusable.hpp>
 #include <components/GameWorld.hpp>
 #include <components/GameplayUI.hpp>
@@ -13,15 +15,16 @@
 #include <components/UIElement.hpp>
 #include <components/UIFocusText.hpp>
 #include <components/UISubtitleBox.hpp>
+#include <core/Engine.hpp>
 
-class REGothCharacterMovementTester : public REGoth::REGothEngineDefaultConfig
+class REGothCharacterMovementTester : public REGoth::Engine
 {
 public:
-  using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+  using REGoth::Engine::Engine;
 
   void setupMainCamera() override
   {
-    REGoth::REGothEngine::setupMainCamera();
+    REGoth::AbstractEngine::setupMainCamera();
 
     auto rs = mMainCamera->getRenderSettings();
 

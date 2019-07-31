@@ -1,7 +1,6 @@
-#include "BsFPSCamera.h"
-#include "REGothEngine.hpp"
-#include <BsZenLib/ImportFont.hpp>
-#include <BsZenLib/ImportTexture.hpp>
+#include <memory>
+
+#include <BsFPSCamera.h>
 #include <Components/BsCCamera.h>
 #include <GUI/BsCGUIWidget.h>
 #include <GUI/BsGUILabel.h>
@@ -13,17 +12,22 @@
 #include <Resources/BsBuiltinResources.h>
 #include <Scene/BsSceneObject.h>
 #include <Text/BsFont.h>
+
+#include <BsZenLib/ImportFont.hpp>
+#include <BsZenLib/ImportTexture.hpp>
+
+#include <core/Engine.hpp>
 #include <gui/skin_gothic.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothFontViewer : public REGoth::REGothEngineDefaultConfig
+class REGothFontViewer : public REGoth::Engine
 {
 public:
-  using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+  using REGoth::Engine::Engine;
 
   void setupMainCamera() override
   {
-    REGoth::REGothEngine::setupMainCamera();
+    REGoth::AbstractEngine::setupMainCamera();
 
     mFPSCamera = mMainCamera->SO()->addComponent<bs::FPSCamera>();
     mMainCamera->getViewport()->setClearColorValue(bs::Color(0.0f, 0.0f, 0.0f, 1.0f));

@@ -1,7 +1,6 @@
-#include "BsFPSCamera.h"
-#include "REGothEngine.hpp"
-#include "components/AnchoredTextLabels.hpp"
-#include <BsZenLib/ImportPath.hpp>
+#include <memory>
+
+#include <BsFPSCamera.h>
 #include <Components/BsCCamera.h>
 #include <FileSystem/BsFileSystem.h>
 #include <GUI/BsCGUIWidget.h>
@@ -9,23 +8,28 @@
 #include <Scene/BsPrefab.h>
 #include <Scene/BsSceneObject.h>
 #include <Utility/BsTimer.h>
+
+#include <BsZenLib/ImportPath.hpp>
+#include <daedalus/DATFile.h>
+
+#include <components/AnchoredTextLabels.hpp>
 #include <components/GameWorld.hpp>
 #include <components/Item.hpp>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
-#include <daedalus/DATFile.h>
+#include <core/Engine.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothWorldCacheTest : public REGoth::REGothEngineDefaultConfig
+class REGothWorldCacheTest : public REGoth::Engine
 {
 public:
-  using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+  using REGoth::Engine::Engine;
 
   void setupMainCamera() override
   {
-    REGoth::REGothEngine::setupMainCamera();
+    REGoth::AbstractEngine::setupMainCamera();
 
     mMainCamera->SO()->addComponent<bs::FPSCamera>();
   }

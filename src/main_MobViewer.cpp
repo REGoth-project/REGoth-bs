@@ -1,20 +1,24 @@
-#include "BsFPSCamera.h"
-#include "REGothEngine.hpp"
-#include <BsZenLib/ImportSkeletalMesh.hpp>
+#include <memory>
+
+#include <BsFPSCamera.h>
 #include <Components/BsCCamera.h>
 #include <Scene/BsSceneObject.h>
+
+#include <BsZenLib/ImportSkeletalMesh.hpp>
+
 #include <components/VisualInteractiveObject.hpp>
+#include <core/Engine.hpp>
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothMobViewer : public REGoth::REGothEngineDefaultConfig
+class REGothMobViewer : public REGoth::Engine
 {
 public:
-  using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+  using REGoth::Engine::Engine;
 
   void setupMainCamera() override
   {
-    REGoth::REGothEngine::setupMainCamera();
+    REGoth::AbstractEngine::setupMainCamera();
 
     mFPSCamera = mMainCamera->SO()->addComponent<bs::FPSCamera>();
   }

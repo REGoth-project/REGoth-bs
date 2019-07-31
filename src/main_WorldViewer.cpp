@@ -1,10 +1,13 @@
+#include <memory>
 #include <string>
 
 #include <BsFPSCamera.h>
-#include <REGothEngine.hpp>
 #include <Components/BsCCamera.h>
 #include <Scene/BsPrefab.h>
 #include <Scene/BsSceneObject.h>
+#include <String/BsString.h>
+
+#include <cxxopts.hpp>
 
 #include <components/Character.hpp>
 #include <components/CharacterAI.hpp>
@@ -13,6 +16,8 @@
 #include <components/GameWorld.hpp>
 #include <components/GameplayUI.hpp>
 #include <components/ThirdPersonCamera.hpp>
+#include <core/AbstractEngine.hpp>
+#include <core/EngineConfig.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 #include <original-content/OriginalGameFiles.hpp>
@@ -46,7 +51,7 @@ struct WorldViewerConfig : public REGoth::EngineConfig
   bs::String world;
 };
 
-class REGothWorldViewer : public REGoth::REGothEngine
+class REGothWorldViewer : public REGoth::AbstractEngine
 {
 public:
   REGothWorldViewer(std::unique_ptr<const WorldViewerConfig>&& config)
@@ -78,7 +83,7 @@ public:
 
   void setupMainCamera() override
   {
-    REGoth::REGothEngine::setupMainCamera();
+    REGoth::AbstractEngine::setupMainCamera();
 
     mThirdPersonCamera = mMainCamera->SO()->addComponent<REGoth::ThirdPersonCamera>();
   }

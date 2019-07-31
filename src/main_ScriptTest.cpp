@@ -1,20 +1,24 @@
-#include "REGothEngine.hpp"
+#include <memory>
+
 #include <Components/BsCCamera.h>
 #include <Scene/BsSceneObject.h>
+
+#include <daedalus/DATFile.h>
+
 #include <components/GameWorld.hpp>
 #include <components/Item.hpp>
-#include <daedalus/DATFile.h>
+#include <core/Engine.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 #include <scripting/ScriptSymbolStorage.hpp>
 
-class REGothScriptTester : public REGoth::REGothEngineDefaultConfig
+class REGothScriptTester : public REGoth::Engine
 {
 public:
-  using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+  using REGoth::Engine::Engine;
 
   void setupMainCamera() override
   {
-    REGoth::REGothEngine::setupMainCamera();
+    REGoth::AbstractEngine::setupMainCamera();
   }
 
   void setupScene() override

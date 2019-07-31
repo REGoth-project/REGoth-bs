@@ -1,17 +1,20 @@
-#include "BsFPSCamera.h"
-#include "REGothEngine.hpp"
+#include <memory>
+
+#include <BsFPSCamera.h>
 #include <Components/BsCCamera.h>
 #include <Scene/BsSceneObject.h>
+
+#include <core/Engine.hpp>
 #include <world/internals/ConstructFromZEN.hpp>
 
-class REGothWorldMeshViewer : public REGoth::REGothEngineDefaultConfig
+class REGothWorldMeshViewer : public REGoth::Engine
 {
 public:
-  using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+  using REGoth::Engine::Engine;
 
   void setupMainCamera() override
   {
-    REGoth::REGothEngine::setupMainCamera();
+    REGoth::AbstractEngine::setupMainCamera();
 
     mFPSCamera = mMainCamera->SO()->addComponent<bs::FPSCamera>();
   }
