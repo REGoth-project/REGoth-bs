@@ -68,9 +68,10 @@ add_library(REGothEngine STATIC
   core/Engine.cpp
   core/EngineConfig.hpp
   core/EngineConfig.cpp
-  core/functions.hpp
-  core/functions.tpp
-  core/functions.cpp
+  core/ParseArguments.hpp
+  core/ParseArguments.tpp
+  core/RunEngine.hpp
+  core/RunEngine.cpp
   sky/SkyColoring.hpp
   sky/SkyColoring.cpp
   components/Focusable.hpp

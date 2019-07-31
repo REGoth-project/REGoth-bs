@@ -4,7 +4,7 @@
 #include <Components/BsCCamera.h>
 #include <Scene/BsSceneObject.h>
 
-#include <core/Engine.hpp>
+#include <core.hpp>
 #include <world/internals/ConstructFromZEN.hpp>
 
 class REGothWorldMeshViewer : public REGoth::Engine

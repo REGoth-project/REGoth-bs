@@ -2,8 +2,7 @@
  * Entry point for REGoth
  */
 
-#include <core/Engine.hpp>
-#include <core/EngineConfig.hpp>
+#include <core.hpp>
 
 int main(int argc, char** argv)
 {

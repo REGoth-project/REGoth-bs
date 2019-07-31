@@ -16,7 +16,7 @@
 #include <BsZenLib/ImportFont.hpp>
 #include <BsZenLib/ImportTexture.hpp>
 
-#include <core/Engine.hpp>
+#include <core.hpp>
 #include <gui/skin_gothic.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 

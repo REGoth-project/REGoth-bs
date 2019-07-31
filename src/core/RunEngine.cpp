@@ -1,4 +1,4 @@
-#include <core/functions.hpp>
+#include <core/RunEngine.hpp>
 
 #include <iostream>
 #include <string>
@@ -9,12 +9,6 @@
 #include <log/logging.hpp>
 
 using namespace REGoth;
-
-std::stringstream& operator>>(std::stringstream& str, bs::Path& path)
-{
-  path.assign(bs::Path{str.str().c_str()});
-  return str;
-}
 
 int REGoth::runEngine(AbstractEngine& engine)
 {

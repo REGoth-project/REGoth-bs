@@ -7,6 +7,7 @@
 #include <Resources/BsBuiltinResources.h>
 #include <Scene/BsSceneObject.h>
 
+#include <core.hpp>
 #include <components/Focusable.hpp>
 #include <components/GameWorld.hpp>
 #include <components/GameplayUI.hpp>
@@ -15,7 +16,6 @@
 #include <components/UIElement.hpp>
 #include <components/UIFocusText.hpp>
 #include <components/UISubtitleBox.hpp>
-#include <core/Engine.hpp>
 
 class REGothCharacterMovementTester : public REGoth::Engine
 {

@@ -9,6 +9,7 @@
 
 #include <cxxopts.hpp>
 
+#include <core.hpp>
 #include <components/Character.hpp>
 #include <components/CharacterAI.hpp>
 #include <components/CharacterEventQueue.hpp>
@@ -16,8 +17,6 @@
 #include <components/GameWorld.hpp>
 #include <components/GameplayUI.hpp>
 #include <components/ThirdPersonCamera.hpp>
-#include <core/AbstractEngine.hpp>
-#include <core/EngineConfig.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 #include <original-content/OriginalGameFiles.hpp>

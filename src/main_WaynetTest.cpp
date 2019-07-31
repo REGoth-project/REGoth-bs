@@ -5,11 +5,11 @@
 #include <GUI/BsCGUIWidget.h>
 #include <Scene/BsSceneObject.h>
 
+#include <core.hpp>
 #include <components/AnchoredTextLabels.hpp>
 #include <components/GameWorld.hpp>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
-#include <core/Engine.hpp>
 #include <exception/Throw.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 

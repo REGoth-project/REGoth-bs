@@ -6,8 +6,8 @@
 
 #include <BsZenLib/ImportSkeletalMesh.hpp>
 
+#include <core.hpp>
 #include <components/VisualInteractiveObject.hpp>
-#include <core/Engine.hpp>
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 

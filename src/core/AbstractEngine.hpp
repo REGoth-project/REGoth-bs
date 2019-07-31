@@ -7,7 +7,6 @@
 #include <cxxopts.hpp>
 
 #include <core/EngineConfig.hpp>
-#include <core/functions.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 #include <original-content/OriginalGameFiles.hpp>

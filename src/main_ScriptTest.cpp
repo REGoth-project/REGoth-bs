@@ -5,9 +5,9 @@
 
 #include <daedalus/DATFile.h>
 
+#include <core.hpp>
 #include <components/GameWorld.hpp>
 #include <components/Item.hpp>
-#include <core/Engine.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 #include <scripting/ScriptSymbolStorage.hpp>
 

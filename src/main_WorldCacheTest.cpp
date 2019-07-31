@@ -12,12 +12,12 @@
 #include <BsZenLib/ImportPath.hpp>
 #include <daedalus/DATFile.h>
 
+#include <core.hpp>
 #include <components/AnchoredTextLabels.hpp>
 #include <components/GameWorld.hpp>
 #include <components/Item.hpp>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
-#include <core/Engine.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>

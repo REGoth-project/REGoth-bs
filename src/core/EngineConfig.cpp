@@ -5,12 +5,17 @@
 
 #include <cxxopts.hpp>
 
-#include <core/functions.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 #include <original-content/OriginalGameFiles.hpp>
 
 using namespace REGoth;
+
+std::stringstream& operator>>(std::stringstream& str, bs::Path& path)
+{
+  path.assign(bs::Path{str.str().c_str()});
+  return str;
+}
 
 EngineConfig::~EngineConfig()
 {
