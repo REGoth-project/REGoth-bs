@@ -125,6 +125,11 @@ namespace REGoth
   {
     bs::Path cwd = from;
 
+    if (isGameRoot(cwd))
+    {
+      return cwd.makeAbsolute(from);
+    }
+
     for (bs::UINT32 i = 0; i < cwd.getNumDirectories(); i++)
     {
       cwd = cwd.getParent();

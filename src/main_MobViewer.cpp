@@ -7,9 +7,11 @@
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothMobViewer : public REGoth::REGothEngine
+class REGothMobViewer : public REGoth::REGothEngineDefaultConfig
 {
 public:
+  using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+
   void setupMainCamera() override
   {
     REGoth::REGothEngine::setupMainCamera();
@@ -50,7 +52,9 @@ protected:
 
 int main(int argc, char** argv)
 {
-  REGothMobViewer regoth;
+  std::unique_ptr<const REGoth::EngineConfig> config =
+      REGoth::parseArguments<REGoth::EngineConfig>(argc, argv);
+  REGothMobViewer engine{std::move(config)};
 
-  return REGoth::main(regoth, argc, argv);
+  return REGoth::runEngine(engine);
 }

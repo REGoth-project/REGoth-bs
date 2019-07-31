@@ -9,6 +9,9 @@
 # Visual Studio Code
 .vscode
 
+# QtCreator
+CMakeLists.txt.user
+
 # bsf crash reports
 CrashReports/
 

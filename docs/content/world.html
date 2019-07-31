@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Waynet" href="waynet.html" />
     <link rel="prev" title="Setting up a Test-Application" href="setting-up-app.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -80,7 +82,8 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building from Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running REGoth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setting-up-app.html">Setting up a Test-Application</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">World</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#loading-a-world">Loading a World</a><ul>
@@ -98,6 +101,7 @@
 <li class="toctree-l1"><a class="reference internal" href="case-study-scene-structure.html">Case-Study: Scene Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case-study-character-statemachine.html">Case-Study: Character Statemachine</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case-study-daedalus-vm.html">Case-Study: Daedalus VM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
 </ul>
 
             
@@ -170,9 +174,9 @@
 <h2>Loading a World<a class="headerlink" href="#loading-a-world" title="Permalink to this headline">¶</a></h2>
 <p>There are multiple options for loading a world in REGoth:</p>
 <ol class="arabic simple">
-<li>load everything and run the init-script,</li>
-<li>load everything but don’t run the init-script,</li>
-<li>load only the world-mesh.</li>
+<li><p>load everything and run the init-script,</p></li>
+<li><p>load everything but don’t run the init-script,</p></li>
+<li><p>load only the world-mesh.</p></li>
 </ol>
 <p>We will go through all of them.</p>
 <p>As starting point, we will use this application template:</p>
@@ -181,17 +185,19 @@
 <span class="cp">#include</span> <span class="cpf">&lt;Components/BsCCamera.h&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;components/GameWorld.hpp&gt;</span><span class="cp"></span>
 
-<span class="k">class</span> <span class="nc">REGothWorldViewer</span> <span class="o">:</span> <span class="k">public</span> <span class="n">REGoth</span><span class="o">::</span><span class="n">REGothEngine</span>
+<span class="k">class</span> <span class="nc">REGothWorldViewer</span> <span class="o">:</span> <span class="k">public</span> <span class="n">REGoth</span><span class="o">::</span><span class="n">REGothEngineDefaultConfig</span>
 <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
-  <span class="kt">void</span> <span class="n">setupMainCamera</span><span class="p">()</span> <span class="k">override</span>
+  <span class="k">using</span> <span class="n">REGoth</span><span class="o">::</span><span class="n">REGothEngineDefaultConfig</span><span class="o">::</span><span class="n">REGothEngineDefaultConfig</span><span class="p">;</span>
+
+  <span class="kt">void</span> <span class="nf">setupMainCamera</span><span class="p">()</span> <span class="k">override</span>
   <span class="p">{</span>
     <span class="n">REGoth</span><span class="o">::</span><span class="n">REGothEngine</span><span class="o">::</span><span class="n">setupMainCamera</span><span class="p">();</span>
 
     <span class="n">mMainCamera</span><span class="o">-&gt;</span><span class="n">SO</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">addComponent</span><span class="o">&lt;</span><span class="n">bs</span><span class="o">::</span><span class="n">FPSCamera</span><span class="o">&gt;</span><span class="p">();</span>
   <span class="p">}</span>
 
-  <span class="kt">void</span> <span class="n">setupScene</span><span class="p">()</span> <span class="k">override</span>
+  <span class="kt">void</span> <span class="nf">setupScene</span><span class="p">()</span> <span class="k">override</span>
   <span class="p">{</span>
 
   <span class="p">}</span>
@@ -229,8 +235,8 @@ world as well.</p>
 by <cite>GameWorld::importZEN</cite> to access more world related functionality such as
 creating Characters or Items.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">You can also chose to not run the init scripts so the world won’t be filled with
+<p class="admonition-title">Note</p>
+<p>You can also chose to not run the init scripts so the world won’t be filled with
 Characters. This will also improve loading times.</p>
 </div>
 </div>
@@ -272,7 +278,7 @@ you access to the Waynet among other things.</p>
         <a href="waynet.html" class="btn btn-neutral float-right" title="Waynet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="setting-up-app.html" class="btn btn-neutral" title="Setting up a Test-Application" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="setting-up-app.html" class="btn btn-neutral float-left" title="Setting up a Test-Application" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -298,26 +304,16 @@ you access to the Waynet among other things.</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

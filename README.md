@@ -37,7 +37,7 @@ While there has not been an official release yet, you can download nightly build
 
 Select on the build you are interested in and click on the blue "Artifacts" Button in the top right corner to download the build.
 
-See the documentation on how to run REGoth: 
+See the documentation on how to run REGoth:
 https://regoth-project.github.io/REGoth-bs/content/running.html
 
 # Building from Source

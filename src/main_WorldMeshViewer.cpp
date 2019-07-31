@@ -4,9 +4,11 @@
 #include <Scene/BsSceneObject.h>
 #include <world/internals/ConstructFromZEN.hpp>
 
-class REGothWorldMeshViewer : public REGoth::REGothEngine
+class REGothWorldMeshViewer : public REGoth::REGothEngineDefaultConfig
 {
 public:
+  using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+
   void setupMainCamera() override
   {
     REGoth::REGothEngine::setupMainCamera();
@@ -25,7 +27,9 @@ protected:
 
 int main(int argc, char** argv)
 {
-  REGothWorldMeshViewer regoth;
+  std::unique_ptr<const REGoth::EngineConfig> config =
+      REGoth::parseArguments<REGoth::EngineConfig>(argc, argv);
+  REGothWorldMeshViewer engine{std::move(config)};
 
-  return REGoth::main(regoth, argc, argv);
+  return REGoth::runEngine(engine);
 }

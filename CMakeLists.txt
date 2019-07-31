@@ -1,11 +1,11 @@
 cmake_minimum_required (VERSION 3.13.0)
 
-
 ###############################################################################
 #                               Automate VCPKG                                #
 ###############################################################################
 
-option(SKIP_AUTOMATE_VCPKG "When ON, you will need to built the packages required by REGoth on your own or supply your own vcpkg toolchain.")
+option(SKIP_AUTOMATE_VCPKG "When ON, you will need to built the packages required by REGoth on \
+your own or supply your own vcpkg toolchain.")
 
 if (NOT SKIP_AUTOMATE_VCPKG)
   include(cmake/automate-vcpkg.cmake)
@@ -62,20 +62,28 @@ else()
   # Need to reset RPATH-settings to default again because bsf has messed with them.
   # See https://gitlab.kitware.com/cmake/community/wikis/doc/cmake/RPATH-handling
   # use, i.e. don't skip the full RPATH for the build tree
-  set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+  set(CMAKE_SKIP_BUILD_RPATH FALSE)
 
   # when building, don't use the install RPATH already
   # (but later on when installing)
   set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
+  # Enable exceptions in bsf as some dependencies (like cxxopts) rely on them.
+  set(BSF_ENABLE_EXCEPTIONS ON CACHE BOOL "" FORCE)
+
   add_subdirectory(lib/bsf)
 
 endif()
 
-# BsZenLib will try to find bs:f for itself as well. Since we already
-# have a bsf-target, skip that.
+# BsZenLib will try to find bs:f for itself as well. Since we already have a bsf-target, skip that.
 set(BSZENLIB_SKIP_FIND_BSF ON CACHE BOOL "" FORCE)
 add_subdirectory(lib/BsZenLib)
+
+# cxxopts as library to parse command line options.
+set(CXXOPTS_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # Disable unnecessary targets for examples.
+set(CXXOPTS_BUILD_TESTS OFF CACHE BOOL "" FORCE) # Disable unnecessary targets for unit tests.
+add_definitions(-DCXXOPTS_NO_RTTI) # Disable RTTI dependent instructions.
+add_subdirectory(lib/cxxopts)
 
 ###############################################################################
 #                               Add Samples, etc                              #

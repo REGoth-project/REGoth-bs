@@ -7,9 +7,11 @@
 #include <original-content/VirtualFileSystem.hpp>
 #include <scripting/ScriptSymbolStorage.hpp>
 
-class REGothScriptTester : public REGoth::REGothEngine
+class REGothScriptTester : public REGoth::REGothEngineDefaultConfig
 {
 public:
+  using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+
   void setupMainCamera() override
   {
     REGoth::REGothEngine::setupMainCamera();
@@ -45,7 +47,9 @@ protected:
 
 int main(int argc, char** argv)
 {
-  REGothScriptTester regoth;
+  std::unique_ptr<const REGoth::EngineConfig> config =
+      REGoth::parseArguments<REGoth::EngineConfig>(argc, argv);
+  REGothScriptTester engine{std::move(config)};
 
-  return REGoth::main(regoth, argc, argv);
+  return REGoth::runEngine(engine);
 }

@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Characters" href="characters.html" />
     <link rel="prev" title="World" href="world.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -80,7 +82,8 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building from Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running REGoth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setting-up-app.html">Setting up a Test-Application</a></li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Waynet</a><ul>
@@ -95,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="case-study-scene-structure.html">Case-Study: Scene Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case-study-character-statemachine.html">Case-Study: Character Statemachine</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case-study-daedalus-vm.html">Case-Study: Daedalus VM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
 </ul>
 
             
@@ -166,8 +170,8 @@
 and <code class="docutils literal notranslate"><span class="pre">Waypoint</span></code> defined in</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">src/components/Waynet.hpp</span></code> and</li>
-<li><code class="docutils literal notranslate"><span class="pre">src/components/Waypoint.hpp</span></code>, respectively.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/components/Waynet.hpp</span></code> and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/components/Waypoint.hpp</span></code>, respectively.</p></li>
 </ul>
 </div></blockquote>
 <div class="section" id="what-is-the-waynet">
@@ -176,11 +180,11 @@ and <code class="docutils literal notranslate"><span class="pre">Waypoint</span>
 through the world. It tells the AI which paths can be taken to reach a certain
 destination. Think of it like a <em>street-map</em> for the AI. See <a class="reference internal" href="#fig-waynet"><span class="std std-numref">Fig. 1</span></a> for
 an example.</p>
-<div class="figure" id="id1">
+<div class="figure align-default" id="id1">
 <span id="fig-waynet"></span><img alt="Waynet of the Old-Camp in Gothic 2" src="../_images/waynet.png" />
 <p class="caption"><span class="caption-number">Fig. 1 </span><span class="caption-text">Waynet of the Old-Camp in Gothic 2 visualized. The places at the
 intersections are called <em>Waypoints</em>. A line from one <em>Waypoint</em> to another
-means that there is a path between them the AI can take.</span></p>
+means that there is a path between them the AI can take.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p>This <em>street-map</em> is built up from <em>Waypoints</em> and <em>Paths</em>. Waypoints are normal
 Scene-Objects with the <code class="docutils literal notranslate"><span class="pre">Waypoint</span></code>-component attached. This component stores
@@ -198,8 +202,8 @@ so some sort of algorithm to find the shortest path to it is needed.</p>
 specific ones. Since every Waypoint is a normal Scene-Object, you can also simply do a
 recursive search for the name you are looking for from the scenes root object.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">If you are querying a Waypoint by name and you are not <em>completely</em> sure that the object you are
+<p class="admonition-title">Note</p>
+<p>If you are querying a Waypoint by name and you are not <em>completely</em> sure that the object you are
 looking for is indeed a Waypoint, it’s better to search the full scene.</p>
 </div>
 <p>If you have a <code class="docutils literal notranslate"><span class="pre">Waypoint</span></code>-component at hand, you can query the paths reachable from that Waypoint
@@ -219,8 +223,8 @@ shortest possible path, but go an other route. How that is determined is unknown
 camp to the swamp will go though the forest, while he goes around the forest in
 the original.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Since the Waynet is supposed to be static, it might be beneficial to precompute the distances
+<p class="admonition-title">Note</p>
+<p>Since the Waynet is supposed to be static, it might be beneficial to precompute the distances
 between Waypoints and store them in an acceleration structure for faster pathfinding.</p>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">TODO:</span> <span class="pre">Need</span> <span class="pre">more</span> <span class="pre">information.</span></code></p>
@@ -238,7 +242,7 @@ between Waypoints and store them in an acceleration structure for faster pathfin
         <a href="characters.html" class="btn btn-neutral float-right" title="Characters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="world.html" class="btn btn-neutral" title="World" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="world.html" class="btn btn-neutral float-left" title="World" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -264,26 +268,16 @@ between Waypoints and store them in an acceleration structure for faster pathfin
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

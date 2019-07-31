@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Creating a new Component" href="create-component.html" />
     <link rel="prev" title="Waynet" href="waynet.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -80,7 +82,8 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building from Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running REGoth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setting-up-app.html">Setting up a Test-Application</a></li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
 <li class="toctree-l1"><a class="reference internal" href="waynet.html">Waynet</a></li>
@@ -100,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="case-study-scene-structure.html">Case-Study: Scene Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case-study-character-statemachine.html">Case-Study: Character Statemachine</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case-study-daedalus-vm.html">Case-Study: Daedalus VM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
 </ul>
 
             
@@ -170,8 +174,8 @@
 minding his own business. But it can also be a Wolf, an Orc or a Meatbug. In REGoth, a each Character has its own Scene-Object, with multiple Components working together in order to
 process the AI, render the visuals and a number of other things.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The original engine called all of those <em>NPCs</em>, as in “Non Player Characters”. However, that name is misleading as the Character controlled by the player was an <em>NPC</em>, too.
+<p class="admonition-title">Note</p>
+<p>The original engine called all of those <em>NPCs</em>, as in “Non Player Characters”. However, that name is misleading as the Character controlled by the player was an <em>NPC</em>, too.
 Therefore, we just call everything <em>Character</em> in REGoth.</p>
 </div>
 <div class="section" id="inserting-a-character">
@@ -184,9 +188,9 @@ will insert a character of instance <code class="docutils literal notranslate"><
 <h2>Inserting the Hero<a class="headerlink" href="#inserting-the-hero" title="Permalink to this headline">¶</a></h2>
 <p>To insert the hero, you need to:</p>
 <ol class="arabic simple">
-<li>Insert a Character with the <code class="docutils literal notranslate"><span class="pre">PC_HERO</span></code> instance,</li>
-<li>register it as <em>Hero</em>,</li>
-<li>optionally attach a <code class="docutils literal notranslate"><span class="pre">CharacterKeyboardInput</span></code>-Component to control it.</li>
+<li><p>Insert a Character with the <code class="docutils literal notranslate"><span class="pre">PC_HERO</span></code> instance,</p></li>
+<li><p>register it as <em>Hero</em>,</p></li>
+<li><p>optionally attach a <code class="docutils literal notranslate"><span class="pre">CharacterKeyboardInput</span></code>-Component to control it.</p></li>
 </ol>
 <p>Once you have loaded a world, this is done by the following lines of code:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">HCharacter</span> <span class="n">hero</span> <span class="o">=</span> <span class="n">world</span><span class="o">-&gt;</span><span class="n">insertCharacter</span><span class="p">(</span><span class="s">&quot;PC_HERO&quot;</span><span class="p">,</span> <span class="s">&quot;STARTPOINT&quot;</span><span class="p">);</span>
@@ -197,8 +201,8 @@ will insert a character of instance <code class="docutils literal notranslate"><
 <p>The parameter <code class="docutils literal notranslate"><span class="pre">&quot;STARTPOINT&quot;</span></code> has to be set to a valid Waypoint in this case. You can also use an other
 overload to use a different method to describe where the Hero should be added.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">After the hero is created and registered, you may call <code class="docutils literal notranslate"><span class="pre">GameWorld::runInitScripts()</span></code> to also insert
+<p class="admonition-title">Note</p>
+<p>After the hero is created and registered, you may call <code class="docutils literal notranslate"><span class="pre">GameWorld::runInitScripts()</span></code> to also insert
 the other characters and items into the world.</p>
 </div>
 </div>
@@ -217,8 +221,8 @@ script code as well as native code.</p>
 <em>Shrinked</em>. If the distance to the player falls below that threshold again, it will be <em>Un-Shrinked</em>.</p>
 <p>However, it’s not actually that simple. The original engine, actually has <em>two</em> distances:</p>
 <ul class="simple">
-<li>one for Characters going <em>out of range</em> (<em>Shrink</em>),</li>
-<li>and one for Characters comming <em>into range</em> (<em>Un-Shrink</em>),</li>
+<li><p>one for Characters going <em>out of range</em> (<em>Shrink</em>),</p></li>
+<li><p>and one for Characters comming <em>into range</em> (<em>Un-Shrink</em>),</p></li>
 </ul>
 <p>while the distance for <em>Shrinking</em> is larger than the one for <em>Un-Shrinking</em>. This is to work around
 that when using a single distance, Characters being right on the edge of it may pop into and out of
@@ -234,12 +238,12 @@ close to it again. To work around that, the daily routines of the Characters wil
 evaluated while the Character is <em>Shrinked</em>. The position of a Character the player cannot see
 is then just assumed to be whatever the current routine says.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>This is why in Gothic I, you can run into the Old-Camp faster than Diego walks, but you will
 still find him at his hut: He went out of reach since he walks rather slowly, got put where
 his daily routine expects him to be while being <em>Shrinked</em>, which is at his own hut and therefor
 arrived faster at the Old-Camp than you can run.</p>
-<p class="last">The only way to arrive faster than Diego is to always keep him in range, so he doesn’t get
+<p>The only way to arrive faster than Diego is to always keep him in range, so he doesn’t get
 <em>Shrinked</em> and then move a little bit quicker on the last few steps.</p>
 </div>
 </div>
@@ -249,17 +253,17 @@ arrived faster at the Old-Camp than you can run.</p>
 <p>The following Components are important for a Character:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">VisualCharacter</span></code> -
-Loads the Skeletal-Mesh and handles Animation-Playback.</li>
-<li><code class="docutils literal notranslate"><span class="pre">bs::CCharacterController</span></code> -
-Physics-Processing.</li>
-<li><code class="docutils literal notranslate"><span class="pre">CharacterAI</span></code> -
+<li><p><code class="docutils literal notranslate"><span class="pre">VisualCharacter</span></code> -
+Loads the Skeletal-Mesh and handles Animation-Playback.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bs::CCharacterController</span></code> -
+Physics-Processing.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CharacterAI</span></code> -
 Implements the Characters State-Machine, ie. which actions it can do at what time
-and asks the visual to play matching animations.</li>
-<li><code class="docutils literal notranslate"><span class="pre">Character</span></code> -
+and asks the visual to play matching animations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Character</span></code> -
 Handles the Characters gameplay relevant actions, and serves as the main interface
 into what a Character can do. This is also the place where most <cite>NPC_*</cite>-externals
-are implemented.</li>
+are implemented.</p></li>
 </ul>
 <p>To create a Scene-Object with the correct components, please see <code class="docutils literal notranslate"><span class="pre">GameWorld::insertCharacter()</span></code>.</p>
 </div></blockquote>
@@ -277,7 +281,7 @@ are implemented.</li>
         <a href="create-component.html" class="btn btn-neutral float-right" title="Creating a new Component" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="waynet.html" class="btn btn-neutral" title="Waynet" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="waynet.html" class="btn btn-neutral float-left" title="Waynet" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -303,26 +307,16 @@ are implemented.</li>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

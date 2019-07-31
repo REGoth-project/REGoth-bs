@@ -26,29 +26,31 @@ As starting point, we will use this application template:
    #include "REGothEngine.hpp"
    #include <Components/BsCCamera.h>
    #include <components/GameWorld.hpp>
-   
-   class REGothWorldViewer : public REGoth::REGothEngine
+
+   class REGothWorldViewer : public REGoth::REGothEngineDefaultConfig
    {
    public:
+     using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+
      void setupMainCamera() override
      {
        REGoth::REGothEngine::setupMainCamera();
-   
+
        mMainCamera->SO()->addComponent<bs::FPSCamera>();
      }
-   
+
      void setupScene() override
      {
 
      }
-   
+
    protected:
    };
-   
+
    int main(int argc, char** argv)
    {
      REGothWorldViewer regoth;
-   
+
      return REGoth::main(regoth, argc, argv);
    }
 

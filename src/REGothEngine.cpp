@@ -1,14 +1,22 @@
 #include "REGothEngine.hpp"
+
+#include <cassert>
+#include <iostream>
+#include <memory>
+
 #include <BsApplication.h>
-#include <assert.h>
-#include <BsZenLib/ImportMaterial.hpp>
-#include <BsZenLib/ImportPath.hpp>
-#include <BsZenLib/ResourceManifest.hpp>
 #include <Components/BsCCamera.h>
 #include <FileSystem/BsFileSystem.h>
 #include <Importer/BsImporter.h>
 #include <Input/BsVirtualInput.h>
 #include <Scene/BsSceneObject.h>
+
+#include <BsZenLib/ImportMaterial.hpp>
+#include <BsZenLib/ImportPath.hpp>
+#include <BsZenLib/ResourceManifest.hpp>
+
+#include <cxxopts.hpp>
+
 #include <engine-content/EngineContent.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
@@ -16,6 +24,12 @@
 #include <original-content/VirtualFileSystem.hpp>
 
 using namespace REGoth;
+
+std::stringstream& operator>>(std::stringstream& str, bs::Path& path)
+{
+  path.assign(bs::Path{str.str().c_str()});
+  return str;
+}
 
 /**
  * Name of REGoth's own content directory
@@ -26,11 +40,11 @@ REGothEngine::~REGothEngine()
 {
 }
 
-void REGothEngine::loadGamePackages(const bs::Path& executablePath, const bs::Path& gameDirectory)
+void REGothEngine::loadGamePackages()
 {
-  OriginalGameFiles files = OriginalGameFiles(gameDirectory);
+  OriginalGameFiles files = OriginalGameFiles(config()->originalAssetsPath);
 
-  gVirtualFileSystem().setPathToEngineExecutable(executablePath.toString());
+  gVirtualFileSystem().setPathToEngineExecutable(config()->engineExecutablePath.toString());
 
   REGOTH_LOG(Info, Uncategorized, "[VDFS] Indexing packages: ");
 
@@ -45,7 +59,7 @@ void REGothEngine::loadGamePackages(const bs::Path& executablePath, const bs::Pa
   loadModPackages(files);
 }
 
-void REGothEngine::loadModPackages(const OriginalGameFiles& files)
+void REGothEngine::loadModPackages(const OriginalGameFiles& /* files */)
 {
   // Don't load mod-files by defaults
 }
@@ -67,9 +81,9 @@ bool REGothEngine::hasFoundGameFiles()
   return gVirtualFileSystem().hasFoundGameFiles();
 }
 
-void REGothEngine::findEngineContent(const bs::Path& executablePath)
+void REGothEngine::findEngineContent()
 {
-  mEngineContent = bs::bs_shared_ptr_new<EngineContent>(executablePath);
+  mEngineContent = bs::bs_shared_ptr_new<EngineContent>(config()->engineExecutablePath);
 
   if (!mEngineContent->hasFoundContentDirectory())
   {
@@ -84,9 +98,8 @@ void REGothEngine::initializeBsf()
 {
   using namespace bs;
 
-  // TODO: Make video mode configurable
-  VideoMode videoMode(1280, 720);
-  Application::startUp(videoMode, "REGoth", false);
+  VideoMode videoMode{config()->resolutionX, config()->resolutionY};
+  Application::startUp(videoMode, "REGoth", config()->isFullscreen);
 }
 
 void REGothEngine::loadCachedResourceManifests()
@@ -136,8 +149,8 @@ void REGothEngine::setupInput()
 
   // Camera controls for axes (analog input, e.g. mouse or gamepad thumbstick)
   // These return values in [-1.0, 1.0] range.
-  inputConfig->registerAxis("Horizontal", VIRTUAL_AXIS_DESC((UINT32)InputAxis::MouseX));
-  inputConfig->registerAxis("Vertical", VIRTUAL_AXIS_DESC((UINT32)InputAxis::MouseY));
+  inputConfig->registerAxis("Horizontal", VIRTUAL_AXIS_DESC(static_cast<UINT32>(InputAxis::MouseX)));
+  inputConfig->registerAxis("Vertical", VIRTUAL_AXIS_DESC(static_cast<UINT32>(InputAxis::MouseY)));
 }
 
 void REGothEngine::setupMainCamera()
@@ -221,93 +234,66 @@ void REGothEngine::shutdown()
   }
 }
 
-int ::REGoth::main(REGothEngine& regoth, int argc, char** argv)
+REGothEngineDefaultConfig::REGothEngineDefaultConfig(std::unique_ptr<const EngineConfig>&& config)
+    : mConfig{std::move(config)}
 {
-  regoth.initializeBsf();
+  // pass
+}
 
-  bs::Path engineExecutablePath = bs::Path(argv[0]);
-  bs::Path gameDirectory;
+const EngineConfig* REGothEngineDefaultConfig::config() const
+{
+  return mConfig.get();
+}
 
-  // No game path supplied. Check whether we are running from within a game directory.
-  if (argc < 2)
-  {
-    std::cout << "Trying to find game installation root from engine executable upwards..."
-              << std::endl;
-
-    gameDirectory = OriginalGameFiles::findGameFilesRoot(engineExecutablePath);
-
-    if (gameDirectory == bs::Path::BLANK &&
-        engineExecutablePath != bs::FileSystem::getWorkingDirectoryPath())
-    {
-      std::cout << "Trying to find game installation root from working directory..." << std::endl;
-
-      gameDirectory =
-          OriginalGameFiles::findGameFilesRoot(bs::FileSystem::getWorkingDirectoryPath());
-    }
-  }
-  else
-  {
-    gameDirectory = bs::Path(argv[1]);
-  }
-
-  if (gameDirectory == bs::Path::BLANK)
-  {
-    std::cout << "Could not find game installation!" << std::endl;
-    std::cout << "Try to supply one by calling REGoth like this:" << std::endl;
-    std::cout << "" << std::endl;
-    std::cout << "    REGoth <path/to/game>" << std::endl;
-    std::cout << "" << std::endl;
-    std::cout << "Or place REGoth in a subdirectory of your game installation." << std::endl;
-
-    return -1;
-  }
-  else
-  {
-    std::cout << "Using game installation at: " << gameDirectory.toString() << std::endl;
-  }
-
-  engineExecutablePath.makeAbsolute(bs::FileSystem::getWorkingDirectoryPath());
-  gameDirectory.makeAbsolute(bs::FileSystem::getWorkingDirectoryPath());
+int ::REGoth::runEngine(REGothEngine& engine)
+{
+  engine.initializeBsf();
 
   REGOTH_LOG(Info, Uncategorized, "[Main] Running REGothEngine");
   REGOTH_LOG(Info, Uncategorized, "[Main]  - Engine executable: {0}",
-             engineExecutablePath.toString());
-  REGOTH_LOG(Info, Uncategorized, "[Main]  - Game directory:    {0}", gameDirectory.toString());
+             engine.config()->engineExecutablePath.toString());
+  REGOTH_LOG(Info, Uncategorized, "[Main]  - Game directory:    {0}",
+             engine.config()->originalAssetsPath.toString());
 
   REGOTH_LOG(Info, Uncategorized, "[Main] Finding REGoth content-directory");
-  regoth.findEngineContent(engineExecutablePath);
+  engine.findEngineContent();
 
   REGOTH_LOG(Info, Uncategorized, "[Main] Loading original game packages");
-  regoth.loadGamePackages(engineExecutablePath, gameDirectory);
+  engine.loadGamePackages();
 
-  if (!regoth.hasFoundGameFiles())
+  if (!engine.hasFoundGameFiles())
   {
-    std::cout << "No files loaded into the VDFS - is the datapath correct?" << std::endl;
-    return -1;
+    REGOTH_LOG(Fatal, Uncategorized,
+               "No files loaded into the VDFS - is the game assets path correct?");
+    return EXIT_FAILURE;
   }
 
-  regoth.loadCachedResourceManifests();
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Load cached resource manifests");
+  engine.loadCachedResourceManifests();
 
   REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Loading Shaders");
+  engine.setShaders();
 
-  regoth.setShaders();
-  regoth.setupInput();
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Setting up input");
+  engine.setupInput();
 
   REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Setting up Main Camera");
-
-  regoth.setupMainCamera();
+  engine.setupMainCamera();
 
   REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Setting up Scene");
+  engine.setupScene();
 
-  regoth.setupScene();
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Save cached resource manifests");
+  engine.saveCachedResourceManifests();
 
-  regoth.saveCachedResourceManifests();
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Run");
+  engine.run();
 
-  regoth.run();
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Save cached resource manifests");
+  engine.saveCachedResourceManifests();
 
-  regoth.saveCachedResourceManifests();
+  REGOTH_LOG(Info, Uncategorized, "[REGothEngine] Shutdown");
+  engine.shutdown();
 
-  regoth.shutdown();
-
-  return 0;
+  return EXIT_SUCCESS;
 }

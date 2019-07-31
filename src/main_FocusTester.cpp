@@ -6,17 +6,19 @@
 #include <Resources/BsBuiltinResources.h>
 #include <Scene/BsSceneObject.h>
 #include <components/Focusable.hpp>
-#include <components/GameplayUI.hpp>
 #include <components/GameWorld.hpp>
+#include <components/GameplayUI.hpp>
 #include <components/Item.hpp>
 #include <components/UIDialogueChoice.hpp>
 #include <components/UIElement.hpp>
 #include <components/UIFocusText.hpp>
 #include <components/UISubtitleBox.hpp>
 
-class REGothCharacterMovementTester : public REGoth::REGothEngine
+class REGothCharacterMovementTester : public REGoth::REGothEngineDefaultConfig
 {
 public:
+  using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+
   void setupMainCamera() override
   {
     REGoth::REGothEngine::setupMainCamera();
@@ -77,7 +79,9 @@ protected:
 
 int main(int argc, char** argv)
 {
-  REGothCharacterMovementTester regoth;
+  std::unique_ptr<const REGoth::EngineConfig> config =
+      REGoth::parseArguments<REGoth::EngineConfig>(argc, argv);
+  REGothCharacterMovementTester engine{std::move(config)};
 
-  return REGoth::main(regoth, argc, argv);
+  return REGoth::runEngine(engine);
 }

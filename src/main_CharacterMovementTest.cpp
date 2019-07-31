@@ -19,9 +19,11 @@
 #include <exception/Throw.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothCharacterMovementTester : public REGoth::REGothEngine
+class REGothCharacterMovementTester : public REGoth::REGothEngineDefaultConfig
 {
 public:
+  using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+
   void setupMainCamera() override
   {
     REGoth::REGothEngine::setupMainCamera();
@@ -89,7 +91,9 @@ protected:
 
 int main(int argc, char** argv)
 {
-  REGothCharacterMovementTester regoth;
+  std::unique_ptr<const REGoth::EngineConfig> config =
+      REGoth::parseArguments<REGoth::EngineConfig>(argc, argv);
+  REGothCharacterMovementTester engine{std::move(config)};
 
-  return REGoth::main(regoth, argc, argv);
+  return REGoth::runEngine(engine);
 }

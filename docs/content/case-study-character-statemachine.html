@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Case-Study: Daedalus VM" href="case-study-daedalus-vm.html" />
     <link rel="prev" title="Case-Study: Scene Structure" href="case-study-scene-structure.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -80,7 +82,8 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building from Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running REGoth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setting-up-app.html">Setting up a Test-Application</a></li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
 <li class="toctree-l1"><a class="reference internal" href="waynet.html">Waynet</a></li>
@@ -109,6 +112,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="case-study-daedalus-vm.html">Case-Study: Daedalus VM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
 </ul>
 
             
@@ -181,16 +185,16 @@ From the <em>Standing</em>-State, most other states are reached by eg. pressing 
 are active as long as that button is pressed.</p>
 <p>The <em>Standing</em>-State can transition to the following other states:</p>
 <ul class="simple">
-<li><em>Run Forward</em></li>
-<li><em>Jump Backward</em></li>
-<li><em>Strafe Left</em></li>
-<li><em>Strafe Right</em></li>
-<li><em>Draw Weapon</em></li>
-<li><em>Undraw Weapon</em></li>
-<li><em>Fight Forward</em></li>
-<li><em>Fight Left</em></li>
-<li><em>Fight Right</em></li>
-<li><em>Fight Block</em></li>
+<li><p><em>Run Forward</em></p></li>
+<li><p><em>Jump Backward</em></p></li>
+<li><p><em>Strafe Left</em></p></li>
+<li><p><em>Strafe Right</em></p></li>
+<li><p><em>Draw Weapon</em></p></li>
+<li><p><em>Undraw Weapon</em></p></li>
+<li><p><em>Fight Forward</em></p></li>
+<li><p><em>Fight Left</em></p></li>
+<li><p><em>Fight Right</em></p></li>
+<li><p><em>Fight Block</em></p></li>
 </ul>
 <p>One of the reasons why a state-machine is needed here is for playing the transition animations:
 In the original game, the states described here were implicitly coded into the currently active
@@ -233,25 +237,25 @@ are rather the <em>type</em> of animation the character should play. The final n
 <p>Where <code class="docutils literal notranslate"><span class="pre">&lt;weaponmode&gt;</span></code> can be one of:</p>
 <blockquote>
 <div><ul class="simple">
-<li>None: Empty string</li>
-<li>1h: <code class="docutils literal notranslate"><span class="pre">1H</span></code></li>
-<li>2h: <code class="docutils literal notranslate"><span class="pre">2H</span></code></li>
-<li>Bow: <code class="docutils literal notranslate"><span class="pre">BOW</span></code></li>
-<li>CrossBow: <code class="docutils literal notranslate"><span class="pre">CBOW</span></code></li>
-<li>Magic: <code class="docutils literal notranslate"><span class="pre">MAG</span></code></li>
-<li>Fist: <code class="docutils literal notranslate"><span class="pre">FIST</span></code></li>
+<li><p>None: Empty string</p></li>
+<li><p>1h: <code class="docutils literal notranslate"><span class="pre">1H</span></code></p></li>
+<li><p>2h: <code class="docutils literal notranslate"><span class="pre">2H</span></code></p></li>
+<li><p>Bow: <code class="docutils literal notranslate"><span class="pre">BOW</span></code></p></li>
+<li><p>CrossBow: <code class="docutils literal notranslate"><span class="pre">CBOW</span></code></p></li>
+<li><p>Magic: <code class="docutils literal notranslate"><span class="pre">MAG</span></code></p></li>
+<li><p>Fist: <code class="docutils literal notranslate"><span class="pre">FIST</span></code></p></li>
 </ul>
 </div></blockquote>
 <p>And <code class="docutils literal notranslate"><span class="pre">&lt;walkmode&gt;</span></code> can be one of:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">RUN</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">WALK</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SNEAK</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SWIM</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">JUMP</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">WATER</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">DIVE</span></code></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RUN</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WALK</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SNEAK</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SWIM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JUMP</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WATER</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DIVE</span></code></p></li>
 </ul>
 </div></blockquote>
 <p>And <code class="docutils literal notranslate"><span class="pre">&lt;kind&gt;</span></code> is the animation named in the following state descriptions. For
@@ -259,11 +263,11 @@ example, the full animation file name <code class="docutils literal notranslate"
 Running-Walkmode with the animation which lets the character actually run
 forward, called <code class="docutils literal notranslate"><span class="pre">L</span></code>.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>We don’t exactly know why the actual <em>Go Forward</em>-Animations are called <em>L</em>, but it seems like the <em>L</em> does indeed stand for
 <em>Left</em>, since the animation starts with the left foot. In Gothic I there are actually two seperate jump animations, one for jumping
 off the left foot and one for the right foot.</p>
-<p class="last">Some trivia: In earlier versions of Gothic I the character would jump with the incorrect foot, as someone mixed up the <em>L</em> and <em>R</em>. <strong>&#64;nicode</strong> fixed that.</p>
+<p>Some trivia: In earlier versions of Gothic I the character would jump with the incorrect foot, as someone mixed up the <em>L</em> and <em>R</em>. <strong>&#64;nicode</strong> fixed that.</p>
 </div>
 <p>As an other example, the animation file name <code class="docutils literal notranslate"><span class="pre">S_FISTWALKSTRAFEL</span></code> would be for
 fist-fighting, walking and strafing left.</p>
@@ -277,15 +281,15 @@ exist either, we’re out of luck and can’t play any animation.</p>
 to another. To construct the name of a transition animation, you will need:</p>
 <blockquote>
 <div><ul class="simple">
-<li>The <em>State</em> the character is currently in</li>
-<li>The <em>State</em> the character goes to</li>
-<li>The current weapon-mode</li>
+<li><p>The <em>State</em> the character is currently in</p></li>
+<li><p>The <em>State</em> the character goes to</p></li>
+<li><p>The current weapon-mode</p></li>
 </ul>
 </div></blockquote>
 <p>Then the name of the transition animation is constructed like so: <code class="docutils literal notranslate"><span class="pre">T_&lt;weaponmode&gt;&lt;from&gt;_2_&lt;weaponmode&gt;</span></code>.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">I don’t think there are transitions between different weapon types as the character would always undraw the other weapon first.
+<p class="admonition-title">Note</p>
+<p>I don’t think there are transitions between different weapon types as the character would always undraw the other weapon first.
 However, at the moment I’m not sure whether transitions for <em>Standing</em> to <em>1H-Weapon Standing</em> exist.</p>
 </div>
 </div>
@@ -294,8 +298,8 @@ However, at the moment I’m not sure whether transitions for <em>Standing</em> 
 <p>Turning is a bit weird as it can happen not only while standing, but also while running or strafing. However, the turning animations shall only be played
 while the character is standing. Therefore it makes sense to seperate these two functionalities.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Turning needs to be faster when a weapon is drawn. The speedup-factor actually comes from a script value, but I’m not sure which one.</p>
+<p class="admonition-title">Note</p>
+<p>Turning needs to be faster when a weapon is drawn. The speedup-factor actually comes from a script value, but I’m not sure which one.</p>
 </div>
 </div>
 </div>
@@ -307,24 +311,6 @@ while the character is standing. Therefore it makes sense to seperate these two 
 <p>Once the <em>Run forward</em>-button is pressed while in the <em>Standing</em>-State, the following substate shall
 be entered:</p>
 <div class="figure align-center" id="id1">
-<p class="plantuml">
-<img src="../_images/plantuml-00d72b71104e72a1da83771b06fc15958c20853d.png" alt="!include style.iuml
-
-state &quot;Play Transition:\nIdle to Run&quot; as transitionToRun
-state &quot;Play Transition:\nRun to Idle&quot; as transitionToIdle
-
-transitionToRun  : Play animation: &quot;&quot;RUN_2_RUNL&quot;&quot;
-Run              : Loop animation: &quot;&quot;RUNL&quot;&quot;
-transitionToIdle : Play animation: &quot;&quot;RUNL_2_RUN&quot;&quot;
-
-[*] --&gt; transitionToRun
-transitionToRun --&gt; Run : Animation Done
-
-Run --&gt; Run : While Forward-Button down
-Run --&gt; transitionToIdle : Run Forward-Button no longer down
-
-transitionToIdle --&gt; [*] : Animation Done"/>
-</p>
 <p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">Statechart for running forward.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p>While in the <em>Run</em>-State, turning shall be allowed but without playing an animation. Turning Left shall take precedence over turning Right.</p>
@@ -334,21 +320,6 @@ transitionToIdle --&gt; [*] : Animation Done"/>
 <p>Once the <em>Jump Backward</em>-button is pressed while in the <em>Standing</em>-State, the following substate
 shall be entered:</p>
 <div class="figure align-center" id="id2">
-<p class="plantuml">
-<img src="../_images/plantuml-44225d6e0b749b030106421bb6cf7b5138217eb2.png" alt="!include style.iuml
-
-state &quot;Check Keys&quot; as CheckKeys
-state &quot;Play Animation&quot; as PlayAnimation
-
-PlayAnimation: Play Animation: &quot;&quot;JUMPB&quot;&quot;
-
-[*] -down-&gt; PlayAnimation
-
-PlayAnimation -right-&gt; CheckKeys : Animation finished
-
-CheckKeys -left-&gt; PlayAnimation : Jump Back-button down
-CheckKeys -down-&gt; [*]           : Jump Back button up"/>
-</p>
 <p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">Statechart for jump backwards.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <p>While in the <em>PlayAnimation</em>-State, turning shall be allowed but without playing an animation. Turning Left shall take precedence over turning Right.</p>
@@ -358,18 +329,6 @@ CheckKeys -down-&gt; [*]           : Jump Back button up"/>
 <p>Once the <em>Strafe Left</em>-button is pressed while in the <em>Standing</em>-State, the following substate
 shall be entered:</p>
 <div class="figure align-center" id="id3">
-<p class="plantuml">
-<img src="../_images/plantuml-1658df6f25b926763f28d752849f3ad27e34e567.png" alt="!include style.iuml
-
-state &quot;Strafe Left&quot; as StrafeLeft
-StrafeLeft: Loop Animation: &quot;&quot;STRAFEL&quot;&quot;
-
-[*] --&gt; StrafeLeft
-
-StrafeLeft --&gt; StrafeLeft : While Strafe Left-button down
-
-StrafeLeft --&gt; [*] : Strafe Left-button Up"/>
-</p>
 <p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">Statechart for <em>Strafe Left</em>.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
 <p>While in the <em>StrafeLeft</em>-State, turning shall be allowed but without playing an animation. Turning Left shall take precedence over turning Right.</p>
@@ -379,18 +338,6 @@ StrafeLeft --&gt; [*] : Strafe Left-button Up"/>
 <p>Once the <em>Strafe Right</em>-button is pressed while in the <em>Standing</em>-State, the following substate
 shall be entered:</p>
 <div class="figure align-center" id="id4">
-<p class="plantuml">
-<img src="../_images/plantuml-b53b2dd0462e93a7f07bb97bef4d520935f6cb8a.png" alt="!include style.iuml
-
-state &quot;Strafe Right&quot; as StrafeRight
-StrafeRight: Loop Animation: &quot;&quot;STRAFER&quot;&quot;
-
-[*] --&gt; StrafeRight
-
-StrafeRight --&gt; StrafeRight : While Strafe Right-button down
-
-StrafeRight --&gt; [*] : Strafe Right-button Up"/>
-</p>
 <p class="caption"><span class="caption-number">Fig. 5 </span><span class="caption-text">Statechart for <em>Strafe Right</em>.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
 <p>While in the <em>StrafeRight</em>-State, turning shall be allowed but without playing an animation. Turning Left shall take precedence over turning Right.</p>
@@ -401,11 +348,11 @@ StrafeRight --&gt; [*] : Strafe Right-button Up"/>
 <p>The character statemachine can be split into the following parts:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Generic state-machine module,</li>
-<li>Module constructing animation names,</li>
-<li>Actual character state logic (Component),</li>
-<li>Character-Visual (Component),</li>
-<li>Character-Animation player (Component).</li>
+<li><p>Generic state-machine module,</p></li>
+<li><p>Module constructing animation names,</p></li>
+<li><p>Actual character state logic (Component),</p></li>
+<li><p>Character-Visual (Component),</p></li>
+<li><p>Character-Animation player (Component).</p></li>
 </ul>
 </div></blockquote>
 </div>
@@ -422,7 +369,7 @@ StrafeRight --&gt; [*] : Strafe Right-button Up"/>
         <a href="case-study-daedalus-vm.html" class="btn btn-neutral float-right" title="Case-Study: Daedalus VM" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="case-study-scene-structure.html" class="btn btn-neutral" title="Case-Study: Scene Structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="case-study-scene-structure.html" class="btn btn-neutral float-left" title="Case-Study: Scene Structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -448,26 +395,16 @@ StrafeRight --&gt; [*] : Strafe Right-button Up"/>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

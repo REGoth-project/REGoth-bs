@@ -4,3 +4,6 @@
 [submodule "lib/bsf"]
 	path = lib/bsf
 	url = https://github.com/GameFoundry/bsf.git
+[submodule "lib/cxxopts"]
+	path = lib/cxxopts
+	url = https://github.com/jarro2783/cxxopts.git

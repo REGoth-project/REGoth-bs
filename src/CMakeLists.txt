@@ -159,6 +159,7 @@ add_library(REGothEngine STATIC
 
 target_link_libraries(REGothEngine PUBLIC bsf BsZenLib)
 target_link_libraries(REGothEngine PUBLIC ${OpenMP_CXX_LIBRARIES})
+target_link_libraries(REGothEngine PUBLIC cxxopts)
 target_include_directories(REGothEngine PUBLIC .)
 
 # Let CMake take care of the __declspec nonsense on windows.

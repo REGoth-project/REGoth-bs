@@ -1,24 +1,26 @@
 #include "BsFPSCamera.h"
 #include "REGothEngine.hpp"
-#include <GUI/BsGUILayoutY.h>
 #include <BsZenLib/ImportFont.hpp>
 #include <BsZenLib/ImportTexture.hpp>
 #include <Components/BsCCamera.h>
 #include <GUI/BsCGUIWidget.h>
-#include <Image/BsSpriteTexture.h>
 #include <GUI/BsGUILabel.h>
+#include <GUI/BsGUILayoutY.h>
 #include <GUI/BsGUIPanel.h>
 #include <GUI/BsGUISkin.h>
 #include <GUI/BsGUITexture.h>
+#include <Image/BsSpriteTexture.h>
 #include <Resources/BsBuiltinResources.h>
 #include <Scene/BsSceneObject.h>
 #include <Text/BsFont.h>
-#include <original-content/VirtualFileSystem.hpp>
 #include <gui/skin_gothic.hpp>
+#include <original-content/VirtualFileSystem.hpp>
 
-class REGothFontViewer : public REGoth::REGothEngine
+class REGothFontViewer : public REGoth::REGothEngineDefaultConfig
 {
 public:
+  using REGoth::REGothEngineDefaultConfig::REGothEngineDefaultConfig;
+
   void setupMainCamera() override
   {
     REGoth::REGothEngine::setupMainCamera();
@@ -31,7 +33,7 @@ public:
   {
     // Add GUI
     bs::HSceneObject guiSO = bs::SceneObject::create("GUI");
-    bs::HGUIWidget gui = guiSO->addComponent<bs::CGUIWidget>(mMainCamera);
+    bs::HGUIWidget gui     = guiSO->addComponent<bs::CGUIWidget>(mMainCamera);
 
     // gui->setSkin(bs::BuiltinResources::instance().getGUISkin());
     gui->setSkin(REGoth::GUI::getGothicStyleSkin());
@@ -57,7 +59,9 @@ protected:
 
 int main(int argc, char** argv)
 {
-  REGothFontViewer regoth;
+  std::unique_ptr<const REGoth::EngineConfig> config =
+      REGoth::parseArguments<REGoth::EngineConfig>(argc, argv);
+  REGothFontViewer engine{std::move(config)};
 
-  return REGoth::main(regoth, argc, argv);
+  return REGoth::runEngine(engine);
 }

@@ -11,7 +11,8 @@
   do                                                                                    \
   {                                                                                     \
     using namespace ::bs;                                                               \
-    if ((INT32)LogVerbosity::verbosity <= (INT32)BS_LOG_VERBOSITY)                      \
+    if (static_cast<INT32>(LogVerbosity::verbosity)                                     \
+        <= static_cast<INT32>(BS_LOG_VERBOSITY))                                        \
     {                                                                                   \
       gDebug().log(StringUtil::format(message, ##__VA_ARGS__), LogVerbosity::verbosity, \
                    LogCategory##category::_id);                                         \

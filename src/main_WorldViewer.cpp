@@ -1,8 +1,11 @@
-#include "BsFPSCamera.h"
+#include <string>
+
+#include <BsFPSCamera.h>
 #include <REGothEngine.hpp>
 #include <Components/BsCCamera.h>
 #include <Scene/BsPrefab.h>
 #include <Scene/BsSceneObject.h>
+
 #include <components/Character.hpp>
 #include <components/CharacterAI.hpp>
 #include <components/CharacterEventQueue.hpp>
@@ -15,10 +18,49 @@
 #include <original-content/OriginalGameFiles.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
+struct WorldViewerConfig : public REGoth::EngineConfig
+{
+  virtual void registerCLIOptions(cxxopts::Options& opts) override
+  {
+    const std::string grp = "WorldViewer";
+    opts.add_option(grp, "w", "world", "Name of the world to load",
+                    cxxopts::value<bs::String>(world), "[NAME]");
+  }
+
+  virtual void verifyCLIOptions() override
+  {
+    // Make sure that world is set.
+    if (world.empty())
+    {
+      REGOTH_THROW(InvalidStateException, "World cannot be empty.");
+    }
+
+    // Unify possible inputs.
+    bs::StringUtil::toUpperCase(world);
+    if (!bs::StringUtil::endsWith(world, ".ZEN"))
+    {
+      world += ".ZEN";
+    }
+  }
+
+  bs::String world;
+};
+
 class REGothWorldViewer : public REGoth::REGothEngine
 {
 public:
-  void loadModPackages(const REGoth::OriginalGameFiles& files) override
+  REGothWorldViewer(std::unique_ptr<const WorldViewerConfig>&& config)
+      : mConfig{std::move(config)}
+  {
+    // pass
+  }
+
+  const WorldViewerConfig* config() const override
+  {
+    return mConfig.get();
+  }
+
+  void loadModPackages(const REGoth::OriginalGameFiles& /* files */) override
   {
     // using namespace REGoth;
 
@@ -45,15 +87,14 @@ public:
   {
     using namespace REGoth;
 
-    const bs::String WORLD    = "OLDMINE.ZEN";
-    const bs::String SAVEGAME = "WorldViewer-" + WORLD;
+    const bs::String SAVEGAME = "WorldViewer-" + config()->world;
 
     bs::HPrefab worldPrefab = GameWorld::load(SAVEGAME);
     HGameWorld world;
 
     if (!worldPrefab)
     {
-      world = GameWorld::importZEN(WORLD);
+      world = GameWorld::importZEN(config()->world);
 
       HCharacter hero = world->insertCharacter("PC_HERO", WORLD_STARTPOINT);
       hero->useAsHero();
@@ -88,11 +129,16 @@ public:
 
 protected:
   REGoth::HThirdPersonCamera mThirdPersonCamera;
+
+private:
+  std::unique_ptr<const WorldViewerConfig> mConfig;
 };
 
 int main(int argc, char** argv)
 {
-  REGothWorldViewer regoth;
+  std::unique_ptr<const WorldViewerConfig> config =
+      REGoth::parseArguments<WorldViewerConfig>(argc, argv);
+  REGothWorldViewer engine{std::move(config)};
 
-  return REGoth::main(regoth, argc, argv);
+  return REGoth::runEngine(engine);
 }
