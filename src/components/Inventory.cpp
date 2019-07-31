@@ -18,16 +18,16 @@ namespace REGoth
   {
     throwIfNotUpperCase(instance);
 
-    return mInventory.find(instance) != mInventory.end();
+    return mItemCountsByInstance.find(instance) != mItemCountsByInstance.end();
   }
 
   bs::UINT32 Inventory::itemCount(const bs::String& instance) const
   {
     throwIfNotUpperCase(instance);
 
-    auto it = mInventory.find(instance);
+    auto it = mItemCountsByInstance.find(instance);
 
-    if (it == mInventory.end()) return 0;
+    if (it == mItemCountsByInstance.end()) return 0;
 
     return it->second;
   }
@@ -39,7 +39,7 @@ namespace REGoth
     REGOTH_LOG(Info, Uncategorized, "[Inventory] Add {0}x item {1} to Inventory of {2}", count,
                instance, SO()->getName());
 
-    mInventory[instance] += 1;
+    mItemCountsByInstance[instance] += 1;
 
     OnItemChanged(instance);
   }
@@ -48,9 +48,9 @@ namespace REGoth
   {
     throwIfNotUpperCase(instance);
 
-    auto it = mInventory.find(instance);
+    auto it = mItemCountsByInstance.find(instance);
 
-    if (it == mInventory.end())
+    if (it == mItemCountsByInstance.end())
     {
       REGOTH_THROW(InvalidParametersException,
                    bs::StringUtil::format("Trying to remove items of instance {1}, but there "
@@ -70,7 +70,7 @@ namespace REGoth
 
     if (it->second == 0)
     {
-      mInventory.erase(it);
+      mItemCountsByInstance.erase(it);
     }
 
     OnItemChanged(instance);
@@ -78,7 +78,7 @@ namespace REGoth
 
   const bs::Map<bs::String, bs::UINT32>& Inventory::allItems() const
   {
-    return mInventory;
+    return mItemCountsByInstance;
   }
 
   HInventory Inventory::thisHandle() const

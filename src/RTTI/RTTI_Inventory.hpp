@@ -8,7 +8,7 @@ namespace REGoth
       : public bs::RTTIType<Inventory, bs::Component, RTTI_Inventory>
   {
     BS_BEGIN_RTTI_MEMBERS
-    BS_RTTI_MEMBER_PLAIN(mInventory, 0)
+    BS_RTTI_MEMBER_PLAIN(mItemCountsByInstancesByInstance, 0)
     BS_END_RTTI_MEMBERS
 
   public:
