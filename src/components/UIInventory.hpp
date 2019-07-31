@@ -88,7 +88,6 @@ namespace REGoth
     void update() override;
 
   private:
-
     bs::GUIScrollArea* mScrollArea;
 
     bs::Map<const bs::String, Item> mItemsByInstance;
@@ -97,6 +96,7 @@ namespace REGoth
      * The inventory being viewed through this UI component.
      */
     HInventory mViewedInventory;
+    bs::HEvent mRegisteredOnItemChangedEvent;
 
   public:
     REGOTH_DECLARE_RTTI(UIInventory)

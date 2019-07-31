@@ -38,10 +38,18 @@ namespace REGoth
 
     mViewedInventory = inventory;
 
+    if (mRegisteredOnItemChangedEvent)
+    {
+      mRegisteredOnItemChangedEvent.disconnect();
+    }
+
     if (mViewedInventory)
     {
-      mViewedInventory->OnItemChanged.connect(
-          [this](const bs::String& instance) { onInventoryItemUpdated(instance); });
+      mRegisteredOnItemChangedEvent =
+          mViewedInventory->OnItemChanged.connect([this](const bs::String& instance) {
+            // Get notified when the viewed inventory changes
+            onInventoryItemUpdated(instance);
+          });
 
       forceUpdateAll();
     }
