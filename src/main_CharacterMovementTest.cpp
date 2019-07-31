@@ -23,14 +23,14 @@
 #include <exception/Throw.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothCharacterMovementTester : public REGoth::Engine
+class REGothCharacterMovementTester : public REGoth::EmptyEngine
 {
 public:
-  using REGoth::Engine::Engine;
+  using REGoth::EmptyEngine::EmptyEngine;
 
   void setupMainCamera() override
   {
-    REGoth::AbstractEngine::setupMainCamera();
+    REGoth::Engine::setupMainCamera();
 
     auto rs = mMainCamera->getRenderSettings();
 

@@ -13,14 +13,14 @@
 #include <exception/Throw.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothWaynetTester : public REGoth::Engine
+class REGothWaynetTester : public REGoth::EmptyEngine
 {
 public:
-  using REGoth::Engine::Engine;
+  using REGoth::EmptyEngine::EmptyEngine;
 
   void setupMainCamera() override
   {
-    REGoth::AbstractEngine::setupMainCamera();
+    REGoth::Engine::setupMainCamera();
 
     mMainCamera->SO()->addComponent<bs::FPSCamera>();
 

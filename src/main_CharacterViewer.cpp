@@ -30,14 +30,14 @@
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothCharacterViewer : public REGoth::Engine
+class REGothCharacterViewer : public REGoth::EmptyEngine
 {
 public:
-  using REGoth::Engine::Engine;
+  using REGoth::EmptyEngine::EmptyEngine;
 
   void setupMainCamera() override
   {
-    REGoth::AbstractEngine::setupMainCamera();
+    REGoth::Engine::setupMainCamera();
 
     // mFPSCamera = mMainCamera->SO()->addComponent<bs::FPSCamera>();
     mMainCamera->SO()->addComponent<bs::CameraZoomer>();
@@ -47,7 +47,7 @@ public:
   {
     using namespace bs;
 
-    REGoth::AbstractEngine::setupInput();
+    REGoth::Engine::setupInput();
 
     auto inputConfig = gVirtualInput().getConfiguration();
 

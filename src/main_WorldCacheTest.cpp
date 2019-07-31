@@ -22,14 +22,14 @@
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothWorldCacheTest : public REGoth::Engine
+class REGothWorldCacheTest : public REGoth::EmptyEngine
 {
 public:
-  using REGoth::Engine::Engine;
+  using REGoth::EmptyEngine::EmptyEngine;
 
   void setupMainCamera() override
   {
-    REGoth::AbstractEngine::setupMainCamera();
+    REGoth::Engine::setupMainCamera();
 
     mMainCamera->SO()->addComponent<bs::FPSCamera>();
   }

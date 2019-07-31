@@ -20,14 +20,14 @@
 #include <gui/skin_gothic.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothFontViewer : public REGoth::Engine
+class REGothFontViewer : public REGoth::EmptyEngine
 {
 public:
-  using REGoth::Engine::Engine;
+  using REGoth::EmptyEngine::EmptyEngine;
 
   void setupMainCamera() override
   {
-    REGoth::AbstractEngine::setupMainCamera();
+    REGoth::Engine::setupMainCamera();
 
     mFPSCamera = mMainCamera->SO()->addComponent<bs::FPSCamera>();
     mMainCamera->getViewport()->setClearColorValue(bs::Color(0.0f, 0.0f, 0.0f, 1.0f));

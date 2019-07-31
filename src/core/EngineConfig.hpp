@@ -16,14 +16,14 @@ std::stringstream& operator>>(std::stringstream& str, bs::Path& path);
 namespace REGoth
 {
   /**
-   * @brief The base configuration for an engine (`AbstractEngine`).
+   * @brief The base configuration for an `Engine`.
    *
    * Configuration objects are required to construct an engine.  An `EngineConfig` is the default
-   * configuration object, which is used in the definition of `AbstractEngine::config()`, and which
-   * is also the configuration object for the default engine implementation `Engine`.
+   * configuration object, which is used in the definition of `Engine::config()`, and which
+   * is also the configuration object for the default engine implementation `EmptyEngine`.
    *
-   * If a specialised `EngineConfig` is needed, `AbstractEngine` must be extended and
-   * `AbstractEngine::config()` overridden accordingly.
+   * If a specialised `EngineConfig` is needed, `Engine` must be extended and
+   * `Engine::config()` overridden accordingly.
    *
    * @ingroup core
    * @headerfile core/EngineConfig.hpp

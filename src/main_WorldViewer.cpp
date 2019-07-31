@@ -50,7 +50,7 @@ struct WorldViewerConfig : public REGoth::EngineConfig
   bs::String world;
 };
 
-class REGothWorldViewer : public REGoth::AbstractEngine
+class REGothWorldViewer : public REGoth::Engine
 {
 public:
   REGothWorldViewer(std::unique_ptr<const WorldViewerConfig>&& config)
@@ -82,7 +82,7 @@ public:
 
   void setupMainCamera() override
   {
-    REGoth::AbstractEngine::setupMainCamera();
+    REGoth::Engine::setupMainCamera();
 
     mThirdPersonCamera = mMainCamera->SO()->addComponent<REGoth::ThirdPersonCamera>();
   }

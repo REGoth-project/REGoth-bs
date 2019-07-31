@@ -11,8 +11,7 @@ namespace REGoth
    * Parses the given command line arguments in `argv` and returns a newly constructed `EngineConfig`
    * of subtype `T`.
    *
-   * The returned `EngineConfig` can be used to be `std::move`d into an engine (`AbstractEngine`)
-   * while construction.
+   * The returned `EngineConfig` can be used to be `std::move`d into an `Engine` while construction.
    *
    * @param argc Main's `argc` (argument count).
    * @param argv Main's `argv` (arguments vector).
@@ -26,5 +25,5 @@ namespace REGoth
   std::unique_ptr<const T> parseArguments(int argc, char** argv);
 }  // namespace REGoth
 
-// Template implementations.
+// Template implementation.
 #include <core/ParseArguments.tpp>

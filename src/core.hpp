@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <core/AbstractEngine.hpp>
+#include <core/EmptyEngine.hpp>
 #include <core/Engine.hpp>
 #include <core/EngineConfig.hpp>
 #include <core/ParseArguments.hpp>

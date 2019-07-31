@@ -2,7 +2,7 @@
 
 namespace REGoth
 {
-  class AbstractEngine;
+  class Engine;
 
   /**
    * Bootstrap and run the given engine.
@@ -15,5 +15,5 @@ namespace REGoth
    * @ingroup core
    * @headerfile core/RunEngine.hpp
    */
-  int runEngine(AbstractEngine& engine);
+  int runEngine(Engine& engine);
 }  // namespace REGoth

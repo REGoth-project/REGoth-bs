@@ -5,12 +5,12 @@
 
 #include <FileSystem/BsPath.h>
 
-#include <core/AbstractEngine.hpp>
+#include <core/Engine.hpp>
 #include <log/logging.hpp>
 
 using namespace REGoth;
 
-int REGoth::runEngine(AbstractEngine& engine)
+int REGoth::runEngine(Engine& engine)
 {
   engine.initializeBsf();
 

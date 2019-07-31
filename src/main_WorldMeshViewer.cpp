@@ -7,14 +7,14 @@
 #include <core.hpp>
 #include <world/internals/ConstructFromZEN.hpp>
 
-class REGothWorldMeshViewer : public REGoth::Engine
+class REGothWorldMeshViewer : public REGoth::EmptyEngine
 {
 public:
-  using REGoth::Engine::Engine;
+  using REGoth::EmptyEngine::EmptyEngine;
 
   void setupMainCamera() override
   {
-    REGoth::AbstractEngine::setupMainCamera();
+    REGoth::Engine::setupMainCamera();
 
     mFPSCamera = mMainCamera->SO()->addComponent<bs::FPSCamera>();
   }

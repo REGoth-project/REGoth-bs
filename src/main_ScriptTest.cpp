@@ -11,14 +11,14 @@
 #include <original-content/VirtualFileSystem.hpp>
 #include <scripting/ScriptSymbolStorage.hpp>
 
-class REGothScriptTester : public REGoth::Engine
+class REGothScriptTester : public REGoth::EmptyEngine
 {
 public:
-  using REGoth::Engine::Engine;
+  using REGoth::EmptyEngine::EmptyEngine;
 
   void setupMainCamera() override
   {
-    REGoth::AbstractEngine::setupMainCamera();
+    REGoth::Engine::setupMainCamera();
   }
 
   void setupScene() override
