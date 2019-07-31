@@ -81,11 +81,6 @@ namespace REGoth
     return mItemCountsByInstance;
   }
 
-  HInventory Inventory::thisHandle() const
-  {
-    return bs::static_object_cast<Inventory>(getHandle());
-  }
-
   void Inventory::throwIfNotUpperCase(const bs::String& instance) const
   {
     bs::String upper = instance;

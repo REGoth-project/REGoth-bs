@@ -46,23 +46,23 @@ namespace REGoth
     bs::UINT32 itemCount(const bs::String& instance) const;
 
     /**
-     * Creates an item of the given instance and adds it to the inventory. If there are
-     * items of this instance already in the inventory, their count is increased.
+     * Creates items of the given instance and adds them to the inventory. Multiple items
+     * can be added at once by modifying the `count` parameter.
      *
      * @param  instance  UPPERCASE Script instance name of the item to create.
-     * @param  count     How many instances of the item to add to the inventory.
+     * @param  count     (Optional) How many instances of the item to add to the inventory.
      */
     void giveItem(const bs::String& instance, bs::UINT32 count = 1);
 
     /**
-     * Removes an item of the given instance from the inventory. If there are multiple
-     * items of this instance in the inventory, their count is decreased.
+     * Removes items of the given instance from the inventory. Multiple items can be removed
+     * at once by modifying the `count` parameter.
      *
      * Throws if no such item exists, so you should check that first.
      * Throws if not enough items exist.
      *
      * @param  instance  UPPERCASE Script instance name of the item to remove.
-     * @param  count     How many instances of the item to remove from the inventory.
+     * @param  count     (Optional) How many instances of the item to remove from the inventory.
      */
     void removeItem(const bs::String& instance, bs::UINT32 count = 1);
 
@@ -80,7 +80,6 @@ namespace REGoth
 
   private:
 
-    HInventory thisHandle() const;
     void throwIfNotUpperCase(const bs::String& instance) const;
 
     /**
