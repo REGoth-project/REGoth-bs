@@ -77,7 +77,7 @@ namespace REGoth
     bool hasFoundGameFiles();
 
     /**
-     * Initializes `bsf` and opens the window
+     * Initializes `bsf` and opens the window.
      */
     void initializeBsf();
 
@@ -102,7 +102,7 @@ namespace REGoth
     virtual void setupMainCamera();
 
     /**
-     * Load scenes and other objects and add them to the scene
+     * Load scenes and other objects and add them to the scene.
      */
     virtual void setupScene() = 0;
 
