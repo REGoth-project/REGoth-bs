@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <core/EmptyEngine.hpp>
+#include <core/EmptyGame.hpp>
 #include <core/Engine.hpp>
 #include <core/EngineConfig.hpp>
 #include <core/ParseArguments.hpp>

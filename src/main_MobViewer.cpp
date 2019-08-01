@@ -11,10 +11,10 @@
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothMobViewer : public REGoth::EmptyEngine
+class REGothMobViewer : public REGoth::EmptyGame
 {
 public:
-  using REGoth::EmptyEngine::EmptyEngine;
+  using REGoth::EmptyGame::EmptyGame;
 
   void setupMainCamera() override
   {

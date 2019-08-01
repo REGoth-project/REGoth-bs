@@ -22,10 +22,10 @@
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothWorldCacheTest : public REGoth::EmptyEngine
+class REGothWorldCacheTest : public REGoth::EmptyGame
 {
 public:
-  using REGoth::EmptyEngine::EmptyEngine;
+  using REGoth::EmptyGame::EmptyGame;
 
   void setupMainCamera() override
   {

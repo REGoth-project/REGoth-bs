@@ -30,10 +30,10 @@
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothCharacterViewer : public REGoth::EmptyEngine
+class REGothCharacterViewer : public REGoth::EmptyGame
 {
 public:
-  using REGoth::EmptyEngine::EmptyEngine;
+  using REGoth::EmptyGame::EmptyGame;
 
   void setupMainCamera() override
   {

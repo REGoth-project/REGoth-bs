@@ -1,4 +1,4 @@
-#include <core/EmptyEngine.hpp>
+#include <core/EmptyGame.hpp>
 
 #include <memory>
 
@@ -6,13 +6,13 @@
 
 using namespace REGoth;
 
-EmptyEngine::EmptyEngine(std::unique_ptr<const EngineConfig>&& config)
+EmptyGame::EmptyGame(std::unique_ptr<const EngineConfig>&& config)
     : mConfig{std::move(config)}
 {
   // pass
 }
 
-const EngineConfig* EmptyEngine::config() const
+const EngineConfig* EmptyGame::config() const
 {
   return mConfig.get();
 }

@@ -20,7 +20,7 @@ namespace REGoth
    *
    * Configuration objects are required to construct an engine.  An `EngineConfig` is the default
    * configuration object, which is used in the definition of `Engine::config()`, and which
-   * is also the configuration object for the default engine implementation `EmptyEngine`.
+   * is also the configuration object for the default engine implementation `EmptyGame`.
    *
    * If a specialised `EngineConfig` is needed, `Engine` must be extended and
    * `Engine::config()` overridden accordingly.

@@ -18,9 +18,9 @@ namespace REGoth
    * `Engine::config()` overridden to avoid confusion between different configuration members.
    *
    * @ingroup core
-   * @headerfile core/EmptyEngine.hpp
+   * @headerfile core/EmptyGame.hpp
    */
-  class EmptyEngine : public Engine
+  class EmptyGame : public Engine
   {
   public:
     /**
@@ -28,7 +28,7 @@ namespace REGoth
      *
      * @param config `Engine` configuration.
      */
-    EmptyEngine(std::unique_ptr<const EngineConfig>&& config);
+    EmptyGame(std::unique_ptr<const EngineConfig>&& config);
 
     /**
      * Gets the engine's configuration.

@@ -7,10 +7,10 @@
 #include <core.hpp>
 #include <world/internals/ConstructFromZEN.hpp>
 
-class REGothWorldMeshViewer : public REGoth::EmptyEngine
+class REGothWorldMeshViewer : public REGoth::EmptyGame
 {
 public:
-  using REGoth::EmptyEngine::EmptyEngine;
+  using REGoth::EmptyGame::EmptyGame;
 
   void setupMainCamera() override
   {

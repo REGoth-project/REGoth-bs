@@ -13,10 +13,10 @@
 #include <exception/Throw.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothWaynetTester : public REGoth::EmptyEngine
+class REGothWaynetTester : public REGoth::EmptyGame
 {
 public:
-  using REGoth::EmptyEngine::EmptyEngine;
+  using REGoth::EmptyGame::EmptyGame;
 
   void setupMainCamera() override
   {

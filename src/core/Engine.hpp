@@ -21,7 +21,7 @@ namespace REGoth
    * the engine, setup the input, the scene, and others.
    *
    * To handle more use cases, and if a custom `EngineConfig` is desired `Engine` can be extended
-   * (otherwise, see `EmptyEngine`).  The base implementations provided here will not load
+   * (otherwise, see `EmptyGame`).  The base implementations provided here will not load
    * any world and start on an empty scene, but with most of the utilities set up to load original
    * content and game mechanics.
    *
@@ -36,7 +36,7 @@ namespace REGoth
    *
    * - `setupScene()`: Set up the scene this engine should handle.
    * - `config()`: Return the engine's configuration. To use a default implementation, see
-   *   `EmptyEngine`.
+   *   `EmptyGame`.
    *
    * To actually run an instance of the engine, see `runEngine()`.
    *
@@ -130,7 +130,7 @@ namespace REGoth
      * Grants access to the engine's configuration.
      *
      * If you do not need a custom engine configuration, and `EngineConfig` is enough, consider
-     * extending `EmptyEngine` instead of `Engine`, which features a default implementation using
+     * extending `EmptyGame` instead of `Engine`, which features a default implementation using
      * `EngineConfig`.
      *
      * @return The engine configuration data structure.

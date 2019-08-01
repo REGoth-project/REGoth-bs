@@ -62,8 +62,8 @@ add_library(REGothEngine STATIC
   components/Sky.hpp
   components/Sky.cpp
   core.hpp
-  core/EmptyEngine.hpp
-  core/EmptyEngine.cpp
+  core/EmptyGame.hpp
+  core/EmptyGame.cpp
   core/Engine.hpp
   core/Engine.cpp
   core/EngineConfig.hpp

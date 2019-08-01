@@ -20,10 +20,10 @@
 #include <gui/skin_gothic.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 
-class REGothFontViewer : public REGoth::EmptyEngine
+class REGothFontViewer : public REGoth::EmptyGame
 {
 public:
-  using REGoth::EmptyEngine::EmptyEngine;
+  using REGoth::EmptyGame::EmptyGame;
 
   void setupMainCamera() override
   {
