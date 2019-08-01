@@ -51,8 +51,7 @@ protected:
 
 int main(int argc, char** argv)
 {
-  std::unique_ptr<const REGoth::EngineConfig> config =
-      REGoth::parseArguments<REGoth::EngineConfig>(argc, argv);
+  auto config = REGoth::parseArguments<REGoth::EngineConfig>(argc, argv);
   REGothScriptTester engine{std::move(config)};
 
   return REGoth::runEngine(engine);

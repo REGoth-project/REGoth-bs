@@ -140,8 +140,7 @@ private:
 
 int main(int argc, char** argv)
 {
-  std::unique_ptr<const WorldViewerConfig> config =
-      REGoth::parseArguments<WorldViewerConfig>(argc, argv);
+  auto config = REGoth::parseArguments<WorldViewerConfig>(argc, argv);
   REGothWorldViewer engine{std::move(config)};
 
   return REGoth::runEngine(engine);
