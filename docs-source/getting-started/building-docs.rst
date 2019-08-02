@@ -1,6 +1,11 @@
 Building the documentation
 ==========================
 
+.. note::
+
+  You can skip this section if you just want to get REGoth running.  This guide is only relevant
+  if you want to contribute to this documentation.
+
 This documentation is written as reStructuredText and built using
 `Sphinx <http://www.sphinx-doc.org>`_.
 See `here <http://docutils.sourceforge.net/docs/user/rst/quickref.html>`_
