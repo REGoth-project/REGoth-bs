@@ -9,8 +9,8 @@ Building the documentation
 This documentation is written as reStructuredText and built using
 `Sphinx <http://www.sphinx-doc.org>`_.
 See `here <http://docutils.sourceforge.net/docs/user/rst/quickref.html>`_
-for a quick reference of the ``rst`` syntax.  You will also need to have Doxygen installed (see
-:ref:`building_regoth`, Development dependencies).
+for a quick reference of the ``rst`` syntax.  You will also need to have Doxygen and PlantUML
+installed (see :ref:`building_regoth`, Development dependencies).
 
 
 pip packages

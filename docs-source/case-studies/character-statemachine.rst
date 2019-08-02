@@ -167,7 +167,7 @@ be entered:
    :caption: Statechart for running forward.
    :align: center
 
-   !include style.iuml
+   !include ../style.iuml
 
    state "Play Transition:\nIdle to Run" as transitionToRun
    state "Play Transition:\nRun to Idle" as transitionToIdle
@@ -199,7 +199,7 @@ shall be entered:
    :caption: Statechart for jump backwards.
    :align: center
 
-   !include style.iuml
+   !include ../style.iuml
 
    state "Check Keys" as CheckKeys
    state "Play Animation" as PlayAnimation
@@ -227,7 +227,7 @@ shall be entered:
    :caption: Statechart for *Strafe Left*.
    :align: center
 
-   !include style.iuml
+   !include ../style.iuml
 
    state "Strafe Left" as StrafeLeft
    StrafeLeft: Loop Animation: ""STRAFEL""
@@ -252,7 +252,7 @@ shall be entered:
    :caption: Statechart for *Strafe Right*.
    :align: center
 
-   !include style.iuml
+   !include ../style.iuml
 
    state "Strafe Right" as StrafeRight
    StrafeRight: Loop Animation: ""STRAFER""

@@ -42,7 +42,7 @@ following packages:
   libglu1-mesa-dev freeglut3-dev libphysfs-dev libsquish-dev
 
   # Development dependencies (optional).
-  $ sudo apt install doxygen
+  $ sudo apt install doxygen plantuml
 
 For **Fedora**, install the following packages:
 
@@ -56,7 +56,7 @@ For **Fedora**, install the following packages:
   mesa-libGLU freeglut-devel physfs-devel libsquish-devel libXrandr-devel
 
   # Development dependencies (optional).
-  $ sudo dnf install doxygen
+  $ sudo dnf install doxygen plantuml
 
 For **Arch Linux**, **Manjaro**, or derivatives, install the following packages:
 
@@ -69,7 +69,7 @@ For **Arch Linux**, **Manjaro**, or derivatives, install the following packages:
   $ sudo pacman -S physfs libx11 libxcursor libxi icu mesa freeglut libxrandr
 
   # Development dependencies (optional).
-  $ sudo pacman -S doxygen
+  $ sudo pacman -S doxygen plantuml
 
 .. note:: If a required package is missing, or you managed to compile REGoth on a distribution not
   explicitly listed above, we would *greatly* appreciate a pull request or GitHub issue with this
