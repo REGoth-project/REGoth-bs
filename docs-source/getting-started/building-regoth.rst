@@ -98,7 +98,7 @@ Now we can build the project (if you want to use less cores than available, repl
 with the desired number.  You might want to do this if you have little RAM, expect up to 2GB of RAM
 usage per core):
 
-.. code:: sh
+.. code-block:: sh
 
   # Compile REGoth.
   $ cmake --build . --parallel $(nproc)
@@ -126,7 +126,7 @@ To build the project for Windows, you need to be aware of some common pitfalls:
 
 These are the commands:
 
-.. code:: sh
+.. code-block:: sh
 
   > md build
   > cd build
