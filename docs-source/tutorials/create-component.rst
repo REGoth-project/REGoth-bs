@@ -1,8 +1,8 @@
-Creating a new Component
+Creating a new component
 ========================
 
-Multiple things need to be done when creating a new component. This file describes the canonical way
-and templates to use.
+Multiple things need to be done when creating a new component.  This file describes the canonical
+way and templates to use.
 
 For the sake of making *Replace All*-operations easier, all examples will use a component named
 `NewThing`.
@@ -20,7 +20,7 @@ Each component needs a
 
 Header File
 -----------
-   
+
 Use the following template for ``NewFile.hpp``:
 
 .. code-block:: cpp
@@ -28,7 +28,7 @@ Use the following template for ``NewFile.hpp``:
    #pragma once
    #include <Scene/BsComponent.h>
    #include <RTTI/RTTIUtil.hpp>
- 
+
    namespace REGoth
    {
      /**
@@ -39,12 +39,12 @@ Use the following template for ``NewFile.hpp``:
      public:
        NewThing(const bs::HSceneObject& parent);
        virtual ~NewThing();
- 
+
      private:
- 
+
      public:
        REGOTH_DECLARE_RTTI(NewThing)
- 
+
      protected:
        NewThing() = default;  // For RTTI
      };
@@ -60,7 +60,7 @@ Use the following template for ``NewThing.cpp``:
 
    #include "NewThing.hpp"
    #include <RTTI/RTTI_NewThing.hpp>
- 
+
    namespace REGoth
    {
      NewThing::NewThing(const bs::HSceneObject& parent)
@@ -68,15 +68,14 @@ Use the following template for ``NewThing.cpp``:
      {
        setName("NewThing");
      }
- 
+
      NewThing::~NewThing()
      {
      }
- 
+
      REGOTH_DEFINE_RTTI(NewThing)
 
    }  // namespace REGoth
-
 
 
 RTTI File
@@ -86,10 +85,9 @@ Use the following template for ``RTTI_NewThing.hpp``:
 
 .. code-block:: cpp
 
-   #pragma once
    #include "RTTIUtil.hpp"
    #include <components/NewThing.hpp>
-   
+
    namespace REGoth
    {
      class RTTI_NewThing
@@ -98,16 +96,15 @@ Use the following template for ``RTTI_NewThing.hpp``:
        BS_BEGIN_RTTI_MEMBERS
        // TODO: Fill RTTI Members
        BS_END_RTTI_MEMBERS
- 
+
      public:
        RTTI_NewThing()
        {
        }
- 
+
        REGOTH_IMPLEMENT_RTTI_CLASS_FOR_COMPONENT(NewThing)
      };
    }  // namespace REGoth
-
 
 
 RTTI Type ID
@@ -127,6 +124,7 @@ As a last step, add the RTTI-Types ID to ``src/RTTI/RTTI_TypeIDs.hpp``:
      TID_REGOTH_GameClock                    = 600037,
      TID_REGOTH_NewThing                     = 600038,
    };
+
 
 CMake
 -----

@@ -5,7 +5,7 @@
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/11406580/58186975-2cdbb880-7cb6-11e9-9a6d-b38326bc3edb.png" />
-  <p align="center"><em>OpenSource-Reimplementation of the zEngine, used by the game "Gothic" and "Gothic II"</em></p>
+  <p align="center"><em>OpenSource-Reimplementation of the zEngine, used by the games "Gothic" and "Gothic II"</em></p>
 </p>
 
 ---
@@ -16,37 +16,39 @@
 </p>
 
 
-
 # Developer Chat-Room
 
-We have an active Chatroom on [Gitter](https://gitter.im/REGoth/Lobby)! If you want to reach us, this is the best way!
+We have an active Chatroom on [Gitter](https://gitter.im/REGoth/Lobby)! If you want to reach us,
+this is the best way!
+
 
 # Documentation
 
-https://regoth-project.github.io/REGoth-bs/index.html
+The [official documentation](https://regoth-project.github.io/REGoth-bs/index.html) covers all
+questions. There you will find everything to get started **building** or **running** REGoth on
+Linux or Windows, the **internal documentation** of the source code, **insights** from the original
+games, and more.
+
 
 # Download
 
-While there has not been an official release yet, you can download nightly builds for Windows.
-
-<p align="center">
-  <b>
-    <a href="https://dev.azure.com/ataulien/REGoth/_build?definitionId=1&view=buildsHistory">Latest Nightly Builds</a>
-  </b>
-</p>
-
-Select on the build you are interested in and click on the blue "Artifacts" Button in the top right corner to download the build.
+While there has not been an official release yet, you can download
+[nightly builds for Windows](https://dev.azure.com/ataulien/REGoth/_build?definitionId=1&view=buildsHistory).
+Select the build you are interested in and click on the blue "Artifacts" Button in the top right
+corner to download the build.
 
 See the documentation on how to run REGoth:
-https://regoth-project.github.io/REGoth-bs/content/running.html
+https://regoth-project.github.io/REGoth-bs/getting-started/running.html
+
 
 # Building from Source
 
-See https://regoth-project.github.io/REGoth-bs/content/building.html
+See https://regoth-project.github.io/REGoth-bs/getting-started/building-regoth.html
+
 
 # Running REGoth
 
-See https://regoth-project.github.io/REGoth-bs/content/running.html
+See https://regoth-project.github.io/REGoth-bs/getting-started/running.html
 
 
 # Special Thanks
