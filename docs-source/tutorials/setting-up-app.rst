@@ -9,11 +9,6 @@ All of those test applications reside directly inside the ``src`` directory, wit
 ``main_<Subject>.cpp``.  The existing test applications shipped with REGoth are documented
 :ref:`here <execs>`.
 
-.. note::
-
-  For an overview on the existing executables and what they do exactly, see
-  :ref:`here <execs>`.
-
 
 .. _setting_up_app_hello_regoth:
 
