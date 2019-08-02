@@ -88,7 +88,7 @@ namespace REGoth
      * just want to know whether there is at least one instance of an item in
      * this inventory, it's enough to check whether such a key exists.
      */
-    bs::Map<bs::String, bs::UINT32> mItemCountsByInstance;
+    bs::Map<bs::String, bs::UINT32> mItemCountByInstance;
 
   public:
     REGOTH_DECLARE_RTTI(Inventory)
