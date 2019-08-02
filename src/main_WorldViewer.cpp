@@ -141,7 +141,7 @@ public:
     inventory->giveItem("ITARSCROLLSHRINK");
     inventory->giveItem("ITARSCROLLSHRINK");
 
-    gGameplayUI()->inventory()->setViewedInventory(inventory);
+    gGameplayUI()->inventoryUI()->setViewedInventory(inventory);
   }
 
 protected:

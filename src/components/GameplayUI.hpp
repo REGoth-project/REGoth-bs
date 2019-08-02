@@ -99,9 +99,9 @@ namespace REGoth
       return mFocusText;
     }
 
-    HUIInventory inventory() const
+    HUIInventory inventoryUI() const
     {
-      return mInventory;
+      return mInventoryUI;
     }
 
   protected:
@@ -110,7 +110,7 @@ namespace REGoth
     HUIDialogueChoice mChoices;
     HUISubtitleBox mSubtitleBox;
     HUIFocusText mFocusText;
-    HUIInventory mInventory;
+    HUIInventory mInventoryUI;
 
   private:
   public:

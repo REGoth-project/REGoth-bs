@@ -43,9 +43,9 @@ namespace REGoth
       mFocusText = addChildElement<UIFocusText>("UIFocusText");
     }
 
-    if (!mInventory)
+    if (!mInventoryUI)
     {
-      mInventory = addChildElement<UIInventory>("UIInventory");
+      mInventoryUI = addChildElement<UIInventory>("UIInventory");
     }
   }
 
