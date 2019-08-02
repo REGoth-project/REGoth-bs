@@ -12,15 +12,19 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
+import datetime
+import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
+docs_source = '@CMAKE_CURRENT_SOURCE_DIR@'
+
 project = 'REGoth'
-copyright = '2019, The REGoth-Team'
+copyright = '{year}, The REGoth-Team'.format(year=datetime.datetime.now().year)
 author = 'The REGoth-Team'
+
 
 # The short X.Y version
 version = ''
@@ -73,16 +77,24 @@ pygments_style = None
 html_theme = '@SPHINX_THEME@'
 html_theme_path = ['@SPHINX_THEME_DIR@']
 
+html_logo = os.path.join(docs_source, '_static/img/regoth_logo_small.png')
+
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    'logo_only': True,
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = [os.path.join(docs_source, '_static')]
+
+html_css_files = [
+    'css/custom.css'
+]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.

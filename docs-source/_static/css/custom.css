@@ -1,0 +1,145 @@
+/**
+ * This file contains theme overrides for the RTD Sphinx theme.
+ */
+
+/**
+ * Override code colour from red to black to make it more subtle.
+ */
+code.literal {
+  color: #404040 !important;
+}
+
+/**
+ * Make link colours blue (also for code).
+ */
+a[href] > code.literal {
+  color: #2980B9 !important;
+}
+
+/**
+ * Override hover link colour.
+ */
+a[href]:hover > code.literal {
+ color: #3091d1 !important;
+}
+
+/**
+ * Override visited link colour.
+ */
+a[href]:visited > code.literal{
+ color: #9B59B6 !important;
+}
+
+/**
+ * Make top nav-bar red (only for mobile).
+ */
+.wy-nav-top {
+  background: #b12f16 !important;
+}
+
+/**
+ * Make search background black (until head background image loads).
+ */
+.wy-side-nav-search {
+  background: #1e1e1e !important; /* Override to prevent blue flickering */
+  background-image: url('../img/header_background.png') !important;
+}
+
+/**
+ * Container definitons.
+ */
+.wy-side-nav-search > a {
+  position: relative;
+  padding: 0;
+}
+
+/**
+ * Disable default background on hover.
+ */
+.wy-side-nav-search > a:hover,
+.wy-side-nav-search .wy-dropdown > a:hover {
+  background: none !important;
+}
+
+/**
+ * Container definitions to fit header image.
+ */
+.wy-side-nav-search > a > img,
+.wy-side-nav-search .wy-dropdown > a > img {
+  position: relative;
+  box-sizing: border-box !important;
+  width: 223px !important;
+  height: 81px !important;
+  padding-top: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 0 !important;
+}
+
+/**
+ * Define a pseudo element over the logo with the hover image, with opacity=0 and also define
+ * CSS animations to ease-out.
+ */
+.wy-side-nav-search > a::before,
+.wy-side-nav-search .wy-dropdown a::before {
+  background: url('../img/regoth_logo_small_hover.png') left top no-repeat;
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity .2s ease-out;
+  -moz-transition: opacity .2s ease-out;
+  -webkit-transition: opacity .2s ease-out;
+  -o-transition: opacity .2s ease-out;
+}
+
+/**
+ * Overwrite opacity for logo hover image as target for animation.
+ */
+.wy-side-nav-search > a:hover::before,
+.wy-side-nav-search .wy-dropdown a:hover::before {
+  opacity: 1;
+}
+
+/**
+ * Make side-nav darker.
+ */
+.wy-nav-side {
+  background: #1e1e1e !important;
+}
+
+/**
+ * Out of content right side also dark only on large screens.
+ */
+@media screen and (min-width: 1100px) {
+  .wy-nav-content-wrap{
+    background: #1e1e1e !important;
+  }
+}
+
+/**
+ * Override selected menu item to red background instead of blue.
+ */
+.wy-menu-vertical a:active {
+  background: #b12f16 !important;
+}
+
+/**
+ * Make section headings in the main menu red instead of blue.
+ */
+.wy-menu-vertical header,
+.wy-menu-vertical p.caption {
+  color: #ad2309 !important;
+}
+
+/**
+ * Preload images to prevent flickering.
+ */
+body::after {
+  content: url('../img/regoth_logo_small_hover.png');
+}
