@@ -26,16 +26,6 @@ namespace REGoth
 
   void UIInventory::setViewedInventory(HInventory inventory)
   {
-    if (mViewedInventory)
-    {
-      // FIXME: There might be other code registering a callback here, but for some reason
-      //        we can only clear the whole thing! This should be handled differently, but
-      //        I don't know how yet.
-      mViewedInventory->OnItemChanged.clear();
-
-      REGOTH_LOG(Warning, Uncategorized, "[UIInventory] Cleared Inventory OnItemChanged callback!");
-    }
-
     mViewedInventory = inventory;
 
     if (mRegisteredOnItemChangedEvent)
