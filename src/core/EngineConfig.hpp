@@ -4,14 +4,17 @@
 
 #include <cxxopts.hpp>
 
-/**
- * Allows using the `bs::Path` data type together with `cxxopts`.
- *
- * @param str Input stringstream.
- * @param path Path to write data to.
- * @return The original stringstream.
- */
-std::stringstream& operator>>(std::stringstream& str, bs::Path& path);
+namespace bs
+{
+  /**
+   * Allows using the `bs::Path` data type together with `cxxopts`.
+   *
+   * @param str Input stringstream.
+   * @param path Path to write data to.
+   * @return The original stringstream.
+   */
+  std::stringstream& operator>>(std::stringstream& str, bs::Path& path);
+}  // namespace bs
 
 namespace REGoth
 {

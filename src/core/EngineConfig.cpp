@@ -11,7 +11,7 @@
 
 using namespace REGoth;
 
-std::stringstream& operator>>(std::stringstream& str, bs::Path& path)
+std::stringstream& bs::operator>>(std::stringstream& str, bs::Path& path)
 {
   path.assign(bs::Path{str.str().c_str()});
   return str;
