@@ -6,29 +6,54 @@
 Welcome to REGoth's documentation!
 ==================================
 
+.. raw:: html
+
+  <p align="center">
+    <img src="./_static/img/regoth_logo.png" />
+    <p align="center"><em>OpenSource-Reimplementation of the zEngine, used by the games "Gothic" and "Gothic II"</em></p>
+  </p>
+
+
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+  :maxdepth: 1
+  :caption: General
 
-   content/building
-   content/running
-   content/setting-up-app
-   content/world
-   content/waynet
-   content/characters
-   content/create-component
-   content/case-study-object-kinds
-   content/case-study-scene-structure
-   content/case-study-character-statemachine
-   content/case-study-daedalus-vm
-   content/extending-docs
+  general/about
 
 
+.. toctree::
+  :maxdepth: 1
+  :caption: Getting Started
 
-Indices and tables
-==================
+  getting-started/building-regoth
+  getting-started/building-docs
+  getting-started/running
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-* -. doxygenindex::
+
+.. toctree::
+  :maxdepth: 1
+  :caption: Tutorials
+
+  tutorials/setting-up-app
+  tutorials/world
+  tutorials/waynet
+  tutorials/characters
+  tutorials/create-component
+
+
+.. toctree::
+  :maxdepth: 1
+  :caption: Case Studies
+
+  case-studies/object-kinds
+  case-studies/scene-structure
+  case-studies/character-statemachine
+  case-studies/daedalus-vm
+
+
+.. toctree::
+  :maxdepth: 1
+  :caption: Code Reference
+
+  code-ref/core
+  code-ref/execs

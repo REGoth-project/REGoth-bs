@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Building REGoth &mdash; REGoth  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Building the documentation" href="building-docs.html" />
+    <link rel="prev" title="About" href="../general/about.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/regoth_logo_small.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../general/about.html">About</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building REGoth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#linux">Linux</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#system-packages">System packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building">Building</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#windows">Windows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-visual-studio-code">Using Visual Studio Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-visual-studio">Using Visual Studio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-ninja">Using Ninja</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="building-docs.html">Building the documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running REGoth</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/setting-up-app.html">Setting up a test application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/world.html">World</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/waynet.html">Waynet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/characters.html">Characters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/create-component.html">Creating a new component</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Case Studies</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/object-kinds.html">Kinds of objects in Gothic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/scene-structure.html">Scene structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/character-statemachine.html">Character state machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../case-studies/daedalus-vm.html">Daedalus VM</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Code Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code-ref/core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-ref/execs.html">Executables</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">REGoth</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Building REGoth</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/getting-started/building-regoth.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-regoth">
+<span id="id1"></span><h1>Building REGoth<a class="headerlink" href="#building-regoth" title="Permalink to this headline">¶</a></h1>
+<p>This page documents how to build REGoth on Linux or Windows.  The project is built via CMake.  For
+all platforms, CMake version 3.13 is required.</p>
+<p>REGoth uses <a class="reference external" href="https://github.com/microsoft/vcpkg">Vcpkg</a> internally.  To make building as seamless
+as possible, the build script will take care of getting a copy of Vcpkg, bootstrap it and install
+the required packages.  All this happens inside the <code class="docutils literal notranslate"><span class="pre">build</span></code> directory so it doesn’t clutter your
+system with stuff you don’t want.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to use your own copy of Vcpkg, just pass the toolchain file as usual.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you don’t want to have anything to do with Vcpkg, you can also choose to supply the required
+packages yourself.  To do this, you need to pass <code class="docutils literal notranslate"><span class="pre">-DSKIP_AUTOMATE_VCPKG=ON</span></code> to CMake.  Now
+you’re completely on your own to gather the required dependencies for REGoth.</p>
+</div>
+<div class="section" id="linux">
+<h2>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="system-packages">
+<h3>System packages<a class="headerlink" href="#system-packages" title="Permalink to this headline">¶</a></h3>
+<p>For <strong>Debian</strong> (Buster or newer), <strong>Ubuntu</strong> (bionic or newer), or derivatives, install the
+following packages:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Required tooling packages.</span>
+$ sudo apt install git cmake make gcc
+
+<span class="c1"># Required dependencies.</span>
+$ sudo apt install libx11-dev libxcursor-dev libxi-dev libicu-dev libgl1-mesa-dev <span class="se">\</span>
+libglu1-mesa-dev freeglut3-dev libphysfs-dev libsquish-dev
+
+<span class="c1"># Development dependencies (optional).</span>
+$ sudo apt install doxygen plantuml
+</pre></div>
+</div>
+<p>For <strong>Fedora</strong>, install the following packages:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Required tooling packages.</span>
+$ sudo dnf install git cmake make gcc
+
+<span class="c1"># Required dependencies.</span>
+$ sudo dnf install libX11-devel libXcursor-devel libXi-devel libicu-devel mesa-libGL-devel <span class="se">\</span>
+mesa-libGLU freeglut-devel physfs-devel libsquish-devel libXrandr-devel
+
+<span class="c1"># Development dependencies (optional).</span>
+$ sudo dnf install doxygen plantuml
+</pre></div>
+</div>
+<p>For <strong>Arch Linux</strong>, <strong>Manjaro</strong>, or derivatives, install the following packages:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Required tooling packages.</span>
+$ sudo pacman -S git cmake make gcc
+
+<span class="c1"># Required dependencies.</span>
+$ sudo pacman -S physfs libx11 libxcursor libxi icu mesa freeglut libxrandr
+
+<span class="c1"># Development dependencies (optional).</span>
+$ sudo pacman -S doxygen plantuml
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a required package is missing, or you managed to compile REGoth on a distribution not
+explicitly listed above, we would <em>greatly</em> appreciate a pull request or GitHub issue with this
+information.</p>
+</div>
+</div>
+<div class="section" id="building">
+<h3>Building<a class="headerlink" href="#building" title="Permalink to this headline">¶</a></h3>
+<p>First we need to fetch the source code and prepare our build environment:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, clone the Git repository together with its submodules.</span>
+$ git clone --recursive https://github.com/REGoth-project/REGoth-bs.git
+$ <span class="nb">cd</span> REGoth-bs
+
+<span class="c1"># Prepare the build directory.</span>
+$ mkdir build
+$ <span class="nb">cd</span> build
+
+<span class="c1"># Run CMake.</span>
+$ cmake -DCMAKE_BUILD_TYPE<span class="o">=</span>RelWithDebInfo ..
+</pre></div>
+</div>
+<p>Now we can build the project (if you want to use less cores than available, replace <code class="docutils literal notranslate"><span class="pre">$(nproc)</span></code>
+with the desired number.  You might want to do this if you have little RAM, expect up to 2GB of RAM
+usage per core):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compile REGoth.</span>
+$ cmake --build . --parallel <span class="k">$(</span>nproc<span class="k">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="using-visual-studio-code">
+<h3>Using Visual Studio Code<a class="headerlink" href="#using-visual-studio-code" title="Permalink to this headline">¶</a></h3>
+<p>This is the recommended way for developing on Windows.  Visual Studio Code works really well with
+the CMake files of REGoth.  Just make sure to install the official C/C++ and CMake extensions.</p>
+</div>
+<div class="section" id="using-visual-studio">
+<h3>Using Visual Studio<a class="headerlink" href="#using-visual-studio" title="Permalink to this headline">¶</a></h3>
+<p>To build the project for Windows, you need to be aware of some common pitfalls:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Always build x64, as bs::framework does not support x86. To do that, make sure to use the
+correct Visual-Studio-Generator.</p></li>
+<li><p>Similar to <code class="docutils literal notranslate"><span class="pre">make</span></code>, Visual Studio will not do parallel builds by default.</p></li>
+</ol>
+</div></blockquote>
+<p>These are the commands:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&gt; md build
+&gt; <span class="nb">cd</span> build
+&gt; cmake -G<span class="s2">&quot;Visual Studio 15 2017 Win64&quot;</span> ..
+&gt; cmake --build . --config RelWithDebInfo --parallel <span class="m">8</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-ninja">
+<h3>Using Ninja<a class="headerlink" href="#using-ninja" title="Permalink to this headline">¶</a></h3>
+<p>The Ninja build system performs faster than MsBuild since it is able to run more tasks in parallel:
+While MsBuild can only build different projects in parallel, Ninja acts as you would expect and is
+able to build multiple files in parallel, even if they are from within the same project.</p>
+<p>Unfortunately, using it on Windows is a little bit tricky.  From a
+<em>x64 Native Tools Command Prompt</em>, navigate to where you cloned REGoth and run:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&gt; md build
+&gt; <span class="nb">cd</span> build
+&gt; cmake -GNinja -DCMAKE_BUILD_TYPE<span class="o">=</span>RelWithDebInfo -DCMAKE_C_COMPILER<span class="o">=</span><span class="s2">&quot;cl.exe&quot;</span> -DCMAKE_CXX_COMPILER<span class="o">=</span><span class="s2">&quot;cl.exe&quot;</span> -DMSVC_TOOLSET_VERSION<span class="o">=</span><span class="m">140</span> ..
+&gt; ninja
+</pre></div>
+</div>
+<p>Note that Visual Studio Code seems to figure this out automatically and uses Ninja by default.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="building-docs.html" class="btn btn-neutral float-right" title="Building the documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../general/about.html" class="btn btn-neutral float-left" title="About" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, The REGoth-Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

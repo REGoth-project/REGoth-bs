@@ -33,9 +33,10 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Building from Source" href="content/building.html" /> 
+    <link rel="next" title="About" href="general/about.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -49,9 +50,12 @@
           
 
           
-            <a href="#" class="icon icon-home"> REGoth
+            <a href="#">
           
 
+          
+            
+            <img src="_static/regoth_logo_small.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -79,20 +83,35 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">General</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="content/building.html">Building from Source</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/running.html">Running REGoth</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/setting-up-app.html">Setting up a Test-Application</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/world.html">World</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/waynet.html">Waynet</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/characters.html">Characters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/create-component.html">Creating a new Component</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/case-study-object-kinds.html">Case-Study: Kinds of Objects in Gothic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/case-study-scene-structure.html">Case-Study: Scene Structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/case-study-character-statemachine.html">Case-Study: Character Statemachine</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/case-study-daedalus-vm.html">Case-Study: Daedalus VM</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/extending-docs.html">Extending the Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general/about.html">About</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started/building-regoth.html">Building REGoth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started/building-docs.html">Building the documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started/running.html">Running REGoth</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/setting-up-app.html">Setting up a test application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/world.html">World</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/waynet.html">Waynet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/characters.html">Characters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/create-component.html">Creating a new component</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Case Studies</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="case-studies/object-kinds.html">Kinds of objects in Gothic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-studies/scene-structure.html">Scene structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-studies/character-statemachine.html">Character state machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-studies/daedalus-vm.html">Daedalus VM</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Code Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="code-ref/core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-ref/execs.html">Executables</a></li>
 </ul>
 
             
@@ -159,97 +178,49 @@
             
   <div class="section" id="welcome-to-regoth-s-documentation">
 <h1>Welcome to REGoth’s documentation!<a class="headerlink" href="#welcome-to-regoth-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p align="center">
+  <img src="./_static/img/regoth_logo.png" />
+  <p align="center"><em>OpenSource-Reimplementation of the zEngine, used by the games "Gothic" and "Gothic II"</em></p>
+</p><div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">General</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="content/building.html">Building from Source</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/building.html#linux">Linux</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/building.html#windows-using-visual-studio-code">Windows using Visual Studio Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/building.html#windows-using-visual-studio">Windows using Visual Studio</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/building.html#windows-using-ninja">Windows using Ninja</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/building.html#dependencies-via-vcpkg">Dependencies via Vcpkg</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/building.html#building-the-documentation">Building the Documentation</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="content/running.html">Running REGoth</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/running.html#running-from-outside-of-a-gothic-installation">Running from outside of a Gothic installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/running.html#the-asset-cache">The Asset Cache</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="content/setting-up-app.html">Setting up a Test-Application</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/setting-up-app.html#hello-regoth">Hello REGoth!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/setting-up-app.html#specifying-a-custom-configuration">Specifying a Custom Configuration</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="content/world.html">World</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/world.html#loading-a-world">Loading a World</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/world.html#using-the-world">Using the world</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="content/waynet.html">Waynet</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/waynet.html#what-is-the-waynet">What is the Waynet?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/waynet.html#the-waynet-components">The Waynet-Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/waynet.html#how-pathfinding-works">How Pathfinding works</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="content/characters.html">Characters</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/characters.html#inserting-a-character">Inserting a Character</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/characters.html#inserting-the-hero">Inserting the Hero</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/characters.html#shrinking-and-un-shrinking">Shrinking and Un-Shrinking</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/characters.html#components-making-up-a-character">Components making up a Character</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="content/create-component.html">Creating a new Component</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/create-component.html#files-to-create">Files to create</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/create-component.html#header-file">Header File</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/create-component.html#source-file">Source File</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/create-component.html#rtti-file">RTTI File</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/create-component.html#rtti-type-id">RTTI Type ID</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/create-component.html#cmake">CMake</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="content/case-study-object-kinds.html">Case-Study: Kinds of Objects in Gothic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-object-kinds.html#vob">Vob</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-object-kinds.html#npc-non-player-character">NPC (Non-Player-Character)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-object-kinds.html#mob-interactive-objects">MOB (Interactive Objects)</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="content/case-study-scene-structure.html">Case-Study: Scene Structure</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-scene-structure.html#logic">Logic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-scene-structure.html#visuals">Visuals</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="content/case-study-character-statemachine.html">Case-Study: Character Statemachine</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-character-statemachine.html#buttons-and-ai">Buttons and AI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-character-statemachine.html#priorities">Priorities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-character-statemachine.html#states">States</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-character-statemachine.html#animation-naming">Animation naming</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-character-statemachine.html#standing-substate-description">Standing-Substate description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-character-statemachine.html#architecture">Architecture</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="content/case-study-daedalus-vm.html">Case-Study: Daedalus VM</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-daedalus-vm.html#daedalusvm-in-zenlib">DaedalusVM in ZenLib</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-daedalus-vm.html#design-decisions">Design decisions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/case-study-daedalus-vm.html#parts-of-a-daedalusvm">Parts of a DaedalusVM</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="content/extending-docs.html">Extending the Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/extending-docs.html#modifying-an-existing-chapter">Modifying an existing chapter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/extending-docs.html#adding-a-new-chapter">Adding a new chapter</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="general/about.html">About</a></li>
 </ul>
 </div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-<li><p>-. doxygenindex:</p></li>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started/building-regoth.html">Building REGoth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started/building-docs.html">Building the documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started/running.html">Running REGoth</a></li>
 </ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/setting-up-app.html">Setting up a test application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/world.html">World</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/waynet.html">Waynet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/characters.html">Characters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/create-component.html">Creating a new component</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Case Studies</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="case-studies/object-kinds.html">Kinds of objects in Gothic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-studies/scene-structure.html">Scene structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-studies/character-statemachine.html">Character state machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-studies/daedalus-vm.html">Daedalus VM</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Code Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="code-ref/core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-ref/execs.html">Executables</a></li>
+</ul>
+</div>
 </div>
 
 
@@ -260,7 +231,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="content/building.html" class="btn btn-neutral float-right" title="Building from Source" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="general/about.html" class="btn btn-neutral float-right" title="About" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
