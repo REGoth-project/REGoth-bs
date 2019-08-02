@@ -131,6 +131,11 @@ namespace REGoth
   {
     auto it = mItemsByInstance.find(instance);
 
+    if (count == 0)
+    {
+      REGOTH_THROW(InvalidParametersException, "Count cannot be 0");
+    }
+
     if (it == mItemsByInstance.end())
     {
       auto& item = mItemsByInstance[instance];

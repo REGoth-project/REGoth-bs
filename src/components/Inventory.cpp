@@ -39,6 +39,11 @@ namespace REGoth
     REGOTH_LOG(Info, Uncategorized, "[Inventory] Add {0}x item {1} to Inventory of {2}", count,
                instance, SO()->getName());
 
+    if (count == 0)
+    {
+      REGOTH_THROW(InvalidParametersException, "Count cannot be 0");
+    }
+
     mItemCountByInstance[instance] += 1;
 
     OnItemChanged(instance);
