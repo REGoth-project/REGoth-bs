@@ -66,7 +66,7 @@ The asset cache
 
 When loading a world for the first time, REGoth will convert the resources of the original Gothic
 game into a more modern format faster to load next time.  If you want to re-import everything,
-simply delete the `cache/` directory next to your REGoth executables.
+simply delete the ``cache/`` directory next to your REGoth executables.
 
 If you only want to re-import a world, you can delete ``cache/worlds`` while leaving the rest for
 faster startup time.
