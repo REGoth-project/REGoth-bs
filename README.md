@@ -21,6 +21,13 @@
 We have an active Chatroom on [Gitter](https://gitter.im/REGoth/Lobby)! If you want to reach us,
 this is the best way!
 
+# Contributing
+
+If you want to implement a new feature, check out the [Projects-Tab](https://github.com/REGoth-project/REGoth-bs/projects) for a condensed view of features we still need to implement. This list is not complete, but most of the linked issues will contain helpful hints that should get you started.
+
+If fixing bugs is more your thing, head over to the [Issues-Tab](https://github.com/REGoth-project/REGoth-bs/issues).
+
+Regardless of what you're working on, we'd like to hear from you over in our [Gitter-Chatroom](https://gitter.im/REGoth/Lobby)!
 
 # Documentation
 
