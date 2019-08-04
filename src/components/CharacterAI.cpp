@@ -222,6 +222,9 @@ namespace REGoth
 
   bool CharacterAI::tryPlayTransitionAnimationTo(const bs::String& anim)
   {
+    // Cannot play animations if the character has no model yet
+    if (!mVisual->hasVisual()) return false;
+
     bs::String playingNow = mVisual->getPlayingAnimationName();
     auto clipPlayingNow   = mVisual->findAnimationClip(playingNow);
 
@@ -499,30 +502,45 @@ namespace REGoth
 
   bool CharacterAI::changeWeaponMode(AI::WeaponMode mode)
   {
-    bs::String stateTarget = AnimationState::constructStateAnimationName(mode, mWalkMode, "");
-
-    bool wasAllowed = tryPlayTransitionAnimationTo(stateTarget);
-
-    if (wasAllowed)
+    if (!mVisual->hasVisual())
     {
+      // If the model hasn't been set up yet, just make it start in the target mode.
+      // This happens on the Stone-Guardians in Gothic 2, which call NPC_SetToFistMode() before
+      // calling MDL_SetVisual().
+
       mWeaponMode = mode;
+
+      return true;
     }
-
-    if (!wasAllowed)
+    else
     {
-      // FIXME: We're missing some aniAliases, for example, "T_RUN_2_SNEAK" exists,
-      //        and "T_SNEAK_2_RUN" is just the same animation but in reverse. This
-      //        is defined using an aniAlias, which does not seem to be implemented.
-      auto c = mVisual->findAnimationClip(stateTarget);
+      // Model exists, check if the state transition is possible
 
-      if (c)
+      bs::String stateTarget = AnimationState::constructStateAnimationName(mode, mWalkMode, "");
+
+      bool wasAllowed = tryPlayTransitionAnimationTo(stateTarget);
+
+      if (wasAllowed)
       {
-        mVisual->playAnimationClip(c);
         mWeaponMode = mode;
       }
-    }
 
-    return wasAllowed;
+      if (!wasAllowed)
+      {
+        // FIXME: We're missing some aniAliases, for example, "T_RUN_2_SNEAK" exists,
+        //        and "T_SNEAK_2_RUN" is just the same animation but in reverse. This
+        //        is defined using an aniAlias, which does not seem to be implemented.
+        auto c = mVisual->findAnimationClip(stateTarget);
+
+        if (c)
+        {
+          mVisual->playAnimationClip(c);
+          mWeaponMode = mode;
+        }
+      }
+
+      return wasAllowed;
+    }
   }
 
   void CharacterAI::tryToggleWalking()

@@ -79,6 +79,15 @@ namespace REGoth
     void setVisual(const bs::String& visual);
 
     /**
+     * @return Whether a visual has been assigned to this component, so that it can play animations.
+     * 
+     * If no visual has been assigned, methods related to playing or querying animations might fail.
+     * 
+     * @note  Having a *Visual* assigned means that there is a model-script and a mesh set.
+     */
+    bool hasVisual() const;
+
+    /**
      * Calculates how far the characters animation has moved since the last
      * call ot this function via animation.
      *

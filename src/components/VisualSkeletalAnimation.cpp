@@ -132,6 +132,17 @@ namespace REGoth
     useFirstMeshOfModelScript();
   }
 
+  bool VisualSkeletalAnimation::hasVisual() const
+  {
+    if (!mModelScript)
+      return false;
+
+    if (!mMesh)
+      return false;
+
+    return true;
+  }
+
   bs::Bounds VisualSkeletalAnimation::getBounds() const
   {
     return mSubRenderable ? mSubRenderable->getBounds() : bs::Bounds();
