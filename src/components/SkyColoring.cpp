@@ -19,12 +19,15 @@ namespace REGoth
 
   static_assert(TIME_KEY_0 == 0.00f, "TIME_KEY_0 must be 0.0f!");
 
-  SkyColoring::SkyColoring()
+  SkyColoring::SkyColoring(const bs::Color& skyColor)
+      : mSkyColor{skyColor}
   {
+    // pass
   }
 
   SkyColoring::~SkyColoring()
   {
+    // pass
   }
 
   void SkyColoring::getSkyColors(bs::Color& color0, bs::Color& color1)
@@ -35,7 +38,7 @@ namespace REGoth
 
   void SkyColoring::interpolate(float dayRatio)
   {
-    mMasterState.time = std::fmod(dayRatio + 0.5, 1.0);
+    mMasterState.time = std::fmod(dayRatio + 0.5f, 1.0f);
 
     bs::UINT32 si0;
     bs::UINT32 si1;
@@ -55,10 +58,10 @@ namespace REGoth
   void SkyColoring::findTwoSkyStatesToInterpolateBetween(bs::UINT32& s0, bs::UINT32& s1) const
   {
     // init with values for case: time >= TIME_KEY_7 (= 0.75f)
-    s0 = (bs::INT32)mSkyStates.size() - 1;
+    s0 = static_cast<bs::UINT32>(mSkyStates.size()) - 1;
     s1 = 0;
 
-    for (bs::UINT32 i = 0; i < (bs::UINT32)mSkyStates.size(); i++)
+    for (bs::UINT32 i = 0; i < static_cast<bs::UINT32>(mSkyStates.size()); i++)
     {
       // Since the sky states are ordered, our start state is the first one which is supposed
       // to start *before* the current time. The target state is then the one right after.
@@ -106,19 +109,13 @@ namespace REGoth
 
   void SkyColoring::initSkyState(SkyPresetType type, SkyColoring::SkyState& s)
   {
-    bs::Color skyColor_g1 = bs::Color(114, 93, 82) / 255.0f;    // G1
-    bs::Color skyColor_g2 = bs::Color(120, 140, 180) / 255.0f;  // G2
-
-    // TODO: Figure out game type and chose sky color accordingly
-    bs::Color skyColor = skyColor_g2;
-
     switch (type)
     {
       case SkyPresetType::Day0:
         s.time = TIME_KEY_7;
 
         s.baseColor      = bs::Color(255, 250, 235) / 255.0f;
-        s.fogColor       = skyColor;
+        s.fogColor       = mSkyColor;
         s.domeColorUpper = bs::Color(255, 255, 255) / 255.0f;
 
         s.fogDistance = 0.2f;
@@ -139,7 +136,7 @@ namespace REGoth
         s.time = TIME_KEY_0;
 
         s.baseColor      = bs::Color(255, 250, 235) / 255.0f;
-        s.fogColor       = skyColor;
+        s.fogColor       = mSkyColor;
         s.domeColorUpper = bs::Color(255, 255, 255) / 255.0f;
 
         s.fogDistance = 0.05f;
@@ -160,7 +157,7 @@ namespace REGoth
         s.time = TIME_KEY_1;
 
         s.baseColor      = bs::Color(255, 250, 235) / 255.0f;
-        s.fogColor       = skyColor;
+        s.fogColor       = mSkyColor;
         s.domeColorUpper = bs::Color(255, 255, 255) / 255.0f;
 
         s.fogDistance = 0.05f;
@@ -290,7 +287,7 @@ namespace REGoth
   void SkyColoring::fillSkyStates()
   {
     // Fill all sky-states, in order
-    for (int i = 0; i < mSkyStates.size(); i++)
+    for (unsigned int i = 0; i < mSkyStates.size(); i++)
     {
       initSkyState(static_cast<SkyPresetType>(i), mSkyStates[i]);
     }
@@ -355,7 +352,7 @@ namespace REGoth
     finalFogColor = (1.0f - intensityScale) * mMasterState.fogColor + intensityScale * intensity;
   }
 
-  void SkyColoring::onWorldNameChanged(const bs::String& newWorldName)
+  void SkyColoring::onWorldNameChanged(const bs::String& /* newWorldName */)
   {
     // Must come before loading the config since fillSkyStates initializes everything with defaults
     fillSkyStates();

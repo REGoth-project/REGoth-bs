@@ -1,9 +1,10 @@
 #pragma once
 
 #include <BsPrerequisites.h>
-#include <BsZenLib/ZenResources.hpp>
 #include <Image/BsColor.h>
 #include <Math/BsVector2.h>
+
+#include <BsZenLib/ZenResources.hpp>
 
 #include <RTTI/RTTIUtil.hpp>
 
@@ -82,7 +83,7 @@ namespace REGoth
       SkyLayer skyLayer;
     };
 
-    SkyColoring();
+    SkyColoring(const bs::Color& skyColor);
     virtual ~SkyColoring();
 
     /**
@@ -152,16 +153,21 @@ namespace REGoth
     /**
      * Initializes the given skystate to the given type
      */
-    static void initSkyState(SkyPresetType type, SkyState& s);
+    void initSkyState(SkyPresetType type, SkyState& s);
 
     /**
      * Skystates we're interpolating
      */
-    std::array<SkyState, (bs::UINT32)SkyPresetType::NUM_PRESETS> mSkyStates;
+    std::array<SkyState, static_cast<bs::UINT32>(SkyPresetType::NUM_PRESETS)> mSkyStates;
 
     /**
      * Interpolated skystate
      */
     SkyState mMasterState;
+
+    /**
+     * Sky color.
+     */
+    const bs::Color mSkyColor;
   };
 }  // namespace REGoth

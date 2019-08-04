@@ -1,30 +1,34 @@
-#include "Sky.hpp"
-#include <RTTI/RTTI_Sky.hpp>
+#include <components/Sky.hpp>
+
 #include <RenderAPI/BsViewport.h>
 #include <Renderer/BsCamera.h>
 #include <Scene/BsSceneManager.h>
+
+#include <RTTI/RTTI_Sky.hpp>
 #include <components/GameClock.hpp>
 #include <components/GameWorld.hpp>
 #include <components/SkyColoring.hpp>
 
 namespace REGoth
 {
-  Sky::Sky(const bs::HSceneObject& parent, HGameWorld gameWorld)
+  Sky::Sky(const bs::HSceneObject& parent, HGameWorld gameWorld, const bs::Color& skyColor)
       : bs::Component(parent)
       , mGameWorld(gameWorld)
+      , mSkyColor{skyColor}
   {
     setName("Sky");
   }
 
   Sky::~Sky()
   {
+    // pass
   }
 
   void Sky::onInitialized()
   {
     if (!mSkyColoring)
     {
-      mSkyColoring = bs::bs_shared_ptr_new<SkyColoring>();
+      mSkyColoring = bs::bs_shared_ptr_new<SkyColoring>(mSkyColor);
       mSkyColoring->fillSkyStates();
     }
   }
@@ -55,5 +59,4 @@ namespace REGoth
   }
 
   REGOTH_DEFINE_RTTI(Sky)
-
 }  // namespace REGoth

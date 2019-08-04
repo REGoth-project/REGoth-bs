@@ -1,6 +1,9 @@
 #pragma once
-#include <RTTI/RTTIUtil.hpp>
+
+#include <Image/BsColor.h>
 #include <Scene/BsComponent.h>
+
+#include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
 {
@@ -15,19 +18,19 @@ namespace REGoth
   class Sky : public bs::Component
   {
   public:
-    Sky(const bs::HSceneObject& parent, HGameWorld gameWorld);
-    virtual ~Sky();
+    Sky(const bs::HSceneObject& parent, HGameWorld gameWorld, const bs::Color& skyColor);
+    virtual ~Sky() override;
 
     void onInitialized() override;
 
     void update() override;
 
   private:
-
     void applySkySettingsToCamera() const;
 
     bs::SPtr<SkyColoring> mSkyColoring;
     HGameWorld mGameWorld;
+    const bs::Color mSkyColor;
 
   public:
     REGOTH_DECLARE_RTTI(Sky)

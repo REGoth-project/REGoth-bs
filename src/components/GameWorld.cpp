@@ -8,7 +8,6 @@
 #include <components/Focusable.hpp>
 #include <components/GameClock.hpp>
 #include <components/Item.hpp>
-#include <components/Sky.hpp>
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
 #include <daedalus/DATFile.h>
@@ -29,7 +28,7 @@ namespace REGoth
     setName("GameWorld");
   }
 
-  GameWorld::GameWorld(const bs::HSceneObject& parent, Empty empty)
+  GameWorld::GameWorld(const bs::HSceneObject& parent, Empty /* empty */)
       : bs::Component(parent)
       , mZenFile("")
   {
@@ -80,8 +79,6 @@ namespace REGoth
 
     mGameClock = SO()->addComponent<GameClock>();
     mGameClock->setTime(8, 0);
-
-    SO()->addComponent<Sky>(thisWorld);
 
     mIsInitialized = true;
   }

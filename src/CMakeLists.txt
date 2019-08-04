@@ -69,6 +69,10 @@ add_library(REGothEngine STATIC
   core/EngineConfig.hpp
   core/EngineConfig.cpp
   core/GameType.hpp
+  core/Gothic1Game.hpp
+  core/Gothic1Game.cpp
+  core/Gothic2Game.hpp
+  core/Gothic2Game.cpp
   core/ParseArguments.hpp
   core/ParseArguments.tpp
   core/RunEngine.hpp
@@ -183,8 +187,8 @@ set_target_properties(REGothEngine PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 # Make sure our calls to BS_LOG work
 target_compile_definitions(REGothEngine PUBLIC -DBS_LOG_VERBOSITY=LogVerbosity::Log)
 
-# add_executable(REGoth main.cpp)
-# target_link_libraries(REGoth REGothEngine samples-common)
+add_executable(REGoth main.cpp)
+target_link_libraries(REGoth REGothEngine samples-common)
 
 add_executable(REGothCharacterViewer main_CharacterViewer.cpp)
 target_link_libraries(REGothCharacterViewer REGothEngine samples-common)

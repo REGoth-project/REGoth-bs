@@ -1,7 +1,9 @@
 #pragma once
+
 #include <BsPrerequisites.h>
-#include <RTTI/RTTIUtil.hpp>
 #include <Scene/BsComponent.h>
+
+#include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth
 {
@@ -115,7 +117,7 @@ namespace REGoth
     GameWorld(const bs::HSceneObject& parent, const bs::String& zenFile);
     GameWorld(const bs::HSceneObject& parent, Empty empty);
 
-    virtual ~GameWorld();
+    virtual ~GameWorld() override;
 
     /**
      * Returns the currently loaded worlds name.
