@@ -7,7 +7,7 @@ namespace REGoth
   OriginalGameFiles::OriginalGameFiles(const bs::Path& root)
       : mRoot(root)
   {
-    if (vdfsFileEntryPoint() == bs::Path::BLANK)
+    if (vdfsFileEntryPoint().isEmpty())
     {
       REGOTH_THROW(FileNotFoundException,
                    bs::StringUtil::format(
@@ -15,7 +15,7 @@ namespace REGoth
                        mRoot.toString()));
     }
 
-    if (dataDirectory() == bs::Path::BLANK)
+    if (dataDirectory().isEmpty())
     {
       REGOTH_THROW(
           FileNotFoundException,
@@ -23,7 +23,7 @@ namespace REGoth
                                  mRoot.toString()));
     }
 
-    if (gothicDat() == bs::Path::BLANK)
+    if (gothicDat().isEmpty())
     {
       REGOTH_THROW(
           FileNotFoundException,
@@ -77,11 +77,11 @@ namespace REGoth
 
   OriginalGameFiles::GameType OriginalGameFiles::gameType() const
   {
-    if (findCaseSensitivePathOf("system/gothic.exe") != bs::Path::BLANK)
+    if (!findCaseSensitivePathOf("system/gothic.exe").isEmpty())
     {
       return GameType::Gothic1;
     }
-    else if (findCaseSensitivePathOf("system/gothic2.exe") != bs::Path::BLANK)
+    else if (!findCaseSensitivePathOf("system/gothic2.exe").isEmpty())
     {
       return GameType::Gothic2;
     }
@@ -151,7 +151,7 @@ namespace REGoth
     {
       actual = appendCaseInsensitiveThing(actual, path.getDirectory(i));
 
-      if (actual == bs::Path::BLANK)
+      if (actual.isEmpty())
       {
         return bs::Path::BLANK;
       }
