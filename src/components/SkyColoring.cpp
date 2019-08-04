@@ -1,4 +1,5 @@
-#include "SkyColoring.hpp"
+#include <components/SkyColoring.hpp>
+
 #include <Image/BsColor.h>
 #include <Math/BsMath.h>
 #include <Renderer/BsCamera.h>

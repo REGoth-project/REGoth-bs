@@ -4,6 +4,7 @@
 #include <BsZenLib/ZenResources.hpp>
 #include <Image/BsColor.h>
 #include <Math/BsVector2.h>
+
 #include <RTTI/RTTIUtil.hpp>
 
 namespace REGoth

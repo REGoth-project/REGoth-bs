@@ -74,8 +74,8 @@ add_library(REGothEngine STATIC
   core/RunEngine.cpp
   components/Inventory.hpp
   components/Inventory.cpp
-  sky/SkyColoring.hpp
-  sky/SkyColoring.cpp
+  components/SkyColoring.hpp
+  components/SkyColoring.cpp
   components/Focusable.hpp
   components/Focusable.cpp
   components/StoryInformation.hpp
@@ -177,7 +177,7 @@ target_link_libraries(REGothEngine PUBLIC cxxopts)
 target_include_directories(REGothEngine PUBLIC .)
 
 # Let CMake take care of the __declspec nonsense on windows.
-set_target_properties(REGothEngine PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS TRUE) 
+set_target_properties(REGothEngine PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 
 # Make sure our calls to BS_LOG work
 target_compile_definitions(REGothEngine PUBLIC -DBS_LOG_VERBOSITY=LogVerbosity::Log)
