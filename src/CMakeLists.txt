@@ -68,6 +68,7 @@ add_library(REGothEngine STATIC
   core/Engine.cpp
   core/EngineConfig.hpp
   core/EngineConfig.cpp
+  core/GameType.hpp
   core/ParseArguments.hpp
   core/ParseArguments.tpp
   core/RunEngine.hpp

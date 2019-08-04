@@ -1,6 +1,9 @@
 #pragma once
+
 #include <BsPrerequisites.h>
 #include <FileSystem/BsPath.h>
+
+#include <core/GameType.hpp>
 
 namespace REGoth
 {
@@ -59,18 +62,6 @@ namespace REGoth
      * @return Absolute path of the original games `system`-directory.
      */
     bs::Path system() const;
-
-    enum class GameType
-    {
-      /** Used if a Gothic.exe exists */
-      Gothic1,
-
-      /** Used if a Gothic2.exe exists */
-      Gothic2,
-
-      /** Used if the game files don't contain Gothic.exe or Gothic2.exe */
-      Custom,
-    };
 
     /**
      * @return Which game REGoth is currently running. (e.g. Gothic I or Gothic II)

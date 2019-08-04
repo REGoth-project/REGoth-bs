@@ -9,5 +9,6 @@
 #include <core/EmptyGame.hpp>
 #include <core/Engine.hpp>
 #include <core/EngineConfig.hpp>
+#include <core/GameType.hpp>
 #include <core/ParseArguments.hpp>
 #include <core/RunEngine.hpp>

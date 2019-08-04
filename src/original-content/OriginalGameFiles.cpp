@@ -75,7 +75,7 @@ namespace REGoth
     return findCaseSensitivePathOf("system/");
   }
 
-  OriginalGameFiles::GameType OriginalGameFiles::gameType() const
+  GameType OriginalGameFiles::gameType() const
   {
     if (!findCaseSensitivePathOf("system/gothic.exe").isEmpty())
     {
@@ -87,7 +87,7 @@ namespace REGoth
     }
     else
     {
-      return GameType::Custom;
+      return GameType::Unidentified;
     }
   }
 
