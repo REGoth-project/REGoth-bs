@@ -217,7 +217,9 @@ namespace REGoth
 
   bool CharacterAI::jump()
   {
-    return tryTransitionToState("");
+    if (!isStateSwitchAllowed()) return false;
+
+    return tryPlayTransitionAnimationTo("S_JUMP");
   }
 
   bool CharacterAI::tryPlayTransitionAnimationTo(const bs::String& anim)
@@ -481,20 +483,6 @@ namespace REGoth
     if (wasAllowed)
     {
       mWalkMode = walkMode;
-    }
-
-    if (!wasAllowed)
-    {
-      // FIXME: We're missing some aniAliases, for example, "T_RUN_2_SNEAK" exists,
-      //        and "T_SNEAK_2_RUN" is just the same animation but in reverse. This
-      //        is defined using an aniAlias, which does not seem to be implemented.
-      auto c = mVisual->findAnimationClip(stateTarget);
-
-      if (c)
-      {
-        mVisual->playAnimationClip(c);
-        mWalkMode = walkMode;
-      }
     }
 
     return wasAllowed;
