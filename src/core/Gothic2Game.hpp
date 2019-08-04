@@ -18,8 +18,6 @@ namespace REGoth
 
     void setupScene() override;
 
-    void setupGothic2(HGameWorld world);
-
   private:
     REGoth::HThirdPersonCamera mThirdPersonCamera;
   };

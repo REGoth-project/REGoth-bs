@@ -46,7 +46,8 @@ void Gothic1Game::setupScene()
     world = worldSO->getComponent<GameWorld>();
   }
 
-  setupGothic1(world);
+  const bs::Color skyColor = bs::Color{114, 93, 82} / 255.0f;
+  world->SO()->addComponent<Sky>(world, skyColor);
 
   bs::HSceneObject heroSO = world->SO()->findChild("PC_HERO");
 
@@ -60,10 +61,4 @@ void Gothic1Game::setupScene()
   mThirdPersonCamera->follow(hero);
 
   GameplayUI::createGlobal(mMainCamera);
-}
-
-void Gothic1Game::setupGothic1(HGameWorld world)
-{
-  const bs::Color skyColor = bs::Color{114, 93, 82} / 255.0f;
-  world->SO()->addComponent<Sky>(world, skyColor);
 }
