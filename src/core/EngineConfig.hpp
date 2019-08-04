@@ -2,6 +2,8 @@
 
 #include <FileSystem/BsPath.h>
 
+#include <core/GameType.hpp>
+
 #include <cxxopts.hpp>
 
 namespace bs
@@ -76,6 +78,11 @@ namespace REGoth
      * Path to the game assets of Gothic or Gothic II.
      */
     bs::Path originalAssetsPath;
+
+    /**
+     * The current game type (i.e. Gothic vs Gothic II).
+     */
+    GameType gameType = GameType::Unidentified;
 
     /**
      * X resolution of the game.

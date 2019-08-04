@@ -97,6 +97,9 @@ void EngineConfig::verifyCLIEngineOptions()
                        userInput + "`.");
     }
   }
+
+  // Now that originalAssetsPath is determined, try to derive the game type.
+  gameType = OriginalGameFiles{originalAssetsPath}.gameType();
 }
 
 void EngineConfig::registerCLIOptions(cxxopts::Options& /* options */)
