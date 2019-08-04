@@ -1,179 +1,179 @@
 add_library(samples-common
-  common/BsCameraZoomer.h
   common/BsCameraZoomer.cpp
-  common/BsFPSCamera.h
+  common/BsCameraZoomer.h
   common/BsFPSCamera.cpp
-  common/BsFPSWalker.h
+  common/BsFPSCamera.h
   common/BsFPSWalker.cpp
-  common/BsObjectRotator.h
+  common/BsFPSWalker.h
   common/BsObjectRotator.cpp
+  common/BsObjectRotator.h
  )
 
 target_include_directories(samples-common PUBLIC common)
 target_link_libraries(samples-common PUBLIC bsf)
 
 add_library(REGothEngine STATIC
-  components/AnchoredTextLabels.hpp
+  AI/EventMessage.cpp
+  AI/EventMessage.hpp
+  AI/Pathfinder.cpp
+  AI/Pathfinder.hpp
+  AI/ScriptState.cpp
+  AI/ScriptState.hpp
+  RTTI/RTTIUtil.hpp
+  RTTI/RTTI_Character.hpp
+  RTTI/RTTI_CharacterAI.hpp
+  RTTI/RTTI_CharacterKeyboardInput.hpp
+  RTTI/RTTI_GameClock.hpp
+  RTTI/RTTI_Inventory.hpp
+  RTTI/RTTI_NodeVisuals.hpp
+  RTTI/RTTI_ScriptBackedBy.hpp
+  RTTI/RTTI_ScriptObject.hpp
+  RTTI/RTTI_ScriptObjectStorage.hpp
+  RTTI/RTTI_StoryInformation.hpp
+  RTTI/RTTI_TypeIDs.hpp
+  RTTI/RTTI_UIElement.hpp
+  RTTI/RTTI_UIFocusText.hpp
+  RTTI/RTTI_VisualCharacter.hpp
+  RTTI/RTTI_VisualInteractiveObject.hpp
+  RTTI/RTTI_VisualSkeletalAnimation.hpp
+  RTTI/RTTI_VisualStaticMesh.hpp
+  RTTI/RTTI_Waynet.hpp
+  RTTI/RTTI_Waypoint.hpp
+  animation/Animation.cpp
+  animation/Animation.hpp
+  animation/StateNaming.cpp
+  animation/StateNaming.hpp
   components/AnchoredTextLabels.cpp
-  components/CharacterState.hpp
-  components/CharacterState.cpp
-  components/VisualCharacter.hpp
-  components/VisualCharacter.cpp
-  components/VisualSkeletalAnimation.hpp
-  components/VisualSkeletalAnimation.cpp
-  components/VisualStaticMesh.hpp
-  components/VisualStaticMesh.cpp
-  components/VisualInteractiveObject.hpp
-  components/VisualInteractiveObject.cpp
-  components/NodeVisuals.hpp
-  components/NodeVisuals.cpp
-  components/ScriptBackedBy.hpp
-  components/ScriptBackedBy.cpp
-  components/GameWorld.hpp
-  components/GameWorld.cpp
-  components/NeedsGameWorld.hpp
-  components/NeedsGameWorld.cpp
-  components/Visual.hpp
-  components/Visual.cpp
-  components/VisualMorphMesh.hpp
-  components/VisualMorphMesh.cpp
-  components/Item.hpp
-  components/Item.cpp
-  components/Character.hpp
+  components/AnchoredTextLabels.hpp
   components/Character.cpp
-  components/CharacterAI.hpp
+  components/Character.hpp
   components/CharacterAI.cpp
-  components/Waypoint.hpp
-  components/Waypoint.cpp
-  components/Freepoint.hpp
-  components/Freepoint.cpp
-  components/Waynet.hpp
-  components/Waynet.cpp
-  components/CharacterKeyboardInput.hpp
-  components/CharacterKeyboardInput.cpp
-  components/GameClock.hpp
-  components/GameClock.cpp
-  components/ThirdPersonCamera.hpp
-  components/ThirdPersonCamera.cpp
-  components/EventQueue.hpp
-  components/EventQueue.cpp
-  components/CharacterEventQueue.hpp
+  components/CharacterAI.hpp
   components/CharacterEventQueue.cpp
-  components/Sky.hpp
+  components/CharacterEventQueue.hpp
+  components/CharacterKeyboardInput.cpp
+  components/CharacterKeyboardInput.hpp
+  components/CharacterState.cpp
+  components/CharacterState.hpp
+  components/EventQueue.cpp
+  components/EventQueue.hpp
+  components/Focusable.cpp
+  components/Focusable.hpp
+  components/Freepoint.cpp
+  components/Freepoint.hpp
+  components/GameClock.cpp
+  components/GameClock.hpp
+  components/GameWorld.cpp
+  components/GameWorld.hpp
+  components/GameplayUI.cpp
+  components/GameplayUI.hpp
+  components/Inventory.cpp
+  components/Inventory.hpp
+  components/Item.cpp
+  components/Item.hpp
+  components/NeedsGameWorld.cpp
+  components/NeedsGameWorld.hpp
+  components/NodeVisuals.cpp
+  components/NodeVisuals.hpp
+  components/ScriptBackedBy.cpp
+  components/ScriptBackedBy.hpp
   components/Sky.cpp
+  components/Sky.hpp
+  components/SkyColoring.cpp
+  components/SkyColoring.hpp
+  components/StoryInformation.cpp
+  components/StoryInformation.hpp
+  components/ThirdPersonCamera.cpp
+  components/ThirdPersonCamera.hpp
+  components/UIDialogueChoice.cpp
+  components/UIDialogueChoice.hpp
+  components/UIElement.cpp
+  components/UIElement.hpp
+  components/UIFocusText.cpp
+  components/UIFocusText.hpp
+  components/UIInventory.cpp
+  components/UIInventory.hpp
+  components/UISubtitleBox.cpp
+  components/UISubtitleBox.hpp
+  components/Visual.cpp
+  components/Visual.hpp
+  components/VisualCharacter.cpp
+  components/VisualCharacter.hpp
+  components/VisualInteractiveObject.cpp
+  components/VisualInteractiveObject.hpp
+  components/VisualMorphMesh.cpp
+  components/VisualMorphMesh.hpp
+  components/VisualSkeletalAnimation.cpp
+  components/VisualSkeletalAnimation.hpp
+  components/VisualStaticMesh.cpp
+  components/VisualStaticMesh.hpp
+  components/Waynet.cpp
+  components/Waynet.hpp
+  components/Waypoint.cpp
+  components/Waypoint.hpp
   core.hpp
-  core/EmptyGame.hpp
   core/EmptyGame.cpp
-  core/Engine.hpp
+  core/EmptyGame.hpp
   core/Engine.cpp
-  core/EngineConfig.hpp
+  core/Engine.hpp
   core/EngineConfig.cpp
+  core/EngineConfig.hpp
   core/GameType.hpp
-  core/Gothic1Game.hpp
   core/Gothic1Game.cpp
-  core/Gothic2Game.hpp
+  core/Gothic1Game.hpp
   core/Gothic2Game.cpp
+  core/Gothic2Game.hpp
   core/ParseArguments.hpp
   core/ParseArguments.tpp
-  core/RunEngine.hpp
   core/RunEngine.cpp
-  components/Inventory.hpp
-  components/Inventory.cpp
-  components/SkyColoring.hpp
-  components/SkyColoring.cpp
-  components/Focusable.hpp
-  components/Focusable.cpp
-  components/StoryInformation.hpp
-  components/StoryInformation.cpp
-  components/GameplayUI.hpp
-  components/GameplayUI.cpp
-  components/UIElement.hpp
-  components/UIElement.cpp
-  components/UIFocusText.hpp
-  components/UIFocusText.cpp
-  components/UISubtitleBox.hpp
-  components/UISubtitleBox.cpp
-  components/UIDialogueChoice.hpp
-  components/UIDialogueChoice.cpp
-  components/UIInventory.hpp
-  components/UIInventory.cpp
-  AI/EventMessage.hpp
-  AI/EventMessage.cpp
-  AI/ScriptState.hpp
-  AI/ScriptState.cpp
-  AI/Pathfinder.hpp
-  AI/Pathfinder.cpp
-  exception/Throw.hpp
-  animation/StateNaming.hpp
-  animation/StateNaming.cpp
-  animation/Animation.hpp
-  animation/Animation.cpp
-  scripting/daedalus/REGothDaedalusVM.hpp
-  scripting/daedalus/REGothDaedalusVM.cpp
-  scripting/daedalus/DATSymbolStorageLoader.hpp
-  scripting/daedalus/DATSymbolStorageLoader.cpp
-  scripting/daedalus/DaedalusClassVarResolver.hpp
-  scripting/daedalus/DaedalusClassVarResolver.cpp
-  scripting/daedalus/DaedalusStack.hpp
-  scripting/daedalus/DaedalusStack.cpp
-  scripting/daedalus/DaedalusDisassembler.hpp
-  scripting/daedalus/DaedalusDisassembler.cpp
-  scripting/daedalus/DaedalusVMForGameWorld.hpp
-  scripting/daedalus/DaedalusVMForGameWorld.cpp
-  scripting/ScriptSymbols.hpp
-  scripting/ScriptSymbols.cpp
-  scripting/ScriptSymbolStorage.hpp
-  scripting/ScriptSymbolStorage.cpp
-  scripting/ScriptObject.hpp
-  scripting/ScriptObject.cpp
-  scripting/ScriptObjectStorage.hpp
-  scripting/ScriptObjectStorage.cpp
-  scripting/ScriptVM.hpp
-  scripting/ScriptVM.cpp
-  scripting/ScriptSymbolQueries.hpp
-  scripting/ScriptSymbolQueries.cpp
-  scripting/ScriptClassTemplates.hpp
-  scripting/ScriptClassTemplates.cpp
-  scripting/ScriptVMForGameWorld.hpp
-  scripting/ScriptVMForGameWorld.cpp
-  scripting/ScriptObjectMapping.hpp
-  scripting/ScriptObjectMapping.cpp
-  original-content/VirtualFileSystem.hpp
-  original-content/VirtualFileSystem.cpp
-  original-content/OriginalGameFiles.hpp
-  original-content/OriginalGameFiles.cpp
-  original-content/OriginalGameResources.hpp
-  original-content/OriginalGameResources.cpp
+  core/RunEngine.hpp
   engine-content/EngineContent.cpp
   engine-content/EngineContent.hpp
   engine-content/internal/FindEngineContent.cpp
   engine-content/internal/FindEngineContent.hpp
-  world/internals/ConstructFromZEN.hpp
-  world/internals/ConstructFromZEN.cpp
-  gui/skin_gothic.hpp
+  exception/Throw.hpp
   gui/skin_gothic.cpp
-  world/internals/ImportSingleVob.hpp
+  gui/skin_gothic.hpp
+  original-content/OriginalGameFiles.cpp
+  original-content/OriginalGameFiles.hpp
+  original-content/OriginalGameResources.cpp
+  original-content/OriginalGameResources.hpp
+  original-content/VirtualFileSystem.cpp
+  original-content/VirtualFileSystem.hpp
+  scripting/ScriptClassTemplates.cpp
+  scripting/ScriptClassTemplates.hpp
+  scripting/ScriptObject.cpp
+  scripting/ScriptObject.hpp
+  scripting/ScriptObjectMapping.cpp
+  scripting/ScriptObjectMapping.hpp
+  scripting/ScriptObjectStorage.cpp
+  scripting/ScriptObjectStorage.hpp
+  scripting/ScriptSymbolQueries.cpp
+  scripting/ScriptSymbolQueries.hpp
+  scripting/ScriptSymbolStorage.cpp
+  scripting/ScriptSymbolStorage.hpp
+  scripting/ScriptSymbols.cpp
+  scripting/ScriptSymbols.hpp
+  scripting/ScriptVM.cpp
+  scripting/ScriptVM.hpp
+  scripting/ScriptVMForGameWorld.cpp
+  scripting/ScriptVMForGameWorld.hpp
+  scripting/daedalus/DATSymbolStorageLoader.cpp
+  scripting/daedalus/DATSymbolStorageLoader.hpp
+  scripting/daedalus/DaedalusClassVarResolver.cpp
+  scripting/daedalus/DaedalusClassVarResolver.hpp
+  scripting/daedalus/DaedalusDisassembler.cpp
+  scripting/daedalus/DaedalusDisassembler.hpp
+  scripting/daedalus/DaedalusStack.cpp
+  scripting/daedalus/DaedalusStack.hpp
+  scripting/daedalus/DaedalusVMForGameWorld.cpp
+  scripting/daedalus/DaedalusVMForGameWorld.hpp
+  scripting/daedalus/REGothDaedalusVM.cpp
+  scripting/daedalus/REGothDaedalusVM.hpp
+  world/internals/ConstructFromZEN.cpp
+  world/internals/ConstructFromZEN.hpp
   world/internals/ImportSingleVob.cpp
-  RTTI/RTTI_CharacterAI.hpp
-  RTTI/RTTI_Character.hpp
-  RTTI/RTTI_CharacterKeyboardInput.hpp
-  RTTI/RTTI_ScriptBackedBy.hpp
-  RTTI/RTTI_ScriptObject.hpp
-  RTTI/RTTI_ScriptObjectStorage.hpp
-  RTTI/RTTI_TypeIDs.hpp
-  RTTI/RTTIUtil.hpp
-  RTTI/RTTI_VisualCharacter.hpp
-  RTTI/RTTI_VisualStaticMesh.hpp
-  RTTI/RTTI_VisualInteractiveObject.hpp
-  RTTI/RTTI_VisualSkeletalAnimation.hpp
-  RTTI/RTTI_NodeVisuals.hpp
-  RTTI/RTTI_Waynet.hpp
-  RTTI/RTTI_Waypoint.hpp
-  RTTI/RTTI_GameClock.hpp
-  RTTI/RTTI_UIElement.hpp
-  RTTI/RTTI_UIFocusText.hpp
-  RTTI/RTTI_StoryInformation.hpp
-  RTTI/RTTI_Inventory.hpp
+  world/internals/ImportSingleVob.hpp
   )
 
 target_link_libraries(REGothEngine PUBLIC bsf BsZenLib)
