@@ -227,6 +227,13 @@ namespace REGoth
     void handleTurning();
 
     /**
+     * If the character is not standing on solid ground, we need to increase
+     * the falling velocity. Once it hits the ground again, the falling velocity
+     * needs to be reset.
+     */
+    void handleFalling();
+
+    /**
      * Tries to transition to the given animation name.
      *
      * @param  Animation to transition to, eg `S_RUNL` or `T_JUMPB`.
@@ -281,14 +288,21 @@ namespace REGoth
     // Whether Physics is being processed for this character
     bool mIsPhysicsActive = true;
 
-    // Whether this character is standing on solid ground, like the world mesh or a static vob
+    // Whether this character is standing on solid ground, like the world mesh or a static vob.
+    // Dynamic objects such as movers or other characters do not count as solid.
     bool isStandingOnSolidGround = false;
+
+    // Whether this character is currently in air, not standing on anything.
+    bool isInAir = false;
 
     // Whether the character is running, sneaking, etc
     AI::WalkMode mWalkMode = AI::WalkMode::Run;
 
     // Type of weapon the character is currently holding
     AI::WeaponMode mWeaponMode = AI::WeaponMode::None;
+
+    // Velocity to apply to the y-axis while falling. Reset when the ground is hit.
+    float mFallingVelocity = 0.0f;
 
   public:
     REGOTH_DECLARE_RTTI(CharacterAI);

@@ -14,6 +14,7 @@ namespace REGoth
     BS_RTTI_MEMBER_REFL(mWorld, 3)
     BS_RTTI_MEMBER_PLAIN(mWalkMode, 4)
     BS_RTTI_MEMBER_PLAIN(mWeaponMode, 5)
+    BS_RTTI_MEMBER_PLAIN(mFallingVelocity, 6)
     BS_END_RTTI_MEMBERS
 
   public:

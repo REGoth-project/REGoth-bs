@@ -450,6 +450,14 @@ namespace REGoth
     return name.find("-T_") == bs::String::npos;
   }
 
+  bool VisualSkeletalAnimation::isPlayingFlyingAnimation() const
+  {
+    if (!mPlayingMainAnimation)
+      return false;
+
+    return mPlayingMainAnimation->mIsFlyingAnimation;
+  }
+
   bs::String VisualSkeletalAnimation::getStateFromPlayingAnimation() const
   {
     return AnimationState::getStateName(getPlayingAnimationName());

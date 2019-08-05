@@ -32,6 +32,12 @@ namespace REGoth
   /** See DEACTIVATE_PHYSICS_RANGE_METERS */
   constexpr float ACTIVATE_PHYSICS_RANGE_METERS = 40.0;
 
+  /** Acceleration of the Y-Axis while falling */
+  constexpr float FALLING_ACCELERATION_Y = -9.81f;
+
+  /** Constant velocity to apply downwards to keep the player on the ground */
+  constexpr float DOWNWARDS_VELOCITY_WHILE_WALKING = -10.0f;
+
   CharacterAI::CharacterAI(const bs::HSceneObject& parent, HGameWorld world)
       : bs::Component(parent)
       , mWorld(world)
@@ -218,7 +224,8 @@ namespace REGoth
   bool CharacterAI::jump()
   {
     if (!isStateSwitchAllowed()) return false;
-
+    if (isInAir) return false;
+    
     return tryPlayTransitionAnimationTo("S_JUMP");
   }
 
@@ -355,6 +362,8 @@ namespace REGoth
       handleTurning();
     }
 
+    handleFalling();
+
     bs::Vector3 rootMotion = bs::Vector3::ZERO;
 
     if (!mVisual->isPlayingIdleAnimation())
@@ -369,17 +378,28 @@ namespace REGoth
       rootMotion *= -1.0;
     }
 
-    if (!isStandingOnSolidGround || rootMotion.squaredLength() > 0)
+    if (isInAir || !isStandingOnSolidGround || rootMotion.squaredLength() > 0)
     {
-      // Note: Gravity is acceleration, but since the walker doesn't support falling, just apply it
-      // as a velocity FIXME: Actual gravity!
       const float frameDelta = bs::gTime().getFixedFrameDelta();
-      bs::Vector3 gravity    = bs::Vector3(0, -9.81f, 0);  // gPhysics().getGravity();
+      bs::Vector3 velocity   = rootMotion;
 
-      auto flags = mCharacterController->move(rootMotion + gravity * frameDelta);
+      if (isInAir)
+      {
+        velocity.y += mFallingVelocity * frameDelta;
+      }
+      else
+      {
+        // Since the character controller doesn't "stick" to the ground, we apply a
+        // constant downwards velocity to keep it on the ground on slopes.
+        velocity.y += DOWNWARDS_VELOCITY_WHILE_WALKING * frameDelta;
+      }
+
+      auto flags = mCharacterController->move(velocity);
 
       // TODO: Check if the character is standing on a dynamic object, which is NOT solid ground!
       isStandingOnSolidGround = flags.isSet(bs::CharacterCollisionFlag::Down);
+
+      isInAir = !flags.isSet(bs::CharacterCollisionFlag::Down);
     }
   }
 
@@ -405,6 +425,24 @@ namespace REGoth
     if (fabs(frameTurn) > 0.0001f)
     {
       SO()->rotate(bs::Vector3::UNIT_Y, bs::Radian(frameTurn));
+    }
+  }
+
+  void CharacterAI::handleFalling()
+  {
+    if (!isInAir)
+    {
+      mFallingVelocity = 0.0f;
+    }
+    else
+    {
+      mFallingVelocity += FALLING_ACCELERATION_Y * bs::gTime().getFixedFrameDelta();
+    }
+
+    if (mVisual->isPlayingFlyingAnimation())
+    {
+      isInAir          = true;
+      mFallingVelocity = 0.0f;
     }
   }
 

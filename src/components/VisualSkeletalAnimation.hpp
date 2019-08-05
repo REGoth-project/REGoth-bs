@@ -186,6 +186,15 @@ namespace REGoth
     bool isPlayingAnimationInterruptable() const;
 
     /**
+     * Some animations are supposed to be played without the character being
+     * affected by gravity.
+     *
+     * @return True, if the Character should not be affected by gravity during
+     *         the currently playing animation.
+     */
+    bool isPlayingFlyingAnimation() const;
+
+    /**
      * This is only for debugging, don't expect this to be saved with a savegame!
      * Sets the animation speed factor, e.g. for fast running.
      */
