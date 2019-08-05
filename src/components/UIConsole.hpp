@@ -25,7 +25,12 @@ namespace REGoth
     virtual ~UIConsole();
 
     /**
-     * Resets the input of the internal InputBox UIElement to the empty String "",
+     * Get the current Input.
+     */
+    const bs::String& getInput();
+
+    /**
+     * Resets the input of the internal InputBox UIElement to the empty String "".
      * Used to clear the input after a command has been entered.
      */
     void clearInput();
@@ -44,6 +49,12 @@ namespace REGoth
      */
     void setOutput(bs::String output);
 
+    /**
+     * Resets the input of the internal ScrollArea UIElement.
+     * Used to clear the output.
+     */
+    void clearOutput();
+
   protected:
     enum class State
     {
@@ -58,6 +69,10 @@ namespace REGoth
 
     /** Triggered once per frame. Allows the component to handle input and move. */
     void update() override;
+
+  public:
+    bs::Event<void()> mOnConfirm;
+    bs::Event<void(const bs::String&)> mOnInputChanged;
 
   private:
     State mState                   = State::Closed;

@@ -1,5 +1,6 @@
 #include "Console.hpp"
 #include "components/GameplayUI.hpp"
+#include "components/UIConsole.hpp"
 #include <RTTI/RTTI_Console.hpp>
 #include <String/BsString.h>
 #include <log/logging.hpp>
@@ -18,6 +19,23 @@ namespace REGoth
 
   Console::~Console()
   {
+  }
+
+  void Console::onInitialized()
+  {
+    auto valueChangedCallback = [&](const bs::String& input) {
+      REGOTH_LOG(Info, Uncategorized, "[Console] Input changed to: {0}!", input);
+      bs::Vector<bs::String> suggestions = onInputChanged(input);
+    };
+    mConsoleUI->mOnInputChanged.connect(valueChangedCallback);
+
+    auto confirmCallback = [&]() {
+      const bs::String& input = mConsoleUI->getInput();
+      REGOTH_LOG(Info, Uncategorized, "[Console] Command confirmed: {0}!", input);
+      bs::Vector<bs::String> outputs = onCommandConfirmed(input);
+      mConsoleUI->clearInput();
+    };
+    mConsoleUI->mOnConfirm.connect(confirmCallback);
   }
 
   bs::Vector<bs::String> Console::onInputChanged(const bs::String& input)

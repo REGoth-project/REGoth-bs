@@ -52,6 +52,9 @@ namespace REGoth
      */
     bs::Vector<bs::String> onCommandConfirmed(bs::String input);
 
+  protected:
+    void onInitialized() override;
+
   private:
     /**
      * Lists all commands that are registered to this Console.

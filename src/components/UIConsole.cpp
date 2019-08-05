@@ -39,7 +39,9 @@ namespace REGoth
 
   void UIConsole::onInitialized()
   {
-    mToggleConsole = bs::VirtualButton("ToggleConsole");
+    mOnConfirm      = mInputBox->onConfirm;
+    mOnInputChanged = mInputBox->onValueChanged;
+    mToggleConsole  = bs::VirtualButton("ToggleConsole");
   }
 
   void UIConsole::update()
@@ -83,6 +85,11 @@ namespace REGoth
     }
   }
 
+  const bs::String& UIConsole::getInput()
+  {
+    return mInputBox->getText();
+  }
+
   void UIConsole::clearInput()
   {
     mInputBox->setText("");
@@ -102,6 +109,11 @@ namespace REGoth
     element->setHeight(20);
     mScrollArea->scrollDownPct(1.0);  // Move scrollbar to the very bottom ; FIXME: Does not work
                                       // correctly
+  }
+
+  void UIConsole::clearOutput()
+  {
+    // TODO
   }
 
   REGOTH_DEFINE_RTTI(UIConsole)
