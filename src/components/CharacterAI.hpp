@@ -236,7 +236,7 @@ namespace REGoth
 
     /**
      * @return True, if the physical Character Controller should be moved or have gravity
-     *         applyied in this update cycle.
+     *         applied in this update cycle.
      */
     bool needsToUpdatePhysics(const bs::Vector3& rootMotion) const;
 
