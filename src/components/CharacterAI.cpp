@@ -224,8 +224,8 @@ namespace REGoth
   bool CharacterAI::jump()
   {
     if (!isStateSwitchAllowed()) return false;
-    if (isInAir) return false;
-    
+    if (mIsInAir) return false;
+
     return tryPlayTransitionAnimationTo("S_JUMP");
   }
 
@@ -362,7 +362,7 @@ namespace REGoth
       handleTurning();
     }
 
-    handleFalling();
+    handleFallingAndFlying();
 
     bs::Vector3 rootMotion = bs::Vector3::ZERO;
 
@@ -378,12 +378,12 @@ namespace REGoth
       rootMotion *= -1.0;
     }
 
-    if (isInAir || !isStandingOnSolidGround || rootMotion.squaredLength() > 0)
+    if (needsToUpdatePhysics(rootMotion))
     {
       const float frameDelta = bs::gTime().getFixedFrameDelta();
       bs::Vector3 velocity   = rootMotion;
 
-      if (isInAir)
+      if (mIsInAir)
       {
         velocity.y += mFallingVelocity * frameDelta;
       }
@@ -397,10 +397,24 @@ namespace REGoth
       auto flags = mCharacterController->move(velocity);
 
       // TODO: Check if the character is standing on a dynamic object, which is NOT solid ground!
-      isStandingOnSolidGround = flags.isSet(bs::CharacterCollisionFlag::Down);
+      mIsStandingOnSolidGround = flags.isSet(bs::CharacterCollisionFlag::Down);
 
-      isInAir = !flags.isSet(bs::CharacterCollisionFlag::Down);
+      mIsInAir = !flags.isSet(bs::CharacterCollisionFlag::Down);
     }
+  }
+
+  bool CharacterAI::needsToUpdatePhysics(const bs::Vector3& rootMotion) const
+  {
+    // Apply gravity while being airborne
+    if (mIsInAir) return true;
+
+    // Apply gravity in case the object below us moved
+    if (!mIsStandingOnSolidGround) return true;
+
+    // Move according to the animation system if it wants us to
+    if (rootMotion.squaredLength() > 0.0f) return true;
+
+    return false;
   }
 
   void CharacterAI::handleTurning()
@@ -428,21 +442,23 @@ namespace REGoth
     }
   }
 
-  void CharacterAI::handleFalling()
+  void CharacterAI::handleFallingAndFlying()
   {
-    if (!isInAir)
+    if (mVisual->isPlayingFlyingAnimation())
+    {
+      // Overwrite air status, in case we have not lifted off yet
+      mIsInAir = true;
+
+      // Falling velocity is taken care of by the animation system
+      mFallingVelocity = 0.0f;
+    }
+    else if (!mIsInAir)
     {
       mFallingVelocity = 0.0f;
     }
     else
     {
       mFallingVelocity += FALLING_ACCELERATION_Y * bs::gTime().getFixedFrameDelta();
-    }
-
-    if (mVisual->isPlayingFlyingAnimation())
-    {
-      isInAir          = true;
-      mFallingVelocity = 0.0f;
     }
   }
 

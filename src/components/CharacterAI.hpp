@@ -229,9 +229,16 @@ namespace REGoth
     /**
      * If the character is not standing on solid ground, we need to increase
      * the falling velocity. Once it hits the ground again, the falling velocity
-     * needs to be reset.
+     * needs to be reset. Also some animations exist which want to take care of the falling
+     * velocity on their own.
      */
-    void handleFalling();
+    void handleFallingAndFlying();
+
+    /**
+     * @return True, if the physical Character Controller should be moved or have gravity
+     *         applyied in this update cycle.
+     */
+    bool needsToUpdatePhysics(const bs::Vector3& rootMotion) const;
 
     /**
      * Tries to transition to the given animation name.
@@ -290,10 +297,10 @@ namespace REGoth
 
     // Whether this character is standing on solid ground, like the world mesh or a static vob.
     // Dynamic objects such as movers or other characters do not count as solid.
-    bool isStandingOnSolidGround = false;
+    bool mIsStandingOnSolidGround = false;
 
     // Whether this character is currently in air, not standing on anything.
-    bool isInAir = false;
+    bool mIsInAir = false;
 
     // Whether the character is running, sneaking, etc
     AI::WalkMode mWalkMode = AI::WalkMode::Run;
