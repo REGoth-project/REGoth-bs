@@ -46,12 +46,21 @@ namespace REGoth
      * @param  input
      *           Current input - Needs to be provided manually by the ConsoleUI component.
      */
-    void onCommandConfirmed(const bs::String& input);
+    void parseAndExecuteCommand(const bs::String& input);
 
   protected:
     void onInitialized() override;
 
   private:
+    /**
+     * Clears console output
+     *
+     *
+     * @param  args
+     *           Does not use any arguments.
+     */
+    void command_Clear(bs::Vector<bs::String> args);
+
     /**
      * Lists all commands that are registered to this Console.
      *
@@ -265,7 +274,7 @@ namespace REGoth
      * @param  command
      *           The command itself with its reference to the callback and other useful information.
      */
-    void registerCommand(const bs::String& name, Command command);
+    void registerCommand(const Command& command);
 
     /**
      * Registers all commands.
@@ -274,7 +283,7 @@ namespace REGoth
 
   private:
     HUIConsole mConsoleUI;
-    bs::Map<bs::String, Command> mCommands;
+    bs::Vector<Command> mCommands;
     using commandCallback = void (Console::*)(bs::Vector<bs::String>);
 
     /**
@@ -306,6 +315,8 @@ namespace REGoth
      */
     struct Command
     {
+      bs::String name;
+      bs::UINT32 num_of_tokens;
       commandCallback callback;
       bs::Vector<TokenType> args = {};
       bs::String usage;  // TODO: Maybe I can generate this from the args?
@@ -319,6 +330,17 @@ namespace REGoth
     class CommandBuilder
     {
     public:
+      CommandBuilder& name(const bs::String& name)
+      {
+        // sanitize name and determine num of tokens aka how many words in the command
+        bs::String sanitized_name = name;
+        bs::StringUtil::trim(sanitized_name);
+        bs::UINT32 num_of_tokens = bs::StringUtil::split(sanitized_name, " ").size();
+
+        cmd.name          = sanitized_name;
+        cmd.num_of_tokens = num_of_tokens;
+        return *this;
+      }
       CommandBuilder& callback(commandCallback callback)
       {
         cmd.callback = callback;

@@ -26,11 +26,9 @@ namespace REGoth
 
     bs::GUIPanel* foregroundPanel = topPanel->addNewElement<bs::GUIPanel>(0);
     mScrollArea                   = foregroundPanel->addNewElement<bs::GUIScrollArea>();
-    setOutput("Welcome to the REGoth Console :)");
 
     // FIXME: Input box does not appear properly ontop of the texture so i moved it below everything
     mInputBox = layoutY->addNewElement<bs::GUIInputBox>(false, "GothicConsoleInputBox");
-    mInputBox->setText("I am a console!");
   }
 
   UIConsole::~UIConsole()
@@ -42,6 +40,8 @@ namespace REGoth
     mOnConfirm      = mInputBox->onConfirm;
     mOnInputChanged = mInputBox->onValueChanged;
     mToggleConsole  = bs::VirtualButton("ToggleConsole");
+
+    setOutput("Welcome to the REGoth Console :)");
   }
 
   void UIConsole::update()
@@ -95,7 +95,7 @@ namespace REGoth
     mInputBox->setText("");
   }
 
-  void UIConsole::setOutput(bs::Vector<bs::String> outputs)
+  void UIConsole::setOutput(const bs::Vector<bs::String>& outputs)
   {
     for (auto output : outputs)
     {
@@ -103,17 +103,26 @@ namespace REGoth
     }
   }
 
-  void UIConsole::setOutput(bs::String output)
+  void UIConsole::setOutput(const bs::String& output)
   {
-    auto element = mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(output));
-    element->setHeight(20);
+    auto label = mScrollArea->getLayout().addNewElement<bs::GUILabel>(bs::HString(output));
+    label->setHeight(20);
+    mOutputLabels.push_back(label);
+
+    mScrollArea->_updateLayout(mScrollArea->_getLayoutData());
     mScrollArea->scrollDownPct(1.0);  // Move scrollbar to the very bottom ; FIXME: Does not work
-                                      // correctly
+                                      // correctly, call above is workaround
   }
 
   void UIConsole::clearOutput()
   {
-    // TODO
+    // TODO: does not work correctly
+    for (bs::GUILabel* pLabel : mOutputLabels)
+    {
+      mScrollArea->getLayout().removeElement(pLabel);
+    }
+
+    mOutputLabels.clear();
   }
 
   REGOTH_DEFINE_RTTI(UIConsole)

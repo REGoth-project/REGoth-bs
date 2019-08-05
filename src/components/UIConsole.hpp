@@ -40,14 +40,14 @@ namespace REGoth
      *
      * @param outputs A Vector of Strings with the ouputs to be added to the Scrollable Area.
      */
-    void setOutput(bs::Vector<bs::String> outputs);
+    void setOutput(const bs::Vector<bs::String>& outputs);
 
     /**
      * Creates a UI Label for \p output to be put into the Scrollable Area.
      *
      * @param output a String with the output to be added to the Scrollable Area.
      */
-    void setOutput(bs::String output);
+    void setOutput(const bs::String& output);
 
     /**
      * Resets the input of the internal ScrollArea UIElement.
@@ -78,7 +78,8 @@ namespace REGoth
     State mState                   = State::Closed;
     bs::GUITexture* mBackground    = nullptr;
     bs::GUIScrollArea* mScrollArea = nullptr;
-    bs::GUIInputBox* mInputBox     = nullptr;
+    bs::Vector<bs::GUILabel*> mOutputLabels;
+    bs::GUIInputBox* mInputBox = nullptr;
     bs::VirtualButton mToggleConsole;
 
   public:
