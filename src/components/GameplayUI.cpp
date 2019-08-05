@@ -4,6 +4,7 @@
 #include <GUI/BsGUILayoutY.h>
 #include <GUI/BsGUIScrollArea.h>
 #include <RTTI/RTTI_GameplayUI.hpp>
+#include <components/UIConsole.hpp>
 #include <components/UIDialogueChoice.hpp>
 #include <components/UIFocusText.hpp>
 #include <components/UIInventory.hpp>
@@ -46,6 +47,11 @@ namespace REGoth
     if (!mInventoryUI)
     {
       mInventoryUI = addChildElement<UIInventory>("UIInventory");
+    }
+
+    if (!mConsoleUI)
+    {
+      mConsoleUI = addChildElement<UIConsole>("UIConsole");
     }
   }
 

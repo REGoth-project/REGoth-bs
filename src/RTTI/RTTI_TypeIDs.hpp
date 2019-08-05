@@ -73,5 +73,7 @@ namespace REGoth
     TID_REGOTH_StoryInformation             = 600065,
     TID_REGOTH_Inventory                    = 600066,
     TID_REGOTH_UIInventory                  = 600067,
+    TID_REGOTH_Console                      = 600068,
+    TID_REGOTH_UIConsole                    = 600069,
   };
 }  // namespace REGoth

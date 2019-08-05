@@ -70,8 +70,8 @@ namespace REGoth
 
     bs::Rect2I bounds = parentLayout().getBounds();
 
-    bounds.y      = 0;
     bounds.height = parentLayout().getBounds().height;
+    bounds.y      = bounds.height / 2;
     bounds.width  = 180;
 
     layout().setBounds(bounds);

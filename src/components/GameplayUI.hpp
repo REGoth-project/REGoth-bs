@@ -16,6 +16,9 @@ namespace REGoth
   class UIInventory;
   using HUIInventory = bs::GameObjectHandle<UIInventory>;
 
+  class UIConsole;
+  using HUIConsole = bs::GameObjectHandle<UIConsole>;
+
   class GameplayUI;
   using HGameplayUI = bs::GameObjectHandle<GameplayUI>;
 
@@ -104,6 +107,11 @@ namespace REGoth
       return mInventoryUI;
     }
 
+    HUIConsole consoleUI() const
+    {
+      return mConsoleUI;
+    }
+
   protected:
     void onInitialized() override;
 
@@ -111,6 +119,7 @@ namespace REGoth
     HUISubtitleBox mSubtitleBox;
     HUIFocusText mFocusText;
     HUIInventory mInventoryUI;
+    HUIConsole mConsoleUI;
 
   private:
   public:

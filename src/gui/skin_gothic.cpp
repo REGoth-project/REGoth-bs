@@ -101,12 +101,20 @@ namespace REGoth
     skin->setStyle("GothicSubtitleBoxCharacterName", labelDefaultHighlighted);
     skin->setStyle("GothicSubtitleBoxText", labelDefault);
 
-    auto button     = *skin->getStyle("Button");
-
+    auto button = *skin->getStyle("Button");
     // Commented out: That font is hard to read
     // button.font     = fontGothicOld10WhiteHi;
     // button.fontSize = 17;
     skin->setStyle("Button", button);
+
+    bs::GUIElementStyle consoleBackground = baseStyle;
+    consoleBackground.normal.texture      = gOriginalGameResources().sprite("CONSOLE.TGA");
+    skin->setStyle("GothicConsoleBackground", consoleBackground);
+
+    auto consoleInputBox = *skin->getStyle("InputBox");
+    // consoleInputBox.font     = fontGothicOld10WhiteHi;
+    // consoleInputBox.fontSize = 17;
+    skin->setStyle("GothicConsoleInputBox", consoleInputBox);
 
     // Cache the skin for later use
     s_SkinGothic = skin;
