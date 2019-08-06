@@ -79,7 +79,8 @@ namespace REGoth
 
     // call callback and pass arguments
     tokenized_input.erase(tokenized_input.begin(), tokenized_input.begin() + it->num_of_tokens);
-    if (tokenized_input.size() != it->args.size())
+    // FIXME: allow trailing arguments that are ignored for now
+    if (tokenized_input.size() < it->args.size())
     {
       REGOTH_LOG(Info, Uncategorized,
                  "[Console] Wrong number of arguments: Should be {0}, but is {1}!", it->args.size(),
@@ -90,14 +91,14 @@ namespace REGoth
     (this->*it->callback)(tokenized_input);
   }
 
-  void Console::command_Clear(bs::Vector<bs::String> args)
+  void Console::command_Clear(bs::Vector<bs::String>& args)
   {
     REGOTH_LOG(Info, Uncategorized, "[Console] Command 'clear' executed!");
 
     mConsoleUI->clearOutput();
   }
 
-  void Console::command_List(bs::Vector<bs::String> args)
+  void Console::command_List(bs::Vector<bs::String>& args)
   {
     REGOTH_LOG(Info, Uncategorized, "[Console] Command 'list' executed!");
     bs::Vector<bs::String> outputs;
@@ -113,18 +114,35 @@ namespace REGoth
     mConsoleUI->setOutput(outputs);
   }
 
-  void Console::command_Help(bs::Vector<bs::String> args)
+  void Console::command_Help(bs::Vector<bs::String>& args)
   {
     REGOTH_LOG(Info, Uncategorized, "[Console] Command 'help' executed!");
     bs::Vector<bs::String> outputs;
 
-    bs::String& command = args.front();
-    auto it = std::find_if(mCommands.begin(), mCommands.end(), [&command](const Command& cmd) {
-      return (bs::StringUtil::compare(cmd.name, command) == 0);
-    });
+    // detect command
+    auto it = mCommands.begin();
+    for (; it != mCommands.end(); it++)
+    {
+      // construct command based on number of tokens
+      bs::UINT32 num_of_tokens = it->num_of_tokens;
+      if (args.size() < num_of_tokens) continue;
+      bs::String command;
+      for (bs::UINT32 i = 0; i < num_of_tokens; i++)
+      {
+        if (!command.empty())
+        {
+          command = command + " ";
+        }
+        command = command + args[i];
+      }
+
+      // if the command matches the input we just break and it will contain the correct command
+      if (bs::StringUtil::compare(command, it->name) == 0) break;
+    }
+
     if (it == mCommands.end())
     {
-      outputs.push_back("Unkown command: " + command);
+      outputs.push_back("Unkown command!");
     }
     else
     {
@@ -137,7 +155,7 @@ namespace REGoth
     mConsoleUI->setOutput(outputs);
   }
 
-  void Console::command_CheatFull(bs::Vector<bs::String> args)
+  void Console::command_CheatFull(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'cheat full' is not implemented yet!");
@@ -145,7 +163,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'cheat full' is not implemented yet!");
   }
 
-  void Console::command_CheatGod(bs::Vector<bs::String> args)
+  void Console::command_CheatGod(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'cheat god' is not implemented yet!");
@@ -153,7 +171,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'cheat god' is not implemented yet!");
   }
 
-  void Console::command_Insert(bs::Vector<bs::String> args)
+  void Console::command_Insert(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'insert' is not implemented yet!");
@@ -161,7 +179,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'insert' is not implemented yet!");
   }
 
-  void Console::command_Spawnmass(bs::Vector<bs::String> args)
+  void Console::command_SpawnMass(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'spawnmass' is not implemented yet!");
@@ -169,7 +187,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'spawnmass' is not implemented yet!");
   }
 
-  void Console::command_Kill(bs::Vector<bs::String> args)
+  void Console::command_Kill(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'kill' is not implemented yet!");
@@ -177,7 +195,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'kill' is not implemented yet!");
   }
 
-  void Console::command_EditAbilities(bs::Vector<bs::String> args)
+  void Console::command_EditAbilities(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'edit abilities' is not implemented yet!");
@@ -185,7 +203,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'edit abilities' is not implemented yet!");
   }
 
-  void Console::command_EditFocus(bs::Vector<bs::String> args)
+  void Console::command_EditFocus(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'edit focus' is not implemented yet!");
@@ -193,7 +211,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'edit focus' is not implemented yet!");
   }
 
-  void Console::command_SetTime(bs::Vector<bs::String> args)
+  void Console::command_SetTime(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'set time' is not implemented yet!");
@@ -201,7 +219,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'set time' is not implemented yet!");
   }
 
-  void Console::command_GotoWaypoint(bs::Vector<bs::String> args)
+  void Console::command_GotoWaypoint(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'goto waypoint' is not implemented yet!");
@@ -209,7 +227,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'goto waypoint' is not implemented yet!");
   }
 
-  void Console::command_GotoCamera(bs::Vector<bs::String> args)
+  void Console::command_GotoCamera(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'goto camera' is not implemented yet!");
@@ -217,7 +235,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'goto camera' is not implemented yet!");
   }
 
-  void Console::command_GotoPos(bs::Vector<bs::String> args)
+  void Console::command_GotoPos(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'goto pos' is not implemented yet!");
@@ -225,7 +243,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'goto pos' is not implemented yet!");
   }
 
-  void Console::command_AIGoto(bs::Vector<bs::String> args)
+  void Console::command_AIGoto(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'aigoto' is not implemented yet!");
@@ -233,7 +251,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'aigoto' is not implemented yet!");
   }
 
-  void Console::command_SetClippingfactor(bs::Vector<bs::String> args)
+  void Console::command_SetClippingfactor(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized,
@@ -242,7 +260,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'set clippingfactor' is not implemented yet!");
   }
 
-  void Console::command_ZFogZone(bs::Vector<bs::String> args)
+  void Console::command_ZFogZone(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'zfogzone' is not implemented yet!");
@@ -250,7 +268,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'zfogzone' is not implemented yet!");
   }
 
-  void Console::command_ToggleConsole(bs::Vector<bs::String> args)
+  void Console::command_ToggleConsole(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'toggle console' is not implemented yet!");
@@ -258,7 +276,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'toggle console' is not implemented yet!");
   }
 
-  void Console::command_ToggleFrame(bs::Vector<bs::String> args)
+  void Console::command_ToggleFrame(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'toggle frame' is not implemented yet!");
@@ -266,7 +284,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'toggle frame' is not implemented yet!");
   }
 
-  void Console::command_ToggleWaynet(bs::Vector<bs::String> args)
+  void Console::command_ToggleWaynet(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'toggle waynet' is not implemented yet!");
@@ -274,7 +292,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'toggle waynet' is not implemented yet!");
   }
 
-  void Console::command_Firstperson(bs::Vector<bs::String> args)
+  void Console::command_Firstperson(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'firstperson' is not implemented yet!");
@@ -282,7 +300,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'firstperson' is not implemented yet!");
   }
 
-  void Console::command_HeroExport(bs::Vector<bs::String> args)
+  void Console::command_HeroExport(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'hero export' is not implemented yet!");
@@ -290,7 +308,7 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'hero export' is not implemented yet!");
   }
 
-  void Console::command_HeroImport(bs::Vector<bs::String> args)
+  void Console::command_HeroImport(bs::Vector<bs::String>& args)
   {
     // TODO: implement
     REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'hero import' is not implemented yet!");
@@ -361,7 +379,7 @@ namespace REGoth
 
     command = CommandBuilder()
                   .name("spawnmass")
-                  .callback(&This::command_Spawnmass)
+                  .callback(&This::command_SpawnMass)
                   .arg(TokenType::Literal)
                   .usage("Usage: spawnmass {giga} [amount]")
                   .help("")

@@ -12,14 +12,10 @@ namespace REGoth
   /**
    * This class handles the logical side of the in-game Console.
    * This is where the command functions are defined and are registered to the corresponding command.
-   * Handles history of executed command (TODO) and tries for autocomplete suggestions of the current
-   * input supplied by the ConsoleUI component.
    * Executes correct command based on textual input.
    */
   class Console : public bs::Component
   {
-    struct Command;  // forward declaration
-
   public:
     Console(const bs::HSceneObject& parent);
     virtual ~Console();
@@ -55,216 +51,194 @@ namespace REGoth
     /**
      * Clears console output
      *
-     *
      * @param  args
      *           Does not use any arguments.
      */
-    void command_Clear(bs::Vector<bs::String> args);
+    void command_Clear(bs::Vector<bs::String>& args);
 
     /**
      * Lists all commands that are registered to this Console.
      *
-     *
      * @param  args
      *           Does not use any arguments.
      */
-    void command_List(bs::Vector<bs::String> args);
+    void command_List(bs::Vector<bs::String>& args);
 
     /**
      * Prints a 'helpful' help message (aka a short description) of the given command.
      *
-     *
      * @param  args
      *           Name of the command.
      */
-    void command_Help(bs::Vector<bs::String> args);
+    void command_Help(bs::Vector<bs::String>& args);
 
     /**
      * Restores health and mana of the currently controlled(?) character.
      * TODO: currently controlled or PC_HERO only?
      *
-     *
      * @param  args
      *           Does not use any arguments.
      */
-    void command_CheatFull(bs::Vector<bs::String> args);
+    void command_CheatFull(bs::Vector<bs::String>& args);
 
     /**
      * Turns on god mode for the currently controlled(?) character.
      * TODO: currently controlled or PC_HERO only?
      * TODO: Is god mode only invulnerability?
      *
-     *
      * @param  args
      *           Does not use any arguments.
      */
-    void command_CheatGod(bs::Vector<bs::String> args);
+    void command_CheatGod(bs::Vector<bs::String>& args);
 
     /**
      * Insert the given Item/NPC infront of the currently controlled character.
-     *
      *
      * @param  args
      *           Name of an item or NPC.
      * TODO: Anything else you can insert with this?
      */
-    void command_Insert(bs::Vector<bs::String> args);
+    void command_Insert(bs::Vector<bs::String>& args);
 
     /**
      * Spawns (???) around(?) the currently controlled character-
      *
-     *
      * @param  args
      *           Amount of entities to spawn.
      */
-    void command_Spawnmass(bs::Vector<bs::String> args);
+    void command_SpawnMass(bs::Vector<bs::String>& args);
 
     /**
      * Kills target currently in focus.
      *
-     *
      * @param  args
      *           Does not use any arguments.
      */
-    void command_Kill(bs::Vector<bs::String> args);
+    void command_Kill(bs::Vector<bs::String>& args);
 
     /**
      * Allows editing various attributes and abilities of the currently controlled character.
      *
-     *
      * @param  args
      *           Does not use any arguments.
      */
-    void command_EditAbilities(bs::Vector<bs::String> args);
+    void command_EditAbilities(bs::Vector<bs::String>& args);
 
     /**
      * Allows editing various attributes and abilities of the character currently in focus.
      *
-     *
      * @param  args
      *           Does not use any arguments.
      */
-    void command_EditFocus(bs::Vector<bs::String> args);
+    void command_EditFocus(bs::Vector<bs::String>& args);
 
     /**
      * Sets the current time.
      *
-     *
      * @param  args
      *           Two literal arguments in the form of [hh] [mm].
      */
-    void command_SetTime(bs::Vector<bs::String> args);
+    void command_SetTime(bs::Vector<bs::String>& args);
 
     /**
      * Teleport the currently controlled character to the given waypoint.
      *
-     *
      * @param  args
      *           Waypoint to teleport to.
      */
-    void command_GotoWaypoint(bs::Vector<bs::String> args);
+    void command_GotoWaypoint(bs::Vector<bs::String>& args);
 
     /**
      * Teleports PC_HERO(?) to the free floating camera.
      *
-     *
      * @param  args
      *           Does not use any arguments.
      */
-    void command_GotoCamera(bs::Vector<bs::String> args);
+    void command_GotoCamera(bs::Vector<bs::String>& args);
 
     /**
      * Teleport the currently controlled character to the given position in the world.
      *
-     *
      * @param  args
      *           Three literal arguments in the form of [x] [y] [z] to repesent a position.
      */
-    void command_GotoPos(bs::Vector<bs::String> args);
+    void command_GotoPos(bs::Vector<bs::String>& args);
 
     /**
      * ???
-     *
      *
      * @param  args
      *           Waypoint.
      */
-    void command_AIGoto(bs::Vector<bs::String> args);
+    void command_AIGoto(bs::Vector<bs::String>& args);
 
     /**
      * ???
-     *
      *
      * @param  args
      *           Literal float argument.
      */
-    void command_SetClippingfactor(bs::Vector<bs::String> args);
+    void command_SetClippingfactor(bs::Vector<bs::String>& args);
 
     /**
      * ???
      *
-     *
      * @param  args
      *           Does not use any arguments.
      */
-    void command_ZFogZone(bs::Vector<bs::String> args);
+    void command_ZFogZone(bs::Vector<bs::String>& args);
 
     /**
      * Toggles the visuals of the console.
      *
-     *
      * @param  args
      *           Does not use any arguments.
      */
-    void command_ToggleConsole(bs::Vector<bs::String> args);
+    void command_ToggleConsole(bs::Vector<bs::String>& args);
 
     /**
      * Toggles the visuals of the frame (whole gameui).
      *
-     *
      * @param  args
      *           Does not use any arguments.
      */
-    void command_ToggleFrame(bs::Vector<bs::String> args);
+    void command_ToggleFrame(bs::Vector<bs::String>& args);
 
     /**
      * Toggles the visuals of the waynet (debug).
      *
-     *
      * @param  args
      *           Does not use any arguments.
      */
-    void command_ToggleWaynet(bs::Vector<bs::String> args);
+    void command_ToggleWaynet(bs::Vector<bs::String>& args);
 
     /**
      * Toggles firstperson mode.
      *
-     *
      * @param  args
      *           Does not use any arguments.
      */
-    void command_Firstperson(bs::Vector<bs::String> args);
+    void command_Firstperson(bs::Vector<bs::String>& args);
 
     /**
      * Exports attributes and abilities of currently controlled characters to a file with the given
      * name in the save folder.
      *
-     *
      * @param  args
      *           Name of the file.
      */
-    void command_HeroExport(bs::Vector<bs::String> args);
+    void command_HeroExport(bs::Vector<bs::String>& args);
 
     /**
      * Import attributes and abilities from the file with the given name in the save folder and apply
      * them to the currently controlled character.
      *
-     *
      * @param  args
      *           Name of the file.
      */
-    void command_HeroImport(bs::Vector<bs::String> args);
+    void command_HeroImport(bs::Vector<bs::String>& args);
 
+    struct Command;  // forward declaration
     /**
      * Register a command by
      *
@@ -284,7 +258,7 @@ namespace REGoth
   private:
     HUIConsole mConsoleUI;
     bs::Vector<Command> mCommands;
-    using commandCallback = void (Console::*)(bs::Vector<bs::String>);
+    using commandCallback = void (Console::*)(bs::Vector<bs::String>&);
 
     /**
      * A collection of all types of tokesn that can appear in a command like the command itself and

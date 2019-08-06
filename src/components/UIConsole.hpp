@@ -16,7 +16,7 @@ namespace REGoth
    * properties (TODO).
    *
    * The component is largely autonomous and works solely on the input of the user by delegated it to
-   * the actual Console component.
+   * the actual Console component via events.
    */
   class UIConsole : public UIElement
   {
