@@ -32,7 +32,6 @@ add_library(REGothEngine STATIC
   RTTI/RTTI_ScriptObjectStorage.hpp
   RTTI/RTTI_StoryInformation.hpp
   RTTI/RTTI_TypeIDs.hpp
-  RTTI/RTTI_Console.hpp
   RTTI/RTTI_UIConsole.hpp
   RTTI/RTTI_UIDialogueChoice.hpp
   RTTI/RTTI_UIElement.hpp
