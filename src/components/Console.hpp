@@ -9,6 +9,9 @@ namespace REGoth
   class UIConsole;
   using HUIConsole = bs::GameObjectHandle<UIConsole>;
 
+  class GameWorld;
+  using HGameWorld = bs::GameObjectHandle<GameWorld>;
+
   /**
    * This class handles the logical side of the in-game Console.
    * This is where the command functions are defined and are registered to the corresponding command.
@@ -17,7 +20,7 @@ namespace REGoth
   class Console : public bs::Component
   {
   public:
-    Console(const bs::HSceneObject& parent);
+    Console(const bs::HSceneObject& parent, HGameWorld gameWorld);
     virtual ~Console();
 
     /**
@@ -131,6 +134,14 @@ namespace REGoth
      *           Does not use any arguments.
      */
     void command_EditFocus(bs::Vector<bs::String>& args);
+
+    /**
+     * Gets the current time.
+     *
+     * @param  args
+     *           Does not use any arguments.
+     */
+    void command_GetTime(bs::Vector<bs::String>& args);
 
     /**
      * Sets the current time.
@@ -256,6 +267,7 @@ namespace REGoth
     void registerAllCommand();
 
   private:
+    HGameWorld mGameWorld;
     HUIConsole mConsoleUI;
     bs::Vector<Command> mCommands;
     using commandCallback = void (Console::*)(bs::Vector<bs::String>&);

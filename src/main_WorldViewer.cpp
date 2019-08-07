@@ -131,7 +131,7 @@ public:
 
     REGoth::GameplayUI::createGlobal(mMainCamera);
 
-    world->SO()->addComponent<Console>();
+    world->SO()->addComponent<Console>(world);
 
     auto inventory = hero->SO()->getComponent<Inventory>();
 

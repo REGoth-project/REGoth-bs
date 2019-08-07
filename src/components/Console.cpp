@@ -1,4 +1,6 @@
 #include "Console.hpp"
+#include "components/GameClock.hpp"
+#include "components/GameWorld.hpp"
 #include "components/GameplayUI.hpp"
 #include "components/UIConsole.hpp"
 #include <RTTI/RTTI_Console.hpp>
@@ -7,8 +9,9 @@
 
 namespace REGoth
 {
-  Console::Console(const bs::HSceneObject& parent)
+  Console::Console(const bs::HSceneObject& parent, HGameWorld gameWorld)
       : bs::Component(parent)
+      , mGameWorld(gameWorld)
   {
     setName("Console");
 
@@ -211,12 +214,29 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'edit focus' is not implemented yet!");
   }
 
+  void Console::command_GetTime(bs::Vector<bs::String>& args)
+  {
+    auto clock       = mGameWorld->gameclock();
+    bs::INT32 day    = clock->getDay();
+    bs::INT32 hour   = clock->getHour();
+    bs::INT32 minute = clock->getMinute();
+
+    // FIXME: proper formatting for hour and day, maybe move to GameClock
+    bs::String output = bs::StringUtil::format("Time: Day {0} {1}:{2}", day, hour, minute);
+
+    mConsoleUI->setOutput(output);
+    REGOTH_LOG(Info, Uncategorized, output);
+  }
+
   void Console::command_SetTime(bs::Vector<bs::String>& args)
   {
-    // TODO: implement
-    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'set time' is not implemented yet!");
+    auto clock   = mGameWorld->gameclock();
+    bs::INT32 hh = bs::parseINT32(args[0]);
+    bs::INT32 mm = bs::parseINT32(args[1]);
 
-    mConsoleUI->setOutput("Command 'set time' is not implemented yet!");
+    clock->setTime(hh, mm);
+
+    mConsoleUI->setOutput("Set time called!");
   }
 
   void Console::command_GotoWaypoint(bs::Vector<bs::String>& args)
@@ -406,6 +426,14 @@ namespace REGoth
                   .name("edit focus")
                   .callback(&This::command_EditFocus)
                   .usage("Usage: edit focus")
+                  .help("")
+                  .build();
+    registerCommand(command);
+
+    command = CommandBuilder()
+                  .name("get time")
+                  .callback(&This::command_GetTime)
+                  .usage("Usage: get time")
                   .help("")
                   .build();
     registerCommand(command);
