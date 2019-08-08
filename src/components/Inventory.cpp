@@ -44,7 +44,7 @@ namespace REGoth
       REGOTH_THROW(InvalidParametersException, "Count cannot be 0");
     }
 
-    mItemCountByInstance[instance] += 1;
+    mItemCountByInstance[instance] += count;
 
     OnItemChanged(instance);
   }

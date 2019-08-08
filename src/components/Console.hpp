@@ -95,6 +95,15 @@ namespace REGoth
     void command_CheatGod(bs::Vector<bs::String>& args);
 
     /**
+     * Give the given item to pc_hero
+     *
+     * @param  args
+     *           Name of an item.
+     *           Amount.
+     */
+    void command_Give(bs::Vector<bs::String>& args);
+
+    /**
      * Insert the given Item/NPC infront of the currently controlled character.
      *
      * @param  args

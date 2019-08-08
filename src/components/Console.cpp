@@ -1,7 +1,9 @@
 #include "Console.hpp"
+#include "components/Character.hpp"
 #include "components/GameClock.hpp"
 #include "components/GameWorld.hpp"
 #include "components/GameplayUI.hpp"
+#include "components/Inventory.hpp"
 #include "components/UIConsole.hpp"
 #include <RTTI/RTTI_Console.hpp>
 #include <String/BsString.h>
@@ -174,12 +176,43 @@ namespace REGoth
     mConsoleUI->setOutput("Command 'cheat god' is not implemented yet!");
   }
 
+  void Console::command_Give(bs::Vector<bs::String>& args)
+  {
+    bs::String& instance = args[0];
+    bs::StringUtil::replaceAll(instance, "_", "");
+    bs::StringUtil::toUpperCase(instance);
+    const bs::UINT32 amount = bs::parseINT32(args[1]);
+
+    auto inventory = mGameWorld->hero()->SO()->getComponent<Inventory>();
+    inventory->giveItem(instance, amount);
+
+    bs::String output = bs::StringUtil::format("Gave {0} {1} to hero.", instance, amount);
+    mConsoleUI->setOutput(output);
+  }
+
   void Console::command_Insert(bs::Vector<bs::String>& args)
   {
-    // TODO: implement
-    REGOTH_LOG(Warning, Uncategorized, "[Console] Command 'insert' is not implemented yet!");
+    bs::String& instance = args[0];
+    bs::StringUtil::replaceAll(instance, "_", "");
+    bs::StringUtil::toUpperCase(instance);
+    const bs::Transform& transform = mGameWorld->hero()->SO()->getTransform();
+    REGOTH_LOG(Info, Uncategorized, "Insert called with {0}.", instance);
 
-    mConsoleUI->setOutput("Command 'insert' is not implemented yet!");
+    // determine if it is an item or a "creature"
+    if (bs::StringUtil::startsWith(instance, "it"))  // this is not entirely correct :)
+    {
+      REGOTH_LOG(Info, Uncategorized, "Is am item!", instance);
+      mGameWorld->insertItem(instance, transform);
+    }
+    else
+    {
+      REGOTH_LOG(Info, Uncategorized, "Is a character!", instance);
+      mGameWorld->insertCharacter(instance, transform);
+    }
+
+    bs::String output =
+        bs::StringUtil::format("Inserted {0} at some place.", instance /*, transform*/);
+    mConsoleUI->setOutput(output);
   }
 
   void Console::command_SpawnMass(bs::Vector<bs::String>& args)
@@ -216,10 +249,10 @@ namespace REGoth
 
   void Console::command_GetTime(bs::Vector<bs::String>& args)
   {
-    auto clock       = mGameWorld->gameclock();
-    bs::INT32 day    = clock->getDay();
-    bs::INT32 hour   = clock->getHour();
-    bs::INT32 minute = clock->getMinute();
+    auto clock             = mGameWorld->gameclock();
+    const bs::INT32 day    = clock->getDay();
+    const bs::INT32 hour   = clock->getHour();
+    const bs::INT32 minute = clock->getMinute();
 
     // FIXME: proper formatting for hour and day, maybe move to GameClock
     bs::String output = bs::StringUtil::format("Time: Day {0} {1}:{2}", day, hour, minute);
@@ -230,9 +263,9 @@ namespace REGoth
 
   void Console::command_SetTime(bs::Vector<bs::String>& args)
   {
-    auto clock   = mGameWorld->gameclock();
-    bs::INT32 hh = bs::parseINT32(args[0]);
-    bs::INT32 mm = bs::parseINT32(args[1]);
+    auto clock         = mGameWorld->gameclock();
+    const bs::INT32 hh = bs::parseINT32(args[0]);
+    const bs::INT32 mm = bs::parseINT32(args[1]);
 
     clock->setTime(hh, mm);
 
@@ -384,6 +417,16 @@ namespace REGoth
                   .name("cheat god")
                   .callback(&This::command_CheatGod)
                   .usage("Usage: cheat god")
+                  .help("")
+                  .build();
+    registerCommand(command);
+
+    command = CommandBuilder()
+                  .name("give")
+                  .callback(&This::command_Give)
+                  .arg(TokenType::Instance)
+                  .arg(TokenType::Literal)
+                  .usage("Usage: give [name] [amount]")
                   .help("")
                   .build();
     registerCommand(command);
