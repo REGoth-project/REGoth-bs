@@ -39,6 +39,9 @@ int REGoth::runEngine(Engine& engine)
   REGOTH_LOG(Info, Uncategorized, "[Engine] Loading Shaders");
   engine.setShaders();
 
+  REGOTH_LOG(Info, Uncategorized, "[Engine] Caching original resources");
+  engine.populateResourceCache();
+
   REGOTH_LOG(Info, Uncategorized, "[Engine] Setting up input");
   engine.setupInput();
 

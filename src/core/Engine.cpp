@@ -22,6 +22,7 @@
 #include <log/logging.hpp>
 #include <original-content/OriginalGameFiles.hpp>
 #include <original-content/VirtualFileSystem.hpp>
+#include "original-content/OriginalGameResources.hpp"
 
 using namespace REGoth;
 
@@ -114,6 +115,11 @@ void Engine::loadCachedResourceManifests()
 
   REGOTH_LOG(Info, Uncategorized, "[Engine]   - Original Gothic Assets");
   BsZenLib::LoadResourceManifest();
+}
+
+void REGoth::Engine::populateResourceCache()
+{
+  OriginalGameResources::populateCache();
 }
 
 void Engine::setupInput()

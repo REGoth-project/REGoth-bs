@@ -35,6 +35,12 @@ namespace REGoth
   public:
 
     /**
+     * Goes through the loaded VDFS packages and imports the original games resources
+     * which were not already cached.
+     */
+    static void populateCache();
+
+    /**
      * Loads a texture from the original game files.
      *
      * If the resource has not been cached before, it will be cached inside.

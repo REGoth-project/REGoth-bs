@@ -87,6 +87,12 @@ namespace REGoth
     void loadCachedResourceManifests();
 
     /**
+     * Goes through the loaded VDFS packages and imports the original games resources
+     * which were not already cached.
+     */
+    void populateResourceCache();
+
+    /**
      * Save resource manifests containing resources loaded during this run.
      */
     void saveCachedResourceManifests();

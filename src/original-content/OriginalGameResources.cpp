@@ -1,4 +1,5 @@
 #include "OriginalGameResources.hpp"
+#include <BsZenLib/CacheUtility.hpp>
 #include <BsZenLib/ImportFont.hpp>
 #include <BsZenLib/ImportMorphMesh.hpp>
 #include <BsZenLib/ImportSkeletalMesh.hpp>
@@ -10,6 +11,11 @@
 
 namespace REGoth
 {
+  void OriginalGameResources::populateCache()
+  {
+    BsZenLib::CacheWholeVDFS(gVirtualFileSystem().getFileIndex());
+  }
+
   bs::HTexture OriginalGameResources::texture(const bs::String& originalFileName)
   {
     if (BsZenLib::HasCachedTexture(originalFileName))
