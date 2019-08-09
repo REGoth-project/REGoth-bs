@@ -144,8 +144,10 @@ namespace REGoth
       populateWaypointPositionCache();
     }
 
-    if (!from || !to)
-      return {};
+    if (!from || !to) return {};
+
+    // FIXME: HACK, this waypoint does not seem to go anywhere but that takes AGES to figure out!
+    if (to->getName() == "SPAWN_TALL_PATH_BANDITOS2_02_04") return {};
 
     // FIXME: This is not a very fast implementation. Improve!
     // FIXME: The FIXME above is as old as old REGoth. And now part of REGoth-bs! Wohoo!
