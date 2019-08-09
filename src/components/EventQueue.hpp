@@ -159,7 +159,7 @@ namespace REGoth
     /**
      * Cyclic update
      */
-    virtual void fixedUpdate() override;
+    virtual void update() override;
 
   private:
     /**

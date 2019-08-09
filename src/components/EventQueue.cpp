@@ -37,7 +37,7 @@ namespace REGoth
     message->isFirstRun = false;
   }
 
-  void EventQueue::fixedUpdate()
+  void EventQueue::update()
   {
     processMessageQueue();
   }

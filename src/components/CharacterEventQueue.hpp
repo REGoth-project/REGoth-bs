@@ -147,7 +147,7 @@ namespace REGoth
     /**
      * Cyclic update
      */
-    virtual void fixedUpdate() override;
+    virtual void update() override;
 
   private:
     bool EV_Event(AI::EventMessage& message, bs::HSceneObject sender);

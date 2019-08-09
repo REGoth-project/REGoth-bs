@@ -305,7 +305,7 @@ namespace REGoth
         break;
 
       case AI::StateMessage::ST_Wait:
-        message.waitTime -= bs::gTime().getFixedFrameDelta();
+        message.waitTime -= bs::gTime().getFrameDelta();
 
         if (message.waitTime <= 0)
         {
@@ -390,13 +390,13 @@ namespace REGoth
     return done;
   }
 
-  void CharacterEventQueue::fixedUpdate()
+  void CharacterEventQueue::update()
   {
-    EventQueue::fixedUpdate();
+    EventQueue::update();
 
     if (mCharacterAI->isPhysicsActive())
     {
-      mScriptState->doAIState(bs::gTime().getFixedFrameDelta());
+      mScriptState->doAIState(bs::gTime().getFrameDelta());
     }
     else
     {
