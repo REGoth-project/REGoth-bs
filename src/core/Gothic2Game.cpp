@@ -46,7 +46,7 @@ void Gothic2Game::setupScene()
   }
 
   const bs::Color skyColor = bs::Color{120, 140, 180} / 255.0f;
-  world->SO()->addComponent<Sky>(world, skyColor);
+  world->SO()->addComponent<Sky>(world, config()->skyRenderMode, skyColor);
 
   bs::HSceneObject heroSO = world->SO()->findChild("PC_HERO");
 

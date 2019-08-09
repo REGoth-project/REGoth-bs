@@ -4,11 +4,10 @@
 #include <Scene/BsComponent.h>
 
 #include <RTTI/RTTIUtil.hpp>
+#include <components/SkyStateGenerator.hpp>
 
 namespace REGoth
 {
-  class SkyColoring;
-
   class GameWorld;
   using HGameWorld = bs::GameObjectHandle<GameWorld>;
 
@@ -18,19 +17,28 @@ namespace REGoth
   class Sky : public bs::Component
   {
   public:
-    Sky(const bs::HSceneObject& parent, HGameWorld gameWorld, const bs::Color& skyColor);
-    virtual ~Sky() override;
+    /**
+     * The utilised render mode, i.e. render the sky as a textured dome or a plane.
+     */
+    enum class RenderMode
+    {
+      Dome,
+      Plane
+    };
 
-    void onInitialized() override;
+    Sky(const bs::HSceneObject& parent, HGameWorld gameWorld, const RenderMode& renderMode,
+        const bs::Color& skyColor);
+    virtual ~Sky() override;
 
     void update() override;
 
   private:
-    void applySkySettingsToCamera() const;
+    void renderFog(const bs::Color& color, float fogNear, float fogFar) const;
+    void renderSky() const;
 
-    bs::SPtr<SkyColoring> mSkyColoring;
+    SkyStateGenerator mSkyStateGen{bs::Color{}, bs::String{}};
     HGameWorld mGameWorld;
-    const bs::Color mSkyColor;
+    const RenderMode mRenderMode = RenderMode::Plane;
 
   public:
     REGOTH_DECLARE_RTTI(Sky)

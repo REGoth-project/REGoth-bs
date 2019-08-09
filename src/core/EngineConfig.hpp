@@ -6,6 +6,8 @@
 
 #include <cxxopts.hpp>
 
+#include <components/Sky.hpp>
+
 namespace bs
 {
   /**
@@ -20,6 +22,15 @@ namespace bs
 
 namespace REGoth
 {
+  /**
+   * Allows using the `REGoth::Sky::RenderMode` data type together with `cxxopts`.
+   *
+   * @param str Input stringstream.
+   * @param path Path to write data to.
+   * @return The original stringstream.
+   */
+  std::stringstream& operator>>(std::stringstream& str, REGoth::Sky::RenderMode& renderMode);
+
   /**
    * @brief The base configuration for an `Engine`.
    *
@@ -98,5 +109,10 @@ namespace REGoth
      * Whether the game should be run in fullscreen.
      */
     bool isFullscreen = false;
+
+    /**
+     * The sky render mode of the game.
+     */
+    Sky::RenderMode skyRenderMode = Sky::RenderMode::Plane;
   };
 }  // namespace REGoth

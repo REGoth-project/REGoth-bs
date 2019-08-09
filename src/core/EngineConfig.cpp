@@ -5,6 +5,7 @@
 
 #include <cxxopts.hpp>
 
+#include <components/Sky.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 #include <original-content/OriginalGameFiles.hpp>
@@ -17,6 +18,26 @@ std::stringstream& bs::operator>>(std::stringstream& str, bs::Path& path)
   return str;
 }
 
+std::stringstream& REGoth::operator>>(std::stringstream& str, Sky::RenderMode& renderMode)
+{
+  bs::String mode{str.str().c_str()};
+  bs::StringUtil::toLowerCase(mode);
+  if (mode == "plane")
+  {
+    renderMode = Sky::RenderMode::Plane;
+  }
+  else if (mode == "dome")
+  {
+    renderMode = Sky::RenderMode::Dome;
+  }
+  else
+  {
+    REGOTH_THROW(InvalidStateException, "Sky render mode cannot be \"" + mode +
+                                            "\".  Possible values: \"plane\", \"dome\".");
+  }
+  return str;
+}
+
 EngineConfig::~EngineConfig()
 {
   // pass
@@ -24,23 +45,30 @@ EngineConfig::~EngineConfig()
 
 void EngineConfig::registerCLIEngineOptions(cxxopts::Options& options)
 {
-  // Configure positional handling
+  // Configure positional handling.
   options.positional_help("[GAME ASSETS PATH]");
   options.show_positional_help();
 
-  const std::string grp = "Core engine";
+  // Define core options.
+  options.add_option("", "g", "game-assets",
+                     "Path to a Gothic or Gothic II installation.  Can also be the first positional "
+                     "argument",
+                     cxxopts::value<bs::Path>(originalAssetsPath), "[GAME ASSETS PATH]");
 
-  // Define engine options
-  options.add_option(grp, "g", "game-assets", "Path to a Gothic or Gothic II installation",
-                     cxxopts::value<bs::Path>(originalAssetsPath), "[PATH]");
-  options.add_option(grp, "", "video-x-res", "X resolution",
+  // Video options.
+  const std::string vidgrp = "Video";
+  options.add_option(vidgrp, "", "video-x-res", "X resolution",
                      cxxopts::value<unsigned int>(resolutionX), "[PX]");
-  options.add_option(grp, "", "video-y-res", "Y resolution",
+  options.add_option(vidgrp, "", "video-y-res", "Y resolution",
                      cxxopts::value<unsigned int>(resolutionY), "[PX]");
-  options.add_option(grp, "", "video-fullscreen", "Run in fullscreen mode",
+  options.add_option(vidgrp, "", "video-fullscreen", "If set, the game runs in fullscreen mode",
                      cxxopts::value<bool>(isFullscreen), "");
+  options.add_option(vidgrp, "", "video-sky-mode",
+                     "Sky render mode, either \"plane\" or \"dome\".  Note: \"dome\" can only be "
+                     "used in Gothic II",
+                     cxxopts::value<Sky::RenderMode>(skyRenderMode), "[plane|dome]");
 
-  // Allow game-assets to also be a positional
+  // Allow game-assets to also be a positional.
   options.parse_positional({"game-assets"});
 }
 
@@ -100,6 +128,12 @@ void EngineConfig::verifyCLIEngineOptions()
 
   // Now that originalAssetsPath is determined, try to derive the game type.
   gameType = OriginalGameFiles{originalAssetsPath}.gameType();
+
+  // In Gothic 1, the sky render mode cannot be "dome".
+  if (gameType == GameType::Gothic1 && skyRenderMode == Sky::RenderMode::Dome)
+  {
+    REGOTH_THROW(InvalidStateException, "Only Gothic II supports the \"dome\" sky render mode.");
+  }
 }
 
 void EngineConfig::registerCLIOptions(cxxopts::Options& /* options */)

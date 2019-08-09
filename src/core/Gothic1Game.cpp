@@ -47,7 +47,7 @@ void Gothic1Game::setupScene()
   }
 
   const bs::Color skyColor = bs::Color{114, 93, 82} / 255.0f;
-  world->SO()->addComponent<Sky>(world, skyColor);
+  world->SO()->addComponent<Sky>(world, Sky::RenderMode::Plane, skyColor);
 
   bs::HSceneObject heroSO = world->SO()->findChild("PC_HERO");
 

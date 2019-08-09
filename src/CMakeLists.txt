@@ -79,8 +79,8 @@ add_library(REGothEngine STATIC
   components/ScriptBackedBy.hpp
   components/Sky.cpp
   components/Sky.hpp
-  components/SkyColoring.cpp
-  components/SkyColoring.hpp
+  components/SkyStateGenerator.cpp
+  components/SkyStateGenerator.hpp
   components/StoryInformation.cpp
   components/StoryInformation.hpp
   components/ThirdPersonCamera.cpp
