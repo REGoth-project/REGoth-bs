@@ -36,8 +36,8 @@ namespace REGoth
   {
     throwIfNotUpperCase(instance);
 
-    REGOTH_LOG(Info, Uncategorized, "[Inventory] Add {0}x item {1} to Inventory of {2}", count,
-               instance, SO()->getName());
+    // REGOTH_LOG(Info, Uncategorized, "[Inventory] Add {0}x item {1} to Inventory of {2}", count,
+    //            instance, SO()->getName());
 
     if (count == 0)
     {
