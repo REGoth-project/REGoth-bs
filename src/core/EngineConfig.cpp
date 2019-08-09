@@ -32,8 +32,8 @@ std::stringstream& REGoth::operator>>(std::stringstream& str, Sky::RenderMode& r
   }
   else
   {
-    REGOTH_THROW(InvalidStateException, "Sky render mode cannot be \"" + mode +
-                                            "\".  Possible values: \"plane\", \"dome\".");
+    REGOTH_THROW(InvalidParametersException, "Sky render mode cannot be \"" + mode +
+                                                 "\".  Possible values: \"plane\", \"dome\".");
   }
   return str;
 }
