@@ -59,9 +59,6 @@ namespace REGoth
       bs::UINT32 index = mAllInfos.size();
 
       mAllInfos.emplace_back(info);
-
-      REGOTH_LOG(Info, Uncategorized, "[StoryInformation] Info {0} for {1}", info.name,
-                 mSelf->getName());
     }
   }
 
