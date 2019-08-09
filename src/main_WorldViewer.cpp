@@ -108,7 +108,12 @@ public:
 
       world->runInitScripts();
 
+
+      REGOTH_LOG(Info, Uncategorized, "[WorldViewer] Saving world...");
+
       world->save(SAVEGAME);
+
+      REGOTH_LOG(Info, Uncategorized, "[WorldViewer] Done!");
     }
     else
     {
