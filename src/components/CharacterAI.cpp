@@ -61,6 +61,14 @@ namespace REGoth
           bs::StringUtil::format("Scene Object {0} does not have a CCharacterController component!",
                                  SO()->getName()));
     }
+
+    // All characters will be disabled right after inserting them so they don't
+    // cause the game to slow down. If they are all active, physics will be
+    // calculated even for those out of reach which takes a huge hit on
+    // performance.
+    //
+    // The character-controller will be enabled by the AI or user input.
+    deactivatePhysics();
   }
 
   void CharacterAI::deactivatePhysics()

@@ -145,12 +145,6 @@ namespace REGoth
     characterSO->setPosition(transform.pos());
     characterSO->setRotation(transform.rot());
 
-    // All script-inserted characters will be disabled right after inserting them so they
-    // don't cause the game to slow down. If they are all active, physics will be calculated
-    // even for those out of reach which takes a huge hit on performance.
-    // The character-controller will be enabled by the AI or user input.
-    // ai->deactivatePhysics(); // Commented out for testing
-
     auto character = characterSO->addComponent<Character>(instance, thisWorld);
 
     mAllCharacters.push_back(character);
