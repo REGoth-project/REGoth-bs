@@ -38,8 +38,8 @@ namespace REGoth
   void Sky::update()
   {
     // Update the sky state.
-    const float dayRatio               = mGameWorld->gameclock()->getDayRatio();
-    std::shared_ptr<SkyState> skyState = mSkyStateGen.update(dayRatio);
+    const float dayRatio                     = mGameWorld->gameclock()->getDayRatio();
+    std::shared_ptr<const SkyState> skyState = mSkyStateGen.update(dayRatio);
 
     // Render fog and sky.
     renderFog(skyState->fogColor, skyState->fogNear, skyState->fogFar);

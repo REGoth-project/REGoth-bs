@@ -88,7 +88,7 @@ namespace REGoth
      *                   reads 23:59 this would need to be close to 1.
      * @return The current sky state after update.
      */
-    const std::shared_ptr<SkyState> update(float dayRatio);
+    const std::shared_ptr<const SkyState> update(float dayRatio);
 
   private:
     /**

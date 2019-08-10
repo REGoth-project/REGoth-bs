@@ -164,13 +164,13 @@ SkyStateGenerator::~SkyStateGenerator()
   // pass
 }
 
-const std::shared_ptr<SkyState> SkyStateGenerator::update(float dayRatio)
+const std::shared_ptr<const SkyState> SkyStateGenerator::update(float dayRatio)
 {
   // Set time to current state.
   mCurrentSkyState->time = std::fmod(dayRatio + 0.5f, 1.0f);
 
   // Find two presets to interpolate between by index.
-  unsigned int p1i, p2i;
+  std::uint32_t p1i, p2i;
   std::tie(p1i, p2i) = findPresetIndices();
 
   // Interpolate presets and save to current state.
@@ -183,12 +183,12 @@ const std::shared_ptr<SkyState> SkyStateGenerator::update(float dayRatio)
   return mCurrentSkyState;
 }
 
-std::tuple<unsigned int, unsigned int> SkyStateGenerator::findPresetIndices() const
+std::tuple<std::uint32_t, std::uint32_t> SkyStateGenerator::findPresetIndices() const
 {
-  unsigned int p1i = static_cast<unsigned int>(mSkyStatePresets.size()) - 1;
-  unsigned int p2i = 0;
+  std::uint32_t p1i = static_cast<std::uint32_t>(mSkyStatePresets.size()) - 1;
+  std::uint32_t p2i = 0;
 
-  for (unsigned int i = 0; i < mSkyStatePresets.size(); ++i)
+  for (std::uint32_t i = 0; i < mSkyStatePresets.size(); ++i)
   {
     // Since the sky states are ordered, our start state is the first one which is supposed to start
     // *before* the current time.  The target state is then the one right after.  Since it's easier
