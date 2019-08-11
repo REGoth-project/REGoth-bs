@@ -131,6 +131,8 @@ add_library(REGothEngine STATIC
   engine-content/EngineContent.hpp
   engine-content/internal/FindEngineContent.cpp
   engine-content/internal/FindEngineContent.hpp
+  exception/Assert.hpp
+  exception/AssertionException.hpp
   exception/Throw.hpp
   gui/skin_gothic.cpp
   gui/skin_gothic.hpp
