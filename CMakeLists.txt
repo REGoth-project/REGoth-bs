@@ -85,7 +85,7 @@ set(CXXOPTS_BUILD_TESTS OFF CACHE BOOL "" FORCE) # Disable unnecessary targets f
 add_definitions(-DCXXOPTS_NO_RTTI) # Disable RTTI dependent instructions.
 add_subdirectory(lib/cxxopts)
 
-# If CMake build type is either Debug or RelWithDebInfo, enable assertions.
+# Assertions.
 if(CMAKE_BUILD_TYPE MATCHES Debug OR CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
   add_definitions(-DREGOTH_ENABLE_ASSERTIONS)
 endif()
