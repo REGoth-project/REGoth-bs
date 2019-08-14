@@ -185,10 +185,12 @@ const std::shared_ptr<const SkyState> SkyStateGenerator::update(float dayRatio)
 
 std::tuple<bs::UINT32, bs::UINT32> SkyStateGenerator::findPresetIndices() const
 {
-  bs::UINT32 p1i = static_cast<bs::UINT32>(mSkyStatePresets.size() - 1);
+  bs::UINT32 presetsCount = static_cast<bs::UINT32>(mSkyStatePresets.size());
+
+  bs::UINT32 p1i = presetsCount - 1;
   bs::UINT32 p2i = 0;
 
-  for (bs::UINT32 i = 0; i < mSkyStatePresets.size(); ++i)
+  for (bs::UINT32 i = 0; i < presetsCount; ++i)
   {
     // Since the sky states are ordered, our start state is the first one which is supposed to start
     // *before* the current time.  The target state is then the one right after.  Since it's easier
@@ -198,8 +200,8 @@ std::tuple<bs::UINT32, bs::UINT32> SkyStateGenerator::findPresetIndices() const
     {
       // Subtracting 1 will not cause a negative numbers here since the first state has a time of
       // 0.0, so the check should never pass for it.  If everything is set up correctly that is.
-      p1i = (i - 1) % mSkyStatePresets.size();
-      p2i = i % mSkyStatePresets.size();
+      p1i = (i - 1) % presetsCount;
+      p2i = i % presetsCount;
       break;
     }
   }
