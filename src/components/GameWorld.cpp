@@ -1,16 +1,21 @@
 #include "GameWorld.hpp"
+
 #include <BsZenLib/ImportPath.hpp>
-#include <RTTI/RTTI_GameWorld.hpp>
+#include <daedalus/DATFile.h>
+
 #include <Resources/BsResources.h>
 #include <Scene/BsPrefab.h>
 #include <Scene/BsSceneManager.h>
+#include <Threading/BsTaskScheduler.h>
+
 #include <components/Character.hpp>
 #include <components/Focusable.hpp>
 #include <components/GameClock.hpp>
 #include <components/Item.hpp>
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
-#include <daedalus/DATFile.h>
+
+#include <RTTI/RTTI_GameWorld.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
@@ -376,7 +381,7 @@ namespace REGoth
     return waynet()->findWay(waypointFrom, waypointTo);
   }
 
-  void GameWorld::save(const bs::String& saveName)
+  bs::SPtr<bs::Task> GameWorld::save(const bs::String& saveName)
   {
     bs::HPrefab cached = bs::Prefab::create(SO());
 
@@ -386,9 +391,17 @@ namespace REGoth
       KeepExisting = false,
     };
 
-    // TODO: Should store at savegame location
-    bs::Path path = BsZenLib::GothicPathToCachedWorld(saveName);
-    bs::gResources().save(cached, path, Overwrite);
+    auto saveTask = bs::Task::create("Save:" + saveName, [cached, saveName]() {
+      // TODO: Should store at savegame location
+      bs::Path path = BsZenLib::GothicPathToCachedWorld(saveName);
+
+      // FIXME: This call can take quite long when running under a debugger
+      bs::gResources().save(cached, path, Overwrite);
+    });
+
+    bs::TaskScheduler::instance().addTask(saveTask);
+
+    return saveTask;
   }
 
   bs::HPrefab GameWorld::load(const bs::String& saveName)
