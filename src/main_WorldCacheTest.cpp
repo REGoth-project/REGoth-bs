@@ -4,11 +4,12 @@
 #include <Components/BsCCamera.h>
 #include <Utility/BsTimer.h>
 
+#include <BsZenLib/CacheUtility.hpp>
+
 #include <core.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
-#include <BsZenLib/CacheUtility.hpp>
 
 class REGothWorldCacheTest : public REGoth::EmptyGame
 {
@@ -18,7 +19,6 @@ public:
   void setupScene() override
   {
     using namespace REGoth;
-
 
     BsZenLib::CacheWholeVDFS(gVirtualFileSystem().getFileIndex());
 

@@ -21,8 +21,8 @@
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 #include <original-content/OriginalGameFiles.hpp>
+#include <original-content/OriginalGameResources.hpp>
 #include <original-content/VirtualFileSystem.hpp>
-#include "original-content/OriginalGameResources.hpp"
 
 using namespace REGoth;
 
