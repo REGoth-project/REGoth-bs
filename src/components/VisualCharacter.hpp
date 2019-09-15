@@ -35,7 +35,8 @@ namespace REGoth
      * @param  bodyMesh  Name of the body mesh to use, e.g. `HUM_BODY_NAKED0`. The
      *                   file extension can be omitted.
      */
-    void setBodyMesh(const bs::String& bodyMesh);
+    void setBodyMesh(const bs::String& bodyMesh, bs::UINT32 bodyTextureIdx = 0,
+                     bs::UINT32 bodySkinColorIdx = 0);
 
     /**
      * Sets the headmesh for this model.
@@ -55,6 +56,20 @@ namespace REGoth
      * Replaces the current body mesh of this model from the current body-state
      */
     void updateBodyMesh();
+
+    /**
+     * @return The name of the current body texture. Empty string if not possible
+     *         to extract.
+     */
+    bs::String getCurrentBodyTextureName() const;
+
+    /**
+     * Sets the texture to be displayed on the body mesh.
+     *
+     * @param  originalFileName  Name of the texture file as in the original game files.
+     *                           For example, "STONE.TGA".
+     */
+    void setBodyTexture(const bs::String& originalFileName);
 
     /**
      * Replaces the current headmesh of this model from the current body-state
@@ -78,7 +93,7 @@ namespace REGoth
     REGOTH_DECLARE_RTTI(VisualCharacter);
 
   protected:
-    VisualCharacter() = default; // For RTTI
+    VisualCharacter() = default;  // For RTTI
   };
 
   using HVisualCharacter = bs::GameObjectHandle<VisualCharacter>;
