@@ -14,9 +14,13 @@
 
 #pragma once
 #include "RTTI_TypeIDs.hpp"
+
 #include <BsCorePrerequisites.h>
+#include <RTTI/BsStdRTTI.h>
+#include <RTTI/BsStringRTTI.h>
 #include <Reflection/BsRTTIType.h>
 #include <Scene/BsSceneObject.h>
+
 #include <exception/Throw.hpp>
 
 /**
