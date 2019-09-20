@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 
+#include <BsPrerequisites.h>
 #include <FileSystem/BsPath.h>
 
 #include <core/Engine.hpp>

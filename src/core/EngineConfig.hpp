@@ -1,5 +1,6 @@
 #pragma once
 
+#include <BsPrerequisites.h>
 #include <FileSystem/BsPath.h>
 
 #include <core/GameType.hpp>

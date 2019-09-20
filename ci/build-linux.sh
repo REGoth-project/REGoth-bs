@@ -4,7 +4,7 @@ rm -rf build
 mkdir build
 cd build
 
-wget https://dilborceisv8p.cloudfront.net/bsf_2019.07.26_linux.tar.gz
+wget https://dilborceisv8p.cloudfront.net/bsf_2019.09.18_linux.tar.gz
 
 mkdir bsf
 tar -xf bsf_*.tar.gz -C bsf
