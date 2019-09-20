@@ -231,6 +231,26 @@ namespace REGoth
     }
 
     /**
+     * Access to the material at the given index. Returns an empty handle if
+     * the index is out of range.
+     */
+    bs::HMaterial material(bs::UINT32 index) const;
+
+    /**
+     * Copies all materials currently used by the renderable. This makes it possible
+     * to have different materials on visuals using the same mesh. Note that the
+     * materials are never saved so that you need to re-build them after deserialization.
+     */
+    void cloneMaterials();
+
+    /**
+     * After the materials have been cloned, they need to be destroyed when the mesh
+     * changes. Otherwise new materials would be cloned on every mesh change which
+     * would fill up memory.
+     */
+    void destroyClonedMaterials();
+
+    /**
      * Access to attaching something to specific nodes for sub-classes.
      */
     HNodeVisuals nodeVisuals() const
@@ -302,9 +322,11 @@ namespace REGoth
     bs::UINT32 getClipLayer(HZAnimationClip clip) const;
 
     // Configuration ----------------------------------------------------------
-
     BsZenLib::Res::HModelScriptFile mModelScript; /**< Model-script of the displayed model */
     BsZenLib::Res::HMeshWithMaterials mMesh; /**< Currently displayed mesh, from the model script */
+
+    /** Filled incase cloneMaterials() has been called. Not serialized. */
+    bs::Vector<bs::HMaterial> mClonedMaterials;
 
     // Object Sub Tree --------------------------------------------------------
     bs::Vector<bs::HSceneObject> mSubObjects; /**< All created sub-objects by this component */

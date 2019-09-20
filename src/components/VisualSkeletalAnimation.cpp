@@ -4,6 +4,7 @@
 #include <Components/BsCAnimation.h>
 #include <Components/BsCRenderable.h>
 #include <Debug/BsDebug.h>
+#include <Material/BsMaterial.h>
 #include <Mesh/BsMesh.h>
 #include <RTTI/RTTI_VisualSkeletalAnimation.hpp>
 #include <Scene/BsSceneObject.h>
@@ -26,10 +27,13 @@ namespace REGoth
   {
     bs::Component::onInitialized();
 
-    // If this is called after deserialization, we need register the event-callback in here
     if (mSubRenderable)
     {
+      // If this is called after deserialization, we need register the event-callback in here
       setupAnimationComponent();
+
+      // Also the materials need to be cloned again, as those resources were not saved.
+      cloneMaterials();
     }
   }
 
@@ -49,6 +53,41 @@ namespace REGoth
     {
       REGOTH_THROW(InvalidStateException, "Missing sub-component!");
     }
+  }
+
+  bs::HMaterial VisualSkeletalAnimation::material(bs::UINT32 index) const
+  {
+    auto& materials = mSubRenderable->getMaterials();
+
+    if (index >= materials.size()) return {};
+
+    return materials[index];
+  }
+
+  void VisualSkeletalAnimation::cloneMaterials()
+  {
+    // Access the original materials for cloning
+    const auto& materials = mMesh->getMaterials();
+
+    destroyClonedMaterials();
+    mClonedMaterials.resize(materials.size());
+
+    for (bs::UINT32 i = 0; i < (bs::UINT32)mClonedMaterials.size(); i++)
+    {
+      mClonedMaterials[i] = materials[i]->clone();
+    }
+
+    mSubRenderable->setMaterials(mClonedMaterials);
+  }
+
+  void VisualSkeletalAnimation::destroyClonedMaterials()
+  {
+    for (bs::HMaterial m : mClonedMaterials)
+    {
+      m->destroy();
+    }
+
+    mClonedMaterials.clear();
   }
 
   void VisualSkeletalAnimation::setModelScript(BsZenLib::Res::HModelScriptFile modelScript)
@@ -87,6 +126,7 @@ namespace REGoth
 
       deleteObjectSubtree();
       buildObjectSubtree();
+      cloneMaterials();
 
       addDefaultAttachments();
 

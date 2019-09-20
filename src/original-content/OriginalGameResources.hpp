@@ -33,7 +33,6 @@ namespace REGoth
   class OriginalGameResources
   {
   public:
-
     /**
      * Goes through the loaded VDFS packages and imports the original games resources
      * which were not already cached.
@@ -114,4 +113,4 @@ namespace REGoth
    * Global access to the virtual file system.
    */
   OriginalGameResources& gOriginalGameResources();
-}
+}  // namespace REGoth

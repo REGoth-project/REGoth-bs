@@ -1,13 +1,17 @@
 #include "OriginalGameResources.hpp"
+
 #include <BsZenLib/CacheUtility.hpp>
 #include <BsZenLib/ImportFont.hpp>
 #include <BsZenLib/ImportMorphMesh.hpp>
 #include <BsZenLib/ImportSkeletalMesh.hpp>
 #include <BsZenLib/ImportStaticMesh.hpp>
 #include <BsZenLib/ImportTexture.hpp>
-#include <Image/BsSpriteTexture.h>
+
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
+
+#include <Image/BsSpriteTexture.h>
+#include <Threading/BsTaskScheduler.h>
 
 namespace REGoth
 {
@@ -18,67 +22,104 @@ namespace REGoth
 
   bs::HTexture OriginalGameResources::texture(const bs::String& originalFileName)
   {
+    bs::HTexture htexture;
+
     if (BsZenLib::HasCachedTexture(originalFileName))
     {
-      return BsZenLib::LoadCachedTexture(originalFileName);
+      htexture = BsZenLib::LoadCachedTexture(originalFileName);
     }
-    else
+
+    // This call also checks whether dependencies are loaded. Broken resources
+    // can be fixed by importing them.
+    if (!htexture.isLoaded())
     {
-      return BsZenLib::ImportAndCacheTexture(originalFileName, gVirtualFileSystem().getFileIndex());
+      htexture =
+          BsZenLib::ImportAndCacheTexture(originalFileName, gVirtualFileSystem().getFileIndex());
     }
+
+    return htexture;
   }
 
   BsZenLib::Res::HModelScriptFile OriginalGameResources::modelScript(
       const bs::String& originalFileName)
   {
+    BsZenLib::Res::HModelScriptFile hmodelScript;
+
     if (BsZenLib::HasCachedMDS(originalFileName))
     {
-      return BsZenLib::LoadCachedMDS(originalFileName);
+      hmodelScript = BsZenLib::LoadCachedMDS(originalFileName);
     }
-    else
+
+    // This call also checks whether dependencies are loaded. Broken resources
+    // can be fixed by importing them.
+    if (!hmodelScript.isLoaded())
     {
-      return BsZenLib::ImportAndCacheMDS(originalFileName, gVirtualFileSystem().getFileIndex());
+      hmodelScript =
+          BsZenLib::ImportAndCacheMDS(originalFileName, gVirtualFileSystem().getFileIndex());
     }
+
+    return hmodelScript;
   }
 
   BsZenLib::Res::HMeshWithMaterials OriginalGameResources::staticMesh(
       const bs::String& originalFileName)
   {
+    BsZenLib::Res::HMeshWithMaterials hmesh;
+
     if (BsZenLib::HasCachedStaticMesh(originalFileName))
     {
-      return BsZenLib::LoadCachedStaticMesh(originalFileName);
+      hmesh = BsZenLib::LoadCachedStaticMesh(originalFileName);
     }
-    else
+
+    // This call also checks whether dependencies are loaded. Broken resources
+    // can be fixed by importing them.
+    if (!hmesh.isLoaded())
     {
-      return BsZenLib::ImportAndCacheStaticMesh(originalFileName,
-                                                gVirtualFileSystem().getFileIndex());
+      hmesh =
+          BsZenLib::ImportAndCacheStaticMesh(originalFileName, gVirtualFileSystem().getFileIndex());
     }
+
+    return hmesh;
   }
 
   BsZenLib::Res::HMeshWithMaterials OriginalGameResources::morphMesh(
       const bs::String& originalFileName)
   {
+    BsZenLib::Res::HMeshWithMaterials hmesh;
+
     if (BsZenLib::HasCachedMorphMesh(originalFileName))
     {
-      return BsZenLib::LoadCachedMorphMesh(originalFileName);
+      hmesh = BsZenLib::LoadCachedMorphMesh(originalFileName);
     }
-    else
+
+    // This call also checks whether dependencies are loaded. Broken resources
+    // can be fixed by importing them.
+    if (!hmesh.isLoaded())
     {
-      return BsZenLib::ImportAndCacheMorphMesh(originalFileName,
-                                               gVirtualFileSystem().getFileIndex());
+      hmesh =
+          BsZenLib::ImportAndCacheMorphMesh(originalFileName, gVirtualFileSystem().getFileIndex());
     }
+
+    return hmesh;
   }
 
   bs::HFont OriginalGameResources::font(const bs::String& originalFileName)
   {
+    bs::HFont hfont;
+
     if (BsZenLib::HasCachedFont(originalFileName))
     {
-      return BsZenLib::LoadCachedFont(originalFileName);
+      hfont = BsZenLib::LoadCachedFont(originalFileName);
     }
-    else
+
+    // This call also checks whether dependencies are loaded. Broken resources
+    // can be fixed by importing them.
+    if (!hfont.isLoaded())
     {
-      return BsZenLib::ImportAndCacheFont(originalFileName, gVirtualFileSystem().getFileIndex());
+      hfont = BsZenLib::ImportAndCacheFont(originalFileName, gVirtualFileSystem().getFileIndex());
     }
+
+    return hfont;
   }
 
   bs::HSpriteTexture OriginalGameResources::sprite(const bs::String& originalFileName)

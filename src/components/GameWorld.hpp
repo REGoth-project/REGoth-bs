@@ -176,10 +176,14 @@ namespace REGoth
     static HGameWorld createEmpty();
 
     /**
-     * Saves the current world and everything that goes with it to a
-     * savegame with the given name.
+     * Saves the current world and everything that goes with it to a savegame
+     * with the given name.
+     *
+     * Saving is done in parallel by first copying the game-state (on this thread)
+     * and then saving it in another thread. The task performing the actual save is
+     * returned so you can `wait` for it.
      */
-    void save(const bs::String& saveName);
+    bs::SPtr<bs::Task> save(const bs::String& saveName);
 
     /**
      * Loads the world with the given name previously saved via save().

@@ -679,10 +679,10 @@ namespace REGoth
       HVisualCharacter characterVisual = character->SO()->getComponent<VisualCharacter>();
 
       bs::StringUtil::toUpperCase(bodyMesh);
-      characterVisual->setBodyMesh(bodyMesh);
+      characterVisual->setBodyMesh(bodyMesh, bodyTexIndex, bodyTexColor);
 
       bs::StringUtil::toUpperCase(headMesh);
-      characterVisual->setHeadMesh(headMesh);
+      characterVisual->setHeadMesh(headMesh, headTexIndex, teethTexIndex);
     }
 
     void DaedalusVMForGameWorld::external_AI_GotoWaypoint()

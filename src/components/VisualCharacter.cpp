@@ -1,19 +1,26 @@
 #include "VisualCharacter.hpp"
-#include "original-content/VirtualFileSystem.hpp"
-#include <Animation/BsAnimationClip.h>
+#include <RTTI/RTTI_VisualCharacter.hpp>
+
 #include <BsZenLib/ImportPath.hpp>
 #include <BsZenLib/ImportSkeletalMesh.hpp>
+
 #include <Components/BsCAnimation.h>
 #include <Components/BsCRenderable.h>
+
+#include <Animation/BsAnimationClip.h>
 #include <Debug/BsDebug.h>
+#include <Image/BsTexture.h>
+#include <Material/BsMaterial.h>
 #include <Mesh/BsMesh.h>
-#include <RTTI/RTTI_VisualCharacter.hpp>
 #include <Scene/BsSceneObject.h>
+
 #include <animation/Animation.hpp>
 #include <animation/StateNaming.hpp>
 #include <components/NodeVisuals.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
+#include <original-content/OriginalGameResources.hpp>
+#include <original-content/VirtualFileSystem.hpp>
 
 const bs::String MODEL_NODE_NAME_R_HAND    = "BIP01 R HAND";
 const bs::String MODEL_NODE_NAME_L_HAND    = "BIP01 L HAND";
@@ -30,7 +37,8 @@ namespace REGoth
     setName("VisualCharacter");
   }
 
-  void VisualCharacter::setBodyMesh(const bs::String& bodyMesh)
+  void VisualCharacter::setBodyMesh(const bs::String& bodyMesh, bs::UINT32 bodyTextureIdx,
+                                    bs::UINT32 bodySkinColorIdx)
   {
     if (!modelScript())
     {
@@ -60,6 +68,11 @@ namespace REGoth
 
       setMesh(modelScript()->getMeshes()[0]);
     }
+
+    mBodyState.bodyTextureIdx   = bodyTextureIdx;
+    mBodyState.bodySkinColorIdx = bodySkinColorIdx;
+
+    updateBodyMesh();
   }
 
   void VisualCharacter::setHeadMesh(const bs::String& headmesh, bs::UINT32 headTextureIdx,
@@ -81,6 +94,53 @@ namespace REGoth
 
   void VisualCharacter::updateBodyMesh()
   {
+    bs::String bodyTexName = getCurrentBodyTextureName();
+
+    if (bodyTexName.empty()) return;
+
+    bs::String newTextureName = bodyTexName;
+
+    bool isBodyTexture = bodyTexName.find("_BODY") != bs::String::npos;
+
+    // Only modify if that is the core body texture (not armor)
+    if (isBodyTexture)
+    {
+      if (mBodyState.bodyTextureIdx != 0)
+        newTextureName = bs::StringUtil::replaceAll(newTextureName, "_V0",
+                                                    "_V" + bs::toString(mBodyState.bodyTextureIdx));
+
+      if (mBodyState.bodySkinColorIdx != 0)
+        newTextureName = bs::StringUtil::replaceAll(
+            newTextureName, "_C0", "_C" + bs::toString(mBodyState.bodySkinColorIdx));
+    }
+
+    setBodyTexture(newTextureName);
+  }
+
+  bs::String VisualCharacter::getCurrentBodyTextureName() const
+  {
+    if (mesh()->getMaterials().empty()) return "";
+
+    auto bodyMaterial = mesh()->getMaterials()[0];
+    auto albedo       = bodyMaterial->getTexture("gAlbedoTex");
+
+    if (!albedo) return "";
+
+    return albedo->getName();
+  }
+
+  void VisualCharacter::setBodyTexture(const bs::String& originalFileName)
+  {
+    bs::HTexture texture = gOriginalGameResources().texture(originalFileName);
+
+    if (!texture)
+    {
+      REGOTH_THROW(InvalidParametersException, "Could not load body texture: " + originalFileName);
+    }
+
+    REGOTH_LOG(Info, Uncategorized, "Set body texture: {0}", originalFileName);
+
+    material(0)->setTexture("gAlbedoTex", texture);
   }
 
   void VisualCharacter::updateHeadMesh()
