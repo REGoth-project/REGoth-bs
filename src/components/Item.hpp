@@ -1,7 +1,7 @@
 #pragma once
+#include "ScriptBackedBy.hpp"
 #include <BsPrerequisites.h>
 #include <Scene/BsComponent.h>
-#include "ScriptBackedBy.hpp"
 
 namespace REGoth
 {
@@ -17,13 +17,19 @@ namespace REGoth
   public:
     Item(const bs::HSceneObject& parent, const bs::String& instance, HGameWorld gameWorld);
 
-  protected:
+    /**
+     * Returns the script instance this item was create from, e.g. `ITLSTORCH`.
+     */
+    const bs::String& itemInstance() const
+    {
+      return scriptInstanceName();
+    }
 
+  protected:
     void onInitialized() override;
     void onDestroyed() override;
 
   private:
-
     /**
      * Create a matching visual from the script object
      */
@@ -38,6 +44,6 @@ namespace REGoth
     REGOTH_DECLARE_RTTI(Item);
 
   protected:
-    Item() = default; // For RTTI
+    Item() = default;  // For RTTI
   };
 }  // namespace REGoth

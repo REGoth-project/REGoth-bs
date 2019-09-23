@@ -1,9 +1,15 @@
 #include "CharacterKeyboardInput.hpp"
+
 #include <RTTI/RTTI_CharacterKeyboardInput.hpp>
+
 #include <components/Character.hpp>
 #include <components/CharacterAI.hpp>
 #include <components/CharacterEventQueue.hpp>
+#include <components/Focusable.hpp>
 #include <components/GameWorld.hpp>
+#include <components/Inventory.hpp>
+#include <components/Item.hpp>
+
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 
@@ -73,19 +79,38 @@ namespace REGoth
     {
       auto thisCharacter = SO()->getComponent<Character>();
 
-      // TODO: Proper implementation of using focusable things
-      auto characters = mCharacter->findCharactersInRange(2.0f);
+      auto closestFocusable = mCharacter->findClosestFocusable();
 
-      if (!characters.empty())
+      if (closestFocusable)
       {
-        auto closestCharacter = characters.front();
+        auto characterEventQueue = closestFocusable->SO()->getComponent<CharacterEventQueue>();
+        auto item                = closestFocusable->SO()->getComponent<Item>();
 
-        auto eventQueue = closestCharacter->SO()->getComponent<CharacterEventQueue>();
+        if (characterEventQueue)
+        {
+          REGOTH_LOG(Info, Uncategorized, "[CharacterKeyboardInput] Talk to: {0}",
+                     characterEventQueue->SO()->getName());
 
-        REGOTH_LOG(Info, Uncategorized, "[CharacterKeyboardInput] Talk to: {0}",
-                   closestCharacter->SO()->getName());
-        eventQueue->clear();  // FIXME: Find out what's blocking the new message
-        eventQueue->pushTalkToCharacter(thisCharacter);
+          characterEventQueue->clear();  // FIXME: Find out what's blocking the new message
+          characterEventQueue->pushTalkToCharacter(thisCharacter);
+        }
+        else if (item)
+        {
+          auto inventory = mCharacter->SO()->getComponent<Inventory>();
+
+          REGOTH_LOG(Info, Uncategorized, "[CharacterKeyboardInput] Pick up item: {0}",
+                     item->itemInstance());
+
+          inventory->giveItem(item->itemInstance());
+
+          mWorld->removeItem(item);
+        }
+        else
+        {
+          REGOTH_LOG(Info, Uncategorized,
+                     "[CharacterKeyboardInput] Action on unknown focus object: {0}",
+                     closestFocusable->SO()->getName());
+        }
       }
     }
 

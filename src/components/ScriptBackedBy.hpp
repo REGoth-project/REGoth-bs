@@ -71,6 +71,14 @@ namespace REGoth
     }
 
     /**
+     * @return Script instance this was created from, e.g. `ITLSTORCH`.
+     */
+    const bs::String& scriptInstanceName() const
+    {
+      return mScriptInstance;
+    }
+
+    /**
      * @return Access to the script VM
      */
     Scripting::ScriptVMForGameWorld& scriptVM() const;

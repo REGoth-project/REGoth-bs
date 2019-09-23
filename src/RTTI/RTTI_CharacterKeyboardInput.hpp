@@ -6,13 +6,16 @@
 namespace REGoth
 {
   class RTTI_CharacterKeyboardInput
-    : public bs::RTTIType<CharacterKeyboardInput, bs::Component, RTTI_CharacterKeyboardInput>
+      : public bs::RTTIType<CharacterKeyboardInput, bs::Component, RTTI_CharacterKeyboardInput>
   {
     BS_BEGIN_RTTI_MEMBERS
-    // Nothing to serialize as of now
+    BS_RTTI_MEMBER_REFL(mCharacter, 0)
+    BS_RTTI_MEMBER_REFL(mCharacterAI, 1)
+    BS_RTTI_MEMBER_REFL(mEventQueue, 2)
+    BS_RTTI_MEMBER_REFL(mWorld, 3)
     BS_END_RTTI_MEMBERS
 
-    public:
+  public:
     RTTI_CharacterKeyboardInput()
     {
     }

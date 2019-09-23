@@ -244,6 +244,15 @@ namespace REGoth
     HItem insertItem(const bs::String& instance, const bs::String& spawnPoint);
 
     /**
+     * Removes an item from the world.
+     *
+     * This removes the items scene object from the world and unregisters it
+     * `GameWorld`. Items created using `insertItem` should only be removed
+     * using this method.
+     */
+    void removeItem(HItem item);
+
+    /**
      * Inserts a character at the given waypoint.
      *
      * Throws if instance or waypoint does not exist.

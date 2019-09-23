@@ -200,6 +200,29 @@ namespace REGoth
     return insertCharacter(instance, transform);
   }
 
+  template <typename T>
+  static void removeHandleFromVector(T handle, bs::Vector<T>& vector)
+  {
+    for (auto it = vector.begin(); it != vector.end(); it++)
+    {
+      if (*it == handle)
+      {
+        *it = vector.back();
+        vector.pop_back();
+      }
+    }
+  }
+
+  void GameWorld::removeItem(HItem item)
+  {
+    auto focusable = item->SO()->getComponent<Focusable>();
+
+    removeHandleFromVector(item, mAllItems);
+    removeHandleFromVector(focusable, mAllFocusables);
+
+    item->SO()->destroy();
+  }
+
   void GameWorld::initScriptVM()
   {
     bs::Vector<bs::UINT8> data = gVirtualFileSystem().readFile("GOTHIC.DAT");
