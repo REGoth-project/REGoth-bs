@@ -7,7 +7,8 @@ namespace REGoth
   class RTTI_Focusable : public bs::RTTIType<Focusable, bs::Component, RTTI_Focusable>
   {
     BS_BEGIN_RTTI_MEMBERS
-    // TODO: Fill RTTI Members
+    BS_RTTI_MEMBER_PLAIN(mText, 0)
+    BS_RTTI_MEMBER_PLAIN(mHeightOffset, 1)
     BS_END_RTTI_MEMBERS
 
   public:
