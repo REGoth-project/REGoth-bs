@@ -19,6 +19,9 @@ namespace REGoth
   class GameplayUI;
   using HGameplayUI = bs::GameObjectHandle<GameplayUI>;
 
+  class Character;
+  using HCharacter = bs::GameObjectHandle<Character>;
+
   /**
    * Gameplay UI
    * ===========
@@ -84,6 +87,11 @@ namespace REGoth
     bool isDialogueInProgress() const;
     void stopDialogue();
 
+    /**
+     * Set the character the HUD should be showing information for.
+     */
+    void setTargetCharacter(HCharacter character);
+
     HUIDialogueChoice choices() const
     {
       return mChoices;
@@ -105,12 +113,17 @@ namespace REGoth
     }
 
   protected:
+    void gatherInformationFromTargetCharacter();
+
     void onInitialized() override;
+    void update() override;
 
     HUIDialogueChoice mChoices;
     HUISubtitleBox mSubtitleBox;
     HUIFocusText mFocusText;
     HUIInventory mInventoryUI;
+
+    HCharacter mTargetCharacter;
 
   private:
   public:

@@ -108,7 +108,6 @@ public:
 
       world->runInitScripts();
 
-
       REGOTH_LOG(Info, Uncategorized, "[WorldViewer] Saving world...");
 
       world->save(SAVEGAME);
@@ -147,6 +146,7 @@ public:
     inventory->giveItem("ITARSCROLLSHRINK");
 
     gGameplayUI()->inventoryUI()->setViewedInventory(inventory);
+    gGameplayUI()->setTargetCharacter(hero);
   }
 
 protected:

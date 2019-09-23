@@ -16,6 +16,7 @@
 #include <components/Waynet.hpp>
 
 #include <RTTI/RTTI_GameWorld.hpp>
+#include <exception/Assert.hpp>
 #include <exception/Throw.hpp>
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
@@ -56,6 +57,7 @@ namespace REGoth
     //        At the moment, these lists are stored inside the save game, which is not optimal.
     // findAllCharacters();
     // findAllItems();
+    // findAllFocusables();
 
     // If this is true here, we're being de-serialized
     if (mIsInitialized) return;
@@ -98,6 +100,11 @@ namespace REGoth
     mAllItems = bs::gSceneManager().findComponents<Item>(false);
   }
 
+  void GameWorld::findAllFocusables()
+  {
+    mAllFocusables = bs::gSceneManager().findComponents<Focusable>(false);
+  }
+
   HItem GameWorld::insertItem(const bs::String& instance, const bs::Transform& transform)
   {
     HGameWorld thisWorld = bs::static_object_cast<GameWorld>(getHandle());
@@ -116,6 +123,10 @@ namespace REGoth
     focusable->setText(instance);
 
     mAllItems.push_back(item);
+
+    REGOTH_ASSERT(!!focusable, "Item {0} must be Focusable", itemSO->getName());
+
+    mAllFocusables.push_back(focusable);
 
     return item;
   }
@@ -153,6 +164,11 @@ namespace REGoth
     auto character = characterSO->addComponent<Character>(instance, thisWorld);
 
     mAllCharacters.push_back(character);
+
+    auto focusable = characterSO->getComponent<Focusable>();
+    REGOTH_ASSERT(!!focusable, "Character {0} must be Focusable", characterSO->getName());
+
+    mAllFocusables.push_back(focusable);
 
     return character;
   }
@@ -303,41 +319,55 @@ namespace REGoth
     visit(SO());
   }
 
-  bs::Vector<HCharacter> GameWorld::findCharactersInRange(float rangeInMeters,
-                                                          const bs::Vector3& around) const
+  template <typename T>
+  static bs::Vector<GameWorld::FoundInRange<T>> findComponentsInRange(
+      const bs::Vector<T>& allComponents, float rangeInMeters, const bs::Vector3& around)
   {
+    // Squared distances are faster to compute in the tight loop later as they
+    // don't need the expensive sqrt().
     float rangeSq = rangeInMeters * rangeInMeters;
 
-    bs::Vector<HCharacter> result;
+    bs::Vector<GameWorld::FoundInRange<T>> found;
 
-    for (HCharacter c : mAllCharacters)
+    for (T focusable : allComponents)
     {
-      const bs::Vector3& pos = c->SO()->getTransform().pos();
+      const auto& transform = focusable->SO()->getTransform();
 
-      if (pos.squaredDistance(around) < rangeSq)
+      float distanceSq = transform.pos().squaredDistance(around);
+
+      if (distanceSq < rangeSq)
       {
-        result.push_back(c);
+        GameWorld::FoundInRange<T> result;
+        result.distanceSq = distanceSq;
+        result.thing      = focusable;
+
+        found.emplace_back(result);
       }
     }
 
-    return result;
+    std::sort(found.begin(), found.end(), [](const auto& left, const auto& right) {
+      return left.distanceSq < right.distanceSq;
+    });
+
+    return found;
   }
 
-  bs::Vector<HItem> GameWorld::findItemsInRange(float rangeInMeters, const bs::Vector3& around) const
+  bs::Vector<GameWorld::FoundInRange<HCharacter>> GameWorld::findCharactersInRange(
+      float rangeInMeters, const bs::Vector3& around) const
   {
-    float rangeSq = rangeInMeters * rangeInMeters;
+    return findComponentsInRange(mAllCharacters, rangeInMeters, around);
+  }
 
-    bs::Vector<HItem> result;
+  bs::Vector<GameWorld::FoundInRange<HItem>> GameWorld::findItemsInRange(
+      float rangeInMeters, const bs::Vector3& around) const
+  {
+    return findComponentsInRange(mAllItems, rangeInMeters, around);
+  }
 
-    for (HItem i : mAllItems)
-    {
-      if (i->SO()->getTransform().pos().squaredDistance(around) < rangeSq)
-      {
-        result.push_back(i);
-      }
-    }
-
-    return result;
+  bs::Vector<GameWorld::FoundInRange<HFocusable>> GameWorld::findFocusablesInRange(
+      float rangeInMeters, const bs::Vector3& around) const
+  {
+    return findComponentsInRange(mAllFocusables, rangeInMeters, around);
   }
 
   bs::Vector<HWaypoint> GameWorld::findWay(const bs::Vector3& from, const bs::Vector3& to)

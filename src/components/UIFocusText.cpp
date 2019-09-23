@@ -24,20 +24,19 @@ namespace REGoth
   {
     mFocusedObject = focusable;
 
-    mLabelAboveObject->setContent(bs::GUIContent(bs::HString(focusable->getText())));
-  }
-
-  void UIFocusText::setMaximumDistance(float maximumDistanceInMeters)
-  {
-    assert(maximumDistanceInMeters >= 0.0f);
-
-    mMaximumDistanceInMeters = maximumDistanceInMeters;
+    if (mFocusedObject)
+    {
+      mLabelAboveObject->setContent(bs::GUIContent(bs::HString(focusable->getText())));
+    }
+    else
+    {
+      mLabelAboveObject->setContent(bs::GUIContent(bs::HString("")));
+      mLabelAboveObject->setVisible(false);
+    }
   }
 
   void UIFocusText::update()
   {
-    if (!mFocusedObject) return;
-
     if (shouldLabelBeVisible())
     {
       mLabelAboveObject->setVisible(true);
@@ -64,10 +63,10 @@ namespace REGoth
 
   bool UIFocusText::shouldLabelBeVisible() const
   {
-    return isTargetInRange();
+    return mFocusedObject && isTargetInFrontOfCamera();
   }
 
-  bool UIFocusText::isTargetInRange() const
+  bool UIFocusText::isTargetInFrontOfCamera() const
   {
     const bs::Transform& cameraTransform = camera().getTransform();
 
@@ -78,14 +77,7 @@ namespace REGoth
 
     bool isInFrontOfCamera = positionalDifference.dot(cameraForward) > 0.0f;
 
-    if (!isInFrontOfCamera)
-      return false;
-    else if (positionalDifference.isZeroLength())
-      return true;
-    else if (positionalDifference.length() <= mMaximumDistanceInMeters)
-      return true;
-    else
-      return false;
+    return isInFrontOfCamera;
   }
 
   bs::Vector3 UIFocusText::labelWorldPosition() const
@@ -101,8 +93,7 @@ namespace REGoth
   {
     if (!mFocusedObject) return 0.0f;
 
-    // TODO: Ask focus component about the height
-    return 0.3f;
+    return mFocusedObject->getTextHeight();
   }
 
   REGOTH_DEFINE_RTTI(UIFocusText)

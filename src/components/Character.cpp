@@ -1,15 +1,20 @@
 #include "Character.hpp"
-#include <components/Inventory.hpp>
-#include <Components/BsCCharacterController.h>
 #include <RTTI/RTTI_Character.hpp>
+
+#include <Components/BsCCharacterController.h>
 #include <Scene/BsSceneObject.h>
+
 #include <components/CharacterAI.hpp>
 #include <components/CharacterEventQueue.hpp>
+#include <components/Focusable.hpp>
 #include <components/GameWorld.hpp>
+#include <components/Inventory.hpp>
 #include <components/StoryInformation.hpp>
 #include <components/VisualCharacter.hpp>
 #include <components/Waynet.hpp>
 #include <components/Waypoint.hpp>
+
+#include <exception/Assert.hpp>
 #include <log/logging.hpp>
 #include <scripting/ScriptVMForGameWorld.hpp>
 
@@ -38,6 +43,7 @@ namespace REGoth
       auto visual    = SO()->addComponent<VisualCharacter>();
       auto ai        = SO()->addComponent<CharacterAI>(gameWorld());
       auto inventory = SO()->addComponent<Inventory>();
+      auto focusable = SO()->addComponent<Focusable>();
 
       auto eventQueue =
           SO()->addComponent<CharacterEventQueue>(thisCharacter, ai, visual, gameWorld());
@@ -46,6 +52,8 @@ namespace REGoth
 
       // Needs a valid script object to initialize
       auto infos = SO()->addComponent<StoryInformation>(gameWorld(), thisCharacter);
+
+      focusable->setText(SO()->getName());
 
       // If we don't init the routine now, the character won't have its default routine
       // Must also come *after* the script object has been created since this might run
@@ -312,9 +320,36 @@ namespace REGoth
     return scriptVM().allInfosOfNpc(scriptObjectData().instanceName);
   }
 
-  bs::Vector<HCharacter> Character::findCharactersInRange(float range) const
+  bs::Vector<HCharacter> Character::findCharactersInRange(float rangeInMeters) const
   {
-    return gameWorld()->findCharactersInRange(range, SO()->getTransform().pos());
+    auto found = gameWorld()->findCharactersInRange(rangeInMeters, SO()->getTransform().pos());
+
+    bs::Vector<HCharacter> result;
+    result.reserve(found.size());
+
+    for (const auto& f : found)
+    {
+      if (f.thing != mThisHandle)
+      {
+        result.push_back(f.thing);
+      }
+    }
+
+    return result;
+  }
+
+  HFocusable Character::findClosestFocusable(float rangeInMeters) const
+  {
+    auto found = gameWorld()->findFocusablesInRange(rangeInMeters, SO()->getTransform().pos());
+
+    REGOTH_ASSERT(!found.empty(),
+                  "Search for closest focusable should at least find the seraching character! ({0})",
+                  SO()->getName());
+
+    // 0th element will be this character, 1st element will be the next closest Focusable
+    if (found.size() < 2) return {};
+
+    return found[1].thing;
   }
 
   REGOTH_DEFINE_RTTI(Character);

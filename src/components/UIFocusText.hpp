@@ -30,11 +30,6 @@ namespace REGoth
      */
     void putTextAbove(HFocusable focusable);
 
-    /**
-     * Set the maximum distance to which the label in front of the camera is drawn.
-     */
-    void setMaximumDistance(float maximumDistanceInMeters);
-
   protected:
     /** Triggered once per frame. Allows the component to handle input and move. */
     void update() override;
@@ -48,10 +43,10 @@ namespace REGoth
     bool shouldLabelBeVisible() const;
 
     /**
-     * @return Whether the target position is in forward-range. If the target
-     *         is behind, this returns false too.
+     * @return Whether the target position is in front of the camera. If the target
+     *         is behind, this returns false.
      */
-    bool isTargetInRange() const;
+    bool isTargetInFrontOfCamera() const;
 
     /**
      * Moves the label so that it is displayed over the 3D-Target coordinates.
@@ -78,7 +73,6 @@ namespace REGoth
     float getLabelYOffset() const;
 
     bs::GUILabel* mLabelAboveObject;
-    float mMaximumDistanceInMeters = 2.0;
 
     /** The Scene-Object to draw the text above (if valid) */
     HFocusable mFocusedObject;

@@ -7,6 +7,9 @@ namespace REGoth
   class Character;
   using HCharacter = bs::GameObjectHandle<Character>;
 
+  class Focusable;
+  using HFocusable = bs::GameObjectHandle<Focusable>;
+
   /**
    * Character logic. Implements most of the * externals.
    */
@@ -366,11 +369,16 @@ namespace REGoth
     const bs::Vector<Scripting::ScriptObjectHandle>& allInfosForThisCharacter() const;
 
     /**
-     * Returns a list of all characters standing near this character, in the specified range.
-     *
-     * @note This list will also include this character!
+     * Returns a list of all other characters standing near this character in
+     * the specified range, sorted by distance (Closest first).
      */
-    bs::Vector<HCharacter> findCharactersInRange(float range) const;
+    bs::Vector<HCharacter> findCharactersInRange(float rangeInMeters) const;
+
+    /**
+     * Returns the closest Focusable. Can be empty if there are no Focusables within the specified
+     * range.
+     */
+    HFocusable findClosestFocusable(float rangeInMeters = 4.0f) const;
 
     bs::INT32 GetStateTime();
 

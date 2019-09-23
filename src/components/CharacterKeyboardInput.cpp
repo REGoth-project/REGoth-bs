@@ -76,17 +76,16 @@ namespace REGoth
       // TODO: Proper implementation of using focusable things
       auto characters = mCharacter->findCharactersInRange(2.0f);
 
-      for (HCharacter c : characters)
+      if (!characters.empty())
       {
-        // Skip self
-        if (c->SO() == SO()) continue;
+        auto closestCharacter = characters.front();
 
-        auto eventQueue = c->SO()->getComponent<CharacterEventQueue>();
+        auto eventQueue = closestCharacter->SO()->getComponent<CharacterEventQueue>();
 
-        REGOTH_LOG(Info, Uncategorized, "[CharacterKeyboardInput] Talk to: {0}", c->SO()->getName());
+        REGOTH_LOG(Info, Uncategorized, "[CharacterKeyboardInput] Talk to: {0}",
+                   closestCharacter->SO()->getName());
         eventQueue->clear();  // FIXME: Find out what's blocking the new message
         eventQueue->pushTalkToCharacter(thisCharacter);
-        break;
       }
     }
 

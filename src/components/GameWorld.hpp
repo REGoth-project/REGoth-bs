@@ -10,6 +10,9 @@ namespace REGoth
   class Item;
   using HItem = bs::GameObjectHandle<Item>;
 
+  class Focusable;
+  using HFocusable = bs::GameObjectHandle<Focusable>;
+
   class Waynet;
   using HWaynet = bs::GameObjectHandle<Waynet>;
 
@@ -288,15 +291,34 @@ namespace REGoth
      */
     bs::HSceneObject findObjectByName(const bs::String& name);
 
+    /** Container for results of the `find*InRange` method-family */
+    template <typename T>
+    struct FoundInRange
+    {
+      /** Handle to the thing found within the range */
+      T thing;
+
+      /** Squared distance to the found thing */
+      float distanceSq;
+    };
+
     /**
      * Finds all characters which are in the given range around the given location.
      */
-    bs::Vector<HCharacter> findCharactersInRange(float rangeInMeters,
-                                                 const bs::Vector3& around) const;
+    bs::Vector<FoundInRange<HCharacter>> findCharactersInRange(float rangeInMeters,
+                                                               const bs::Vector3& around) const;
     /**
      * Finds all items which are in the given range around the given location.
      */
-    bs::Vector<HItem> findItemsInRange(float rangeInMeters, const bs::Vector3& around) const;
+    bs::Vector<FoundInRange<HItem>> findItemsInRange(float rangeInMeters,
+                                                     const bs::Vector3& around) const;
+    /**
+     * Finds all Focusables which are in the given range around the given location.
+     *
+     * Result is sorted by distance with the closest Focusable being the first entry.
+     */
+    bs::Vector<FoundInRange<HFocusable>> findFocusablesInRange(float rangeInMeters,
+                                                               const bs::Vector3& around) const;
 
     /**
      * Finds a way between two locations given by name.
@@ -338,10 +360,12 @@ namespace REGoth
     void fillFindByNameCache();
 
     /**
-     * Fills mAllCharacters, mAllItems, and so on.
+     * Fills mAllCharacters, mAllItems, and so on. These fill the matching
+     * `mAllSomething` vectors by searching the scene.
      */
     void findAllCharacters();
     void findAllItems();
+    void findAllFocusables();
 
     /**
      * ZEN-File this world was created from, e.g. `NEWWORLD.ZEN`.
@@ -378,6 +402,7 @@ namespace REGoth
      */
     bs::Vector<HCharacter> mAllCharacters;
     bs::Vector<HItem> mAllItems;
+    bs::Vector<HFocusable> mAllFocusables;
 
     /**
      * Used to skip onInitialized() when loading via RTTI.

@@ -5,8 +5,7 @@
 
 namespace REGoth
 {
-  class RTTI_GameWorld
-    : public bs::RTTIType<GameWorld, bs::Component, RTTI_GameWorld>
+  class RTTI_GameWorld : public bs::RTTIType<GameWorld, bs::Component, RTTI_GameWorld>
   {
     using UINT32 = bs::UINT32;
 
@@ -18,9 +17,10 @@ namespace REGoth
     BS_RTTI_MEMBER_REFL(mGameClock, 4)
     BS_RTTI_MEMBER_REFL_ARRAY(mAllCharacters, 5)
     BS_RTTI_MEMBER_REFL_ARRAY(mAllItems, 6)
+    BS_RTTI_MEMBER_REFL_ARRAY(mAllFocusables, 7)
     BS_END_RTTI_MEMBERS
 
-    public:
+  public:
     RTTI_GameWorld()
     {
     }

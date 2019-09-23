@@ -4,6 +4,7 @@
 #include <GUI/BsGUILayoutY.h>
 #include <GUI/BsGUIScrollArea.h>
 #include <RTTI/RTTI_GameplayUI.hpp>
+#include <components/Character.hpp>
 #include <components/UIDialogueChoice.hpp>
 #include <components/UIFocusText.hpp>
 #include <components/UIInventory.hpp>
@@ -76,6 +77,30 @@ namespace REGoth
   {
     choices()->SO()->setActive(false);
     choices()->clearChoices();
+  }
+
+  void GameplayUI::setTargetCharacter(HCharacter character)
+  {
+    mTargetCharacter = character;
+  }
+
+  void GameplayUI::update()
+  {
+    UIElement::update();
+
+    if (mTargetCharacter)
+    {
+      gatherInformationFromTargetCharacter();
+    }
+  }
+
+  void GameplayUI::gatherInformationFromTargetCharacter()
+  {
+    auto closestFocusable = mTargetCharacter->findClosestFocusable();
+
+    // If the handle is invalid, this will remove the text so there is no need
+    // to check for that
+    focusText()->putTextAbove(closestFocusable);
   }
 
   HGameplayUI gGameplayUI()
