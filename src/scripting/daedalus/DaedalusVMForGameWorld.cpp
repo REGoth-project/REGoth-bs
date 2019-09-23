@@ -482,6 +482,8 @@ namespace REGoth
       registerExternal("NPC_HASITEMS", (externalCallback)&This::external_Npc_HasItems);
       registerExternal("NPC_REMOVEINVITEM", (externalCallback)&This::external_Npc_RemoveInvItem);
       registerExternal("NPC_REMOVEINVITEMS", (externalCallback)&This::external_Npc_RemoveInvItems);
+      registerExternal("AI_TURNTONPC", (externalCallback)&This::external_AI_TurnToNpc);
+      registerExternal("AI_TURNAWAY", (externalCallback)&This::external_AI_TurnAway);
 
       registerExternal("NPC_GETINVITEMBYSLOT",
                        (externalCallback)&This::external_Npc_GetInvItemBySlot);
@@ -1126,6 +1128,25 @@ namespace REGoth
 
         inventory->removeItem(instanceName, bs::Math::min(actualCount, count));
       }
+    }
+
+    void DaedalusVMForGameWorld::external_AI_TurnToNpc()
+    {
+      HCharacter other = popCharacterInstance();
+      HCharacter self  = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushTurnToObject(other->SO());
+    }
+    void DaedalusVMForGameWorld::external_AI_TurnAway()
+    {
+      HCharacter other = popCharacterInstance();
+      HCharacter self  = popCharacterInstance();
+
+      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+
+      eventQueue->pushTurnAwayFromObject(other->SO());
     }
 
     void DaedalusVMForGameWorld::script_PrintPlus(const bs::String& text)

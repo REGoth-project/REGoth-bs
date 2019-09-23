@@ -52,6 +52,21 @@ namespace REGoth
     SharedEMessage pushGotoObject(bs::HSceneObject object);
 
     /**
+     * Push a message to turn towards an object into the queue.
+     */
+    SharedEMessage pushTurnToObject(bs::HSceneObject object);
+
+    /**
+     * Push a message to turn towards a position into the queue.
+     */
+    SharedEMessage pushTurnToPosition(const bs::Vector3& position);
+
+    /**
+     * Push a message to turn away from an object into the queue.
+     */
+    SharedEMessage pushTurnAwayFromObject(bs::HSceneObject object);
+
+    /**
      * Push a message to set the walk-mode into the queue.
      */
     SharedEMessage pushSetWalkMode(AI::WalkMode walkMode);

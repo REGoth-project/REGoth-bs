@@ -237,6 +237,8 @@ namespace REGoth
       void external_Npc_GetInvItemBySlot();
       void external_Npc_RemoveInvItem();
       void external_Npc_RemoveInvItems();
+      void external_AI_TurnToNpc();
+      void external_AI_TurnAway();
 
       void fillSymbolStorage() override;
       void registerAllExternals() override;

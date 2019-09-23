@@ -229,6 +229,24 @@ namespace REGoth
         }
         break;
 
+      case AI::MovementMessage::ST_TurnToObject:
+        // TODO: Turn should not be instant, it should rather be using the animations
+        mCharacterAI->instantTurnToPosition(message.targetObject->getTransform().pos());
+        isDone = true;
+        break;
+
+      case AI::MovementMessage::ST_TurnToPos:
+        // TODO: Turn should not be instant, it should rather be using the animations
+        mCharacterAI->instantTurnToPosition(message.targetPosition);
+        isDone = true;
+        break;
+
+      case AI::MovementMessage::ST_TurnAway:
+        // TODO: Turn should not be instant, it should rather be using the animations
+        mCharacterAI->instantTurnToPosition(-message.targetObject->getTransform().getForward());
+        isDone = true;
+        break;
+
       case AI::MovementMessage::ST_SetWalkMode:
         mCharacterAI->changeWalkMode(message.walkMode);
         isDone = true;
@@ -419,6 +437,36 @@ namespace REGoth
     AI::MovementMessage msg;
 
     msg.subType      = AI::MovementMessage::ST_GotoObject;
+    msg.targetObject = object;
+
+    return onMessage(msg);
+  }
+
+  SharedEMessage CharacterEventQueue::pushTurnToObject(bs::HSceneObject object)
+  {
+    AI::MovementMessage msg;
+
+    msg.subType      = AI::MovementMessage::ST_TurnToObject;
+    msg.targetObject = object;
+
+    return onMessage(msg);
+  }
+
+  SharedEMessage CharacterEventQueue::pushTurnToPosition(const bs::Vector3& position)
+  {
+    AI::MovementMessage msg;
+
+    msg.subType        = AI::MovementMessage::ST_TurnToPos;
+    msg.targetPosition = position;
+
+    return onMessage(msg);
+  }
+
+  SharedEMessage CharacterEventQueue::pushTurnAwayFromObject(bs::HSceneObject object)
+  {
+    AI::MovementMessage msg;
+
+    msg.subType      = AI::MovementMessage::ST_TurnAway;
     msg.targetObject = object;
 
     return onMessage(msg);
