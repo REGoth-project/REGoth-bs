@@ -56,6 +56,7 @@ namespace REGoth
                                            HGameWorld gameWorld);
   static void addVisualTo(bs::HSceneObject sceneObject, const bs::String& visualName);
   static void addCollisionTo(bs::HSceneObject sceneObject);
+  static bs::Transform transformFromVob(const ZenLoad::zCVobData& vob);
 
   bs::HSceneObject Internals::importSingleVob(const ZenLoad::zCVobData& vob,
                                               bs::HSceneObject bsfParent, HGameWorld gameWorld)
@@ -113,17 +114,9 @@ namespace REGoth
     }
   }
 
-  /**
-   * The zCVob is the most basic object class we will encounter. It is
-   * the base class of all others, so it makes sense to handle
-   * position, rotation and the visual here as these are used by all vobs.
-   */
-  static bs::HSceneObject import_zCVob(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
-                                       HGameWorld gameWorld)
+  static bs::Transform transformFromVob(const ZenLoad::zCVobData& vob)
   {
-    bs::HSceneObject so = bs::SceneObject::create(vob.vobName.c_str());
-
-    so->setParent(gameWorld->SO());
+    bs::Transform result = bs::Transform::IDENTITY;
 
     bs::Matrix4 worldMatrix = convertMatrix(vob.worldMatrix);
     bs::Quaternion rotation;
@@ -132,8 +125,31 @@ namespace REGoth
     bs::Vector3 positionCM = bs::Vector3(vob.position.x, vob.position.y, vob.position.z);
 
     float centimetersToMeters = 0.01f;
-    so->setPosition(positionCM * centimetersToMeters);
-    so->setRotation(rotation);
+
+    result.setPosition(positionCM * centimetersToMeters);
+    result.setRotation(rotation);
+
+    return result;
+  }
+
+  /**
+   * The zCVob is the most basic object class we will encounter. It is
+   * the base class of most other objects, so it makes sense to handle
+   * position, rotation and the visual here as these are used by most vobs.
+   *
+   * @note Not all object types will call `import_zCVob`!
+   */
+  static bs::HSceneObject import_zCVob(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
+                                       HGameWorld gameWorld)
+  {
+    bs::HSceneObject so = bs::SceneObject::create(vob.vobName.c_str());
+
+    so->setParent(gameWorld->SO());
+
+    bs::Transform transform = transformFromVob(vob);
+
+    so->setPosition(transform.pos());
+    so->setRotation(transform.rot());
 
     if (!vob.visual.empty())
     {
@@ -216,11 +232,14 @@ namespace REGoth
       return {};
     }
 
-    bs::HSceneObject so = import_zCVob(vob, bsfParent, gameWorld);
+    bs::Transform transform = transformFromVob(vob);
 
-    so->addComponent<Item>(vob.oCItem.instanceName.c_str(), gameWorld);
+    // Items are interactable, they need to be registered within the GameWorld
+    HItem item = gameWorld->insertItem(vob.oCItem.instanceName.c_str(), transform);
 
-    return so;
+    item->SO()->setParent(bsfParent);
+
+    return item->SO();
   }
 
   static bs::HSceneObject import_zCVobSound(const ZenLoad::zCVobData& vob,
