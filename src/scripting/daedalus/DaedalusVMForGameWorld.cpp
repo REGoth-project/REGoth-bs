@@ -1135,18 +1135,26 @@ namespace REGoth
       HCharacter other = popCharacterInstance();
       HCharacter self  = popCharacterInstance();
 
-      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+      // Check needed, `other` was seen to be invalid in G1 (Oldcamp)
+      if (other)
+      {
+        auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
 
-      eventQueue->pushTurnToObject(other->SO());
+        eventQueue->pushTurnToObject(other->SO());
+      }
     }
     void DaedalusVMForGameWorld::external_AI_TurnAway()
     {
       HCharacter other = popCharacterInstance();
       HCharacter self  = popCharacterInstance();
 
-      auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
+      // Check needed, `other` was seen to be invalid in G1 (Oldcamp)
+      if (other)
+      {
+        auto eventQueue = self->SO()->getComponent<CharacterEventQueue>();
 
-      eventQueue->pushTurnAwayFromObject(other->SO());
+        eventQueue->pushTurnAwayFromObject(other->SO());
+      }
     }
 
     void DaedalusVMForGameWorld::script_PrintPlus(const bs::String& text)
