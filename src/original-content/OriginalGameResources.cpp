@@ -24,6 +24,13 @@ namespace REGoth
   {
     bs::HTexture htexture;
 
+    auto it = mTextures.find(originalFileName);
+
+    if (it != mTextures.end())
+    {
+      return it->second;
+    }
+
     if (BsZenLib::HasCachedTexture(originalFileName))
     {
       htexture = BsZenLib::LoadCachedTexture(originalFileName);
@@ -37,6 +44,8 @@ namespace REGoth
           BsZenLib::ImportAndCacheTexture(originalFileName, gVirtualFileSystem().getFileIndex());
     }
 
+    mTextures[originalFileName] = htexture;
+
     return htexture;
   }
 
@@ -44,6 +53,13 @@ namespace REGoth
       const bs::String& originalFileName)
   {
     BsZenLib::Res::HModelScriptFile hmodelScript;
+
+    auto it = mModelScripts.find(originalFileName);
+
+    if (it != mModelScripts.end())
+    {
+      return it->second;
+    }
 
     if (BsZenLib::HasCachedMDS(originalFileName))
     {
@@ -58,6 +74,8 @@ namespace REGoth
           BsZenLib::ImportAndCacheMDS(originalFileName, gVirtualFileSystem().getFileIndex());
     }
 
+    mModelScripts[originalFileName] = hmodelScript;
+
     return hmodelScript;
   }
 
@@ -65,6 +83,13 @@ namespace REGoth
       const bs::String& originalFileName)
   {
     BsZenLib::Res::HMeshWithMaterials hmesh;
+
+    auto it = mStaticMeshes.find(originalFileName);
+
+    if (it != mStaticMeshes.end())
+    {
+      return it->second;
+    }
 
     if (BsZenLib::HasCachedStaticMesh(originalFileName))
     {
@@ -79,6 +104,8 @@ namespace REGoth
           BsZenLib::ImportAndCacheStaticMesh(originalFileName, gVirtualFileSystem().getFileIndex());
     }
 
+    mStaticMeshes[originalFileName] = hmesh;
+
     return hmesh;
   }
 
@@ -86,6 +113,13 @@ namespace REGoth
       const bs::String& originalFileName)
   {
     BsZenLib::Res::HMeshWithMaterials hmesh;
+
+    auto it = mMorphMeshes.find(originalFileName);
+
+    if (it != mMorphMeshes.end())
+    {
+      return it->second;
+    }
 
     if (BsZenLib::HasCachedMorphMesh(originalFileName))
     {
@@ -100,12 +134,21 @@ namespace REGoth
           BsZenLib::ImportAndCacheMorphMesh(originalFileName, gVirtualFileSystem().getFileIndex());
     }
 
+    mMorphMeshes[originalFileName] = hmesh;
+
     return hmesh;
   }
 
   bs::HFont OriginalGameResources::font(const bs::String& originalFileName)
   {
     bs::HFont hfont;
+
+    auto it = mFonts.find(originalFileName);
+
+    if (it != mFonts.end())
+    {
+      return it->second;
+    }
 
     if (BsZenLib::HasCachedFont(originalFileName))
     {
@@ -119,11 +162,20 @@ namespace REGoth
       hfont = BsZenLib::ImportAndCacheFont(originalFileName, gVirtualFileSystem().getFileIndex());
     }
 
+    mFonts[originalFileName] = hfont;
+
     return hfont;
   }
 
   bs::HSpriteTexture OriginalGameResources::sprite(const bs::String& originalFileName)
   {
+    auto it = mSprites.find(originalFileName);
+
+    if (it != mSprites.end())
+    {
+      return it->second;
+    }
+
     bs::HTexture t = texture(originalFileName);
 
     if (!t)
@@ -134,7 +186,11 @@ namespace REGoth
       return {};
     }
 
-    return bs::SpriteTexture::create(t);
+    bs::HSpriteTexture hsprite = bs::SpriteTexture::create(t);
+
+    mSprites[originalFileName] = hsprite;
+
+    return hsprite;
   }
 
   OriginalGameResources& gOriginalGameResources()

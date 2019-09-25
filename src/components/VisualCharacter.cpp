@@ -37,6 +37,14 @@ namespace REGoth
     setName("VisualCharacter");
   }
 
+  void VisualCharacter::onInitialized()
+  {
+    VisualSkeletalAnimation::onInitialized();
+
+    setBodyTexture(mBodyState.bodyTexture);
+    setHeadTexture(mBodyState.headTexture);
+  }
+
   void VisualCharacter::setBodyMesh(const bs::String& bodyMesh, bs::UINT32 bodyTextureIdx,
                                     bs::UINT32 bodySkinColorIdx)
   {
@@ -89,6 +97,8 @@ namespace REGoth
       mBodyState.headVisual += ".MMB";
     }
 
+    // TODO: Save head texture once it is set
+
     updateHeadMesh();
   }
 
@@ -114,7 +124,9 @@ namespace REGoth
             newTextureName, "_C0", "_C" + bs::toString(mBodyState.bodySkinColorIdx));
     }
 
-    setBodyTexture(newTextureName);
+    mBodyState.bodyTexture = gOriginalGameResources().texture(newTextureName);
+
+    setBodyTexture(mBodyState.bodyTexture);
   }
 
   bs::String VisualCharacter::getCurrentBodyTextureName() const
@@ -129,18 +141,9 @@ namespace REGoth
     return albedo->getName();
   }
 
-  void VisualCharacter::setBodyTexture(const bs::String& originalFileName)
+  void VisualCharacter::setBodyTexture(bs::HTexture texture)
   {
-    bs::HTexture texture = gOriginalGameResources().texture(originalFileName);
-
-    if (!texture)
-    {
-      REGOTH_THROW(InvalidParametersException, "Could not load body texture: " + originalFileName);
-    }
-
-    REGOTH_LOG(Info, Uncategorized, "Set body texture: {0}", originalFileName);
-
-    material(0)->setTexture("gAlbedoTex", texture);
+    if (material(0)) material(0)->setTexture("gAlbedoTex", texture);
   }
 
   void VisualCharacter::updateHeadMesh()
@@ -157,6 +160,14 @@ namespace REGoth
     }
 
     // TODO: Fix texture and color
+    mBodyState.headTexture = {};
+
+    setHeadTexture(mBodyState.headTexture);
+  }
+
+  void VisualCharacter::setHeadTexture(bs::HTexture texture)
+  {
+    // TODO: Implement setHeadTexture
   }
 
   bs::Vector<bs::String> VisualCharacter::listPossibleDefaultAnimations() const

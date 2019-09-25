@@ -107,6 +107,17 @@ namespace REGoth
      * @return Sprite with the given texture. Empty handle if loading failed.
      */
     bs::HSpriteTexture sprite(const bs::String& originalFileName);
+
+  private:
+    /**
+     * Caches so that we don't have to re-load resources.
+     */
+    bs::Map<bs::String, bs::HTexture> mTextures;
+    bs::Map<bs::String, BsZenLib::Res::HModelScriptFile> mModelScripts;
+    bs::Map<bs::String, BsZenLib::Res::HMeshWithMaterials> mStaticMeshes;
+    bs::Map<bs::String, BsZenLib::Res::HMeshWithMaterials> mMorphMeshes;
+    bs::Map<bs::String, bs::HFont> mFonts;
+    bs::Map<bs::String, bs::HSpriteTexture> mSprites;
   };
 
   /**

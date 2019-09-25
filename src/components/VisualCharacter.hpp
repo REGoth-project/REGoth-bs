@@ -49,6 +49,8 @@ namespace REGoth
                      bs::UINT32 teethTextureIdx = 0);
 
   protected:
+    void onInitialized() override;
+
     bs::Vector<bs::String> listPossibleDefaultAnimations() const override;
 
   private:
@@ -65,11 +67,9 @@ namespace REGoth
 
     /**
      * Sets the texture to be displayed on the body mesh.
-     *
-     * @param  originalFileName  Name of the texture file as in the original game files.
-     *                           For example, "STONE.TGA".
      */
-    void setBodyTexture(const bs::String& originalFileName);
+    void setBodyTexture(bs::HTexture texture);
+    void setHeadTexture(bs::HTexture texture);
 
     /**
      * Replaces the current headmesh of this model from the current body-state
@@ -84,6 +84,8 @@ namespace REGoth
       bs::UINT32 teethTextureIdx  = 0;
       bs::UINT32 bodySkinColorIdx = 0;
       bs::UINT32 bodyTextureIdx   = 0;
+      bs::HTexture bodyTexture;
+      bs::HTexture headTexture;
     };
 
     // Body Visual Settings ---------------------------------------------------

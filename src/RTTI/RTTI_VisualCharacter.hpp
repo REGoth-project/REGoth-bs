@@ -15,6 +15,8 @@ namespace REGoth
     BS_RTTI_MEMBER_PLAIN_NAMED(teethTextureIdx, mBodyState.teethTextureIdx, 3)
     BS_RTTI_MEMBER_PLAIN_NAMED(bodySkinColorIdx, mBodyState.bodySkinColorIdx, 4)
     BS_RTTI_MEMBER_PLAIN_NAMED(bodyTextureIdx, mBodyState.bodyTextureIdx, 5)
+    BS_RTTI_MEMBER_REFL_NAMED(bodyTexture, mBodyState.bodyTexture, 6)
+    BS_RTTI_MEMBER_REFL_NAMED(headTexture, mBodyState.headTexture, 7)
     BS_END_RTTI_MEMBERS
 
   public:
