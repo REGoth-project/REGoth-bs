@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Scene structure &mdash; REGoth  documentation</title>
+  <title>Sky &mdash; REGoth  documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Character state machine" href="character-statemachine.html" />
-    <link rel="prev" title="Kinds of objects in Gothic" href="object-kinds.html" /> 
+    <link rel="next" title="Core" href="../code-ref/core.html" />
+    <link rel="prev" title="Daedalus VM" href="daedalus-vm.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -105,14 +105,10 @@
 <p class="caption"><span class="caption-text">Case Studies</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="object-kinds.html">Kinds of objects in Gothic</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Scene structure</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#logic">Logic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#visuals">Visuals</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="scene-structure.html">Scene structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="character-statemachine.html">Character state machine</a></li>
 <li class="toctree-l1"><a class="reference internal" href="daedalus-vm.html">Daedalus VM</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sky.html">Sky</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Sky</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Code Reference</span></p>
 <ul>
@@ -163,13 +159,13 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Scene structure</li>
+      <li>Sky</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/case-studies/scene-structure.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/case-studies/sky.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -182,46 +178,40 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="scene-structure">
-<span id="id1"></span><h1>Scene structure<a class="headerlink" href="#scene-structure" title="Permalink to this headline">¶</a></h1>
-<p>In the original game, the scene layed out similar to a tree.  Each object can have multiple children
-which will move according to their parent.  Every object is an instance of a class derived from
-<cite>zCVob</cite> (See <a class="reference internal" href="object-kinds.html#object-kinds"><span class="std std-ref">Kinds of objects in Gothic</span></a>) and thus have their own behavior.  Since REGoth is building upon
-bs::framework, which allows for using an Entity-Component-System as well as the traditional object
-oriented way Gothic is using, we have to decide which way we go.</p>
-<p>As far as I understand, using bs::framework as object-oriented framework will just create objects
-with a single component internally.  I don’t see any reason to not go for the component based
-approach.</p>
-<div class="section" id="logic">
-<h2>Logic<a class="headerlink" href="#logic" title="Permalink to this headline">¶</a></h2>
-<p>Traditionally, the logic of an object in Gothic was given by the type of class it was instantiated
-of.  I would suggest keeping all behavior of an object inside <em>Logic-Components</em>. There will be
-very few kinds to take into account from the original game:</p>
-<ul class="simple">
-<li><p>Characters</p></li>
-<li><p>Interactable objects</p></li>
-<li><p>Triggers</p></li>
-<li><p>Items on the ground</p></li>
-</ul>
-<p>Of course these could (and should) be split into multiple components.  For example, the
-<em>Character</em>-Component could manage the appearance, animations and inventory of a character, while
-other components could do AI or handle being controlled by the Player.</p>
+  <div class="section" id="sky">
+<span id="id1"></span><h1>Sky<a class="headerlink" href="#sky" title="Permalink to this headline">¶</a></h1>
+<p>The sky consists of several layers, and uses different primitives as model depending on the game
+and graphic settings.
+The original Gothic game only used a plane to render the sky texture, while Gothic II added the
+possibility to render the sky as a dome, given enough processing power.</p>
+<p>The different layers of the sky are (1), a plain color layer as background (<a class="reference internal" href="#fig-sky1"><span class="std std-numref">Fig. 6</span></a>),
+(2) a color layer additively blended in (<a class="reference internal" href="#fig-sky2"><span class="std std-numref">Fig. 7</span></a>), and (3) the actual alpha-blended sky
+texture (<a class="reference internal" href="#fig-sky3"><span class="std std-numref">Fig. 8</span></a>).</p>
+<div class="figure align-default" id="id2">
+<span id="fig-sky1"></span><img alt="Sky raw background color." src="../_images/sky_1_raw_bg_color.png" />
+<p class="caption"><span class="caption-number">Fig. 6 </span><span class="caption-text">Background sky color (1) in Gothic II.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
-<div class="section" id="visuals">
-<h2>Visuals<a class="headerlink" href="#visuals" title="Permalink to this headline">¶</a></h2>
-<p>Since the way rendering works is a little bit different from Gothic, we have to come up with a
-solution to get Gothic’s visuals attached to the objects.  In bs::framework, there is a
-<em>Renderable</em>-Component, which holds mesh data, materials, etc.  For REGoth, I would suggest wrapping
-that <em>Renderable</em>-component into a <em>Visual</em>-Component, which is able to load and digest the original
-data.  It could then save everything needed to display an object as a child-object to keep other
-components from directly interacting with what the <em>Visual</em>-Component needed to create.</p>
-<p>To match the original game, we would need at least the following visuals:</p>
-<ul class="simple">
-<li><p>Static meshes (.3DS)</p></li>
-<li><p>Skeletal-Meshes (.ASC)</p></li>
-<li><p>Morph-Meshes</p></li>
-<li><p>Particle-Effects</p></li>
-</ul>
+<div class="figure align-default" id="id3">
+<span id="fig-sky2"></span><img alt="Sky raw background color and color layer." src="../_images/sky_2_color_layer.png" />
+<p class="caption"><span class="caption-number">Fig. 7 </span><span class="caption-text">Background sky color (1) together with an additively blended color layer (2) rendered as cylinder
+in Gothic II.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id4">
+<span id="fig-sky3"></span><img alt="Sky raw background color, color layer, and texture layer." src="../_images/sky_3_clouds_layer.png" />
+<p class="caption"><span class="caption-number">Fig. 8 </span><span class="caption-text">Background sky color (1) together with an additively blended color layer (2) rendered as
+cylinder, as well as the alpha-blended sky texture (3) layer in Gothic II.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+<p>The additively blended color layer (2) is necessary, because the sky looks dull otherwise.  See, for
+example, <a class="reference internal" href="#fig-sky-no-color-layer"><span class="std std-numref">Fig. 9</span></a>, where this layer was deactivated.  In
+<a class="reference internal" href="#fig-sky-color-layer"><span class="std std-numref">Fig. 10</span></a>, the color layer (2) can be seen on black background.</p>
+<div class="figure align-default" id="id5">
+<span id="fig-sky-no-color-layer"></span><img alt="Sky with raw background color and texture layer, but without color layer." src="../_images/sky_no_color_layer.png" />
+<p class="caption"><span class="caption-number">Fig. 9 </span><span class="caption-text">Background sky color (1) and the alpha-blended sky texture layer (3) without the additively
+blended color layer (2).</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id6">
+<span id="fig-sky-color-layer"></span><img alt="Color layer only." src="../_images/sky_color_layer_raw.png" />
+<p class="caption"><span class="caption-number">Fig. 10 </span><span class="caption-text">Additively blended color layer (2) only, rendered on black background.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 
@@ -233,10 +223,10 @@ components from directly interacting with what the <em>Visual</em>-Component nee
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="character-statemachine.html" class="btn btn-neutral float-right" title="Character state machine" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../code-ref/core.html" class="btn btn-neutral float-right" title="Core" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="object-kinds.html" class="btn btn-neutral float-left" title="Kinds of objects in Gothic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="daedalus-vm.html" class="btn btn-neutral float-left" title="Daedalus VM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

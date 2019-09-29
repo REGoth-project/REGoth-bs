@@ -49,6 +49,7 @@ Welcome to REGoth's documentation!
   case-studies/scene-structure
   case-studies/character-statemachine
   case-studies/daedalus-vm
+  case-studies/sky
 
 
 .. toctree::
