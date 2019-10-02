@@ -1,6 +1,5 @@
 #include <components/Sky.hpp>
 
-#include <functional>
 #include <memory>
 
 #include <Components/BsCRenderable.h>
@@ -29,9 +28,6 @@ Sky::Sky(const bs::HSceneObject& parent, HGameWorld gameWorld, const RenderMode&
     , mSkyStateGen{skyColor, gameWorld->worldName()}
     , mGameWorld{gameWorld}
     , mRenderMode{renderMode}
-    , mSkyRenderer{
-          std::bind(renderMode == RenderMode::Plane ? &Sky::renderSkyPlane : &Sky::renderSkyDome,
-                    this, std::placeholders::_1)}
 {
   setName("Sky");
 }
@@ -82,10 +78,23 @@ void Sky::update()
 
   // Render fog and sky.
   renderFog(skyState->fogColor, skyState->fogNear, skyState->fogFar);
-  mSkyRenderer(skyState);
+  renderSky(skyState);
 }
 
-void Sky::renderFog(const bs::Color& fogColor, float fogNear, float fogFar) const
+void Sky::renderSky(const std::shared_ptr<const SkyState> skyState) const
+{
+  switch (mRenderMode)
+  {
+    case RenderMode::Plane:
+      renderSkyPlane(skyState);
+      break;
+    case RenderMode::Dome:
+      renderSkyDome(skyState);
+      break;
+  }
+}
+
+void Sky::renderFog(const bs::Color& fogColor, const float fogNear, const float fogFar) const
 {
   REGOTH_ASSERT(fogNear < fogFar, "fogNear must be smaller than fogFar");
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <functional>
 #include <memory>
 
 #include <Image/BsColor.h>
@@ -64,7 +63,16 @@ namespace REGoth
      * @param fogNear Near distance.
      * @param fogFar Far distance.
      */
-    void renderFog(const bs::Color& color, float fogNear, float fogFar) const;
+    void renderFog(const bs::Color& color, const float fogNear, const float fogFar) const;
+
+    /**
+     * @brief Renders the sky depending on the render mode.
+     *
+     * @note Delegates to `renderSkyPlane` or `renderSkyDome`, depending on `mRenderMode`.
+     *
+     * @param skyState Current interpolated sky state.
+     */
+    void renderSky(const std::shared_ptr<const SkyState> skyState) const;
 
     /**
      * @brief Renders the sky plane.
@@ -95,15 +103,6 @@ namespace REGoth
      * @brief Currently used render mode.
      */
     const RenderMode mRenderMode = RenderMode::Plane;
-
-    /**
-     * @brief Relevant sky rendering function (either `renderSkyPlane()` or `renderSkyDome()`), set
-     *        at construction depending on the `renderMode` construction parameter.
-     *
-     * @note Calling `mSkyRenderer` is cheaper than evaluating `mRenderMode` in each call of
-     *       `update()`.
-     */
-    const std::function<void(std::shared_ptr<const SkyState>)> mSkyRenderer;
 
     /**
      * @brief Used sky material.
