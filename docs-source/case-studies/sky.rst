@@ -22,7 +22,7 @@ texture (:numref:`fig-sky3`).
 .. figure:: images/sky_2_color_layer.png
    :alt: Sky raw background color and color layer.
 
-   Background sky color (1) together with an additively blended color layer (2) rendered as cylinder
+   Background sky color (1) together with an additively blended color layer (2) rendered as sphere
    in Gothic II.
 
 .. _fig-sky3:
@@ -30,7 +30,7 @@ texture (:numref:`fig-sky3`).
    :alt: Sky raw background color, color layer, and texture layer.
 
    Background sky color (1) together with an additively blended color layer (2) rendered as
-   cylinder, as well as the alpha-blended sky texture (3) layer in Gothic II.
+   sphere, as well as the alpha-blended sky texture (3) layer in Gothic II.
 
 
 The additively blended color layer (2) is necessary, because the sky looks dull otherwise.  See, for
