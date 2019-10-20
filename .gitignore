@@ -12,6 +12,9 @@
 # QtCreator
 CMakeLists.txt.user
 
+# CLion
+.idea
+
 # bsf crash reports
 CrashReports/
 
