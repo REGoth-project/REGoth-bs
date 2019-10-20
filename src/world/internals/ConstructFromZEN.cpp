@@ -143,7 +143,7 @@ namespace REGoth
 
     bs::HMesh actualMesh = mesh->getMesh();
 
-    if (!mesh.isLoaded())
+    if (!mesh.isLoaded() || !actualMesh.isLoaded())
     {
       REGOTH_THROW(InvalidStateException, "Failed to load world mesh for zen " + zen.fileName);
     }
