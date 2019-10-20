@@ -8,7 +8,7 @@
 namespace ZenLoad
 {
   struct zCVobData;
-};
+}
 
 namespace REGoth
 {
