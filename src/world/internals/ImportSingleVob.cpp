@@ -166,7 +166,7 @@ namespace REGoth
   }
 
   /**
-   * Lights can be pointlights or spotlights, altough spotlights are not
+   * Lights can be pointlights or spotlights, although spotlights are not
    * used within the original game as it seems.
    */
   static bs::HSceneObject import_zCVobLight(const ZenLoad::zCVobData& vob,

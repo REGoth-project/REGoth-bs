@@ -130,7 +130,7 @@ namespace REGoth
       if (!mesh.isLoaded())
       {
         REGOTH_LOG(Warning, Uncategorized,
-                   "Failed to load cached world mesh of zen {0} - rechaching it!", zen.fileName);
+                   "Failed to load cached world mesh of zen {0} - recaching it!", zen.fileName);
         mesh = BsZenLib::ImportAndCacheStaticMesh(meshFileName, zen.worldMesh,
                                                   gVirtualFileSystem().getFileIndex());
       }
