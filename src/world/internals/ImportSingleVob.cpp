@@ -1,8 +1,6 @@
 #include "ImportSingleVob.hpp"
 #include <BsZenLib/ImportPath.hpp>
 #include <BsZenLib/ResourceManifest.hpp>
-#include <BsZenLib/ZenResources.hpp>
-#include <Components/BsCLight.h>
 #include <Components/BsCMeshCollider.h>
 #include <Components/BsCRenderable.h>
 #include <FileSystem/BsFileSystem.h>
@@ -15,7 +13,6 @@
 #include <components/GameWorld.hpp>
 #include <components/Item.hpp>
 #include <components/Visual.hpp>
-#include <components/VisualStaticMesh.hpp>
 #include <log/logging.hpp>
 #include <zenload/zTypes.h>
 

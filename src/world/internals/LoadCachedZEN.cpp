@@ -1,5 +1,4 @@
 #include "LoadCachedZEN.hpp"
-#include "ConstructFromZEN.hpp"
 #include <BsZenLib/ImportPath.hpp>
 #include <FileSystem/BsFileSystem.h>
 #include <Resources/BsResources.h>
