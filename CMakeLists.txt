@@ -33,9 +33,6 @@ endif()
 #                            Add external libraries                           #
 ###############################################################################
 
-# Required by the libsquish vcpkg package
-find_package(OpenMP REQUIRED) # Find the package
-
 # Let CMake know where to find the Findbsf.cmake file
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
