@@ -17,20 +17,13 @@
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
+  
+  
     
 
   
+
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -38,16 +31,21 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Character state machine" href="character-statemachine.html" />
     <link rel="prev" title="Kinds of objects in Gothic" href="object-kinds.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
+
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-nav-search">
           
 
           
@@ -197,10 +195,10 @@ approach.</p>
 of.  I would suggest keeping all behavior of an object inside <em>Logic-Components</em>. There will be
 very few kinds to take into account from the original game:</p>
 <ul class="simple">
-<li><p>Characters</p></li>
-<li><p>Interactable objects</p></li>
-<li><p>Triggers</p></li>
-<li><p>Items on the ground</p></li>
+<li>Characters</li>
+<li>Interactable objects</li>
+<li>Triggers</li>
+<li>Items on the ground</li>
 </ul>
 <p>Of course these could (and should) be split into multiple components.  For example, the
 <em>Character</em>-Component could manage the appearance, animations and inventory of a character, while
@@ -216,10 +214,10 @@ data.  It could then save everything needed to display an object as a child-obje
 components from directly interacting with what the <em>Visual</em>-Component needed to create.</p>
 <p>To match the original game, we would need at least the following visuals:</p>
 <ul class="simple">
-<li><p>Static meshes (.3DS)</p></li>
-<li><p>Skeletal-Meshes (.ASC)</p></li>
-<li><p>Morph-Meshes</p></li>
-<li><p>Particle-Effects</p></li>
+<li>Static meshes (.3DS)</li>
+<li>Skeletal-Meshes (.ASC)</li>
+<li>Morph-Meshes</li>
+<li>Particle-Effects</li>
 </ul>
 </div>
 </div>
@@ -235,7 +233,7 @@ components from directly interacting with what the <em>Visual</em>-Component nee
         <a href="character-statemachine.html" class="btn btn-neutral float-right" title="Character state machine" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="object-kinds.html" class="btn btn-neutral float-left" title="Kinds of objects in Gothic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="object-kinds.html" class="btn btn-neutral" title="Kinds of objects in Gothic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -261,16 +259,26 @@ components from directly interacting with what the <em>Visual</em>-Component nee
   
 
 
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

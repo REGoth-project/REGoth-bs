@@ -17,20 +17,13 @@
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
+  
+  
     
 
   
+
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -38,16 +31,21 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Executables" href="execs.html" />
     <link rel="prev" title="Daedalus VM" href="../case-studies/daedalus-vm.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
+
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-nav-search">
           
 
           
@@ -184,44 +182,45 @@
 <h1>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h1>
 <p>The core module features the main data structures representing an engine, as well as functions and
 utility tools to bootstrap them.</p>
-<p>The heart is the abstract class <a class="reference internal" href="#_CPPv4N6REGoth6EngineE" title="REGoth::Engine"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::Engine</span></code></a>, which already implements lots
+<p>The heart is the abstract class <a class="reference internal" href="#_CPPv3N6REGoth6EngineE" title="REGoth::Engine"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::Engine</span></code></a>, which already implements lots
 of functionality to run the game.  An engine needs a configuration, which is represented by the
-struct <a class="reference internal" href="#_CPPv4N6REGoth12EngineConfigE" title="REGoth::EngineConfig"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EngineConfig</span></code></a>.  In most cases, the configuration options covered by
-<a class="reference internal" href="#_CPPv4N6REGoth12EngineConfigE" title="REGoth::EngineConfig"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EngineConfig</span></code></a> are enough, so the concrete class <a class="reference internal" href="#_CPPv4N6REGoth9EmptyGameE" title="REGoth::EmptyGame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EmptyGame</span></code></a>
-(extends <a class="reference internal" href="#_CPPv4N6REGoth6EngineE" title="REGoth::Engine"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::Engine</span></code></a>) can be used.  A concrete example on how to use
-<a class="reference internal" href="#_CPPv4N6REGoth9EmptyGameE" title="REGoth::EmptyGame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EmptyGame</span></code></a> can be found <a class="reference internal" href="../tutorials/setting-up-app.html#setting-up-app-hello-regoth"><span class="std std-ref">here</span></a>.</p>
-<p>If the default configuration covered by <a class="reference internal" href="#_CPPv4N6REGoth12EngineConfigE" title="REGoth::EngineConfig"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EngineConfig</span></code></a> is <em>not</em> enough, it is
-best practice to extend directly from <a class="reference internal" href="#_CPPv4N6REGoth6EngineE" title="REGoth::Engine"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::Engine</span></code></a> and implement the function
-<a class="reference internal" href="#_CPPv4NK6REGoth6Engine6configEv" title="REGoth::Engine::config"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">REGoth::Engine::config()</span></code></a>.
-Make sure that your specialised configuration object extends <a class="reference internal" href="#_CPPv4N6REGoth12EngineConfigE" title="REGoth::EngineConfig"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EngineConfig</span></code></a>.
+struct <a class="reference internal" href="#_CPPv3N6REGoth12EngineConfigE" title="REGoth::EngineConfig"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EngineConfig</span></code></a>.  In most cases, the configuration options covered by
+<a class="reference internal" href="#_CPPv3N6REGoth12EngineConfigE" title="REGoth::EngineConfig"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EngineConfig</span></code></a> are enough, so the concrete class <a class="reference internal" href="#_CPPv3N6REGoth9EmptyGameE" title="REGoth::EmptyGame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EmptyGame</span></code></a>
+(extends <a class="reference internal" href="#_CPPv3N6REGoth6EngineE" title="REGoth::Engine"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::Engine</span></code></a>) can be used.  A concrete example on how to use
+<a class="reference internal" href="#_CPPv3N6REGoth9EmptyGameE" title="REGoth::EmptyGame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EmptyGame</span></code></a> can be found <a class="reference internal" href="../tutorials/setting-up-app.html#setting-up-app-hello-regoth"><span class="std std-ref">here</span></a>.</p>
+<p>If the default configuration covered by <a class="reference internal" href="#_CPPv3N6REGoth12EngineConfigE" title="REGoth::EngineConfig"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EngineConfig</span></code></a> is <em>not</em> enough, it is
+best practice to extend directly from <a class="reference internal" href="#_CPPv3N6REGoth6EngineE" title="REGoth::Engine"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::Engine</span></code></a> and implement the function
+<a class="reference internal" href="#_CPPv3NK6REGoth6Engine6configEv" title="REGoth::Engine::config"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">REGoth::Engine::config()</span></code></a>.
+Make sure that your specialised configuration object extends <a class="reference internal" href="#_CPPv3N6REGoth12EngineConfigE" title="REGoth::EngineConfig"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EngineConfig</span></code></a>.
 For a code example on how employ a custom configuration, see
 <a class="reference internal" href="../tutorials/setting-up-app.html#setting-up-app-custom-conf"><span class="std std-ref">here</span></a>.</p>
-<p>To construct an <a class="reference internal" href="#_CPPv4N6REGoth12EngineConfigE" title="REGoth::EngineConfig"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EngineConfig</span></code></a> from command line parameters, the convenience
-function <a class="reference internal" href="#_CPPv4I0EN6REGoth14parseArgumentsENSt10unique_ptrIK1TEEiPPc" title="REGoth::parseArguments"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">REGoth::parseArguments()</span></code></a> is provided.  It is best practice to surrender the
+<p>To construct an <a class="reference internal" href="#_CPPv3N6REGoth12EngineConfigE" title="REGoth::EngineConfig"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">REGoth::EngineConfig</span></code></a> from command line parameters, the convenience
+function <a class="reference internal" href="#_CPPv3N6REGoth14parseArgumentsEiPPc" title="REGoth::parseArguments"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">REGoth::parseArguments()</span></code></a> is provided.  It is best practice to surrender the
 ownership of an engine configuration object to the engine by <code class="docutils literal notranslate"><span class="pre">std::move</span></code>-ing it into the
 constructor call.</p>
-<p>To run an engine, the convenience function <a class="reference internal" href="#_CPPv4N6REGoth9runEngineER6Engine" title="REGoth::runEngine"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">REGoth::runEngine()</span></code></a> is provided.</p>
+<p>To run an engine, the convenience function <a class="reference internal" href="#_CPPv3N6REGoth9runEngineER6Engine" title="REGoth::runEngine"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">REGoth::runEngine()</span></code></a> is provided.</p>
 <div class="section" id="reference">
 <h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
 <dl class="group">
 <dt>
-<span class="target" id="group__core"></span><em>group</em> <code class="sig-name descname">core</code></dt>
+<span class="target" id="group__core"></span><em>group</em> <code class="descname">core</code></dt>
 <dd><p>REGoth core module, in <code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&lt;</span><span class="pre">core.hpp</span><span class="pre">&gt;</span></code>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Functions</p>
 <dl class="function">
-<dt id="_CPPv4I0EN6REGoth14parseArgumentsENSt10unique_ptrIK1TEEiPPc">
-<span id="_CPPv3I0EN6REGoth14parseArgumentsEiPPc"></span><span id="_CPPv2I0EN6REGoth14parseArgumentsEiPPc"></span><span class="target" id="group__core_1ga1aa496c13bb8a74607bef3b53bd12f58"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br />std::unique_ptr&lt;<em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6REGoth14parseArgumentsENSt10unique_ptrIK1TEEiPPc" title="REGoth::parseArguments::T">T</a>&gt; <code class="sig-name descname">parseArguments</code><span class="sig-paren">(</span>int <em>argc</em>, char **<em>argv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6REGoth14parseArgumentsENSt10unique_ptrIK1TEEiPPc" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth14parseArgumentsEiPPc">
+<span id="_CPPv2N6REGoth14parseArgumentsEiPPc"></span><span id="REGoth::parseArguments__i.cPP"></span><em class="property">template </em>&lt;<em class="property">class</em> T&gt;<br /><span class="target" id="group__core_1ga1aa496c13bb8a74607bef3b53bd12f58"></span>std::unique_ptr&lt;<em class="property">const</em> T&gt; <code class="descname">parseArguments</code><span class="sig-paren">(</span>int <em>argc</em>, char **<em>argv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6REGoth14parseArgumentsEiPPc" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Parses the given command line arguments in <code class="docutils literal notranslate"><span class="pre">argv</span></code> and returns a newly constructed <code class="docutils literal notranslate"><a class="reference internal" href="#struct_r_e_goth_1_1_engine_config"><span class="std std-ref"><span class="pre">EngineConfig</span></span></a></code> of subtype <code class="docutils literal notranslate"><span class="pre">T</span></code>. </p>
 <p>The returned <code class="docutils literal notranslate"><a class="reference internal" href="#struct_r_e_goth_1_1_engine_config"><span class="std std-ref"><span class="pre">EngineConfig</span></span></a></code> can be used to be <code class="docutils literal notranslate"><span class="pre">std::move</span></code>d into an <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine"><span class="std std-ref"><span class="pre">Engine</span></span></a></code> while construction.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>Unique pointer to a newly constructed and valid <code class="docutils literal notranslate"><a class="reference internal" href="#struct_r_e_goth_1_1_engine_config"><span class="std std-ref"><span class="pre">EngineConfig</span></span></a></code> of subtype <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p>
-</dd>
-<dt><strong>Note</strong></dt><dd><p>A static assertion ensures that <code class="docutils literal notranslate"><span class="pre">T</span></code> is an <code class="docutils literal notranslate"><a class="reference internal" href="#struct_r_e_goth_1_1_engine_config"><span class="std std-ref"><span class="pre">EngineConfig</span></span></a></code>. </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">argc</span></code>: Main’s <code class="docutils literal notranslate"><span class="pre">argc</span></code> (argument count). </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">argv</span></code>: Main’s <code class="docutils literal notranslate"><span class="pre">argv</span></code> (arguments vector). </p></li>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>Unique pointer to a newly constructed and valid <code class="docutils literal notranslate"><a class="reference internal" href="#struct_r_e_goth_1_1_engine_config"><span class="std std-ref"><span class="pre">EngineConfig</span></span></a></code> of subtype <code class="docutils literal notranslate"><span class="pre">T</span></code>.</dd>
+<dt><strong>Note</strong></dt>
+<dd>A static assertion ensures that <code class="docutils literal notranslate"><span class="pre">T</span></code> is an <code class="docutils literal notranslate"><a class="reference internal" href="#struct_r_e_goth_1_1_engine_config"><span class="std std-ref"><span class="pre">EngineConfig</span></span></a></code>. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">argc</span></code>: Main’s <code class="docutils literal notranslate"><span class="pre">argc</span></code> (argument count). </li>
+<li><code class="docutils literal notranslate"><span class="pre">argv</span></code>: Main’s <code class="docutils literal notranslate"><span class="pre">argv</span></code> (arguments vector). </li>
 </ul>
 </dd>
 </dl>
@@ -229,15 +228,16 @@ constructor call.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N6REGoth9runEngineER6Engine">
-<span id="_CPPv3N6REGoth9runEngineER6Engine"></span><span id="_CPPv2N6REGoth9runEngineER6Engine"></span><span id="REGoth::runEngine__EngineR"></span><span class="target" id="group__core_1ga3ce6a29e5b1898c885c16af98b368104"></span>int <code class="sig-name descname">runEngine</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6REGoth6EngineE" title="REGoth::Engine">Engine</a> &amp;<em>engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6REGoth9runEngineER6Engine" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth9runEngineER6Engine">
+<span id="_CPPv2N6REGoth9runEngineER6Engine"></span><span id="REGoth::runEngine__EngineR"></span><span class="target" id="group__core_1ga3ce6a29e5b1898c885c16af98b368104"></span>int <code class="descname">runEngine</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv3N6REGoth6EngineE" title="REGoth::Engine">Engine</a> &amp;<em>engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6REGoth9runEngineER6Engine" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Bootstrap and run the given engine. </p>
 <p>This is a convenience function to properly setup, bootstrap, and operate an engine.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>Windows errorlevel / POSIX status code. </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">engine</span></code>: Concrete engine to run. </p></li>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>Windows errorlevel / POSIX status code. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">engine</span></code>: Concrete engine to run. </li>
 </ul>
 </dd>
 </dl>
@@ -246,21 +246,22 @@ constructor call.</p>
 
 </div>
 <dl class="class">
-<dt id="_CPPv4N6REGoth9EmptyGameE">
-<span id="_CPPv3N6REGoth9EmptyGameE"></span><span id="_CPPv2N6REGoth9EmptyGameE"></span><span id="REGoth::EmptyGame"></span><span class="target" id="class_r_e_goth_1_1_empty_game"></span><em class="property">class </em><code class="sig-name descname">EmptyGame</code> : <em class="property">public</em> REGoth::<a class="reference internal" href="#_CPPv4N6REGoth6EngineE" title="REGoth::Engine">Engine</a><a class="headerlink" href="#_CPPv4N6REGoth9EmptyGameE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth9EmptyGameE">
+<span id="_CPPv2N6REGoth9EmptyGameE"></span><span id="REGoth::EmptyGame"></span><span class="target" id="class_r_e_goth_1_1_empty_game"></span><em class="property">class </em><code class="descname">EmptyGame</code> : <em class="property">public</em> REGoth::<a class="reference internal" href="#_CPPv3N6REGoth6EngineE" title="REGoth::Engine">Engine</a><a class="headerlink" href="#_CPPv3N6REGoth9EmptyGameE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><em>#include &lt;core/EmptyGame.hpp&gt;</em><p>A concrete, yet empty REGoth engine which uses the default configuration object <code class="docutils literal notranslate"><a class="reference internal" href="#struct_r_e_goth_1_1_engine_config"><span class="std std-ref"><span class="pre">EngineConfig</span></span></a></code>. </p>
 <p>This is a convenience class which can be extended and used if the default configuration object <code class="docutils literal notranslate"><a class="reference internal" href="#struct_r_e_goth_1_1_engine_config"><span class="std std-ref"><span class="pre">EngineConfig</span></span></a></code> is sufficient, and no custom configuration is needed.</p>
 <p>If you wish to use a custom configuration, however, <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine"><span class="std std-ref"><span class="pre">Engine</span></span></a></code> should be extended, and <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine_1a55daa5309c79c8766e22cc8fdae6c11b"><span class="std std-ref"><span class="pre">Engine::config()</span></span></a></code> overridden to avoid confusion between different configuration members. </p>
-<p>Subclassed by REGothCharacterMovementTester, REGothCharacterMovementTester, REGothCharacterViewer, REGothFontViewer, REGothMobViewer, REGothScriptTester, REGothWaynetTester, REGothWorldCacheTest, REGothWorldMeshViewer</p>
+<p>Subclassed by REGoth::Gothic1Game, REGoth::Gothic2Game, REGothCharacterMovementTester, REGothCharacterMovementTester, REGothCharacterViewer, REGothFontViewer, REGothMobViewer, REGothScriptTester, REGothWaynetTester, REGothWorldCacheTest, REGothWorldMeshViewer</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv4N9EmptyGame9EmptyGameERRNSt10unique_ptrIK12EngineConfigEE">
-<span id="_CPPv3N9EmptyGame9EmptyGameERRNSt10unique_ptrIK12EngineConfigEE"></span><span id="_CPPv2N9EmptyGame9EmptyGameERRNSt10unique_ptrIK12EngineConfigEE"></span><span id="EmptyGame::EmptyGame__std::unique_ptr:EngineConfigC:RR"></span><span class="target" id="class_r_e_goth_1_1_empty_game_1a0bc61384b98dd7b631b4474ad7371573"></span><code class="sig-name descname">EmptyGame</code><span class="sig-paren">(</span>std::unique_ptr&lt;<em class="property">const</em> EngineConfig&gt; &amp;&amp;<em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9EmptyGame9EmptyGameERRNSt10unique_ptrIK12EngineConfigEE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N9EmptyGame9EmptyGameERRNSt10unique_ptrIK12EngineConfigEE">
+<span id="_CPPv2N9EmptyGame9EmptyGameERRNSt10unique_ptrIK12EngineConfigEE"></span><span id="EmptyGame::EmptyGame__std::unique_ptr:EngineConfigC:RR"></span><span class="target" id="class_r_e_goth_1_1_empty_game_1a0bc61384b98dd7b631b4474ad7371573"></span><code class="descname">EmptyGame</code><span class="sig-paren">(</span>std::unique_ptr&lt;<em class="property">const</em> EngineConfig&gt; &amp;&amp;<em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N9EmptyGame9EmptyGameERRNSt10unique_ptrIK12EngineConfigEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructs an engine object given a configuration. </p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">config</span></code>: <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine"><span class="std std-ref"><span class="pre">Engine</span></span></a></code> configuration. </p></li>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">config</span></code>: <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine"><span class="std std-ref"><span class="pre">Engine</span></span></a></code> configuration. </li>
 </ul>
 </dd>
 </dl>
@@ -268,12 +269,12 @@ constructor call.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4NK9EmptyGame6configEv">
-<span id="_CPPv3NK9EmptyGame6configEv"></span><span id="_CPPv2NK9EmptyGame6configEv"></span><span id="EmptyGame::configC"></span><span class="target" id="class_r_e_goth_1_1_empty_game_1acc05ad485c303e4a23485779c754db05"></span><em class="property">const</em> EngineConfig *<code class="sig-name descname">config</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9EmptyGame6configEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3NK9EmptyGame6configEv">
+<span id="_CPPv2NK9EmptyGame6configEv"></span><span id="EmptyGame::configC"></span><span class="target" id="class_r_e_goth_1_1_empty_game_1acc05ad485c303e4a23485779c754db05"></span><em class="property">const</em> EngineConfig *<code class="descname">config</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv3NK9EmptyGame6configEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the engine’s configuration. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p><code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine"><span class="std std-ref"><span class="pre">Engine</span></span></a></code> configuration data structure. </p>
-</dd>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd><code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine"><span class="std std-ref"><span class="pre">Engine</span></span></a></code> configuration data structure. </dd>
 </dl>
 </p>
 </dd></dl>
@@ -282,8 +283,8 @@ constructor call.</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Private Members</p>
 <dl class="member">
-<dt id="_CPPv4N6REGoth9EmptyGame7mConfigE">
-<span id="_CPPv3N6REGoth9EmptyGame7mConfigE"></span><span id="_CPPv2N6REGoth9EmptyGame7mConfigE"></span><span id="REGoth::EmptyGame::mConfig__std::unique_ptr:EngineConfigC:"></span><span class="target" id="class_r_e_goth_1_1_empty_game_1a1ead9398409df7e15b75ce6e1f387fd7"></span>std::unique_ptr&lt;<em class="property">const</em> <a class="reference internal" href="#_CPPv4N6REGoth12EngineConfigE" title="REGoth::EngineConfig">EngineConfig</a>&gt; <code class="sig-name descname">mConfig</code><a class="headerlink" href="#_CPPv4N6REGoth9EmptyGame7mConfigE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth9EmptyGame7mConfigE">
+<span id="_CPPv2N6REGoth9EmptyGame7mConfigE"></span><span id="REGoth::EmptyGame::mConfig__std::unique_ptr:EngineConfigC:"></span><span class="target" id="class_r_e_goth_1_1_empty_game_1a1ead9398409df7e15b75ce6e1f387fd7"></span>std::unique_ptr&lt;<em class="property">const</em> <a class="reference internal" href="#_CPPv3N6REGoth12EngineConfigE" title="REGoth::EngineConfig">EngineConfig</a>&gt; <code class="descname">mConfig</code><a class="headerlink" href="#_CPPv3N6REGoth9EmptyGame7mConfigE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p><a class="reference internal" href="#class_r_e_goth_1_1_engine"><span class="std std-ref">Engine</span></a> base configuration. </p>
 </dd></dl>
 
@@ -291,20 +292,20 @@ constructor call.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="_CPPv4N6REGoth6EngineE">
-<span id="_CPPv3N6REGoth6EngineE"></span><span id="_CPPv2N6REGoth6EngineE"></span><span id="REGoth::Engine"></span><span class="target" id="class_r_e_goth_1_1_engine"></span><em class="property">class </em><code class="sig-name descname">Engine</code><a class="headerlink" href="#_CPPv4N6REGoth6EngineE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth6EngineE">
+<span id="_CPPv2N6REGoth6EngineE"></span><span id="REGoth::Engine"></span><span class="target" id="class_r_e_goth_1_1_engine"></span><em class="property">class </em><code class="descname">Engine</code><a class="headerlink" href="#_CPPv3N6REGoth6EngineE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><em>#include &lt;core/Engine.hpp&gt;</em><p>The core class of REGoth, which offers a lot of default implementations to initialize the engine, setup the input, the scene, and others. </p>
 <p>To handle more use cases, and if a custom <code class="docutils literal notranslate"><a class="reference internal" href="#struct_r_e_goth_1_1_engine_config"><span class="std std-ref"><span class="pre">EngineConfig</span></span></a></code> is desired <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine"><span class="std std-ref"><span class="pre">Engine</span></span></a></code> can be extended (otherwise, see <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_empty_game"><span class="std std-ref"><span class="pre">EmptyGame</span></span></a></code>). The base implementations provided here will not load any world and start on an empty scene, but with most of the utilities set up to load original content and game mechanics.</p>
 <p>Therefore, the <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine"><span class="std std-ref"><span class="pre">Engine</span></span></a></code> can be used to implement viewers and other tools, as well as the actual reimplementations of the Gothic games.</p>
 <p>Some important virtual functions exist which can be overridden:</p>
 <p><ul class="simple">
-<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine_1a15a6faea0147731aa42734737afecc57"><span class="std std-ref"><span class="pre">setupInput()</span></span></a></code></p></li>
+<li><code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine_1a15a6faea0147731aa42734737afecc57"><span class="std std-ref"><span class="pre">setupInput()</span></span></a></code></li>
 </ul>
 </p>
 <p>Some pure virtual functions must be implemented:</p>
 <p><ul class="simple">
-<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine_1ad9f48dc2ce6ddeddd67b4bc017a37a40"><span class="std std-ref"><span class="pre">setupScene()</span></span></a></code>: Set up the scene this engine should handle.</p></li>
-<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine_1a55daa5309c79c8766e22cc8fdae6c11b"><span class="std std-ref"><span class="pre">config()</span></span></a></code>: Return the engine’s configuration. To use a default implementation, see <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_empty_game"><span class="std std-ref"><span class="pre">EmptyGame</span></span></a></code>.</p></li>
+<li><code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine_1ad9f48dc2ce6ddeddd67b4bc017a37a40"><span class="std std-ref"><span class="pre">setupScene()</span></span></a></code>: Set up the scene this engine should handle.</li>
+<li><code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine_1a55daa5309c79c8766e22cc8fdae6c11b"><span class="std std-ref"><span class="pre">config()</span></span></a></code>: Return the engine’s configuration. To use a default implementation, see <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_empty_game"><span class="std std-ref"><span class="pre">EmptyGame</span></span></a></code>.</li>
 </ul>
 </p>
 <p>To actually run an instance of the engine, see <code class="docutils literal notranslate"><a class="reference internal" href="#group__core_1ga3ce6a29e5b1898c885c16af98b368104"><span class="std std-ref"><span class="pre">runEngine()</span></span></a></code>. </p>
@@ -312,27 +313,28 @@ constructor call.</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv4N6Engine16loadGamePackagesEv">
-<span id="_CPPv3N6Engine16loadGamePackagesEv"></span><span id="_CPPv2N6Engine16loadGamePackagesEv"></span><span id="Engine::loadGamePackages"></span><span class="target" id="class_r_e_goth_1_1_engine_1aeffd031a5d7c7ceebf9b397da972c979"></span>void <code class="sig-name descname">loadGamePackages</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Engine16loadGamePackagesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6Engine16loadGamePackagesEv">
+<span id="_CPPv2N6Engine16loadGamePackagesEv"></span><span id="Engine::loadGamePackages"></span><span class="target" id="class_r_e_goth_1_1_engine_1aeffd031a5d7c7ceebf9b397da972c979"></span>void <code class="descname">loadGamePackages</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6Engine16loadGamePackagesEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Load VDFS packages from the original game. </p>
 <p>Will load data in the following order:</p>
 <p><ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">Data/</span></code> (<code class="docutils literal notranslate"><span class="pre">*.vdf</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">_world/</span></code> (Recursive)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Data/modvdf/</span></code> (<code class="docutils literal notranslate"><span class="pre">*.mod</span></code>, recursive) </p></li>
+<li><code class="docutils literal notranslate"><span class="pre">Data/</span></code> (<code class="docutils literal notranslate"><span class="pre">*.vdf</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">_world/</span></code> (Recursive)</li>
+<li><code class="docutils literal notranslate"><span class="pre">Data/modvdf/</span></code> (<code class="docutils literal notranslate"><span class="pre">*.mod</span></code>, recursive) </li>
 </ol>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N6Engine15loadModPackagesERK17OriginalGameFiles">
-<span id="_CPPv3N6Engine15loadModPackagesERK17OriginalGameFiles"></span><span id="_CPPv2N6Engine15loadModPackagesERK17OriginalGameFiles"></span><span id="Engine::loadModPackages__OriginalGameFilesCR"></span><span class="target" id="class_r_e_goth_1_1_engine_1a0a8c064c876bf30e1d8038822d181e46"></span>void <code class="sig-name descname">loadModPackages</code><span class="sig-paren">(</span><em class="property">const</em> OriginalGameFiles &amp;<em>files</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Engine15loadModPackagesERK17OriginalGameFiles" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6Engine15loadModPackagesERK17OriginalGameFiles">
+<span id="_CPPv2N6Engine15loadModPackagesERK17OriginalGameFiles"></span><span id="Engine::loadModPackages__OriginalGameFilesCR"></span><span class="target" id="class_r_e_goth_1_1_engine_1a0a8c064c876bf30e1d8038822d181e46"></span>void <code class="descname">loadModPackages</code><span class="sig-paren">(</span><em class="property">const</em> OriginalGameFiles &amp;<em>files</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6Engine15loadModPackagesERK17OriginalGameFiles" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Called by <code class="docutils literal notranslate"><span class="pre">loadOriginalGamePackages()</span></code>. </p>
 <p>Can be overriden by the user to load specific MOD-packages.</p>
 <p>To load a MOD-package, use <code class="docutils literal notranslate"><span class="pre">gVirtualFileSystem()</span><span class="pre">.loadPackage(p)</span></code>.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">files</span></code>: Reference to <code class="docutils literal notranslate"><span class="pre">OriginalGameFiles</span></code> object, which has some utility methods to access files in the original game directory. </p></li>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">files</span></code>: Reference to <code class="docutils literal notranslate"><span class="pre">OriginalGameFiles</span></code> object, which has some utility methods to access files in the original game directory. </li>
 </ul>
 </dd>
 </dl>
@@ -340,84 +342,90 @@ constructor call.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N6Engine17hasFoundGameFilesEv">
-<span id="_CPPv3N6Engine17hasFoundGameFilesEv"></span><span id="_CPPv2N6Engine17hasFoundGameFilesEv"></span><span id="Engine::hasFoundGameFiles"></span><span class="target" id="class_r_e_goth_1_1_engine_1ad60f95ee89f8a4f12eae373301648a8b"></span>bool <code class="sig-name descname">hasFoundGameFiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Engine17hasFoundGameFilesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6Engine17hasFoundGameFilesEv">
+<span id="_CPPv2N6Engine17hasFoundGameFilesEv"></span><span id="Engine::hasFoundGameFiles"></span><span class="target" id="class_r_e_goth_1_1_engine_1ad60f95ee89f8a4f12eae373301648a8b"></span>bool <code class="descname">hasFoundGameFiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6Engine17hasFoundGameFilesEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>When called after <code class="docutils literal notranslate"><span class="pre">loadOriginalGamePackages()</span></code>, this will check whether Gothics game files were found at the location given to <code class="docutils literal notranslate"><span class="pre">loadOriginalGamePackages()</span></code>. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>Whether game files were found. </p>
-</dd>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>Whether game files were found. </dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N6Engine13initializeBsfEv">
-<span id="_CPPv3N6Engine13initializeBsfEv"></span><span id="_CPPv2N6Engine13initializeBsfEv"></span><span id="Engine::initializeBsf"></span><span class="target" id="class_r_e_goth_1_1_engine_1aa57a0df4122f30926adea503758aabb2"></span>void <code class="sig-name descname">initializeBsf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Engine13initializeBsfEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6Engine13initializeBsfEv">
+<span id="_CPPv2N6Engine13initializeBsfEv"></span><span id="Engine::initializeBsf"></span><span class="target" id="class_r_e_goth_1_1_engine_1aa57a0df4122f30926adea503758aabb2"></span>void <code class="descname">initializeBsf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6Engine13initializeBsfEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Initializes <code class="docutils literal notranslate"><span class="pre">bsf</span></code> and opens the window. </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N6Engine27loadCachedResourceManifestsEv">
-<span id="_CPPv3N6Engine27loadCachedResourceManifestsEv"></span><span id="_CPPv2N6Engine27loadCachedResourceManifestsEv"></span><span id="Engine::loadCachedResourceManifests"></span><span class="target" id="class_r_e_goth_1_1_engine_1a5fab7d49f865e2ec1b88fd5993f74612"></span>void <code class="sig-name descname">loadCachedResourceManifests</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Engine27loadCachedResourceManifestsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6Engine27loadCachedResourceManifestsEv">
+<span id="_CPPv2N6Engine27loadCachedResourceManifestsEv"></span><span id="Engine::loadCachedResourceManifests"></span><span class="target" id="class_r_e_goth_1_1_engine_1a5fab7d49f865e2ec1b88fd5993f74612"></span>void <code class="descname">loadCachedResourceManifests</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6Engine27loadCachedResourceManifestsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Load all resource manifests written by previous runs of REGoth. </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N6Engine27saveCachedResourceManifestsEv">
-<span id="_CPPv3N6Engine27saveCachedResourceManifestsEv"></span><span id="_CPPv2N6Engine27saveCachedResourceManifestsEv"></span><span id="Engine::saveCachedResourceManifests"></span><span class="target" id="class_r_e_goth_1_1_engine_1a7890d9e636e460f464a9fa081ddcea98"></span>void <code class="sig-name descname">saveCachedResourceManifests</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Engine27saveCachedResourceManifestsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth6Engine21populateResourceCacheEv">
+<span id="_CPPv2N6REGoth6Engine21populateResourceCacheEv"></span><span id="REGoth::Engine::populateResourceCache"></span><span class="target" id="class_r_e_goth_1_1_engine_1a28742f9e51f9dd878a75613feaf50ab9"></span>void <code class="descname">populateResourceCache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6REGoth6Engine21populateResourceCacheEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Goes through the loaded VDFS packages and imports the original games resources which were not already cached. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv3N6Engine27saveCachedResourceManifestsEv">
+<span id="_CPPv2N6Engine27saveCachedResourceManifestsEv"></span><span id="Engine::saveCachedResourceManifests"></span><span class="target" id="class_r_e_goth_1_1_engine_1a7890d9e636e460f464a9fa081ddcea98"></span>void <code class="descname">saveCachedResourceManifests</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6Engine27saveCachedResourceManifestsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Save resource manifests containing resources loaded during this run. </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N6Engine10setupInputEv">
-<span id="_CPPv3N6Engine10setupInputEv"></span><span id="_CPPv2N6Engine10setupInputEv"></span><span id="Engine::setupInput"></span><span class="target" id="class_r_e_goth_1_1_engine_1a15a6faea0147731aa42734737afecc57"></span>void <code class="sig-name descname">setupInput</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Engine10setupInputEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6Engine10setupInputEv">
+<span id="_CPPv2N6Engine10setupInputEv"></span><span id="Engine::setupInput"></span><span class="target" id="class_r_e_goth_1_1_engine_1a15a6faea0147731aa42734737afecc57"></span>void <code class="descname">setupInput</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6Engine10setupInputEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Assign buttons and axis to control the game. </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N6Engine15setupMainCameraEv">
-<span id="_CPPv3N6Engine15setupMainCameraEv"></span><span id="_CPPv2N6Engine15setupMainCameraEv"></span><span id="Engine::setupMainCamera"></span><span class="target" id="class_r_e_goth_1_1_engine_1aba20f75bc40e47a83d7b4fce13c5a20c"></span>void <code class="sig-name descname">setupMainCamera</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Engine15setupMainCameraEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6Engine15setupMainCameraEv">
+<span id="_CPPv2N6Engine15setupMainCameraEv"></span><span id="Engine::setupMainCamera"></span><span class="target" id="class_r_e_goth_1_1_engine_1aba20f75bc40e47a83d7b4fce13c5a20c"></span>void <code class="descname">setupMainCamera</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6Engine15setupMainCameraEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets up the main camera of this engine. </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N6REGoth6Engine10setupSceneEv">
-<span id="_CPPv3N6REGoth6Engine10setupSceneEv"></span><span id="_CPPv2N6REGoth6Engine10setupSceneEv"></span><span id="REGoth::Engine::setupScene"></span><span class="target" id="class_r_e_goth_1_1_engine_1ad9f48dc2ce6ddeddd67b4bc017a37a40"></span><em class="property">virtual</em> void <code class="sig-name descname">setupScene</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = 0<a class="headerlink" href="#_CPPv4N6REGoth6Engine10setupSceneEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth6Engine10setupSceneEv">
+<span id="_CPPv2N6REGoth6Engine10setupSceneEv"></span><span id="REGoth::Engine::setupScene"></span><span class="target" id="class_r_e_goth_1_1_engine_1ad9f48dc2ce6ddeddd67b4bc017a37a40"></span><em class="property">virtual</em> void <code class="descname">setupScene</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = 0<a class="headerlink" href="#_CPPv3N6REGoth6Engine10setupSceneEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Load scenes and other objects and add them to the scene. </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N6Engine10setShadersEv">
-<span id="_CPPv3N6Engine10setShadersEv"></span><span id="_CPPv2N6Engine10setShadersEv"></span><span id="Engine::setShaders"></span><span class="target" id="class_r_e_goth_1_1_engine_1a43d9ff6c5b6ca49b00d111a589edd1ee"></span>void <code class="sig-name descname">setShaders</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Engine10setShadersEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6Engine10setShadersEv">
+<span id="_CPPv2N6Engine10setShadersEv"></span><span id="Engine::setShaders"></span><span class="target" id="class_r_e_goth_1_1_engine_1a43d9ff6c5b6ca49b00d111a589edd1ee"></span>void <code class="descname">setShaders</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6Engine10setShadersEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set shaders to be used when re-caching the materials. </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N6Engine17findEngineContentEv">
-<span id="_CPPv3N6Engine17findEngineContentEv"></span><span id="_CPPv2N6Engine17findEngineContentEv"></span><span id="Engine::findEngineContent"></span><span class="target" id="class_r_e_goth_1_1_engine_1a66bbe5c64616f63a9b7e65c1902a6eb2"></span>void <code class="sig-name descname">findEngineContent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Engine17findEngineContentEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6Engine17findEngineContentEv">
+<span id="_CPPv2N6Engine17findEngineContentEv"></span><span id="Engine::findEngineContent"></span><span class="target" id="class_r_e_goth_1_1_engine_1a66bbe5c64616f63a9b7e65c1902a6eb2"></span>void <code class="descname">findEngineContent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6Engine17findEngineContentEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Find the location of REGoths own <code class="docutils literal notranslate"><span class="pre">content</span></code> directory. </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N6Engine3runEv">
-<span id="_CPPv3N6Engine3runEv"></span><span id="_CPPv2N6Engine3runEv"></span><span id="Engine::run"></span><span class="target" id="class_r_e_goth_1_1_engine_1a1a210cf30d6bd330b3649439ecd6d6cc"></span>void <code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Engine3runEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6Engine3runEv">
+<span id="_CPPv2N6Engine3runEv"></span><span id="Engine::run"></span><span class="target" id="class_r_e_goth_1_1_engine_1a1a210cf30d6bd330b3649439ecd6d6cc"></span>void <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6Engine3runEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Run the main loop. </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N6Engine8shutdownEv">
-<span id="_CPPv3N6Engine8shutdownEv"></span><span id="_CPPv2N6Engine8shutdownEv"></span><span id="Engine::shutdown"></span><span class="target" id="class_r_e_goth_1_1_engine_1a4bbccf668c46064559c99a999f7b9932"></span>void <code class="sig-name descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Engine8shutdownEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6Engine8shutdownEv">
+<span id="_CPPv2N6Engine8shutdownEv"></span><span id="Engine::shutdown"></span><span class="target" id="class_r_e_goth_1_1_engine_1a4bbccf668c46064559c99a999f7b9932"></span>void <code class="descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6Engine8shutdownEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Shutdown <code class="docutils literal notranslate"><span class="pre">bsf</span></code>. </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4NK6REGoth6Engine6configEv">
-<span id="_CPPv3NK6REGoth6Engine6configEv"></span><span id="_CPPv2NK6REGoth6Engine6configEv"></span><span id="REGoth::Engine::configC"></span><span class="target" id="class_r_e_goth_1_1_engine_1a55daa5309c79c8766e22cc8fdae6c11b"></span><em class="property">virtual</em> <em class="property">const</em> <a class="reference internal" href="#_CPPv4N6REGoth12EngineConfigE" title="REGoth::EngineConfig">EngineConfig</a> *<code class="sig-name descname">config</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> = 0<a class="headerlink" href="#_CPPv4NK6REGoth6Engine6configEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3NK6REGoth6Engine6configEv">
+<span id="_CPPv2NK6REGoth6Engine6configEv"></span><span id="REGoth::Engine::configC"></span><span class="target" id="class_r_e_goth_1_1_engine_1a55daa5309c79c8766e22cc8fdae6c11b"></span><em class="property">virtual</em> <em class="property">const</em> <a class="reference internal" href="#_CPPv3N6REGoth12EngineConfigE" title="REGoth::EngineConfig">EngineConfig</a> *<code class="descname">config</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> = 0<a class="headerlink" href="#_CPPv3NK6REGoth6Engine6configEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Grants access to the engine’s configuration. </p>
 <p>If you do not need a custom engine configuration, and <code class="docutils literal notranslate"><a class="reference internal" href="#struct_r_e_goth_1_1_engine_config"><span class="std std-ref"><span class="pre">EngineConfig</span></span></a></code> is enough, consider extending <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_empty_game"><span class="std std-ref"><span class="pre">EmptyGame</span></span></a></code> instead of <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine"><span class="std std-ref"><span class="pre">Engine</span></span></a></code>, which features a default implementation using <code class="docutils literal notranslate"><a class="reference internal" href="#struct_r_e_goth_1_1_engine_config"><span class="std std-ref"><span class="pre">EngineConfig</span></span></a></code>.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>The engine configuration data structure. </p>
-</dd>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>The engine configuration data structure. </dd>
 </dl>
 </p>
 </dd></dl>
@@ -426,14 +434,14 @@ constructor call.</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Protected Attributes</p>
 <dl class="member">
-<dt id="_CPPv4N6REGoth6Engine11mMainCameraE">
-<span id="_CPPv3N6REGoth6Engine11mMainCameraE"></span><span id="_CPPv2N6REGoth6Engine11mMainCameraE"></span><span id="REGoth::Engine::mMainCamera__bs::HCamera"></span><span class="target" id="class_r_e_goth_1_1_engine_1a3370b9b0c9a62c921770458b76b3097c"></span>bs::HCamera <code class="sig-name descname">mMainCamera</code><a class="headerlink" href="#_CPPv4N6REGoth6Engine11mMainCameraE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth6Engine11mMainCameraE">
+<span id="_CPPv2N6REGoth6Engine11mMainCameraE"></span><span id="REGoth::Engine::mMainCamera__bs::HCamera"></span><span class="target" id="class_r_e_goth_1_1_engine_1a3370b9b0c9a62c921770458b76b3097c"></span>bs::HCamera <code class="descname">mMainCamera</code><a class="headerlink" href="#_CPPv3N6REGoth6Engine11mMainCameraE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Main camera this engines renders with. </p>
 </dd></dl>
 
 <dl class="member">
-<dt id="_CPPv4N6REGoth6Engine14mEngineContentE">
-<span id="_CPPv3N6REGoth6Engine14mEngineContentE"></span><span id="_CPPv2N6REGoth6Engine14mEngineContentE"></span><span id="REGoth::Engine::mEngineContent__bs::SPtr:EngineContent:"></span><span class="target" id="class_r_e_goth_1_1_engine_1a2a9aacd4a369d698457c30c456d20b8f"></span>bs::SPtr&lt;EngineContent&gt; <code class="sig-name descname">mEngineContent</code><a class="headerlink" href="#_CPPv4N6REGoth6Engine14mEngineContentE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth6Engine14mEngineContentE">
+<span id="_CPPv2N6REGoth6Engine14mEngineContentE"></span><span id="REGoth::Engine::mEngineContent__bs::SPtr:EngineContent:"></span><span class="target" id="class_r_e_goth_1_1_engine_1a2a9aacd4a369d698457c30c456d20b8f"></span>bs::SPtr&lt;EngineContent&gt; <code class="descname">mEngineContent</code><a class="headerlink" href="#_CPPv3N6REGoth6Engine14mEngineContentE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Path to REGoth’s own <code class="docutils literal notranslate"><span class="pre">content</span></code> directory and resource loader. </p>
 </dd></dl>
 
@@ -441,8 +449,8 @@ constructor call.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="_CPPv4N6REGoth12EngineConfigE">
-<span id="_CPPv3N6REGoth12EngineConfigE"></span><span id="_CPPv2N6REGoth12EngineConfigE"></span><span id="REGoth::EngineConfig"></span><span class="target" id="struct_r_e_goth_1_1_engine_config"></span><em class="property">struct </em><code class="sig-name descname">EngineConfig</code><a class="headerlink" href="#_CPPv4N6REGoth12EngineConfigE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth12EngineConfigE">
+<span id="_CPPv2N6REGoth12EngineConfigE"></span><span id="REGoth::EngineConfig"></span><span class="target" id="struct_r_e_goth_1_1_engine_config"></span><em class="property">struct </em><code class="descname">EngineConfig</code><a class="headerlink" href="#_CPPv3N6REGoth12EngineConfigE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><em>#include &lt;core/EngineConfig.hpp&gt;</em><p>The base configuration for an <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine"><span class="std std-ref"><span class="pre">Engine</span></span></a></code>. </p>
 <p>Configuration objects are required to construct an engine. An <code class="docutils literal notranslate"><a class="reference internal" href="#struct_r_e_goth_1_1_engine_config"><span class="std std-ref"><span class="pre">EngineConfig</span></span></a></code> is the default configuration object, which is used in the definition of <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine_1a55daa5309c79c8766e22cc8fdae6c11b"><span class="std std-ref"><span class="pre">Engine::config()</span></span></a></code>, and which is also the configuration object for the default engine implementation <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_empty_game"><span class="std std-ref"><span class="pre">EmptyGame</span></span></a></code>.</p>
 <p>If a specialised <code class="docutils literal notranslate"><a class="reference internal" href="#struct_r_e_goth_1_1_engine_config"><span class="std std-ref"><span class="pre">EngineConfig</span></span></a></code> is needed, <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine"><span class="std std-ref"><span class="pre">Engine</span></span></a></code> must be extended and <code class="docutils literal notranslate"><a class="reference internal" href="#class_r_e_goth_1_1_engine_1a55daa5309c79c8766e22cc8fdae6c11b"><span class="std std-ref"><span class="pre">Engine::config()</span></span></a></code> overridden accordingly. </p>
@@ -450,18 +458,19 @@ constructor call.</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv4N12EngineConfigD0Ev">
-<span id="_CPPv3N12EngineConfigD0Ev"></span><span id="_CPPv2N12EngineConfigD0Ev"></span><span id="EngineConfig::~EngineConfig"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ae8046403021cca31cdc1f5f925eb2454"></span><code class="sig-name descname">~EngineConfig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12EngineConfigD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N12EngineConfigD0Ev">
+<span id="_CPPv2N12EngineConfigD0Ev"></span><span id="EngineConfig::~EngineConfig"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ae8046403021cca31cdc1f5f925eb2454"></span><code class="descname">~EngineConfig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N12EngineConfigD0Ev" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Frees acquired resources. </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N12EngineConfig24registerCLIEngineOptionsERN7cxxopts7OptionsE">
-<span id="_CPPv3N12EngineConfig24registerCLIEngineOptionsERN7cxxopts7OptionsE"></span><span id="_CPPv2N12EngineConfig24registerCLIEngineOptionsERN7cxxopts7OptionsE"></span><span id="EngineConfig::registerCLIEngineOptions__cxxopts::OptionsR"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ac3f5bf459747d7f15fdf0c8eea3a0074"></span>void <code class="sig-name descname">registerCLIEngineOptions</code><span class="sig-paren">(</span>cxxopts::Options &amp;<em>options</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12EngineConfig24registerCLIEngineOptionsERN7cxxopts7OptionsE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N12EngineConfig24registerCLIEngineOptionsERN7cxxopts7OptionsE">
+<span id="_CPPv2N12EngineConfig24registerCLIEngineOptionsERN7cxxopts7OptionsE"></span><span id="EngineConfig::registerCLIEngineOptions__cxxopts::OptionsR"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ac3f5bf459747d7f15fdf0c8eea3a0074"></span>void <code class="descname">registerCLIEngineOptions</code><span class="sig-paren">(</span>cxxopts::Options &amp;<em>options</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N12EngineConfig24registerCLIEngineOptionsERN7cxxopts7OptionsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Registers CLI engine options via the given <code class="docutils literal notranslate"><span class="pre">cxxopts</span></code> options parameter. </p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">options</span></code>: A <code class="docutils literal notranslate"><span class="pre">cxxopts</span></code> options configurations object. </p></li>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code>: A <code class="docutils literal notranslate"><span class="pre">cxxopts</span></code> options configurations object. </li>
 </ul>
 </dd>
 </dl>
@@ -469,18 +478,19 @@ constructor call.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N12EngineConfig22verifyCLIEngineOptionsEv">
-<span id="_CPPv3N12EngineConfig22verifyCLIEngineOptionsEv"></span><span id="_CPPv2N12EngineConfig22verifyCLIEngineOptionsEv"></span><span id="EngineConfig::verifyCLIEngineOptions"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ae10617ec9dd863e033fdb6b1160ef358"></span>void <code class="sig-name descname">verifyCLIEngineOptions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12EngineConfig22verifyCLIEngineOptionsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N12EngineConfig22verifyCLIEngineOptionsEv">
+<span id="_CPPv2N12EngineConfig22verifyCLIEngineOptionsEv"></span><span id="EngineConfig::verifyCLIEngineOptions"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ae10617ec9dd863e033fdb6b1160ef358"></span>void <code class="descname">verifyCLIEngineOptions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N12EngineConfig22verifyCLIEngineOptionsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Verifies CLI engine options after parsing. </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N12EngineConfig18registerCLIOptionsERN7cxxopts7OptionsE">
-<span id="_CPPv3N12EngineConfig18registerCLIOptionsERN7cxxopts7OptionsE"></span><span id="_CPPv2N12EngineConfig18registerCLIOptionsERN7cxxopts7OptionsE"></span><span id="EngineConfig::registerCLIOptions__cxxopts::OptionsR"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ad66c35249018c9d6e1654c435abe36e8"></span>void <code class="sig-name descname">registerCLIOptions</code><span class="sig-paren">(</span>cxxopts::Options&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12EngineConfig18registerCLIOptionsERN7cxxopts7OptionsE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N12EngineConfig18registerCLIOptionsERN7cxxopts7OptionsE">
+<span id="_CPPv2N12EngineConfig18registerCLIOptionsERN7cxxopts7OptionsE"></span><span id="EngineConfig::registerCLIOptions__cxxopts::OptionsR"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ad66c35249018c9d6e1654c435abe36e8"></span>void <code class="descname">registerCLIOptions</code><span class="sig-paren">(</span>cxxopts::Options&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N12EngineConfig18registerCLIOptionsERN7cxxopts7OptionsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Registers CLI options via the given <code class="docutils literal notranslate"><span class="pre">cxxopts</span></code> options parameter. </p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">options</span></code>: A <code class="docutils literal notranslate"><span class="pre">cxxopts</span></code> options configurations object. </p></li>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code>: A <code class="docutils literal notranslate"><span class="pre">cxxopts</span></code> options configurations object. </li>
 </ul>
 </dd>
 </dl>
@@ -488,8 +498,8 @@ constructor call.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N12EngineConfig16verifyCLIOptionsEv">
-<span id="_CPPv3N12EngineConfig16verifyCLIOptionsEv"></span><span id="_CPPv2N12EngineConfig16verifyCLIOptionsEv"></span><span id="EngineConfig::verifyCLIOptions"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ae49a3e479fd4ab85b4da79ca994f4b59"></span>void <code class="sig-name descname">verifyCLIOptions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12EngineConfig16verifyCLIOptionsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N12EngineConfig16verifyCLIOptionsEv">
+<span id="_CPPv2N12EngineConfig16verifyCLIOptionsEv"></span><span id="EngineConfig::verifyCLIOptions"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ae49a3e479fd4ab85b4da79ca994f4b59"></span>void <code class="descname">verifyCLIOptions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N12EngineConfig16verifyCLIOptionsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Verifies CLI options after parsing. </p>
 </dd></dl>
 
@@ -497,40 +507,53 @@ constructor call.</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="member">
-<dt id="_CPPv4N6REGoth12EngineConfig9verbosityE">
-<span id="_CPPv3N6REGoth12EngineConfig9verbosityE"></span><span id="_CPPv2N6REGoth12EngineConfig9verbosityE"></span><span id="REGoth::EngineConfig::verbosity__unsigned-i"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1aec262af6d86a09b648620e09648086f8"></span>unsigned int <code class="sig-name descname">verbosity</code> = 0<a class="headerlink" href="#_CPPv4N6REGoth12EngineConfig9verbosityE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth12EngineConfig9verbosityE">
+<span id="_CPPv2N6REGoth12EngineConfig9verbosityE"></span><span id="REGoth::EngineConfig::verbosity__unsigned-i"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1aec262af6d86a09b648620e09648086f8"></span>unsigned int <code class="descname">verbosity</code> = 0<a class="headerlink" href="#_CPPv3N6REGoth12EngineConfig9verbosityE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Verbosity level. </p>
 <p>0 = quiet. The higher, the more verbose. </p>
 </dd></dl>
 
 <dl class="member">
-<dt id="_CPPv4N6REGoth12EngineConfig20engineExecutablePathE">
-<span id="_CPPv3N6REGoth12EngineConfig20engineExecutablePathE"></span><span id="_CPPv2N6REGoth12EngineConfig20engineExecutablePathE"></span><span id="REGoth::EngineConfig::engineExecutablePath__bs::Path"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1af5e5166713e1c1e963e57f8c2dff686d"></span>bs::Path <code class="sig-name descname">engineExecutablePath</code><a class="headerlink" href="#_CPPv4N6REGoth12EngineConfig20engineExecutablePathE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth12EngineConfig20engineExecutablePathE">
+<span id="_CPPv2N6REGoth12EngineConfig20engineExecutablePathE"></span><span id="REGoth::EngineConfig::engineExecutablePath__bs::Path"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1af5e5166713e1c1e963e57f8c2dff686d"></span>bs::Path <code class="descname">engineExecutablePath</code><a class="headerlink" href="#_CPPv3N6REGoth12EngineConfig20engineExecutablePathE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Path to the executable of REGoth. </p>
 </dd></dl>
 
 <dl class="member">
-<dt id="_CPPv4N6REGoth12EngineConfig18originalAssetsPathE">
-<span id="_CPPv3N6REGoth12EngineConfig18originalAssetsPathE"></span><span id="_CPPv2N6REGoth12EngineConfig18originalAssetsPathE"></span><span id="REGoth::EngineConfig::originalAssetsPath__bs::Path"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ac7ed3c9c30bf27dfbefaf2c66cd06ee3"></span>bs::Path <code class="sig-name descname">originalAssetsPath</code><a class="headerlink" href="#_CPPv4N6REGoth12EngineConfig18originalAssetsPathE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth12EngineConfig18originalAssetsPathE">
+<span id="_CPPv2N6REGoth12EngineConfig18originalAssetsPathE"></span><span id="REGoth::EngineConfig::originalAssetsPath__bs::Path"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ac7ed3c9c30bf27dfbefaf2c66cd06ee3"></span>bs::Path <code class="descname">originalAssetsPath</code><a class="headerlink" href="#_CPPv3N6REGoth12EngineConfig18originalAssetsPathE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Path to the game assets of Gothic or Gothic II. </p>
 </dd></dl>
 
 <dl class="member">
-<dt id="_CPPv4N6REGoth12EngineConfig11resolutionXE">
-<span id="_CPPv3N6REGoth12EngineConfig11resolutionXE"></span><span id="_CPPv2N6REGoth12EngineConfig11resolutionXE"></span><span id="REGoth::EngineConfig::resolutionX__unsigned-i"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ae942181e101bdca2736b978060383cb4"></span>unsigned int <code class="sig-name descname">resolutionX</code> = 1280<a class="headerlink" href="#_CPPv4N6REGoth12EngineConfig11resolutionXE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth12EngineConfig8gameTypeE">
+<span id="_CPPv2N6REGoth12EngineConfig8gameTypeE"></span><span id="REGoth::EngineConfig::gameType__GameType"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1a8f4a96c11bffc4545a91bcb059d50ecc"></span>GameType <code class="descname">gameType</code> = GameType::Unidentified<a class="headerlink" href="#_CPPv3N6REGoth12EngineConfig8gameTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The current game type (i.e. </p>
+<p>Gothic vs Gothic II). </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv3N6REGoth12EngineConfig11resolutionXE">
+<span id="_CPPv2N6REGoth12EngineConfig11resolutionXE"></span><span id="REGoth::EngineConfig::resolutionX__unsigned-i"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ae942181e101bdca2736b978060383cb4"></span>unsigned int <code class="descname">resolutionX</code> = 1280<a class="headerlink" href="#_CPPv3N6REGoth12EngineConfig11resolutionXE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>X resolution of the game. </p>
 </dd></dl>
 
 <dl class="member">
-<dt id="_CPPv4N6REGoth12EngineConfig11resolutionYE">
-<span id="_CPPv3N6REGoth12EngineConfig11resolutionYE"></span><span id="_CPPv2N6REGoth12EngineConfig11resolutionYE"></span><span id="REGoth::EngineConfig::resolutionY__unsigned-i"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ae50e4207f7e30aaed4ba8d2e8fa59ee3"></span>unsigned int <code class="sig-name descname">resolutionY</code> = 720<a class="headerlink" href="#_CPPv4N6REGoth12EngineConfig11resolutionYE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth12EngineConfig11resolutionYE">
+<span id="_CPPv2N6REGoth12EngineConfig11resolutionYE"></span><span id="REGoth::EngineConfig::resolutionY__unsigned-i"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1ae50e4207f7e30aaed4ba8d2e8fa59ee3"></span>unsigned int <code class="descname">resolutionY</code> = 720<a class="headerlink" href="#_CPPv3N6REGoth12EngineConfig11resolutionYE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Y resolution of the game. </p>
 </dd></dl>
 
 <dl class="member">
-<dt id="_CPPv4N6REGoth12EngineConfig12isFullscreenE">
-<span id="_CPPv3N6REGoth12EngineConfig12isFullscreenE"></span><span id="_CPPv2N6REGoth12EngineConfig12isFullscreenE"></span><span id="REGoth::EngineConfig::isFullscreen__b"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1acbeb9e3603ba2cf4a14c89cac2da3d7a"></span>bool <code class="sig-name descname">isFullscreen</code> = false<a class="headerlink" href="#_CPPv4N6REGoth12EngineConfig12isFullscreenE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv3N6REGoth12EngineConfig12isFullscreenE">
+<span id="_CPPv2N6REGoth12EngineConfig12isFullscreenE"></span><span id="REGoth::EngineConfig::isFullscreen__b"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1acbeb9e3603ba2cf4a14c89cac2da3d7a"></span>bool <code class="descname">isFullscreen</code> = false<a class="headerlink" href="#_CPPv3N6REGoth12EngineConfig12isFullscreenE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Whether the game should be run in fullscreen. </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv3N6REGoth12EngineConfig13skyRenderModeE">
+<span id="_CPPv2N6REGoth12EngineConfig13skyRenderModeE"></span><span id="REGoth::EngineConfig::skyRenderMode__Sky::RenderMode"></span><span class="target" id="struct_r_e_goth_1_1_engine_config_1a5e9f1894be21aea782559cb95e18a896"></span>Sky::RenderMode <code class="descname">skyRenderMode</code> = Sky::RenderMode::Plane<a class="headerlink" href="#_CPPv3N6REGoth12EngineConfig13skyRenderModeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The sky render mode of the game. </p>
 </dd></dl>
 
 </div>
@@ -552,7 +575,7 @@ constructor call.</p>
         <a href="execs.html" class="btn btn-neutral float-right" title="Executables" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../case-studies/daedalus-vm.html" class="btn btn-neutral float-left" title="Daedalus VM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../case-studies/daedalus-vm.html" class="btn btn-neutral" title="Daedalus VM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -578,16 +601,26 @@ constructor call.</p>
   
 
 
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

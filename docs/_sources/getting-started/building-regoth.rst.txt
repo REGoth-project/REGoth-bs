@@ -6,22 +6,6 @@ Building REGoth
 This page documents how to build REGoth on Linux or Windows.  The project is built via CMake.  For
 all platforms, CMake version 3.13 is required.
 
-REGoth uses `Vcpkg <https://github.com/microsoft/vcpkg>`_ internally.  To make building as seamless
-as possible, the build script will take care of getting a copy of Vcpkg, bootstrap it and install
-the required packages.  All this happens inside the ``build`` directory so it doesn't clutter your
-system with stuff you don't want.
-
-.. note::
-
-  If you want to use your own copy of Vcpkg, just pass the toolchain file as usual.
-
-.. note::
-
-  If you don't want to have anything to do with Vcpkg, you can also choose to supply the required
-  packages yourself.  To do this, you need to pass ``-DSKIP_AUTOMATE_VCPKG=ON`` to CMake.  Now
-  you're completely on your own to gather the required dependencies for REGoth.
-
-
 Linux
 -----
 

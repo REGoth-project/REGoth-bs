@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Running REGoth &mdash; REGoth  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Setting up a Test-Application" href="setting-up-app.html" />
+    <link rel="prev" title="Building from Source" href="building.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> REGoth
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building from Source</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Running REGoth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-from-outside-of-a-gothic-installation">Running from outside of a Gothic installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-asset-cache">The Asset Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="setting-up-app.html">Setting up a Test-Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
+<li class="toctree-l1"><a class="reference internal" href="waynet.html">Waynet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="characters.html">Characters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-component.html">Creating a new Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-object-kinds.html">Case-Study: Kinds of Objects in Gothic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-scene-structure.html">Case-Study: Scene Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-character-statemachine.html">Case-Study: Character Statemachine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-daedalus-vm.html">Case-Study: Daedalus VM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">REGoth</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Running REGoth</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/content/running.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="running-regoth">
+<h1>Running REGoth<a class="headerlink" href="#running-regoth" title="Permalink to this headline">¶</a></h1>
+<p>Once you have downloaded a build of REGoth or built it from source, you will find
+a number of binaries to play with, like <code class="docutils literal notranslate"><span class="pre">REGothWorldViewer</span></code>.</p>
+<p>The most easy way to set up REGoth correctly is to drop everything somewhere into
+the Gothic game installation you want to play. That means, create a sub-directory anywhere
+you like and put the executables and everything that goes with it there.</p>
+<p>For example, place it like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">Games</span><span class="o">/</span><span class="n">Gothic2</span><span class="o">/</span><span class="n">REGoth</span>
+</pre></div>
+</div>
+<p>Or like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">Games</span><span class="o">/</span><span class="n">Gothic2</span><span class="o">/</span><span class="n">REGoth</span><span class="o">/</span><span class="n">Nightly</span><span class="o">-</span><span class="n">build</span><span class="o">-</span><span class="mi">123</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>or even like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">Games</span><span class="o">/</span><span class="n">Gothic2</span><span class="o">/</span><span class="n">this</span><span class="o">/</span><span class="ow">is</span><span class="o">/</span><span class="n">some</span><span class="o">/</span><span class="n">bogus</span><span class="o">/</span><span class="n">path</span>
+</pre></div>
+</div>
+<p>All of those will work.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">REGoth will search the directory tree upwards for a gothic game installation, you can
+freely choose where you put REGoth, as long as it is somewhere inside a Gothic game
+directory.</p>
+</div>
+<div class="section" id="running-from-outside-of-a-gothic-installation">
+<h2>Running from outside of a Gothic installation<a class="headerlink" href="#running-from-outside-of-a-gothic-installation" title="Permalink to this headline">¶</a></h2>
+<p>If you are building REGoth from source, it may be more comfortable to run it from
+the build directory instead of copying it over to a Gothic installation. All REGoth
+executables accept a path to a gothic game root as first commandline argument.</p>
+<p>For example, you can run REGoth like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">REGothWorldViewer</span> <span class="o">~/</span><span class="n">games</span><span class="o">/</span><span class="n">Gothic2</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>Windows</strong>: When building from source, not all required DLLs are copied into the
+build directory automatically as of now. If you get complains about
+<code class="docutils literal notranslate"><span class="pre">bsfPhysX.dll</span></code> failing to load, try to copy the DLLs inside
+<code class="docutils literal notranslate"><span class="pre">REGoth-bs/lib/bsf/Dependencies/PhysX/lib/</span></code> next to your REGoth executables.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>Linux</strong>: If you get complains about missing <code class="docutils literal notranslate"><span class="pre">.so</span></code> files when you try to run an
+executable, try running it as <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH=../lib</span> <span class="pre">./REGothSomething</span></code>.
+Also, you might get an error indicating <code class="docutils literal notranslate"><span class="pre">libPhysX3_x64.so</span></code> not being found.
+You need to go into <code class="docutils literal notranslate"><span class="pre">REGoth-bs/lib/bsf/Dependencies/PhysX/lib/</span></code> and copy all
+<code class="docutils literal notranslate"><span class="pre">.so</span></code>-files to the location where <code class="docutils literal notranslate"><span class="pre">libbsf.so</span></code> was built, usually
+<code class="docutils literal notranslate"><span class="pre">REGoth/build/lib</span></code>.</p>
+</div>
+</div>
+<div class="section" id="the-asset-cache">
+<h2>The Asset Cache<a class="headerlink" href="#the-asset-cache" title="Permalink to this headline">¶</a></h2>
+<p>When loading a world for the first time, REGoth will convert the resources of the original
+Gothic game into a more modern format faster to load next time. If you want to re-import
+everything, simply delete the <cite>cache/</cite> directory next to your REGoth executables.</p>
+<p>If you only want to re-import a world, you can delete <code class="docutils literal notranslate"><span class="pre">cache/worlds</span></code> while leaving
+the rest for faster startup time.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="setting-up-app.html" class="btn btn-neutral float-right" title="Setting up a Test-Application" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="building.html" class="btn btn-neutral" title="Building from Source" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, The REGoth-Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

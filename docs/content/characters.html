@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Characters &mdash; REGoth  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Creating a new Component" href="create-component.html" />
+    <link rel="prev" title="Waynet" href="waynet.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> REGoth
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="extending-docs.html">Extending the Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setting-up-app.html">Setting up a Test-Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
+<li class="toctree-l1"><a class="reference internal" href="waynet.html">Waynet</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Characters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#inserting-a-character">Inserting a Character</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inserting-the-hero">Inserting the Hero</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#shrinking-and-un-shrinking">Shrinking and Un-Shrinking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#distances">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#positioning-of-shrinked-characters">Positioning of Shrinked Characters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#components-making-up-a-character">Components making up a Character</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="create-component.html">Creating a new Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-object-kinds.html">Case-Study: Kinds of Objects in Gothic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-scene-structure.html">Case-Study: Scene Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-character-statemachine.html">Case-Study: Character Statemachine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case-study-daedalus-vm.html">Case-Study: Daedalus VM</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">REGoth</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Characters</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/content/characters.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="characters">
+<h1>Characters<a class="headerlink" href="#characters" title="Permalink to this headline">¶</a></h1>
+<p>When talking about Characters, called <em>NPCs</em> in the original engine, the people and monsters inside the world are meant. A character can be the Hero, Diego or some random other dude
+minding his own business. But it can also be a Wolf, an Orc or a Meatbug. In REGoth, a each Character has its own Scene-Object, with multiple Components working together in order to
+process the AI, render the visuals and a number of other things.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The original engine called all of those <em>NPCs</em>, as in “Non Player Characters”. However, that name is misleading as the Character controlled by the player was an <em>NPC</em>, too.
+Therefore, we just call everything <em>Character</em> in REGoth.</p>
+</div>
+<div class="section" id="inserting-a-character">
+<h2>Inserting a Character<a class="headerlink" href="#inserting-a-character" title="Permalink to this headline">¶</a></h2>
+<p>If you want to insert a character into the world via native code, you should take a look at the <code class="docutils literal notranslate"><span class="pre">GameWorld</span></code>-class, more specifically at <code class="docutils literal notranslate"><span class="pre">GameWorld::insertCharacter()</span></code>. There
+exist multiple overloads of that method, where each of it takes the Name of the Script-<em>Instance</em> to create and a location where to spawn it. For example, <code class="docutils literal notranslate"><span class="pre">insertCharacter(&quot;PC_HERO&quot;,</span> <span class="pre">&quot;OC1&quot;)</span></code>
+will insert a character of instance <code class="docutils literal notranslate"><span class="pre">PC_HERO</span></code> at the Waypoint <code class="docutils literal notranslate"><span class="pre">OC1</span></code>, which is near the Old-Camp. The name of the Script-Instance comes from within the Daedalus-Scripts.</p>
+</div>
+<div class="section" id="inserting-the-hero">
+<h2>Inserting the Hero<a class="headerlink" href="#inserting-the-hero" title="Permalink to this headline">¶</a></h2>
+<p>To insert the hero, you need to:</p>
+<ol class="arabic simple">
+<li>Insert a Character with the <code class="docutils literal notranslate"><span class="pre">PC_HERO</span></code> instance,</li>
+<li>register it as <em>Hero</em>,</li>
+<li>optionally attach a <code class="docutils literal notranslate"><span class="pre">CharacterKeyboardInput</span></code>-Component to control it.</li>
+</ol>
+<p>Once you have loaded a world, this is done by the following lines of code:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">HCharacter</span> <span class="n">hero</span> <span class="o">=</span> <span class="n">world</span><span class="o">-&gt;</span><span class="n">insertCharacter</span><span class="p">(</span><span class="s">&quot;PC_HERO&quot;</span><span class="p">,</span> <span class="s">&quot;STARTPOINT&quot;</span><span class="p">);</span>
+<span class="n">hero</span><span class="o">-&gt;</span><span class="n">useAsHero</span><span class="p">();</span>
+<span class="n">hero</span><span class="o">-&gt;</span><span class="n">SO</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">addComponent</span><span class="o">&lt;</span><span class="n">CharacterKeyboardInput</span><span class="o">&gt;</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>The parameter <code class="docutils literal notranslate"><span class="pre">&quot;STARTPOINT&quot;</span></code> has to be set to a valid Waypoint in this case. You can also use an other
+overload to use a different method to describe where the Hero should be added.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">After the hero is created and registered, you may call <code class="docutils literal notranslate"><span class="pre">GameWorld::runInitScripts()</span></code> to also insert
+the other characters and items into the world.</p>
+</div>
+</div>
+<div class="section" id="shrinking-and-un-shrinking">
+<h2>Shrinking and Un-Shrinking<a class="headerlink" href="#shrinking-and-un-shrinking" title="Permalink to this headline">¶</a></h2>
+<p>The original engine can save processing time by not updating Characters which
+are far away from the player. If a character leaves a certain radius, it’s visuals are unloaded
+after some time, physics is no longer processed and AI is disabled. Disabling a
+Character is called <em>Shrinking</em> by the original engine. Once a character comes into the players
+visibility radius again, it is <em>Un-shrinked</em> and being fully processed again.</p>
+<p>While a Character is <em>Shrinked</em>, it will still exist within the world and can be targeted by
+script code as well as native code.</p>
+<div class="section" id="distances">
+<h3>Distances<a class="headerlink" href="#distances" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned before, once a Character reaches a certain distance to the player, it will be
+<em>Shrinked</em>. If the distance to the player falls below that threshold again, it will be <em>Un-Shrinked</em>.</p>
+<p>However, it’s not actually that simple. The original engine, actually has <em>two</em> distances:</p>
+<ul class="simple">
+<li>one for Characters going <em>out of range</em> (<em>Shrink</em>),</li>
+<li>and one for Characters comming <em>into range</em> (<em>Un-Shrink</em>),</li>
+</ul>
+<p>while the distance for <em>Shrinking</em> is larger than the one for <em>Un-Shrinking</em>. This is to work around
+that when using a single distance, Characters being right on the edge of it may pop into and out of
+range every other frame.</p>
+<p>By default, Gothic <em>Shrinks</em> Characters being further away than 45 meters and <em>Un-Shrinks</em> them again
+if they come closer than 40 meters.</p>
+</div>
+<div class="section" id="positioning-of-shrinked-characters">
+<h3>Positioning of Shrinked Characters<a class="headerlink" href="#positioning-of-shrinked-characters" title="Permalink to this headline">¶</a></h3>
+<p>Since <em>Shrinked</em> Characters have their AI disabled, they cannot move along their daily routine.
+Once a character goes out of range, it would stay exactly where it was until the player comes
+close to it again. To work around that, the daily routines of the Characters will still be
+evaluated while the Character is <em>Shrinked</em>. The position of a Character the player cannot see
+is then just assumed to be whatever the current routine says.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This is why in Gothic I, you can run into the Old-Camp faster than Diego walks, but you will
+still find him at his hut: He went out of reach since he walks rather slowly, got put where
+his daily routine expects him to be while being <em>Shrinked</em>, which is at his own hut and therefor
+arrived faster at the Old-Camp than you can run.</p>
+<p class="last">The only way to arrive faster than Diego is to always keep him in range, so he doesn’t get
+<em>Shrinked</em> and then move a little bit quicker on the last few steps.</p>
+</div>
+</div>
+</div>
+<div class="section" id="components-making-up-a-character">
+<h2>Components making up a Character<a class="headerlink" href="#components-making-up-a-character" title="Permalink to this headline">¶</a></h2>
+<p>The following Components are important for a Character:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">VisualCharacter</span></code> -
+Loads the Skeletal-Mesh and handles Animation-Playback.</li>
+<li><code class="docutils literal notranslate"><span class="pre">bs::CCharacterController</span></code> -
+Physics-Processing.</li>
+<li><code class="docutils literal notranslate"><span class="pre">CharacterAI</span></code> -
+Implements the Characters State-Machine, ie. which actions it can do at what time
+and asks the visual to play matching animations.</li>
+<li><code class="docutils literal notranslate"><span class="pre">Character</span></code> -
+Handles the Characters gameplay relevant actions, and serves as the main interface
+into what a Character can do. This is also the place where most <cite>NPC_*</cite>-externals
+are implemented.</li>
+</ul>
+<p>To create a Scene-Object with the correct components, please see <code class="docutils literal notranslate"><span class="pre">GameWorld::insertCharacter()</span></code>.</p>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="create-component.html" class="btn btn-neutral float-right" title="Creating a new Component" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="waynet.html" class="btn btn-neutral" title="Waynet" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, The REGoth-Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

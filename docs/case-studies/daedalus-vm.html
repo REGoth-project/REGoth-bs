@@ -17,20 +17,13 @@
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
+  
+  
     
 
   
+
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -38,16 +31,21 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Core" href="../code-ref/core.html" />
     <link rel="prev" title="Character state machine" href="character-statemachine.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
+
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-nav-search">
           
 
           
@@ -229,13 +227,13 @@ from maintaining a copy of every script class which might even be different betw
 <h2>Parts of a DaedalusVM<a class="headerlink" href="#parts-of-a-daedalusvm" title="Permalink to this headline">¶</a></h2>
 <p>To execute daedalus code, the VM needs the following basic parts:</p>
 <ul class="simple">
-<li><p>Instruction Memory</p></li>
-<li><p>Instruction Interpreter</p></li>
-<li><p>Instruction Executer</p></li>
-<li><p>Symbol Data Storage</p></li>
-<li><p>External function mapping</p></li>
-<li><p>Global registers</p></li>
-<li><p>Stack</p></li>
+<li>Instruction Memory</li>
+<li>Instruction Interpreter</li>
+<li>Instruction Executer</li>
+<li>Symbol Data Storage</li>
+<li>External function mapping</li>
+<li>Global registers</li>
+<li>Stack</li>
 </ul>
 <p>Each of these will be discussed in the further sections.</p>
 <div class="section" id="instruction-memory">
@@ -276,18 +274,18 @@ that would be the value, for example.  A function symbol will also carry the add
 with it.</p>
 <p>The following kinds of symbols exist:</p>
 <ul class="simple">
-<li><p><em>Void</em></p></li>
-<li><p><em>Float</em></p></li>
-<li><p><em>Int</em></p></li>
-<li><p><em>String</em></p></li>
-<li><p><em>Class</em></p></li>
-<li><p><em>Func</em></p></li>
-<li><p><em>Instance</em></p></li>
-<li><p><em>Prototype</em></p></li>
+<li><em>Void</em></li>
+<li><em>Float</em></li>
+<li><em>Int</em></li>
+<li><em>String</em></li>
+<li><em>Class</em></li>
+<li><em>Func</em></li>
+<li><em>Instance</em></li>
+<li><em>Prototype</em></li>
 </ul>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Special care has to be taken as any symbol with the <em>Class-Variable</em> flag set could be
+<p class="first admonition-title">Warning</p>
+<p class="last">Special care has to be taken as any symbol with the <em>Class-Variable</em> flag set could be
 part of a script object so the underlying data could change as the <em>Current Instance</em> is set to a
 different object!  See <a class="reference internal" href="#global-registers">Global Registers</a> for more information.</p>
 </div>
@@ -331,8 +329,8 @@ REGoth uses a safer approach, this is not used.</p>
 the script code.  The symbol will hold the address of the function in the instruction memory (byte
 code).</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If the <em>External</em>-flag is set, the address of the function would not point into the
+<p class="first admonition-title">Note</p>
+<p class="last">If the <em>External</em>-flag is set, the address of the function would not point into the
 instruction memory but rather be a <em>raw native function pointer</em> into the native game code.</p>
 </div>
 </div>
@@ -341,13 +339,13 @@ instruction memory but rather be a <em>raw native function pointer</em> into the
 <p>This kind of symbol stores a reference to a script object.  This could be a character, an item,
 a quest or others.</p>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
+<p class="first admonition-title">Warning</p>
 <p>This is not to be confused with an <em>Instance Function</em>.
 In Daedalus, an <em>Instance</em> is a function similar to a constructor of an object.  Once a script
 object is created, its <em>Instance</em> function needs to be ran.  For example, after creating a
 blank script object for an NPC, we can run an <em>Instance</em>-function to make the NPC whoever we
 want.</p>
-<p>An instance-function can also call arbitrary functions.  It really is a usual script function
+<p class="last">An instance-function can also call arbitrary functions.  It really is a usual script function
 with a fancy name.</p>
 </div>
 </div>
@@ -383,8 +381,8 @@ as it can just use those of the host CPU.  However, there are a small number of 
 controlling the executing of script code:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>Program Counter</em> (<em>PC</em>)</p></li>
-<li><p><em>Current Instance</em></p></li>
+<li><em>Program Counter</em> (<em>PC</em>)</li>
+<li><em>Current Instance</em></li>
 </ul>
 </div></blockquote>
 <div class="section" id="program-counter">
@@ -393,8 +391,8 @@ controlling the executing of script code:</p>
 to be executed next within the instruction memory.  It is either increased as the program flow
 continues or set to a completely different location after a <code class="docutils literal notranslate"><span class="pre">JUMP</span></code> or function call.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>There is no need to push it to the stack, since the stack of the host machine can be used.</p>
+<p class="first admonition-title">Note</p>
+<p class="last">There is no need to push it to the stack, since the stack of the host machine can be used.</p>
 </div>
 </div>
 <div class="section" id="current-instance">
@@ -422,7 +420,7 @@ data values from the referenced script object.</p>
         <a href="../code-ref/core.html" class="btn btn-neutral float-right" title="Core" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="character-statemachine.html" class="btn btn-neutral float-left" title="Character state machine" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="character-statemachine.html" class="btn btn-neutral" title="Character state machine" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -448,16 +446,26 @@ data values from the referenced script object.</p>
   
 
 
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

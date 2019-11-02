@@ -17,20 +17,13 @@
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
+  
+  
     
 
   
+
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -38,16 +31,21 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Setting up a test application" href="../tutorials/setting-up-app.html" />
     <link rel="prev" title="Building the documentation" href="building-docs.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
+
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-nav-search">
           
 
           
@@ -202,8 +200,8 @@ executables and everything that goes with it there.</p>
 </div>
 <p>All of those will work.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>REGoth will search the directory tree upwards for a Gothic or Gothic II game installation, you
+<p class="first admonition-title">Note</p>
+<p class="last">REGoth will search the directory tree upwards for a Gothic or Gothic II game installation, you
 can freely choose where you put REGoth, as long as it is somewhere inside a Gothic game directory.</p>
 </div>
 <div class="section" id="running-from-outside-of-a-gothic-installation">
@@ -216,19 +214,19 @@ to a Gothic game root as first command line argument.</p>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For all executables, you can specify <code class="docutils literal notranslate"><span class="pre">./REGothXXX</span> <span class="pre">--help</span></code> to get an overview of all available
+<p class="first admonition-title">Note</p>
+<p class="last">For all executables, you can specify <code class="docutils literal notranslate"><span class="pre">./REGothXXX</span> <span class="pre">--help</span></code> to get an overview of all available
 options.  You can also see <a class="reference internal" href="../code-ref/execs.html#execs"><span class="std std-ref">here</span></a> for an overview.</p>
 </div>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><strong>Windows</strong>: When building from source, not all required DLLs are copied into the build directory
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>Windows</strong>: When building from source, not all required DLLs are copied into the build directory
 automatically as of now.  If you get complains about <code class="docutils literal notranslate"><span class="pre">bsfPhysX.dll</span></code> failing to load, try to copy
 the DLLs inside <code class="docutils literal notranslate"><span class="pre">REGoth-bs/lib/bsf/Dependencies/PhysX/lib/</span></code> next to your REGoth executables.</p>
 </div>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><strong>Linux</strong>: If you get complains about missing <code class="docutils literal notranslate"><span class="pre">.so</span></code> files when you try to run an executable, try
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>Linux</strong>: If you get complains about missing <code class="docutils literal notranslate"><span class="pre">.so</span></code> files when you try to run an executable, try
 running it as <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH=../lib</span> <span class="pre">./REGothSomething</span></code>. Also, you might get an error
 indicating <code class="docutils literal notranslate"><span class="pre">libPhysX3_x64.so</span></code> not being found.  You need to go into
 <code class="docutils literal notranslate"><span class="pre">REGoth-bs/lib/bsf/Dependencies/PhysX/lib/</span></code> and copy all <code class="docutils literal notranslate"><span class="pre">.so</span></code>-files to the location where
@@ -256,7 +254,7 @@ faster startup time.</p>
         <a href="../tutorials/setting-up-app.html" class="btn btn-neutral float-right" title="Setting up a test application" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="building-docs.html" class="btn btn-neutral float-left" title="Building the documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="building-docs.html" class="btn btn-neutral" title="Building the documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -282,16 +280,26 @@ faster startup time.</p>
   
 
 
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

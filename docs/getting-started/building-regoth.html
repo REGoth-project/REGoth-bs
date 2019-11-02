@@ -17,20 +17,13 @@
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
+  
+  
     
 
   
+
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -38,16 +31,21 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Building the documentation" href="building-docs.html" />
     <link rel="prev" title="About" href="../general/about.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
+
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-nav-search">
           
 
           
@@ -194,20 +192,6 @@
 <span id="id1"></span><h1>Building REGoth<a class="headerlink" href="#building-regoth" title="Permalink to this headline">¶</a></h1>
 <p>This page documents how to build REGoth on Linux or Windows.  The project is built via CMake.  For
 all platforms, CMake version 3.13 is required.</p>
-<p>REGoth uses <a class="reference external" href="https://github.com/microsoft/vcpkg">Vcpkg</a> internally.  To make building as seamless
-as possible, the build script will take care of getting a copy of Vcpkg, bootstrap it and install
-the required packages.  All this happens inside the <code class="docutils literal notranslate"><span class="pre">build</span></code> directory so it doesn’t clutter your
-system with stuff you don’t want.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If you want to use your own copy of Vcpkg, just pass the toolchain file as usual.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If you don’t want to have anything to do with Vcpkg, you can also choose to supply the required
-packages yourself.  To do this, you need to pass <code class="docutils literal notranslate"><span class="pre">-DSKIP_AUTOMATE_VCPKG=ON</span></code> to CMake.  Now
-you’re completely on your own to gather the required dependencies for REGoth.</p>
-</div>
 <div class="section" id="linux">
 <h2>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="system-packages">
@@ -249,8 +233,8 @@ $ sudo pacman -S doxygen plantuml
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If a required package is missing, or you managed to compile REGoth on a distribution not
+<p class="first admonition-title">Note</p>
+<p class="last">If a required package is missing, or you managed to compile REGoth on a distribution not
 explicitly listed above, we would <em>greatly</em> appreciate a pull request or GitHub issue with this
 information.</p>
 </div>
@@ -291,9 +275,9 @@ the CMake files of REGoth.  Just make sure to install the official C/C++ and CMa
 <p>To build the project for Windows, you need to be aware of some common pitfalls:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li><p>Always build x64, as bs::framework does not support x86. To do that, make sure to use the
-correct Visual-Studio-Generator.</p></li>
-<li><p>Similar to <code class="docutils literal notranslate"><span class="pre">make</span></code>, Visual Studio will not do parallel builds by default.</p></li>
+<li>Always build x64, as bs::framework does not support x86. To do that, make sure to use the
+correct Visual-Studio-Generator.</li>
+<li>Similar to <code class="docutils literal notranslate"><span class="pre">make</span></code>, Visual Studio will not do parallel builds by default.</li>
 </ol>
 </div></blockquote>
 <p>These are the commands:</p>
@@ -333,7 +317,7 @@ able to build multiple files in parallel, even if they are from within the same 
         <a href="building-docs.html" class="btn btn-neutral float-right" title="Building the documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../general/about.html" class="btn btn-neutral float-left" title="About" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../general/about.html" class="btn btn-neutral" title="About" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -359,16 +343,26 @@ able to build multiple files in parallel, even if they are from within the same 
   
 
 
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
