@@ -1,21 +1,4 @@
 cmake_minimum_required (VERSION 3.13.0)
-
-###############################################################################
-#                               Automate VCPKG                                #
-###############################################################################
-
-option(SKIP_AUTOMATE_VCPKG "When ON, you will need to built the packages required by REGoth on \
-your own or supply your own vcpkg toolchain.")
-
-if (NOT SKIP_AUTOMATE_VCPKG)
-  include(cmake/automate-vcpkg.cmake)
-
-  vcpkg_bootstrap()
-  vcpkg_install_packages(libsquish physfs)
-endif()
-
-
-
 project (REGoth)
 
 option(REGOTH_USE_SYSTEM_BSF "Whether to use the system installed bsf via find_package." OFF)
