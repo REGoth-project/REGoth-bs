@@ -41,8 +41,14 @@ namespace REGoth
   {
     VisualSkeletalAnimation::onInitialized();
 
-    setBodyTexture(mBodyState.bodyTexture);
-    setHeadTexture(mBodyState.headTexture);
+    if(mBodyState.bodyTexture)
+    {
+      setBodyTexture(mBodyState.bodyTexture);
+    }
+    if(mBodyState.headTexture)
+    {
+      setHeadTexture(mBodyState.headTexture);
+    }
   }
 
   void VisualCharacter::setBodyMesh(const bs::String& bodyMesh, bs::UINT32 bodyTextureIdx,
