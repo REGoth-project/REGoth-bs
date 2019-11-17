@@ -69,25 +69,13 @@ namespace REGoth
     // Access the original materials for cloning
     const auto& materials = mMesh->getMaterials();
 
-    destroyClonedMaterials();
-    mClonedMaterials.resize(materials.size());
-
-    for (bs::UINT32 i = 0; i < (bs::UINT32)mClonedMaterials.size(); i++)
+    bs::Vector<bs::HMaterial> clonedMaterials(materials.size());
+    for (bs::UINT32 i = 0; i < (bs::UINT32)clonedMaterials.size(); i++)
     {
-      mClonedMaterials[i] = materials[i]->clone();
+      clonedMaterials[i] = materials[i]->clone();
     }
 
-    mSubRenderable->setMaterials(mClonedMaterials);
-  }
-
-  void VisualSkeletalAnimation::destroyClonedMaterials()
-  {
-    for (bs::HMaterial m : mClonedMaterials)
-    {
-      m->destroy();
-    }
-
-    mClonedMaterials.clear();
+    mSubRenderable->setMaterials(clonedMaterials);
   }
 
   void VisualSkeletalAnimation::setModelScript(BsZenLib::Res::HModelScriptFile modelScript)

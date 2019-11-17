@@ -244,13 +244,6 @@ namespace REGoth
     void cloneMaterials();
 
     /**
-     * After the materials have been cloned, they need to be destroyed when the mesh
-     * changes. Otherwise new materials would be cloned on every mesh change which
-     * would fill up memory.
-     */
-    void destroyClonedMaterials();
-
-    /**
      * Access to attaching something to specific nodes for sub-classes.
      */
     HNodeVisuals nodeVisuals() const
@@ -324,9 +317,6 @@ namespace REGoth
     // Configuration ----------------------------------------------------------
     BsZenLib::Res::HModelScriptFile mModelScript; /**< Model-script of the displayed model */
     BsZenLib::Res::HMeshWithMaterials mMesh; /**< Currently displayed mesh, from the model script */
-
-    /** Filled incase cloneMaterials() has been called. Not serialized. */
-    bs::Vector<bs::HMaterial> mClonedMaterials;
 
     // Object Sub Tree --------------------------------------------------------
     bs::Vector<bs::HSceneObject> mSubObjects; /**< All created sub-objects by this component */
