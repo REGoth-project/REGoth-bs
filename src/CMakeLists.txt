@@ -23,6 +23,8 @@ add_library(REGothEngine STATIC
   RTTI/RTTI_Character.hpp
   RTTI/RTTI_CharacterAI.hpp
   RTTI/RTTI_CharacterKeyboardInput.hpp
+  RTTI/RTTI_Debug.hpp
+  RTTI/RTTI_DebugUI.hpp
   RTTI/RTTI_GameClock.hpp
   RTTI/RTTI_Inventory.hpp
   RTTI/RTTI_NodeVisuals.hpp
@@ -31,6 +33,7 @@ add_library(REGothEngine STATIC
   RTTI/RTTI_ScriptObjectStorage.hpp
   RTTI/RTTI_StoryInformation.hpp
   RTTI/RTTI_TypeIDs.hpp
+  RTTI/RTTI_UIConsole.hpp
   RTTI/RTTI_UIElement.hpp
   RTTI/RTTI_UIFocusText.hpp
   RTTI/RTTI_VisualCharacter.hpp
@@ -55,6 +58,10 @@ add_library(REGothEngine STATIC
   components/CharacterKeyboardInput.hpp
   components/CharacterState.cpp
   components/CharacterState.hpp
+  components/Debug.cpp
+  components/Debug.hpp
+  components/DebugUI.cpp
+  components/DebugUI.hpp
   components/EventQueue.cpp
   components/EventQueue.hpp
   components/Focusable.cpp
@@ -85,6 +92,8 @@ add_library(REGothEngine STATIC
   components/StoryInformation.hpp
   components/ThirdPersonCamera.cpp
   components/ThirdPersonCamera.hpp
+  components/UIConsole.hpp
+  components/UIConsole.cpp
   components/UIDialogueChoice.cpp
   components/UIDialogueChoice.hpp
   components/UIElement.cpp
@@ -127,6 +136,8 @@ add_library(REGothEngine STATIC
   core/ParseArguments.tpp
   core/RunEngine.cpp
   core/RunEngine.hpp
+  debug/Console.cpp
+  debug/Console.hpp
   engine-content/EngineContent.cpp
   engine-content/EngineContent.hpp
   engine-content/internal/FindEngineContent.cpp

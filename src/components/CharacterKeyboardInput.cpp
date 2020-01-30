@@ -36,7 +36,6 @@ namespace REGoth
     mStrafeRight       = bs::VirtualButton("StrafeRight");
     mTurnLeft          = bs::VirtualButton("TurnLeft");
     mTurnRight         = bs::VirtualButton("TurnRight");
-    mFastMove          = bs::VirtualButton("FastMove");
     mToggleWalking     = bs::VirtualButton("ToggleWalking");
     mToggleSneaking    = bs::VirtualButton("ToggleSneaking");
     mToggleMeleeWeapon = bs::VirtualButton("ToggleMeleeWeapon");
@@ -181,15 +180,6 @@ namespace REGoth
     else
     {
       mCharacterAI->stopTurning();
-    }
-
-    if (bs::gVirtualInput().isButtonHeld(mFastMove))
-    {
-      mCharacterAI->fastMove(4.0f);
-    }
-    else
-    {
-      mCharacterAI->fastMove(1.0f);
     }
   }
 

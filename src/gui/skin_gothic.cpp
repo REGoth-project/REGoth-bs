@@ -108,6 +108,15 @@ namespace REGoth
     // button.fontSize = 17;
     skin->setStyle("Button", button);
 
+    bs::GUIElementStyle consoleBackground = baseStyle;
+    consoleBackground.normal.texture      = gOriginalGameResources().sprite("CONSOLE.TGA");
+    skin->setStyle("GothicConsoleBackground", consoleBackground);
+
+    auto consoleInputBox = *skin->getStyle("InputBox");
+    // consoleInputBox.font     = fontGothicOld10WhiteHi;
+    // consoleInputBox.fontSize = 17;
+    skin->setStyle("GothicConsoleInputBox", consoleInputBox);
+
     // Cache the skin for later use
     s_SkinGothic = skin;
 

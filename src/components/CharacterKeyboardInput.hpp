@@ -28,7 +28,6 @@ namespace REGoth
     CharacterKeyboardInput(const bs::HSceneObject& parent, HGameWorld world);
     virtual ~CharacterKeyboardInput();
 
-
   protected:
 
     /** Triggered once per frame. Allows the component to handle input and move. */
@@ -46,7 +45,6 @@ namespace REGoth
     bs::VirtualButton mTurnRight;
     bs::VirtualButton mStrafeLeft;
     bs::VirtualButton mStrafeRight;
-    bs::VirtualButton mFastMove;
     bs::VirtualButton mToggleWalking;
     bs::VirtualButton mToggleSneaking;
     bs::VirtualButton mToggleMeleeWeapon;
