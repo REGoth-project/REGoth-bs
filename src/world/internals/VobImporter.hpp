@@ -15,8 +15,9 @@ namespace REGoth
   class GameWorld;
   using HGameWorld = bs::GameObjectHandle<GameWorld>;
 
-  namespace Internals
+  class VobImporter
   {
+  public:
     /**
      * Imports a single vob and creates a bs:f object as similar as possible.
      *
@@ -26,7 +27,8 @@ namespace REGoth
      *
      * @return Scene object modeled after the vob
      */
-    bs::HSceneObject importSingleVob(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
+    static bs::HSceneObject importSingleVob(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
                                      HGameWorld gameWorld);
-  }  // namespace Worlds
+  };
+
 }  // namespace REGoth

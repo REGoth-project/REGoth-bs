@@ -1,5 +1,5 @@
 #include "ConstructFromZEN.hpp"
-#include "ImportSingleVob.hpp"
+#include "VobImporter.hpp"
 #include <BsZenLib/ImportPath.hpp>
 #include <BsZenLib/ImportStaticMesh.hpp>
 #include <BsZenLib/ResourceManifest.hpp>
@@ -84,7 +84,7 @@ namespace REGoth
   {
     for (const auto& v : zenParent.childVobs)
     {
-      bs::HSceneObject so = Internals::importSingleVob(v, bsfParent, gameWorld);
+      bs::HSceneObject so = VobImporter::importSingleVob(v, bsfParent, gameWorld);
 
       if (so)
       {

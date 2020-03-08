@@ -1,4 +1,4 @@
-#include "ImportSingleVob.hpp"
+#include "VobImporter.hpp"
 #include <BsZenLib/ImportPath.hpp>
 #include <BsZenLib/ResourceManifest.hpp>
 #include <Components/BsCMeshCollider.h>
@@ -55,7 +55,7 @@ namespace REGoth
   static void addCollisionTo(bs::HSceneObject sceneObject);
   static bs::Transform transformFromVob(const ZenLoad::zCVobData& vob);
 
-  bs::HSceneObject Internals::importSingleVob(const ZenLoad::zCVobData& vob,
+  bs::HSceneObject VobImporter::importSingleVob(const ZenLoad::zCVobData& vob,
                                               bs::HSceneObject bsfParent, HGameWorld gameWorld)
   {
     if (vob.objectClass == "zCVob")

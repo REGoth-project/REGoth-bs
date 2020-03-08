@@ -174,8 +174,8 @@ add_library(REGothEngine STATIC
   scripting/daedalus/REGothDaedalusVM.hpp
   world/internals/ConstructFromZEN.cpp
   world/internals/ConstructFromZEN.hpp
-  world/internals/ImportSingleVob.cpp
-  world/internals/ImportSingleVob.hpp
+  world/internals/VobImporter.cpp
+  world/internals/VobImporter.hpp
   world/internals/ZenCache.cpp
   world/internals/ZenCache.hpp
   )
