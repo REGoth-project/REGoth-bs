@@ -21,7 +21,7 @@
 #include <log/logging.hpp>
 #include <original-content/VirtualFileSystem.hpp>
 #include <scripting/ScriptVMForGameWorld.hpp>
-#include <world/internals/ConstructFromZEN.hpp>
+#include <world/internals/ZenImporter.hpp>
 
 namespace REGoth
 {
@@ -67,7 +67,7 @@ namespace REGoth
     if (!mZenFile.empty())
     {
       // Import the ZEN and add all scene objects as children to this SO.
-      bs::HSceneObject so = Internals::constructFromZEN(thisWorld, mZenFile);
+      bs::HSceneObject so = ZenImporter::constructFromZEN(thisWorld, mZenFile);
 
       if (!so)
       {

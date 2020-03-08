@@ -1,4 +1,4 @@
-#include "ConstructFromZEN.hpp"
+#include "ZenImporter.hpp"
 #include "VobImporter.hpp"
 #include <BsZenLib/ImportPath.hpp>
 #include <BsZenLib/ImportStaticMesh.hpp>
@@ -35,7 +35,7 @@ namespace REGoth
   static void walkVobTree(bs::HSceneObject bsfParent, HGameWorld gameWorld,
                           const ZenLoad::zCVobData& zenParent);
 
-  bs::HSceneObject Internals::constructFromZEN(HGameWorld gameWorld, const bs::String& zenFile)
+  bs::HSceneObject ZenImporter::constructFromZEN(HGameWorld gameWorld, const bs::String& zenFile)
   {
     OriginalZen zen;
 

@@ -10,8 +10,9 @@ namespace REGoth
   class GameWorld;
   using HGameWorld = bs::GameObjectHandle<GameWorld>;
 
-  namespace Internals
+  class ZenImporter
   {
+  public:
     /**
      * This function will load the given zenFile from the virtual file system
      * and fully convert it into a bs::f scene.
@@ -21,7 +22,7 @@ namespace REGoth
      *
      * @return Root of the created scene.
      */
-    bs::HSceneObject constructFromZEN(HGameWorld gameWorld, const bs::String& zenFile);
+    static bs::HSceneObject constructFromZEN(HGameWorld gameWorld, const bs::String& zenFile);
 
     /**
      * Will load the given ZEN, but only add its world mesh to the scene.
@@ -30,6 +31,7 @@ namespace REGoth
      *
      * @return Root of the created scene.
      */
-    bs::HSceneObject loadWorldMeshFromZEN(const bs::String& zenFile);
-  }  // namespace Internals
+    static bs::HSceneObject loadWorldMeshFromZEN(const bs::String& zenFile);
+  };
+
 }  // namespace REGoth
