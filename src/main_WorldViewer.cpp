@@ -100,7 +100,7 @@ public:
     {
       world = GameWorld::importZEN(config()->world);
 
-      HCharacter hero = world->insertCharacter("PC_HERO", WORLD_STARTPOINT);
+      HCharacter hero = world->insertCharacter("PC_HERO", world->getWorldStartPoint()->getName());
       hero->useAsHero();
       hero->SO()->addComponent<CharacterKeyboardInput>(world);
 

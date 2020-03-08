@@ -155,15 +155,13 @@ namespace REGoth
   bs::HSceneObject VobImporter::import_zCVobStartpoint(const ZenLoad::zCVobData& vob,
                                                  bs::HSceneObject bsfParent, HGameWorld gameWorld)
   {
+    //FIXME: Rotate by 180Degrees
     bs::HSceneObject so = import_zCVob(vob, bsfParent, gameWorld);
 
     // Startpoint is found by name of the scene object
     REGOTH_LOG(Info, Uncategorized, "[ImportSingleVob] Found startpoint: {0}", so->getName());
 
-    // A startpoint has an arbitrary names, which makes it hard to find it at a later point.
-    // Thus, rename it to a known constant. As there should always only be one startpoint in
-    // a world, this should cause no conflicts.
-    so->setName(WORLD_STARTPOINT);
+    mStartpoint = so;
 
     return so;
   }

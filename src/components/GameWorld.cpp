@@ -24,8 +24,6 @@
 
 namespace REGoth
 {
-  const char* const WORLD_STARTPOINT = "STARTPOINT";
-
   GameWorld::GameWorld(const bs::HSceneObject& parent, const bs::String& zenFile)
       : bs::Component(parent)
       , mZenFile(zenFile)
@@ -172,6 +170,7 @@ namespace REGoth
     return character;
   }
 
+  //FIXME: deprecate String as spawnpoint, use Startpoint or Waypoint directly
   HCharacter GameWorld::insertCharacter(const bs::String& instance, const bs::String& spawnPoint)
   {
     bs::HSceneObject spawnPointSO = findObjectByName(spawnPoint);

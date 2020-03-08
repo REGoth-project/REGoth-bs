@@ -34,8 +34,16 @@ namespace REGoth
      */
     bs::HSceneObject importSingleVob(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
                                      HGameWorld gameWorld);
-  
+
+    //FIXME: Come up with a better way, possibly by reworking the importer into one, so there only need to be 2 getters instead of 3
+    bs::HSceneObject getWorldStartPoint()
+    {
+      return mStartpoint;
+    }
+
   private:
+    bs::HSceneObject mStartpoint;
+
     bs::Matrix4 convertMatrix(const ZMath::Matrix& m);
     bs::HSceneObject import_zCVob(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
                                        HGameWorld gameWorld);

@@ -37,6 +37,11 @@ namespace REGoth
      */
     bs::HSceneObject loadWorldMeshFromZEN(const bs::String& zenFile);
   
+    bs::HSceneObject getWorldStartPoint()
+    {
+      return mVobImporter.getWorldStartPoint();
+    }
+
   private:
     VobImporter mVobImporter;
 

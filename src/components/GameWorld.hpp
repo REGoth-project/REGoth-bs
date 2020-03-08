@@ -29,8 +29,6 @@ namespace REGoth
   class Waypoint;
   using HWaypoint = bs::GameObjectHandle<Waypoint>;
 
-  extern const char* const WORLD_STARTPOINT;
-
   namespace Scripting
   {
     class ScriptVMForGameWorld;
@@ -139,6 +137,11 @@ namespace REGoth
     HWaynet waynet() const
     {
       return mWaynet;
+    }
+
+    bs::HSceneObject getWorldStartPoint()
+    {
+      return mZenImporter.getWorldStartPoint();
     }
 
     /**
