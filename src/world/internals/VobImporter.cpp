@@ -4,7 +4,6 @@
 #include <Components/BsCMeshCollider.h>
 #include <Components/BsCRenderable.h>
 #include <FileSystem/BsFileSystem.h>
-#include <Math/BsMatrix4.h>
 #include <Mesh/BsMesh.h>
 #include <Physics/BsPhysicsMesh.h>
 #include <Resources/BsResources.h>
@@ -14,46 +13,9 @@
 #include <components/Item.hpp>
 #include <components/Visual.hpp>
 #include <log/logging.hpp>
-#include <zenload/zTypes.h>
-
-namespace
-{
-  static bs::Matrix4 convertMatrix(const ZMath::Matrix& m)
-  {
-    bs::Matrix4 bs = {m.mv[0], m.mv[1], m.mv[2],  m.mv[3],  m.mv[4],  m.mv[5],  m.mv[6],  m.mv[7],
-                      m.mv[8], m.mv[9], m.mv[10], m.mv[11], m.mv[12], m.mv[13], m.mv[14], m.mv[15]};
-
-    return bs.transpose();
-  }
-}  // namespace
 
 namespace REGoth
 {
-  static bs::HSceneObject import_zCVob(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
-                                       HGameWorld gameWorld);
-  static bs::HSceneObject import_zCVobLight(const ZenLoad::zCVobData& vob,
-                                            bs::HSceneObject bsfParent, HGameWorld gameWorld);
-  static bs::HSceneObject import_zCVobStartpoint(const ZenLoad::zCVobData& vob,
-                                                 bs::HSceneObject bsfParent, HGameWorld gameWorld);
-  static bs::HSceneObject import_zCVobSpot(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
-                                           HGameWorld gameWorld);
-  static bs::HSceneObject import_oCItem(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
-                                        HGameWorld gameWorld);
-  static bs::HSceneObject import_zCVobSound(const ZenLoad::zCVobData& vob,
-                                            bs::HSceneObject bsfParent, HGameWorld gameWorld);
-  static bs::HSceneObject import_zCVobAnimate(const ZenLoad::zCVobData& vob,
-                                              bs::HSceneObject bsfParent, HGameWorld gameWorld);
-  static bs::HSceneObject import_oCMobInter(const ZenLoad::zCVobData& vob,
-                                            bs::HSceneObject bsfParent, HGameWorld gameWorld);
-  static bs::HSceneObject import_oCMobContainer(const ZenLoad::zCVobData& vob,
-                                                bs::HSceneObject bsfParent, HGameWorld gameWorld);
-  static bs::HSceneObject import_oCMobBed(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
-                                          HGameWorld gameWorld);
-  static bs::HSceneObject import_oCMobDoor(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
-                                           HGameWorld gameWorld);
-  static void addVisualTo(bs::HSceneObject sceneObject, const bs::String& visualName);
-  static void addCollisionTo(bs::HSceneObject sceneObject);
-  static bs::Transform transformFromVob(const ZenLoad::zCVobData& vob);
 
   bs::HSceneObject VobImporter::importSingleVob(const ZenLoad::zCVobData& vob,
                                               bs::HSceneObject bsfParent, HGameWorld gameWorld)
@@ -111,7 +73,7 @@ namespace REGoth
     }
   }
 
-  static bs::Transform transformFromVob(const ZenLoad::zCVobData& vob)
+  bs::Transform VobImporter::transformFromVob(const ZenLoad::zCVobData& vob)
   {
     bs::Transform result = bs::Transform::IDENTITY;
 
@@ -136,7 +98,7 @@ namespace REGoth
    *
    * @note Not all object types will call `import_zCVob`!
    */
-  static bs::HSceneObject import_zCVob(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
+  bs::HSceneObject VobImporter::import_zCVob(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
                                        HGameWorld gameWorld)
   {
     bs::HSceneObject so = bs::SceneObject::create(vob.vobName.c_str());
@@ -166,7 +128,7 @@ namespace REGoth
    * Lights can be pointlights or spotlights, although spotlights are not
    * used within the original game as it seems.
    */
-  static bs::HSceneObject import_zCVobLight(const ZenLoad::zCVobData& vob,
+  bs::HSceneObject VobImporter::import_zCVobLight(const ZenLoad::zCVobData& vob,
                                             bs::HSceneObject bsfParent, HGameWorld gameWorld)
   {
     bs::HSceneObject so = import_zCVob(vob, bsfParent, gameWorld);
@@ -190,7 +152,7 @@ namespace REGoth
   /**
    * The startpoint of the player in the current world. There should be only one.
    */
-  static bs::HSceneObject import_zCVobStartpoint(const ZenLoad::zCVobData& vob,
+  bs::HSceneObject VobImporter::import_zCVobStartpoint(const ZenLoad::zCVobData& vob,
                                                  bs::HSceneObject bsfParent, HGameWorld gameWorld)
   {
     bs::HSceneObject so = import_zCVob(vob, bsfParent, gameWorld);
@@ -209,7 +171,7 @@ namespace REGoth
   /**
    * Spots like free-points.
    */
-  static bs::HSceneObject import_zCVobSpot(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
+  bs::HSceneObject VobImporter::import_zCVobSpot(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
                                            HGameWorld gameWorld)
   {
     bs::HSceneObject so = import_zCVob(vob, bsfParent, gameWorld);
@@ -219,7 +181,7 @@ namespace REGoth
     return so;
   }
 
-  static bs::HSceneObject import_oCItem(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
+  bs::HSceneObject VobImporter::import_oCItem(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
                                         HGameWorld gameWorld)
   {
     if (vob.oCItem.instanceName.empty())
@@ -239,7 +201,7 @@ namespace REGoth
     return item->SO();
   }
 
-  static bs::HSceneObject import_zCVobSound(const ZenLoad::zCVobData& vob,
+  bs::HSceneObject VobImporter::import_zCVobSound(const ZenLoad::zCVobData& vob,
                                             bs::HSceneObject bsfParent, HGameWorld gameWorld)
   {
     bs::HSceneObject so = import_zCVob(vob, bsfParent, gameWorld);
@@ -249,7 +211,7 @@ namespace REGoth
     return so;
   }
 
-  static bs::HSceneObject import_zCVobAnimate(const ZenLoad::zCVobData& vob,
+  bs::HSceneObject VobImporter::import_zCVobAnimate(const ZenLoad::zCVobData& vob,
                                               bs::HSceneObject bsfParent, HGameWorld gameWorld)
   {
     bs::HSceneObject so = import_zCVob(vob, bsfParent, gameWorld);
@@ -259,7 +221,7 @@ namespace REGoth
     return so;
   }
 
-  static bs::HSceneObject import_oCMobInter(const ZenLoad::zCVobData& vob,
+  bs::HSceneObject VobImporter::import_oCMobInter(const ZenLoad::zCVobData& vob,
                                             bs::HSceneObject bsfParent, HGameWorld gameWorld)
   {
     bs::HSceneObject so = import_zCVob(vob, bsfParent, gameWorld);
@@ -269,7 +231,7 @@ namespace REGoth
     return so;
   }
 
-  static bs::HSceneObject import_oCMobContainer(const ZenLoad::zCVobData& vob,
+  bs::HSceneObject VobImporter::import_oCMobContainer(const ZenLoad::zCVobData& vob,
                                                 bs::HSceneObject bsfParent, HGameWorld gameWorld)
   {
     bs::HSceneObject so = import_zCVob(vob, bsfParent, gameWorld);
@@ -279,7 +241,7 @@ namespace REGoth
     return so;
   }
 
-  static bs::HSceneObject import_oCMobBed(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
+  bs::HSceneObject VobImporter::import_oCMobBed(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
                                           HGameWorld gameWorld)
   {
     bs::HSceneObject so = import_zCVob(vob, bsfParent, gameWorld);
@@ -289,7 +251,7 @@ namespace REGoth
     return so;
   }
 
-  static bs::HSceneObject import_oCMobDoor(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
+  bs::HSceneObject VobImporter::import_oCMobDoor(const ZenLoad::zCVobData& vob, bs::HSceneObject bsfParent,
                                            HGameWorld gameWorld)
   {
     bs::HSceneObject so = import_zCVob(vob, bsfParent, gameWorld);
@@ -303,7 +265,7 @@ namespace REGoth
    * Adds the given visual to the scene object. If that's not possible
    * nothing will be added.
    */
-  static void addVisualTo(bs::HSceneObject sceneObject, const bs::String& visualName)
+  void VobImporter::addVisualTo(bs::HSceneObject sceneObject, const bs::String& visualName)
   {
     bool hasAdded = Visual::addToSceneObject(sceneObject, visualName);
 
@@ -318,7 +280,7 @@ namespace REGoth
    * scene object has a renderable with a mesh set. The mesh must also have
    * CPU-caching enabled, so we get access to the mesh data.
    */
-  static void addCollisionTo(bs::HSceneObject sceneObject)
+  void VobImporter::addCollisionTo(bs::HSceneObject sceneObject)
   {
     bs::HRenderable renderable = sceneObject->getComponent<bs::CRenderable>();
 
@@ -354,6 +316,14 @@ namespace REGoth
 
     bs::HMeshCollider collider = sceneObject->addComponent<bs::CMeshCollider>();
     collider->setMesh(physicsMesh);
+  }
+
+  bs::Matrix4 VobImporter::convertMatrix(const ZMath::Matrix& m)
+  {
+    bs::Matrix4 bs = {m.mv[0], m.mv[1], m.mv[2],  m.mv[3],  m.mv[4],  m.mv[5],  m.mv[6],  m.mv[7],
+                      m.mv[8], m.mv[9], m.mv[10], m.mv[11], m.mv[12], m.mv[13], m.mv[14], m.mv[15]};
+
+    return bs.transpose();
   }
 
 }  // namespace REGoth

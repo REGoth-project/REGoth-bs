@@ -3,9 +3,13 @@
 
 namespace REGoth
 {
+
   class ZenCache
   {
   public:
+    ZenCache() = default;
+    ~ZenCache() = default;
+
     /**
      * Loads the cached ZEN with the given name.
      *

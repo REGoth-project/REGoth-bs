@@ -1,5 +1,4 @@
 #include "ZenImporter.hpp"
-#include "VobImporter.hpp"
 #include <BsZenLib/ImportPath.hpp>
 #include <BsZenLib/ImportStaticMesh.hpp>
 #include <BsZenLib/ResourceManifest.hpp>
@@ -21,20 +20,7 @@
 
 namespace REGoth
 {
-  struct OriginalZen
-  {
-    bs::String fileName;
-    ZenLoad::oCWorldData vobTree;
-    ZenLoad::PackedMesh worldMesh;
-  };
-
-  static bool importZEN(const bs::String& zenFile, OriginalZen& result);
-  static bs::HSceneObject importWorldMesh(const OriginalZen& zen);
-  static void importVobs(bs::HSceneObject sceneRoot, HGameWorld gameWorld, const OriginalZen& zen);
-  static void importWaynet(bs::HSceneObject sceneRoot, const OriginalZen& zen);
-  static void walkVobTree(bs::HSceneObject bsfParent, HGameWorld gameWorld,
-                          const ZenLoad::zCVobData& zenParent);
-
+  
   bs::HSceneObject ZenImporter::constructFromZEN(HGameWorld gameWorld, const bs::String& zenFile)
   {
     OriginalZen zen;
@@ -56,7 +42,7 @@ namespace REGoth
     return worldMesh;
   }
 
-  bs::HSceneObject Internals::loadWorldMeshFromZEN(const bs::String& zenFile)
+  bs::HSceneObject ZenImporter::loadWorldMeshFromZEN(const bs::String& zenFile)
   {
     OriginalZen zen;
 
@@ -71,7 +57,7 @@ namespace REGoth
     return importWorldMesh(zen);
   }
 
-  static void importVobs(bs::HSceneObject sceneRoot, HGameWorld gameWorld, const OriginalZen& zen)
+  void ZenImporter::importVobs(bs::HSceneObject sceneRoot, HGameWorld gameWorld, const OriginalZen& zen)
   {
     for (const ZenLoad::zCVobData& root : zen.vobTree.rootVobs)
     {
@@ -79,12 +65,12 @@ namespace REGoth
     }
   }
 
-  static void walkVobTree(bs::HSceneObject bsfParent, HGameWorld gameWorld,
+  void ZenImporter::walkVobTree(bs::HSceneObject bsfParent, HGameWorld gameWorld,
                           const ZenLoad::zCVobData& zenParent)
   {
     for (const auto& v : zenParent.childVobs)
     {
-      bs::HSceneObject so = VobImporter::importSingleVob(v, bsfParent, gameWorld);
+      bs::HSceneObject so = mVobImporter.importSingleVob(v, bsfParent, gameWorld);
 
       if (so)
       {
@@ -96,7 +82,7 @@ namespace REGoth
   /**
    * Import a zenfile and load it into datastructures to work with
    */
-  static bool importZEN(const bs::String& zenFile, OriginalZen& result)
+  bool ZenImporter::importZEN(const bs::String& zenFile, OriginalZen& result)
   {
     ZenLoad::ZenParser zenParser(zenFile.c_str(), gVirtualFileSystem().getFileIndex());
 
@@ -117,7 +103,7 @@ namespace REGoth
   /**
    * Create a bs:f scene object holding the world mesh.
    */
-  static bs::HSceneObject importWorldMesh(const OriginalZen& zen)
+  bs::HSceneObject ZenImporter::importWorldMesh(const OriginalZen& zen)
   {
     bs::String meshFileName = zen.fileName + ".worldmesh";
 
@@ -175,7 +161,7 @@ namespace REGoth
     return meshSO;
   }
 
-  static void importWaynet(bs::HSceneObject sceneRoot, const OriginalZen& zen)
+  void ZenImporter::importWaynet(bs::HSceneObject sceneRoot, const OriginalZen& zen)
   {
     const ZenLoad::zCWayNetData& zenWaynet = zen.vobTree.waynet;
 

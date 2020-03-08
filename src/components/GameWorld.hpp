@@ -2,6 +2,7 @@
 
 #include <BsPrerequisites.h>
 #include <Scene/BsComponent.h>
+#include <world/internals/ZenImporter.hpp>
 
 #include <RTTI/RTTIUtil.hpp>
 
@@ -375,6 +376,8 @@ namespace REGoth
     void findAllCharacters();
     void findAllItems();
     void findAllFocusables();
+
+    ZenImporter mZenImporter;
 
     /**
      * ZEN-File this world was created from, e.g. `NEWWORLD.ZEN`.

@@ -5,7 +5,7 @@
 #include <Scene/BsSceneObject.h>
 
 #include <core.hpp>
-#include <world/internals/ConstructFromZEN.hpp>
+#include <world/internals/ZenImporter.hpp>
 
 class REGothWorldMeshViewer : public REGoth::EmptyGame
 {
@@ -21,11 +21,12 @@ public:
 
   void setupScene() override
   {
-    REGoth::Internals::loadWorldMeshFromZEN("ADDONWORLD.ZEN");
+    mZenImporter.loadWorldMeshFromZEN("ADDONWORLD.ZEN");
   }
 
 protected:
   bs::HFPSCamera mFPSCamera;
+  REGoth::ZenImporter mZenImporter;
 };
 
 int main(int argc, char** argv)
