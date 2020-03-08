@@ -1,0 +1,142 @@
+name: REGoth GitHub CI
+    
+on:
+  push:
+    branches: [ master ] #Everytime master branch is updated
+    paths: ['.github/workflows/*', 'cmake/*', 'lib/*', 'src/*'] #only when these files are modifed
+  pull_request:
+    branches: [ master ] #for every pull request going to master
+    paths: ['.github/workflows/*', 'cmake/*', 'lib/*', 'src/*'] #only when these files are modifed
+
+jobs:
+  build: 
+
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-18.04, windows-latest]
+        include:
+          - os: ubuntu-18.04
+            name: Ubuntu 18.04 GCC
+            cc: gcc-8
+            cxx: g++-8
+            cflags: ""
+          - os: windows-latest
+            name: Windows Latest MSVC
+            cc: cl
+            cxx: cl
+            cflags: "" #should be -A 64?
+            
+    steps:
+    - uses: actions/checkout@v2 #checkout our repo     
+    
+    - name: Update submodules #checkout@v2 does not support submodules, but it already does on master
+      shell: bash
+      run: |
+        set -e
+        git submodule update --init --recursive
+    
+    - name: Install dependencies via apt
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        set -e
+        sudo apt-get update
+        sudo apt-get install apt-transport-https ca-certificates gnupg software-properties-common wget uuid-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev gcc-8 g++-8
+        wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add - #newer cmake
+        sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
+        sudo apt-get update
+        sudo apt-get install cmake
+    
+    - name: Setup cache
+      shell: bash
+      run: |
+        set -e
+        rm -rf .cache
+        mkdir -p ./.cache/bsf
+        bsf_status=$(echo $(git submodule status lib/bsf) | sed "s/ /-/g") #get submodule status and replace spaces with dashes
+        echo "::set-env name=BSF_COMMIT_ID::$bsf_status" #output as environment variable because I dont know any better way
+    
+    - name: Cache bsf
+      uses: actions/cache@v1.1.2
+      id: cache-bsf
+      with:
+        path: ./.cache/bsf
+        key: ${{ runner.os }}-${{ env.BSF_COMMIT_ID }} #use os and bsf commit as cache key
+        
+    - name: Build bsf
+      if: steps.cache-bsf.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        set -e
+        export CC="${{ matrix.cc }}"
+        export CXX="${{ matrix.cxx }}"
+        export CFLAGS="${{ matrix.cflags }}"
+        cd lib/bsf
+        mkdir build
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX=../../../.cache/bsf $CFLAGS ..
+        cmake --build . --config Release --parallel $(nproc) --target install          
+
+    - name: List bsf install directory
+      shell: bash
+      run: |
+        set -e
+        find ./.cache/bsf/
+        
+    - name: Build REGoth
+      shell: bash
+      run: |
+        set -e
+        export CC="${{ matrix.cc }}"
+        export CXX="${{ matrix.cxx }}"
+        export CFLAGS="${{ matrix.cflags }}"
+        rm -rf build
+        mkdir build
+        cd build
+        cmake -Dbsf_INSTALL_DIR=./.cache/bsf -DREGOTH_USE_SYSTEM_BSF=ON $CFLAGS ..
+        cmake --build . --config Release --parallel $(nproc)
+    
+    - name: List REGoth build directory
+      shell: bash
+      run: |
+        set -e
+        find build/
+    
+    - name: Gather build artifacts
+      shell: bash
+      run: |
+        set -e
+        rm -rf artifacts
+        mkdir artifacts
+        cp README.md artifacts/
+        cp LICENSE artifacts/
+        cp -r content artifacts/
+        cp -r ./.cache/bsf/bin/Data artifacts/
+        if [  ${{ runner.os }} = "Linux" ]; then
+        cp    ./.cache/bsf/lib/*.so* artifacts/       # bsf libraries
+        cp    ./.cache/bsf/lib/bsf*/*.so* artifacts/  # physx libraries
+        cp    build/bin/* artifacts/                  # executables
+        elif [  ${{ runner.os }} = "Windows" ]; then
+        cp    ./.cache/bsf/bin/*.dll artifacts/       # libraries
+        cp    ./.cache/bsf/bin/*.exe artifacts/       # misc executables
+        cp    build/bin/Release/* artifacts/          # executables
+         #executables
+        fi;
+    
+    - name: List build artifacts directory
+      shell: bash
+      run: |
+        set -e
+        find artifacts/
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: "${{ runner.os }}-REGoth"
+        # Directory containing files to upload
+        path: ./artifacts

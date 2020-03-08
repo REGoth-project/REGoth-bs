@@ -1,5 +1,5 @@
 [![Built with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg)](http://spacemacs.org)
-[![Build Status](https://dev.azure.com/ataulien/REGoth/_apis/build/status/REGoth-project.REGoth-bs?branchName=master)](https://dev.azure.com/ataulien/REGoth/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://github.com/REGoth-project/REGoth-bs/workflows/REGoth%20GitHub%20CI/badge.svg)](https://github.com/REGoth-project/REGoth-bs/actions?query=is%3Asuccess+branch%3Amaster+workflow%3A%22REGoth+GitHub+CI%22)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/REGoth/Lobby)
 
 
