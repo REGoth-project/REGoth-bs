@@ -30,7 +30,7 @@ void Gothic2Game::setupScene()
   {
     world = GameWorld::importZEN(WORLD);
 
-    HCharacter hero = world->insertCharacter("PC_HERO", world->getWorldStartPoint()->getName());
+    HCharacter hero = world->insertCharacter("PC_HERO", world->getWorldStartpoint()->getName());
     hero->useAsHero();
     hero->SO()->addComponent<CharacterKeyboardInput>(world);
 

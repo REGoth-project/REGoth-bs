@@ -139,9 +139,9 @@ namespace REGoth
       return mWaynet;
     }
 
-    bs::HSceneObject getWorldStartPoint()
+    bs::HSceneObject getWorldStartpoint()
     {
-      return mZenImporter.getWorldStartPoint();
+      return mZenImporter.getStartpoint();
     }
 
     /**
@@ -380,6 +380,9 @@ namespace REGoth
     void findAllItems();
     void findAllFocusables();
 
+    /**
+     * ZEN-File Importer.
+     */
     ZenImporter mZenImporter;
 
     /**

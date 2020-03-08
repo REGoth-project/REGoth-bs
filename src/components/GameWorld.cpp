@@ -170,7 +170,6 @@ namespace REGoth
     return character;
   }
 
-  //FIXME: deprecate String as spawnpoint, use Startpoint or Waypoint directly
   HCharacter GameWorld::insertCharacter(const bs::String& instance, const bs::String& spawnPoint)
   {
     bs::HSceneObject spawnPointSO = findObjectByName(spawnPoint);
