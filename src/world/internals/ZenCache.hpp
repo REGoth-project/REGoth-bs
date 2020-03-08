@@ -3,8 +3,9 @@
 
 namespace REGoth
 {
-  namespace World
+  class ZenCache
   {
+  public:
     /**
      * Loads the cached ZEN with the given name.
      *
@@ -46,5 +47,6 @@ namespace REGoth
      * @See loadCachedZEN() to load it.
      */
     bool hasCachedZEN(const bs::String& zenFile);
-  }
+  };
+  
 }  // namespace REGoth

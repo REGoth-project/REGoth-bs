@@ -1,4 +1,4 @@
-#include "LoadCachedZEN.hpp"
+#include "ZenCache.hpp"
 #include <BsZenLib/ImportPath.hpp>
 #include <FileSystem/BsFileSystem.h>
 #include <Resources/BsResources.h>
@@ -7,9 +7,7 @@
 
 namespace REGoth
 {
-  namespace World
-  {
-    bs::HSceneObject loadCachedZEN(const bs::String& zenFile)
+    bs::HSceneObject ZenCache::loadCachedZEN(const bs::String& zenFile)
     {
       if (!hasCachedZEN(zenFile))
       {
@@ -23,23 +21,23 @@ namespace REGoth
       return prefab->instantiate();
     }
 
-    void saveCacheForZEN(bs::HSceneObject root, const bs::String& zenFile)
+    void ZenCache::saveCacheForZEN(bs::HSceneObject root, const bs::String& zenFile)
     {
       bs::HPrefab cached = bs::Prefab::create(root);
 
       enum
       {
-        Overwrite = true,
-        KeepExisting = false,
+        overwrite = true,
+        keepExisting = false,
       };
 
       bs::Path path = BsZenLib::GothicPathToCachedWorld(zenFile);
-      bs::gResources().save(cached, path, Overwrite);
+      bs::gResources().save(cached, path, overwrite);
     }
 
-    bool hasCachedZEN(const bs::String& zenFile)
+    bool ZenCache::hasCachedZEN(const bs::String& zenFile)
     {
       return bs::FileSystem::exists(BsZenLib::GothicPathToCachedWorld(zenFile));
     }
-  }  // namespace World
+
 }  // namespace REGoth

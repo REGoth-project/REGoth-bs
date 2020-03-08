@@ -176,6 +176,8 @@ add_library(REGothEngine STATIC
   world/internals/ConstructFromZEN.hpp
   world/internals/ImportSingleVob.cpp
   world/internals/ImportSingleVob.hpp
+  world/internals/ZenCache.cpp
+  world/internals/ZenCache.hpp
   )
 
 target_link_libraries(REGothEngine PUBLIC bsf BsZenLib)
