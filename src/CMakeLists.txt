@@ -178,6 +178,13 @@ add_library(REGothEngine STATIC
   world/internals/ImportSingleVob.hpp
   )
 
+# link necessary libraries for physfs on macOS
+if(APPLE)
+target_link_libraries(REGothEngine PUBLIC "-framework CoreFoundation")
+target_link_libraries(REGothEngine PUBLIC "-framework Foundation")
+target_link_libraries(REGothEngine PUBLIC "-framework IOKit")
+endif(APPLE)
+
 target_link_libraries(REGothEngine PUBLIC bsf BsZenLib)
 target_link_libraries(REGothEngine PUBLIC ${OpenMP_CXX_LIBRARIES})
 target_link_libraries(REGothEngine PUBLIC cxxopts)
