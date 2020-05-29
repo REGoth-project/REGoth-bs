@@ -23,7 +23,7 @@ following packages:
 
   # Required dependencies.
   $ sudo apt install libx11-dev libxcursor-dev libxi-dev libicu-dev libgl1-mesa-dev \
-  libglu1-mesa-dev freeglut3-dev libphysfs-dev libsquish-dev
+  libglu1-mesa-dev freeglut3-dev libphysfs-dev libsquish-dev uuid-dev
 
   # Development dependencies (optional).
   $ sudo apt install doxygen plantuml
@@ -37,7 +37,7 @@ For **Fedora**, install the following packages:
 
   # Required dependencies.
   $ sudo dnf install libX11-devel libXcursor-devel libXi-devel libicu-devel mesa-libGL-devel \
-  mesa-libGLU freeglut-devel physfs-devel libsquish-devel libXrandr-devel
+  mesa-libGLU freeglut-devel physfs-devel libsquish-devel libXrandr-devel libuuid-devel
 
   # Development dependencies (optional).
   $ sudo dnf install doxygen plantuml
